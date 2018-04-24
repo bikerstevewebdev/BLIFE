@@ -7,7 +7,8 @@ CREATE TABLE users (
     curr_pro INTEGER,
     curr_carb INTEGER,
     curr_fat INTEGER,
-    curr_mes_id references measurements(mes_id)
+    curr_mes_id references measurements(mes_id),
+    auth_id TEXT NOT NULL
 );
 CREATE TABLE meals (
     meal_id SERIAL PRIMARY KEY,
@@ -40,7 +41,8 @@ CREATE TABLE exercises (
     name VARCHAR(60) NOT NULL,
     type VARCHAR(25) NOT NULL,
     author_id references users(user_id),
-    img TEXT
+    img TEXT,
+    video_url TEXT
 );
 CREATE TABLE measurements (
     mes_id SERIAL PRIMARY KEY,
