@@ -9,7 +9,10 @@ const express          = require('express'),
       { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT, DOMAIN, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env,
       c                = require('./controller'),
       port             = SERVER_PORT // || 3000
-
+      
+      
+      
+      
 const app = express()
 
 app.use(express.json())
@@ -34,39 +37,41 @@ passport.use( new Auth0Strategy({
     clientID: CLIENT_ID,
     clientSecret: CLIENT_SECRET,
     callbackURL: CALLBACK_URL,
-    scope: 'openid profile'
+    scope: 'openid email profile'
 }, (accessToken, refreshToken, extraParams, profile, done) => {
     const { id, displayName, picture } = profile
-    // const db = app.get('db') 
-    // db.get_user([id]).then( users => {        
-        // if ( users[0] ){
-            // return done(null, users[0])
-        // } 
-        // else { //when someone is logginG in for the first time.             
-            // db.create_user([displayName, picture, id]).then( createdUser => {
-            // return done(null,{ id: createdUser.id } )
-        // } ) }
-    // } ).catch(err => {
-    //     console.log(err)
-    // })
+    const db = app.get('db') 
+    db.get_user([id]).then( users => {        
+        if ( users[0] ){
+            return done(null, users[0])
+        } 
+        else { //when someone is logginG in for the first time.             
+            let x = new Date(),
+                tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
+            db.create_user([displayName, picture, id, tDate]).then( createdUser => {
+            return done(null, createdUser)
+        } ) }
+    } ).catch(err => {
+        console.log(err)
+    })
     done(null, profile)
     console.log('listening?')
 }) )
 
 // When done, adds user to req.session.user
 passport.serializeUser((user, done) => {
-    console.log(`serial user ${user}`)
+    console.log(`serial user maybe profile ${user}`)
     done(null, user)
 })
 
 
 // When done, adds second parameter to req.user
 passport.deserializeUser((user, done) => {
-    // app.get('db').find_session_user([user.id])
-    // .then( user => {
-        console.log(`Deserial User: ${user}`)
-    return done(null, user[0]);
-    // })
+    app.get('db').find_session_user([user.id])
+    .then( dbUser => {
+        console.log(`Deserial User should be DB User: ${dbUser}, in case its an array: ${dbUser[0]}`)
+        return done(null, dbUser[0]);
+    })
 })
 
 
@@ -77,6 +82,19 @@ app.get('/auth/callback', passport.authenticate('auth0', {
     failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
 
+app.get('/user:id', c.getUser)
+app.get('/auth/me', c.sendUserObjs)
+app.get('/measurements/:id', c.getMeasurements)
+
+app.put('/user/stats', c.updateStats)
+
+app.post('/user/mez', c.addMez)
+app.post('/macroCalc', c.newMacroCalc)
+app.post('/exercise', c.createExercise)
+app.post('/workout', c.createWorkout)
+app.post('/food', c.createFood)
+app.post('/meal', c.createMeal)
+app.post('/dayMenu', c.createDayMenu)
 
 
 

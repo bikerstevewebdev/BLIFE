@@ -58,5 +58,5 @@ function calculate( height, age, weight, bodyfat, activity, tenacity, goal, user
     
     console.log(`bmr: ${bmr}, tdee: ${tdee}, intake: ${intake}, bf: ${bf}, ht: ${ht}, wt: ${wt}`)
 }
-let test = calculate(75, 24, 250, 20, 'low', 'intense', 'lose', 9 )
+let test = calculate(75, 24, 250, 25, 'low', 'slow', 'lose', 9 )
 test

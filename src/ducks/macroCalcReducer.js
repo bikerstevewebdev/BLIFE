@@ -1,13 +1,14 @@
 const axios = require('axios')
 
 const initialState = {
+    userData: {},
     height: '',
     age: '',
     weight: '',
     bodyfat: '',
     goal: '',
-    tenacity: '',
-    tenacity: '',
+    gender: '',
+    activity: '',
     tenacity: '',
     macros: {
         protein: 0,
@@ -16,15 +17,21 @@ const initialState = {
     },
     user: {
         username: '',
-        user_id,
+        user_id: 0,
         profile_pic: '',
         current_protein: 0,
-        current_carb: 0,
+        current_carbs: 0,
         current_fat: 0,
         current_weight: 0,
         current_height: 0,
         current_bf: 0
-    }
+    },
+    current_measurements: {
+        waist: 0,
+        neck: 0,
+        chest: 0
+    },
+    updatedHtWtBf: false
 }
 
 const activityLevel = (level) => {
@@ -46,7 +53,7 @@ const activityLevel = (level) => {
 const tenacityLevel = (level) => {
     switch(level) {
         case "slow":
-            return 250
+            return 300
         case "steady":
             return 450
         case "intense":
@@ -66,7 +73,27 @@ const UPDATE_TENACITY = 'UPDATE_TENACITY'
 const UPDATE_GENDER = 'UPDATE_GENDER'
 const UPDATE_ACTIVITY = 'UPDATE_ACTIVITY'
 const CALCULATE = 'CALCULATE'
+const GET_USER = 'GET_USER'
+const UPDATE_STATS = 'UPDATE_STATS'
+// const UPDATE_MEZ = 'UPDATE_MEZ'
 
+export function getUserData() {
+    let data = axios.get('/auth/me').then(res => {
+        let user = res.data.direct
+        let measure = axios.get(`/measurements/${user.curr_mes_id}`).then(res => {
+            if(res.data.message) {
+                return {message: res.data.message}
+            }else{
+                return res.data
+            }
+        })
+        return {user, measure}
+    })
+    return {
+        type: GET_USER,
+        payload: data
+    }
+}
 export function updateHeight(val) {
     return {
         type: UPDATE_HEIGHT,
@@ -96,6 +123,7 @@ export function updateBodyfat(val) {
 }
 
 export function updateGoal(val) {
+    console.log(val)
     return {
         type: UPDATE_GOAL,
         payload: val
@@ -103,6 +131,7 @@ export function updateGoal(val) {
 }
 
 export function updateTenacity(val) {
+    console.log(val)
     return {
         type: UPDATE_TENACITY,
         payload: val
@@ -110,6 +139,7 @@ export function updateTenacity(val) {
 }
 
 export function updateGender(val) {
+    console.log(val)
     return {
         type: UPDATE_GENDER,
         payload: val
@@ -117,14 +147,39 @@ export function updateGender(val) {
 }
 
 export function updateActivity(val) {
+    console.log(val)
     return {
         type: UPDATE_ACTIVITY,
         payload: val
     }
 }
+export function updateUserStats(p, c, f, wt, ht, bf, waist, chest, neck) {
+    let data = axios.put('/user/stats', { p, c, f }).then(res => {
+        let user = res.data
+        let measures = axios.post('/user/mez', { ht, wt, bf, waist, chest, neck }).then(res => {
+            return res.data
+        })
+        return { user, measures }
+    })    
+    return {
+        type: UPDATE_STATS,
+        payload: data
+    }
+}
+// export function updateUserMez( wt, ht, bf ) {
+//     return {
+//         type: UPDATE_MEZ,
+//         payload: data
+//     }
+// }
 
-export function calculate( height, age, weight, bodyfat, activity, tenacity, goal, user_id ){
-    let protein, carbs, fat, bf = bodyfat/100, tdee, bmr, wt = weight/2.2, ht = height/1, lbm = weight*(1-bf)
+export function calculate( height, age, weight, bodyfat, activity, gender, tenacity, goal ){
+    console.log(height, age, gender, weight, bodyfat, activity, tenacity, goal)
+    let protein, carbs, fat, tdee, bmr, intake,
+        bf  = bodyfat/100,
+        wt  = weight/2.2,
+        lbm = weight*(1-bf),
+        ht  = height/1
     let factor = activityLevel(activity)
     let pace = tenacityLevel(tenacity)
     if(bf > 0) {
@@ -149,18 +204,17 @@ export function calculate( height, age, weight, bodyfat, activity, tenacity, goa
     carbs   = ~~( (intake - (intake * 0.30) - (lbm * 4) ) /4)
     
     
-    console.log(`bmr: ${bmr}, tdee: ${tdee}, intake: ${intake}, bf: ${bf}, ht: ${ht}, wt: ${wt}`)
+    console.log(`lbm: ${lbm}, bmr: ${bmr}, tdee: ${tdee}, intake: ${intake}, bf: ${bf}, ht: ${ht}, wt: ${wt}`)
     
-    axios.post(`/macroCalc/${user_id}`, { protein, fat, carbs }).then(res => {
-        console.log(res.data)
+    let data = axios.post(`/macroCalc`, { protein, fat, carbs }).then(res => {
+        console.log('MACRO DATA:', res.data)
+        return res.data[0]
     })
     
     return{
         type: CALCULATE,
-        payload:  {
-            protein,
-            carbs,
-            fat,
+        payload: data,
+        meta:  {
             bf: bf/1,
             weight: weight/1,
             height: height/1
@@ -202,7 +256,14 @@ Women
 
 
 export default function(state = initialState, action) {
+    console.log(action)
     switch(action.type){
+        case GET_USER + '_FULFILLED':
+            if(action.payload.measure.message){
+                return {...state, userData: action.payload.user}
+            } else{
+                return { ...state, userData: action.payload.userData, current_measurements: action.payload.measure }
+            }
         case UPDATE_WEIGHT:
             return { ...state, weight: action.payload }
         case UPDATE_HEIGHT:
@@ -219,8 +280,24 @@ export default function(state = initialState, action) {
             return { ...state, tenacity: action.payload }
         case UPDATE_BODYFAT:
             return { ...state, bodyfat: action.payload }
-        case CALCULATE:
-            return { ...state, user: { ...state.user, current_bf: action.payload.bf} }
+        case CALCULATE + '_FULFILLED':
+            return {
+                 ...state,
+                 user: {
+                    ...state.user,
+                    current_protein: action.payload.p,
+                    current_carbs: action.payload.c,
+                    current_fat: action.payload.f,
+                    current_bf: action.meta.bf,
+                    current_weight: action.meta.weight,
+                    current_height: action.meta.height
+                    },
+                    updatedHtWtBf: true
+                }
+            case UPDATE_STATS + '_FULFILLED':
+            return { ...state, updatedHtWtBf: false }
+            // case UPDATE_MEZ + '_FULFILLED':
+            // return state
         default:
             return state
     }
