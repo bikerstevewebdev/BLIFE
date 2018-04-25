@@ -1,17 +1,36 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-function Nav() {
+function Nav(props) {
     return(
-        <nav>
-            <h2>BalancedLIFE</h2>
-            <section className="links">
-                <Link to='/dashboard'><button>Dashboard</button></Link>
-                <Link to='/'><button>Login</button></Link>
-                <Link to='/profile'><button>Profile</button></Link>
-                <Link to='/macroCalc'><button>Macro Calc</button></Link>
+        <header className="nav-comp">
+        {
+            props.isLoggedIn
+            ?
+            <nav>
+                <h2>BalancedLIFE</h2>
+                <section className="links">
+                    <Link to='/dashboard'><button>Dashboard</button></Link>
+                    <Link to='/'><button>Login</button></Link>
+                    <Link to='/profile'><button>Profile</button></Link>
+                    <Link to='/macroCalc'><button>Macro Calc</button></Link>
+                </section>
+            </nav>
+            :
+            <section className="unauthorized">
+                YOU ARE NOT LOGGED IN<br />
+                YOU DON'T SAY THAT
             </section>
-        </nav>
+        }
+        </header>
     )
 }
-export default Nav
+
+function mapStateToProps(state) {
+    return {
+        isLoggedIn: state.users.isLoggedIn
+    }
+}
+
+export default connect(mapStateToProps)(Nav)

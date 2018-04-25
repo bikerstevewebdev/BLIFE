@@ -1,7 +1,17 @@
 .App {
   text-align: center;
 }
-
+.unauthorized{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  height: 100%;
+  width:100%;
+  background-color: red;
+  color: #000;
+  font-size: 4em;
+}
 nav.nav{
   height: 65px;
   position: absolute;

@@ -1,16 +1,48 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserData, updateUserStats } from '../../ducks/macroCalcReducer';
+import { getUserData, updateUserStats, addMacrosToState } from '../../ducks/userReducer';
 
 
 class Profile extends Component{
+    constructor() {
+        super()
+        this.state = {
+            updatedHtWtBf: false
+        }
+        this.updateNewMes = this.updateNewMes.bind(this)
+        this.discardNewMes = this.discardNewMes.bind(this)
+    }
 
+    
 
     componentDidMount() {
-        this.props.getUserData()
-        // console.log(this.props.userData)
         console.log(this.props)
+        const { pro, carbs, fat, curr_mes, userData, bodyfat, weight, height } = this.props
+        // if(curr_mes.mes_id !== userData.curr_mes && pro > 0){
+        //     this.props.addMacrosToState(pro, carbs, fat, bodyfat, weight, height)
+        //     this.setState({
+        //         updatedHtWtBf: true
+        //     })
+        // }else if(curr_mes.mes_id !== userData.curr_mes){
+        //     this.setState({
+        //         updatedHtWtBf: true
+        //     })
+        // }
+    }
+    componentDidUpdate() {
+        console.log('profile updated:', this.props)
+        const { pro, carbs, fat, curr_mes, userData, bodyfat, weight, height } = this.props
+        if(curr_mes.mes_id !== userData.curr_mes && pro > 0){
+            this.props.addMacrosToState(pro, carbs, fat, bodyfat, weight, height, curr_mes.mes_id)
+            this.setState({
+                updatedHtWtBf: true
+            })
+        }else if(curr_mes.mes_id !== userData.curr_mes){
+            this.setState({
+                updatedHtWtBf: true
+            })
+        }
     }
 
     updateNewMes() {
@@ -21,7 +53,7 @@ class Profile extends Component{
             current_height,
             current_bf
         } = this.props
-        const { waist, neck, chest } = this.props.current_measurements
+        const { waist, neck, chest } = this.props.curr_mes
         this.props.updateUserStats(current_protein,
             current_carbs,
             current_fat,
@@ -79,17 +111,23 @@ class Profile extends Component{
 
 function mapStateToProps(state){
     return{
-        updatedHtWtBf: state.updatedHtWtBf,
-        profile_pic: state.user.profile_pic,
-        current_protein: state.user.current_protein,
-        current_carbs: state.user.current_carbs,
-        current_fat: state.user.current_fat,
-        current_weight: state.user.current_weight,
-        current_height: state.user.current_height,
-        current_bf: state.user.current_bf,
-        userData: state.userData,
-        current_measurements: state.current_measurements
+        updatedHtWtBf: state.macros.updatedHtWtBf,
+        profile_pic: state.users.user.profile_pic,
+        current_protein: state.users.user.current_protein,
+        current_carbs: state.users.user.current_carbs,
+        current_fat: state.users.user.current_fat,
+        current_weight: state.users.user.current_weight,
+        current_height: state.users.user.current_height,
+        current_bf: state.users.user.current_bf,
+        userData: state.users.userData,
+        curr_mes: state.users.curr_mes,
+        pro: state.macros.macros.protein,
+        carbs: state.macros.macros.carbs,
+        fat: state.macros.macros.fat,
+        weight: state.macros.weight,
+        height: state.macros.height,
+        bodyfat: state.macros.bodyfat
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState })(Profile)

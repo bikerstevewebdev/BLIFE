@@ -70,15 +70,15 @@ class MacroCalc extends Component{
 
 function MapStateToProps(state) {
     return {
-        height: state.height,
-        age: state.age,
-        goal: state.goal,
-        tenacity: state.tenacity,
-        gender: state.gender,
-        bodyfat: state.bodyfat,
-        activity: state.activity,
-        weight: state.weight,
-        user_id: state.userData.auth_id
+        height: state.macros.height,
+        age: state.macros.age,
+        goal: state.macros.goal,
+        tenacity: state.macros.tenacity,
+        gender: state.macros.gender,
+        bodyfat: state.macros.bodyfat,
+        activity: state.macros.activity,
+        weight: state.macros.weight,
+        user_id: state.users.userData.auth_id
     }
 }
 

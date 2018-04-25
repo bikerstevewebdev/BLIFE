@@ -1,6 +1,8 @@
 import { createStore, applyMiddleware } from 'redux'
-// import userReducer from './userReducer'
-import macroCalcReducer from './macroCalcReducer'
 import  reduxPromiseMiddleware  from 'redux-promise-middleware'
+// import macros from './macroCalcReducer'
+// import foods from './foodReducer'
+// import users from './userReducer'
+import reducer from './reducers'
 
-export default createStore( macroCalcReducer, applyMiddleware(reduxPromiseMiddleware()) )
+export default createStore( reducer, applyMiddleware(reduxPromiseMiddleware()) )

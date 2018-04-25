@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { getUserData } from '../../ducks/macroCalcReducer'
+import { getUserData } from '../../ducks/userReducer'
 import { connect } from 'react-redux'
 
 class Dashboard extends Component{
@@ -31,7 +31,7 @@ class Dashboard extends Component{
 
 function mapStateToProps(state){
     return {
-        userData: state.userData
+        userData: state.users.userData
     }
 }
 
