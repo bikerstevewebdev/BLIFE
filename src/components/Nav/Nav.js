@@ -15,6 +15,8 @@ function Nav(props) {
                     <Link to='/'><button>Login</button></Link>
                     <Link to='/profile'><button>Profile</button></Link>
                     <Link to='/macroCalc'><button>Macro Calc</button></Link>
+                    <Link to='/meal/-1'><button>Meal Viewer</button></Link>
+                    <Link to='/mealCreator'><button>Meal Creator</button></Link>
                 </section>
             </nav>
             :

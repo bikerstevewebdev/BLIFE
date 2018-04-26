@@ -87,17 +87,22 @@ app.get('/user/:id', c.getUser)
 app.get('/userInfo', c.getUserInfo)
 app.get('/measurements/:id', c.getMeasurements)
 app.get('/measurements/latest/:id', c.getLatestMes)
+app.get('/food/search', c.searchFoods)
+app.get('/meal/search', c.searchMeals)
+app.get('/meal/search/:id', c.getMealById)
+app.get('/food/search/:id', c.getFood)
 
 app.put('/user/stats', c.updateStats)
 
-// app.post('/user/mez', c.addMez)
+app.post('/user/mez', c.addMez)
 app.post('/macroCalc', c.newMacroCalc)
+app.post('/food', c.createFood)
+app.post('/meal/food', c.addFoodToMeal)
+app.post('/meal', c.createMeal)
 
+// app.post('/dayMenu', c.createDayMenu)
 // app.post('/exercise', c.createExercise)
 // app.post('/workout', c.createWorkout)
-// app.post('/food', c.createFood)
-// app.post('/meal', c.createMeal)
-// app.post('/dayMenu', c.createDayMenu)
 
 
 

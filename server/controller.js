@@ -46,6 +46,44 @@ module.exports = {
             res.status(200).send(measurements[0])
         })
     },
+
+    searchFoods: (req, res, next) => {
+        req.app.get('db').get_food_by_query([req.query.name]).then(foods => {
+            res.status(200).send(foods)
+        })
+    },
+
+    searchMeals: (req, res, next) => {
+        req.app.get('db').get_meals_by_title([req.query.title]).then(meals => {
+            res.status(200).send(meals)
+        })
+    },
+    
+    getFood: (req, res, next) => {
+        req.app.get('db').get_food_by_id([req.params.id]).then(food => {
+            res.status(200).send(food[0])
+        })
+    },
+    
+    getMealById: (req, res, next) => {
+        req.app.get('db').get_meal_by_id([req.params.id]).then(meal => {
+            res.status(200).send(meal[0])
+        })
+    },
+
+    addFoodToMeal: (req, res, next) => {
+        const db = req.app.get('db')
+        const { meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib } = req.body
+        db.add_food_to_meal([meal_id, food_id, (pro + total_p), (carb + total_c), (fat + total_f), (fiber + total_fib)]).then(newMeal => {
+            db.get_foods_by_meal_id(newMeal[0].meal_id).then(foods => {
+                let retObj = {
+                    foods,
+                    newMeal: newMeal[0]
+                }
+                res.status(200).send(retObj)
+            })
+        })
+    },
     
 // createExercise: (req, res, next) => {
 //     const { name, type, img, video_url } = req.body
@@ -61,19 +99,19 @@ module.exports = {
         //     }) 
         // },
         
-// createFood: (req, res, next) => {
-    //     const { name, pro, carb, fat, fiber } = req.body
-    //     req.app.get('db').create_food([name, req.user.auth_id, pro, carb, fat, fiber]).then( food => {
-        //         res.status(200).send(food)
-        //     }) 
-        // },
+createFood: (req, res, next) => {
+        const { name, p, c, f, fib, img } = req.body
+        req.app.get('db').create_food([name, req.user.user_id, p, c, f, fib, img]).then( food => {
+                res.status(200).send(food)
+            }) 
+        },
         
-// createMeal: (req, res, next) => {
-    //     const { title, total_p, total_c, total_f, ingredients } = req.body
-    //     req.app.get('db').create_meal([title, req.user.auth_id, total_p, total_c, total_f, ingredients]).then( meal => {
-        //         res.status(200).send(meal)
-        //     }) 
-        // },
+createMeal: (req, res, next) => {
+        const { title, img } = req.body
+        req.app.get('db').create_meal([title, req.user.user_id, img]).then( meal => {
+                res.status(200).send(meal[0])
+            }) 
+        },
 
 // createDayMenu: (req, res, next) => {
     //     const { name, meals } = req.body

@@ -16,6 +16,7 @@ const initialState = {
     },
     curr_mes: { waist: 0, neck: 0, chest: 0, weight: 0, height: 0, bf: 0, mes_id: 0 },
     isLoggedIn: false
+    
 }
 /////////////////END initial state declaration////////////////////
 
@@ -104,7 +105,11 @@ export default function(state = initialState, action) {
                         current_weight: action.payload.wt,
                         current_height: action.payload.ht
                     },
-                    mes_id: action.payload.currMes_id}
+                    curr_mes: {
+                        ...state.curr_mes,
+                        mes_id: action.payload.currMes_id
+                        }
+                }
         default:
             return state
     }

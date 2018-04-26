@@ -20,6 +20,7 @@ CREATE TABLE meals (
     total_fib INTEGER,
     img_url TEXT
 );
+
 CREATE TABLE foods (
     food_id SERIAL PRIMARY KEY,
     name VARCHAR(25) NOT NULL,
@@ -27,7 +28,8 @@ CREATE TABLE foods (
     pro INTEGER NOT NULL,
     carb INTEGER NOT NULL,
     fat INTEGER NOT NULL,
-    fiber INTEGER
+    fiber INTEGER,
+    img TEXT
 );
 
 CREATE TABLE meal_foods (
@@ -48,6 +50,7 @@ CREATE TABLE workouts (
     ex_ids INTEGER[],
     date_created DATE
 );
+
 CREATE TABLE exercises (
     ex_id SERIAL PRIMARY KEY,
     name VARCHAR(60) NOT NULL,

@@ -14,6 +14,7 @@ const initialState = {
         carbs: 0,
         fat: 0
     },
+    isUpdating: false
 }
 //////////////END initialState declaration/////////////
 
@@ -58,34 +59,50 @@ const UPDATE_TENACITY = 'UPDATE_TENACITY'
 const UPDATE_GENDER = 'UPDATE_GENDER'
 const UPDATE_ACTIVITY = 'UPDATE_ACTIVITY'
 const CALCULATE = 'CALCULATE'
+const CHANGE_UPDATING = 'CHANGE_UPDATING'
+const CLEAR_MACRO_ENTRY = 'CLEAR_MACRO_ENTRY'
 /////////////////////END String Literal Declaration///////////
 
 ////////////BEGIN Action Creator function declarations////////
+export function clearMacroEntry() {
+    return {
+        type: CLEAR_MACRO_ENTRY,
+        payload: 'something'
+    }
+}
+
+export function changeUpdating() {
+    return {
+        type: CHANGE_UPDATING,
+        payload: 'something'
+    }
+}
+
 export function updateHeight(val) {
     return {
         type: UPDATE_HEIGHT,
-        payload: val
+        payload: val/1
     }
 }
 
 export function updateWeight(val) {
     return {
         type: UPDATE_WEIGHT,
-        payload: val
+        payload: val/1
     }
 }
 
 export function updateAge(val) {
     return {
         type: UPDATE_AGE,
-        payload: val
+        payload: val/1
     }
 }
 
 export function updateBodyfat(val) {
     return {
         type: UPDATE_BODYFAT,
-        payload: val
+        payload: val/1
     }
 }
 
@@ -230,8 +247,16 @@ export default function(state = initialState, action) {
                 protein: action.payload.p,
                 carbs: action.payload.c,
                 fat: action.payload.f,
-            }
+            },
+            isUpdating: true
         }
+        case CHANGE_UPDATING:
+            return {
+                ...state,
+                isUpdating: false
+            }
+        case CLEAR_MACRO_ENTRY:
+            return initialState
         default:
         return state
     }

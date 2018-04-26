@@ -7,6 +7,6 @@
 --     ingredients text
 
 
-INSERT INTO meals (title, author_id, total_p, total_c, total_f, ingredients)
-VALUES ($1, $2, $3, $4, $5, $6)
+INSERT INTO meals (title, author_id, img_url, total_p, total_c, total_f, total_fib)
+VALUES ($1, $2, $3, 0, 0, 0, 0)
 RETURNING *
