@@ -4,6 +4,17 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 
 class Food extends Component{
+    constructor() {
+        super()
+        this.sendEdits = this.sendEdits.bind(this)
+    }
+
+    sendEdits() {
+        const { name, p, c, f, fib, img } = this.props
+        const { food_id } = this.props.location.state
+        this.props.editFood( food_id, name, p, c, f, fib, img )
+    }
+    
     render() {
         const { name, p, c, f, fib, img } = this.props
         return(
@@ -24,7 +35,10 @@ class Food extends Component{
                 {
                     this.props.match.params.from === 'meal'
                     ?
-                    <Link to={`meal/${this.props.meal.title}`}>Back to Meal</Link>
+                    <section className="update-food">
+                        <button onClick={this.sendEdits}>UpdateFood</button>
+                        <Link to={`meal/${this.props.meal.title}`}>Back to Meal</Link>
+                    </section>
                     :
                     <button onClick={() => this.props.addFoodToDB(name, p, c, f, fib, img)}>Add Food</button>
                 }

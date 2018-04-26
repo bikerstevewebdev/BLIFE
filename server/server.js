@@ -101,6 +101,7 @@ app.post('/food', c.createFood)
 app.post('/meal/food', c.addFoodToMeal)
 app.post('/meal', c.createMeal)
 
+app.put('/meal/removeFood', c.removeFoodFromMeal)
 // app.post('/dayMenu', c.createDayMenu)
 // app.post('/exercise', c.createExercise)
 // app.post('/workout', c.createWorkout)

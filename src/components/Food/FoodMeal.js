@@ -1,35 +1,37 @@
 import React, { Component } from 'react'
 import { getFoodById, updateFoodQuantity } from '../../ducks/foodReducer'
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 class FoodMeal extends Component{
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            needsEdit: false
+            needsEdit: false,
+            quantityIn: props.quantity
         }
         this.editFood = this.editFood.bind(this)
+        this.deleteFood = this.deleteFood.bind(this)
+        this.sendUpdate = this.sendUpdate.bind(this)
+        this.changeAmount = this.changeAmount.bind(this)
     }
 
-    editFood() {
-        this.props.getFoodById(food_id)
-        this.setState({
-            needsEdit: true
-        })
-    }
+    // editFood() {
+    //     this.props.getFoodById(food_id)
+    //     this.setState({
+    //         needsEdit: true
+    //     })
+    // }
 
     deleteFood() {
-        this.props.removeFromMeal(this.props.food_id)
-        this.setState({
-
-        })
+        const { food_id, meal_id, pro, carb, fat, fiber, quantity } = this.props
+        this.props.removeFromMeal(meal_id, food_id, pro, carb, fat, fiber, quantity)
     }
 
 
     sendUpdate() {
         const { quantityIn } = this.state
-        this.props.updateFoodQuantity(meal_id, food_id, newQuantity, (newQuantity-foodQuantity), pro, carb, fat, fiber)
+        this.props.updateFoodQuantity(meal_id, food_id, quantityIn, (quantityIn-quantity), pro, carb, fat, fiber)
     }
     
     changeAmount(e) {
@@ -39,8 +41,7 @@ class FoodMeal extends Component{
     }
     
     render() {
-        const { food_id, name, pro, carb, fat, fiber, img, foodQuantity } = this.props
-        const initialQuantity = foodQuantity
+        const { food_id, name, pro, carb, fat, fiber, img, quantity } = this.props
         return(
             <section>
                 <p>Name: {name}</p>
@@ -49,17 +50,20 @@ class FoodMeal extends Component{
                 <p>Fat: {fat}</p>
                 <p>Fiber: {fiber}</p>
                 <img src={img} alt={name} />
-                <button onClick={() => this.editFood(name, p, c, f, fib, img)}>Edit Food</button>
+                <Link to={{
+                    pathname: `/food/meal`,
+                    state: { food_id, name, pro, carb, fat, fiber, img }
+                }}><button onClick={() => this.props.getFoodById(food_id)}>Edit Food</button></Link>
                 <button onClick={this.deleteFood}>Remove From Meal</button>
-                <input type="number" min="1" max="100" placeholder={initialQuantity} onChange={this.changeAmount} className="food-quantity" />
+                <input type="number" min="1" max="100" value={this.state.quantityIn} onChange={this.changeAmount} className="food-quantity" />
                 <button onClick={this.sendUpdate}>Update the quantity</button>
-                {
+                {/* {
                     this.state.needsEdit
                     ?
                     <Redirect to={`/food/meal`} />
                     :
                     null
-                }
+                } */}
             </section>
         )
     }

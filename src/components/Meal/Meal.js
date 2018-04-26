@@ -29,16 +29,7 @@ class Meal extends Component{
         })
         const mealFoodList = mealFoods.map(food => {
             const { food_id, name, pro, carb, fat, fiber, img, quantity } = food
-            return <FoodMeal key={food_id} food_id name pro carb fat fiber img />
-                // <section key={food_id} className="food-result">
-                //     <img src={img} alt={name} />
-                //     <p>Food Name: {name}</p>
-                //     <p>Protein: {pro}</p>
-                //     <p>Carb: {carb}</p>
-                //     <p>Fat: {fat}</p>
-                //     <p>Fiber: {fiber}</p>
-                // </section>
-            
+            return <FoodMeal key={food_id} food_id name pro carb fat meal_id fiber img quantity />            
         })
         return(
             <section className="meal">

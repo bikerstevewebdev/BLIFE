@@ -95,16 +95,30 @@ module.exports = {
     updateFoodQuantity: (req, res, next) => {
         const db = req.app.get('db')
         const { meal_id, food_id, quantity, dif, p, c, f, fib } = req.body
-        db.update_food_quantity([meal_id, food_id, quantity, (dif*p), (dif*c), (dif*f), (dif*fib)]).then(meal => {
+        db.update_food_quantity([meal_id, food_id, quantity, (dif*p), (dif*c), (dif*f), (dif*fib)]).then(newMeal => {
             db.get_foods_by_meal_id([meal_id]).then(foods => {
                     let retObj = {
                         foods,
-                        meal: meal[0]
+                        newMeal: newMeal[0]
                     }
                 res.status(200).send(retObj)
             })
         })
-    }
+    },
+
+    removeFoodFromMeal: (req, res, next) => {
+        const db = req.app.get('db')
+        const { meal_id, food_id, p, c, f, fib, quantity } = req.body
+        db.remove_food_from_meal([meal_id, food_id, (quantity*p), (quantity*c), (quantity*f), (quantity*fib), quantity]).then(newMeal => {
+            db.get_foods_by_meal_id([meal_id]).then(foods => {
+                let retObj = {
+                    foods,
+                    newMeal: newMeal[0]
+                }
+                res.status(200).send(retObj)
+            })
+        })
+    },
     
 // createExercise: (req, res, next) => {
 //     const { name, type, img, video_url } = req.body
