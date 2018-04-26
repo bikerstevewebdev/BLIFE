@@ -66,15 +66,22 @@ module.exports = {
     },
     
     getMealById: (req, res, next) => {
-        req.app.get('db').get_meal_by_id([req.params.id]).then(meal => {
-            res.status(200).send(meal[0])
+        const db = req.app.get('db')
+        db.get_meal_by_id([req.params.id]).then(meal => {
+            db.get_foods_by_meal_id(meal[0].meal_id).then(foods => {
+                let retObj = {
+                    foods,
+                    meal: meal[0]
+                }
+                res.status(200).send(retObj)
+            })
         })
     },
 
     addFoodToMeal: (req, res, next) => {
         const db = req.app.get('db')
-        const { meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib } = req.body
-        db.add_food_to_meal([meal_id, food_id, (pro + total_p), (carb + total_c), (fat + total_f), (fiber + total_fib)]).then(newMeal => {
+        const { meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib, quantity } = req.body
+        db.add_food_to_meal([meal_id, food_id, quantity, (pro*quantity + total_p), (carb*quantity + total_c), (fat*quantity + total_f), (fiber*quantity + total_fib)]).then(newMeal => {
             db.get_foods_by_meal_id(newMeal[0].meal_id).then(foods => {
                 let retObj = {
                     foods,
@@ -84,6 +91,20 @@ module.exports = {
             })
         })
     },
+    
+    updateFoodQuantity: (req, res, next) => {
+        const db = req.app.get('db')
+        const { meal_id, food_id, quantity, dif, p, c, f, fib } = req.body
+        db.update_food_quantity([meal_id, food_id, quantity, (dif*p), (dif*c), (dif*f), (dif*fib)]).then(meal => {
+            db.get_foods_by_meal_id([meal_id]).then(foods => {
+                    let retObj = {
+                        foods,
+                        meal: meal[0]
+                    }
+                res.status(200).send(retObj)
+            })
+        })
+    }
     
 // createExercise: (req, res, next) => {
 //     const { name, type, img, video_url } = req.body

@@ -93,6 +93,7 @@ app.get('/meal/search/:id', c.getMealById)
 app.get('/food/search/:id', c.getFood)
 
 app.put('/user/stats', c.updateStats)
+app.put('/meal/foods/quantity', c.updateFoodQuantity)
 
 app.post('/user/mez', c.addMez)
 app.post('/macroCalc', c.newMacroCalc)

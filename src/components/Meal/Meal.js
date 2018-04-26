@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import Food from '../Food/Food'
+import FoodMeal from '../Food/FoodMeal'
 import { connect } from 'react-redux'
 import { searchFoods, updateSearchIn, addFoodToMeal, getMealById } from '../../ducks/foodReducer'
 
 class Meal extends Component{
     componentDidMount() {
         const { id } = this.props.match.params
-        if(id > 0){
+        if(!isNaN(id) && id > 0){
             this.props.getMealById(id)
         } 
     }
@@ -28,17 +28,17 @@ class Meal extends Component{
             )
         })
         const mealFoodList = mealFoods.map(food => {
-            const { food_id, name, pro, carb, fat, fiber, img } = food
-            return (
-                <section key={food_id} className="food-result">
-                    <img src={img} alt={name} />
-                    <p>Food Name: {name}</p>
-                    <p>Protein: {pro}</p>
-                    <p>Carb: {carb}</p>
-                    <p>Fat: {fat}</p>
-                    <p>Fiber: {fiber}</p>
-                </section>
-            )
+            const { food_id, name, pro, carb, fat, fiber, img, quantity } = food
+            return <FoodMeal key={food_id} food_id name pro carb fat fiber img />
+                // <section key={food_id} className="food-result">
+                //     <img src={img} alt={name} />
+                //     <p>Food Name: {name}</p>
+                //     <p>Protein: {pro}</p>
+                //     <p>Carb: {carb}</p>
+                //     <p>Fat: {fat}</p>
+                //     <p>Fiber: {fiber}</p>
+                // </section>
+            
         })
         return(
             <section className="meal">
@@ -53,7 +53,6 @@ class Meal extends Component{
                 {mealFoodList}
                 <input value={searchIn} placeholder="Search Foods by Name" onChange={e => this.props.updateSearchIn(e.target.value)}/>
                 <button onClick={() => this.props.searchFoods(searchIn)}>Search for your food!</button>
-                <Food />
                 {foodResults}
             </section>
         )

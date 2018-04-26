@@ -52,7 +52,7 @@ class MealCreator extends Component{
                     ?
                     null
                     :
-                    <Redirect to='/meal/0' />
+                    <Redirect to={`/meal/${mealTitle}`} />
                 }
             </section>
         )

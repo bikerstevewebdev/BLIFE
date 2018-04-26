@@ -30,6 +30,7 @@ const ADD_FOOD_TO_MEAL = 'ADD_FOOD_TO_MEAL'
 const CREATE_MEAL = 'CREATE_MEAL'
 const SEARCH_MEALS = 'SEARCH_MEALS'
 const GET_MEAL = 'GET_MEAL'
+const EDIT_FOOD = 'EDIT_FOOD'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
@@ -90,12 +91,16 @@ export function addFoodToDB(name, p, c, f, fib, img) {
 }
 
 export function getMealById(id){
-    let meal = axios.get(`/meal/search/${id}`).then(res => {
-        return res.data
+    let mealWithFoods = axios.get(`/meal/search/${id}`).then(res => {
+        if(res.data.foods.length > 0){
+            return res.data
+        } else if(res.data.foods.length === 0) {
+            return res.data.meal
+        }
     })
     return {
         type: GET_MEAL,
-        payload: meal
+        payload: mealWithFoods
     }
 }
 export function getFoodById(id){
@@ -128,8 +133,18 @@ export function searchMeals(title){
     }
 }
 
-export function addFoodToMeal(meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib){
-    let mealData = axios.post(`/meal/food`, {meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib}).then(res => {
+export function updateFoodQuantity(meal_id, food_id, quantity, dif, p, c, f, fib){
+    let meals = axios.put('/meal/foods/quantity', { meal_id, food_id, quantity, dif, p, c, f, fib  }).then(res => {
+        return res.data
+    })
+    return {
+        type: SEARCH_MEALS,
+        payload: meals
+    }
+}
+
+export function addFoodToMeal(meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib, quantity){
+    let mealData = axios.post(`/meal/food`, {meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib, quantity}).then(res => {
         return res.data
     })
     return {
@@ -144,7 +159,11 @@ export function createMeal(title, img){
     })
     return {
         type: CREATE_MEAL,
-        payload: mealData
+        payload: mealData,
+        meta: {
+            title,
+            img
+        }
     }
 }
 ////////////////END ACTION CREATOR declaration/////////
@@ -167,6 +186,19 @@ export default function(state = initialState, action) {
             return { ...state, img: action.payload}
         case UPDATE_SEARCH_IN:
             return { ...state, searchIn: action.payload}
+        case CREATE_MEAL + '_PENDING':
+            return {
+                ...state,
+                meal: {
+                    title: action.meta.title,
+                    img_url: action.meta.img,
+                    total_p: 0,
+                    total_c: 0,
+                    total_f: 0,
+                    total_fib: 0,
+                    meal_id: 0
+                }
+            }
         case CREATE_MEAL + '_FULFILLED':
             return {
                 ...state,
@@ -181,9 +213,20 @@ export default function(state = initialState, action) {
         case SEARCH_MEALS + '_FULFILLED':
             return {...state, mealSearchResults: action.payload}
         case GET_FOOD + '_FULFILLED':
-            return {...state, food: action.payload}
+            return {...state,
+                    name: action.payload.name,
+                    p: action.payload.pro,
+                    c: action.payload.carb,
+                    f: action.payload.fat,
+                    fib: action.payload.fiber,
+                    img: action.payload.img
+                }
         case GET_MEAL + '_FULFILLED':
-            return {...state, meal: action.payload}
+            if(action.payload.foods){
+                return {...state, foods: action.payload.foods, meal: action.payload.meal}
+            }else {
+                return {...state, meal: action.payload}
+            }
         default:
             return state
     }

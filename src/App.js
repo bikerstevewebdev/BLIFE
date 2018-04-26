@@ -7,6 +7,7 @@ import Profile from './components/Profile/Profile'
 import UpdateProfile from './components/UpdateProfile/UpdateProfile'
 import MacroCalc from './components/MacroCalc/MacroCalc'
 import Meal from './components/Meal/Meal'
+import Food from './components/Food/Food'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
@@ -38,6 +39,7 @@ class App extends Component {
           <Route path='/macroCalc' component={MacroCalc} />
           <Route path='/meal/:id' component={Meal} />
           <Route path='/mealCreator' component={MealCreator} />
+          <Route path='/food/:from' component={Food} />
         </Switch>
       </div>
     );

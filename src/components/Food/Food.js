@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { updateNameIn, updatePIn, updateCIn, updateFIn, updateFibIn, updateImgIn, addFoodToDB } from '../../ducks/foodReducer'
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 
 class Food extends Component{
     render() {
@@ -20,7 +21,13 @@ class Food extends Component{
                 <input className="food-fib" type="number" min="0" max="1000" value={fib} onChange={(e) => this.props.updateFibIn(e.target.value)} placeholder="number in grams"/>
                 <p>Image URL:</p>
                 <input className="food-img-url" value={img} onChange={(e) => this.props.updateImgIn(e.target.value)} placeholder="link to image"/>
-                <button onClick={() => this.props.addFoodToDB(name, p, c, f, fib, img)}>Add Food</button>
+                {
+                    this.props.match.params.from === 'meal'
+                    ?
+                    <Link to={`meal/${this.props.meal.title}`}>Back to Meal</Link>
+                    :
+                    <button onClick={() => this.props.addFoodToDB(name, p, c, f, fib, img)}>Add Food</button>
+                }
             </section>
         )
     }
@@ -33,7 +40,8 @@ function mapStateToProps(state) {
         c: state.foods.c,
         f: state.foods.f,
         fib: state.foods.fib,
-        img: state.foods.img
+        img: state.foods.img,
+        meal: state.foods.meal
     }
 }
 
