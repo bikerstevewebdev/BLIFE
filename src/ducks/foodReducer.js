@@ -9,10 +9,12 @@ const initialState = {
     img: '',
     food_id: 0,
     foods: [],
-    searchIn: '',
     meal: {},
     mealFoods: [],
-    mealSearchResults: []
+    mealSearchResults: [],
+    errorMessage: '',
+    menu: {},
+    menuMeals: []
 }
 ////////////////END initialState declaration/////////
 
@@ -26,7 +28,6 @@ const UPDATE_IMGIN = 'UPDATE_IMGIN'
 const ADD_FOOD = 'ADD_FOOD'
 const GET_FOOD = 'GET_FOOD'
 const SEARCH_FOODS = 'SEARCH_FOODS'
-const UPDATE_SEARCH_IN = 'UPDATE_SEARCH_IN'
 const ADD_FOOD_TO_MEAL = 'ADD_FOOD_TO_MEAL'
 const CREATE_MEAL = 'CREATE_MEAL'
 const SEARCH_MEALS = 'SEARCH_MEALS'
@@ -34,15 +35,14 @@ const GET_MEAL = 'GET_MEAL'
 const EDIT_FOOD = 'EDIT_FOOD'
 const UPDATE_FOOD_QUANTITY = 'UPDATE_FOOD_QUANTITY'
 const REMOVE_FOOD = 'REMOVE_FOOD'
+const CREATE_MENU = 'CREATE_MENU'
+const REMOVE_MEAL = 'REMOVE_MEAL'
+const GET_MENU = 'GET_MENU'
+const ADD_MEAL_TO_MENU = 'ADD_MEAL_TO_MENU'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
-export function updateSearchIn(val) {
-    return {
-        type: UPDATE_SEARCH_IN,
-        payload: val
-    }
-}
+
 export function updateNameIn(val) {
     return {
         type: UPDATE_NAMEIN,
@@ -106,6 +106,19 @@ export function getMealById(id){
         payload: mealWithFoods
     }
 }
+export function getMenuById(id){
+    let menuWithMeals = axios.get(`/menu/search/${id}`).then(res => {
+        if(res.data.meals.length > 0){
+            return res.data
+        } else if(res.data.meals.length === 0) {
+            return res.data.menu
+        }
+    })
+    return {
+        type: GET_MENU,
+        payload: menuWithMeals
+    }
+}
 export function getFoodById(id){
     let food = axios.get(`/food/search/${id}`).then(res => {
         return res.data
@@ -123,6 +136,15 @@ export function removeFromMeal(meal_id, food_id, p, c, f, fib, quantity){
     return {
         type: REMOVE_FOOD,
         payload: mealWithFoods
+    }
+}
+export function removeMealFromMenu(menu_id, menu_meals_id, p, c, f, fib){
+    let menuWithMeals = axios.put(`/meal/removeMeal`, { menu_meals_id, food_id, p, c, f, fib, quantity }).then(res => {
+        return res.data
+    })
+    return {
+        type: REMOVE_MEAL,
+        payload: menuWithMeals
     }
 }
 
@@ -165,6 +187,15 @@ export function editFood(food_id, p, c, f, fib, img){
         payload: food
     }
 }
+export function editMenu(menu_id, title, img){
+    let menu = axios.put('/food/edit', { menu_id, title, img }).then(res => {
+        return res.data
+    })
+    return {
+        type: EDIT_MENU,
+        payload: menu
+    }
+}
 
 export function addFoodToMeal(meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib, quantity){
     let mealData = axios.post(`/meal/food`, {meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib, quantity}).then(res => {
@@ -173,6 +204,15 @@ export function addFoodToMeal(meal_id, food_id, pro, carb, fat, fiber, total_p, 
     return {
         type: ADD_FOOD_TO_MEAL,
         payload: mealData
+    }
+}
+export function addMealToMenu(menu_id, meal_id, p, c, f, fib, total_p, total_c, total_f, total_fib){
+    let menuData = axios.post(`/menu/meal`, {menu_id, meal_id, p, c, f, fib, total_p, total_c, total_f, total_fib}).then(res => {
+        return res.data
+    })
+    return {
+        type: ADD_MEAL_TO_MENU,
+        payload: menuData
     }
 }
 
@@ -187,6 +227,15 @@ export function createMeal(title, img){
             title,
             img
         }
+    }
+}
+export function createMenu(title, img){
+    let menu = axios.post(`/menu`, {title, img}).then(res => {
+        return res.data
+    })
+    return {
+        type: CREATE_MENU,
+        payload: menu
     }
 }
 ////////////////END ACTION CREATOR declaration/////////
@@ -207,8 +256,6 @@ export default function(state = initialState, action) {
             return { ...state, fib: action.payload}
         case UPDATE_IMGIN:
             return { ...state, img: action.payload}
-        case UPDATE_SEARCH_IN:
-            return { ...state, searchIn: action.payload}
         case CREATE_MEAL + '_PENDING':
             return {
                     ...state,
@@ -227,6 +274,11 @@ export default function(state = initialState, action) {
                 ...state,
                 meal: action.payload
             }
+        case CREATE_MENU + '_FULFILLED':
+            return {
+                ...state,
+                menu: action.payload
+            }
         case ADD_FOOD + '_FULFILLED':
             return initialState
         case REMOVE_FOOD + '_FULFILLED':
@@ -235,8 +287,16 @@ export default function(state = initialState, action) {
                     meal: action.payload.newMeal,
                     mealFoods: action.payload.foods
                 }
+        case REMOVE_MENU + '_FULFILLED':
+            return {
+                    ...state,
+                    menu: action.payload.newMenu,
+                    menuMeals: action.payload.meals
+                }
         case ADD_FOOD_TO_MEAL + '_FULFILLED':
             return { ...state, meal: action.payload.newMeal, mealFoods: action.payload.foods }
+        case ADD_MEAL_TO_MENU + '_FULFILLED':
+            return { ...state, menu: action.payload.newMenu, menuMeals: action.payload.meals }
         case SEARCH_FOODS + '_FULFILLED':
             return { ...state, foods: action.payload}
         case SEARCH_MEALS + '_FULFILLED':
@@ -250,18 +310,34 @@ export default function(state = initialState, action) {
             }else {
                 return { ...state, meal: action.payload}
             }
+        case GET_MENU + '_FULFILLED':
+            if(action.payload.meals){
+                return { ...state, menuMeals: action.payload.meals, menu: action.payload.menu}
+            }else {
+                return { ...state, menu: action.payload}
+            }
         case UPDATE_FOOD_QUANTITY + '_FULFILLED':
                 return { ...state, foods: action.payload.foods, meal: action.payload.newMeal}
         case EDIT_FOOD + '_FULFILLED':
-                return {
-                        ...state, 
-                        name: action.payload.name,
-                        p: action.payload.pro,
-                        c: action.payload.carb,
-                        f: action.payload.fat,
-                        fib: action.payload.fiber,
-                        img: action.payload.img 
-                    }
+                if(action.payload.foods) {
+                    return {
+                            ...state, 
+                            name: action.payload.name,
+                            p: action.payload.pro,
+                            c: action.payload.carb,
+                            f: action.payload.fat,
+                            fib: action.payload.fiber,
+                            img: action.payload.img 
+                        }
+                } else{
+                    return { ...state, errorMessage: action.payload.message}
+                }
+        case EDIT_FOOD + '_FULFILLED':
+                if(action.payload.menu) {
+                    return { ...state, menu: action.payload }
+                } else{
+                    return { ...state, errorMessage: action.payload.message}
+                }
         default:
             return state
     }

@@ -16,7 +16,7 @@ class Food extends Component{
     }
     
     render() {
-        const { name, p, c, f, fib, img } = this.props
+        const { name, p, c, f, fib, img, errorMessage } = this.props
         return(
             <section>
                 <p>Add a Food to the BLIFE Database</p>
@@ -32,6 +32,13 @@ class Food extends Component{
                 <input className="food-fib" type="number" min="0" max="1000" value={fib} onChange={(e) => this.props.updateFibIn(e.target.value)} placeholder="number in grams"/>
                 <p>Image URL:</p>
                 <input className="food-img-url" value={img} onChange={(e) => this.props.updateImgIn(e.target.value)} placeholder="link to image"/>
+                {
+                    errorMessage
+                    ?
+                    <h2>{errorMessage}</h2>
+                    :
+                    null
+                }
                 {
                     this.props.match.params.from === 'meal'
                     ?
@@ -55,7 +62,8 @@ function mapStateToProps(state) {
         f: state.foods.f,
         fib: state.foods.fib,
         img: state.foods.img,
-        meal: state.foods.meal
+        meal: state.foods.meal,
+        errorMessage: state.foods.errorMessage
     }
 }
 

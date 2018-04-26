@@ -81,31 +81,41 @@ app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3000/#/dashboard',
     failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
-
 app.get('/auth/me', c.sendUserObjs)
+
 app.get('/user/:id', c.getUser)
 app.get('/userInfo', c.getUserInfo)
+
 app.get('/measurements/:id', c.getMeasurements)
 app.get('/measurements/latest/:id', c.getLatestMes)
+
 app.get('/food/search', c.searchFoods)
-app.get('/meal/search', c.searchMeals)
-app.get('/meal/search/:id', c.getMealById)
 app.get('/food/search/:id', c.getFood)
 
+app.get('/meal/search', c.searchMeals)
+app.get('/meal/search/:id', c.getMealById)
+
+app.get('/meal/search', c.searchMenus)
+app.get('/menu/search/:id', c.getMenuById)
+
+
 app.put('/user/stats', c.updateStats)
+app.put('/food/edit', c.editFood)
 app.put('/meal/foods/quantity', c.updateFoodQuantity)
+app.put('/menu', c.editMenu)
 
 app.post('/user/mez', c.addMez)
 app.post('/macroCalc', c.newMacroCalc)
 app.post('/food', c.createFood)
 app.post('/meal/food', c.addFoodToMeal)
 app.post('/meal', c.createMeal)
+app.post('/menu', c.createMenu)
 
-app.put('/meal/removeFood', c.removeFoodFromMeal)
-// app.post('/dayMenu', c.createDayMenu)
 // app.post('/exercise', c.createExercise)
 // app.post('/workout', c.createWorkout)
 
+app.put('/meal/removeFood', c.removeFoodFromMeal)
+app.put('/menu/removeMeal', c.removeMealFromMenu)
 
 
 

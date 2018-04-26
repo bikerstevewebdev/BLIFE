@@ -61,16 +61,31 @@ CREATE TABLE macro_calcs (
     member_id TEXT
 );
 
-CREATE TABLE day_menus (
+CREATE TABLE menu_meals (
+    menu_meals_id SERIAL PRIMARY KEY,
+    menu_id INTEGER,
+    meal_id INTEGER
+)
+
+CREATE TABLE menus (
     menu_id SERIAL PRIMARY KEY,
-    name VARCHAR(60),
-    meal_ids INTEGER[],
-    author_id INTEGER    
+    title VARCHAR(60),
+    author_id INTEGER,
+    total_p INTEGER NOT NULL,
+    total_c INTEGER NOT NULL,
+    total_f INTEGER NOT NULL,
+    total_fib INTEGER,
+    img TEXT    
 );
-
-
-CREATE TABLE work_ex (
-    work_ex_id SERIAL PRIMARY KEY,
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
+CREATE TABLE workout_ex (
+    workout_ex_id SERIAL PRIMARY KEY,
     meal_id INTEGER,
     food_id INTEGER
 );

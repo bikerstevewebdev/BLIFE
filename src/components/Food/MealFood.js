@@ -3,7 +3,7 @@ import { getFoodById, updateFoodQuantity } from '../../ducks/foodReducer'
 // import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
-class FoodMeal extends Component{
+class MealFood extends Component{
     constructor(props) {
         super(props)
         this.state = {
@@ -68,4 +68,4 @@ class FoodMeal extends Component{
         )
     }
 }
-export default connect(null, { getFoodById, updateFoodQuantity })(Food)
+export default connect(null, { getFoodById, updateFoodQuantity })(MealFood)

@@ -1,17 +1,33 @@
 import React, { Component } from 'react'
-import FoodMeal from '../Food/FoodMeal'
+import MealFood from '../Food/MealFood'
 import { connect } from 'react-redux'
-import { searchFoods, updateSearchIn, addFoodToMeal, getMealById } from '../../ducks/foodReducer'
+import { searchFoods, addFoodToMeal, getMealById } from '../../ducks/foodReducer'
 
 class Meal extends Component{
+    constructor(){
+        super()
+        this.state = {
+            searchIn:''
+        }
+        this.updateSearchIn = this.updateSearchIn.bind(this)
+    }
+    
     componentDidMount() {
         const { id } = this.props.match.params
         if(!isNaN(id) && id > 0){
             this.props.getMealById(id)
         } 
     }
+
+    updateSearchIn(e) {
+        this.setState({
+            searchIn: e.target.value
+        })
+    }
+    
     render() {
-        const { searchIn, foods, meal, mealFoods } = this.props
+        const { searchIn } = this.state
+        const { foods, meal, mealFoods } = this.props
         const { total_p, total_c, total_f, total_fib, meal_id, title, img_url } = meal
         const foodResults = foods.map(food => {
             const { food_id, pro, carb, fat, fiber, name, img } = food
@@ -29,7 +45,7 @@ class Meal extends Component{
         })
         const mealFoodList = mealFoods.map(food => {
             const { food_id, name, pro, carb, fat, fiber, img, quantity } = food
-            return <FoodMeal key={food_id} food_id name pro carb fat meal_id fiber img quantity />            
+            return <MealFood key={food_id} food_id name pro carb fat meal_id fiber img quantity />            
         })
         return(
             <section className="meal">
@@ -42,7 +58,7 @@ class Meal extends Component{
                 <p>Fiber: {total_fib}</p>
                 <h3>Foods in this meal:</h3>
                 {mealFoodList}
-                <input value={searchIn} placeholder="Search Foods by Name" onChange={e => this.props.updateSearchIn(e.target.value)}/>
+                <input value={searchIn} placeholder="Search Foods by Name" onChange={this.updateSearchIn}/>
                 <button onClick={() => this.props.searchFoods(searchIn)}>Search for your food!</button>
                 {foodResults}
             </section>
@@ -52,11 +68,10 @@ class Meal extends Component{
 
 function mapStateToProps(state) {
     return {
-        searchIn: state.foods.searchIn,
         foods: state.foods.foods,
         meal: state.foods.meal,
         mealFoods: state.foods.mealFoods
     }
 }
 
-export default connect(mapStateToProps, { searchFoods, updateSearchIn, addFoodToMeal, getMealById })(Meal)
+export default connect(mapStateToProps, { searchFoods, addFoodToMeal, getMealById })(Meal)
