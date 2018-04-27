@@ -14,7 +14,14 @@ const initialState = {
         current_height: 0,
         current_bf: 0
     },
-    curr_mes: { waist: 0, neck: 0, chest: 0, weight: 0, height: 0, bf: 0, mes_id: 0 },
+    curr_mes: { waist: 0,
+        neck: 0,
+        chest: 0,
+        weight: 0,
+        height: 0,
+        bf: 0,
+        mes_id: 0
+    },
     isLoggedIn: false
     
 }
@@ -79,28 +86,37 @@ export default function(state = initialState, action) {
                     curr_mes: { waist, neck, chest, weight, height, bf, mes_id }
                      }
         case GET_USER + '_FULFILLED':
-        console.log('begin getuser success', action.payload)
+            console.log('begin getuser success', action.payload)
 
-            if(action.payload.currMes){
-                const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.currMes
-                const { curr_pro, curr_carb, curr_fat } = action.payload.dBUser
-                console.log('userreducer', action.payload)
-                return { ...state,
-                        userData: action.payload.dBUser,
-                        curr_mes: {
-                            waist, neck, chest, weight, height, bf, mes_id
-                        },
-                        isLoggedIn: true,
-                        current_protein: action.payload.dBUser.curr_pro,
+            // if(action.payload.currMes){
+                // const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.currMes
+            const { curr_pro, curr_carb, curr_fat } = action.payload.dBUser
+            console.log('userreducer', action.payload)
+            return { ...state,
+                    userData: action.payload.dBUser,
+                    curr_mes: {
+                        waist: action.payload.currMes.waist,
+                        neck: action.payload.currMes.neck,
+                        chest: action.payload.currMes.chest,
+                        weight: action.payload.currMes.weight,
+                        height: action.payload.currMes.height,
+                        bf: action.payload.currMes.bf,
+                        mes_id: action.payload.currMes.mes_id
+                    },
+                    isLoggedIn: true,
+                    user: {
+                        ...state.user,
+                        current_protein: curr_pro,
                         current_carbs: curr_carb,
                         current_fat: curr_fat,
-                        current_weight: weight,
-                        current_height: height,
-                        current_bf: bf
+                        current_weight: action.payload.currMes.weight,
+                        current_height: action.payload.currMes.height,
+                        current_bf: action.payload.currMes.bf
                         }
-                } else{
-                    return { ...state, userData: action.payload, isLoggedIn: true }
-                }
+                    }
+                // } else{
+                    // return { ...state, userData: action.payload, isLoggedIn: true }
+                // }
         case MACRO_CALCED:
                 console.log('macros sent to be updated on user state')
             return {...state, 

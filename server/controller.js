@@ -193,12 +193,12 @@ module.exports = {
         })
     },
     
-// createExercise: (req, res, next) => {
-//     const { name, type, img, video_url } = req.body
-//     req.app.get('db').create_exercise([name, type, req.user.user_id, img, video_url]).then( exercise => {
-    //         res.status(200).send(exercise)
-//     }) 
-// },
+    createExercise: (req, res, next) => {
+        const { name, type, img, video_url } = req.body
+        req.app.get('db').create_exercise([name, type, req.user.user_id, img, video_url]).then( exercise => {
+                res.status(200).send(exercise)
+        }) 
+    },
 
 // createWorkout: (req, res, next) => {
     //     const { name, type, img, video_url } = req.body
