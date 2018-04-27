@@ -14,6 +14,7 @@ import { withRouter } from 'react-router'
 import MealCreator from './components/MealCreator/MealCreator';
 import MenuCreator from './components/MenuCreator/MenuCreator';
 import Menu from './components/Menu/Menu';
+import Exercise from './components/Exercise/Exercise';
 
 
 
@@ -44,6 +45,7 @@ class App extends Component {
           <Route path='/food/:from' component={Food} />
           <Route path='/menu/:from' component={Menu} />
           <Route path='/menuCreator' component={MenuCreator} />
+          <Route path='/exercise/:id' component={Exercise} />
         </Switch>
       </div>
     );

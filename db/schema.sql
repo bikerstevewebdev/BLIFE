@@ -89,6 +89,16 @@ CREATE TABLE workout_ex (
     meal_id INTEGER,
     food_id INTEGER
 );
+
+CREATE TABLE exercises (
+    ex_id SERIAL PRIMARY KEY,
+    name VARCHAR(60) NOT NULL,
+    type VARCHAR(25) NOT NULL,
+    main_muscle_group VARCHAR(25),
+    author_id INTEGER,
+    img TEXT,
+    video TEXT
+);
     
 CREATE TABLE workouts (
     workout_id SERIAL PRIMARY KEY,
@@ -97,14 +107,6 @@ CREATE TABLE workouts (
     date_created TEXT
 );
 
-CREATE TABLE exercises (
-    ex_id SERIAL PRIMARY KEY,
-    name VARCHAR(60) NOT NULL,
-    type VARCHAR(25) NOT NULL,
-    author_id INTEGER,
-    img TEXT,
-    video_url TEXT
-);
 CREATE TABLE progress_pics (
     pic_id SERIAL PRIMARY KEY,
     url TEXT,

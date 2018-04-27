@@ -98,6 +98,7 @@ app.get('/meal/search/:id', c.getMealById)
 app.get('/MENU/search', c.searchMenus)
 app.get('/menu/search/:id', c.getMenuById)
 
+app.get('/exercise/search/:id', c.getFood)
 
 app.put('/user/stats', c.updateStats)
 app.put('/food/edit', c.editFood)
@@ -106,14 +107,16 @@ app.put('/menu', c.editMenu)
 
 app.post('/user/mez', c.addMez)
 app.post('/macroCalc', c.newMacroCalc)
+
 app.post('/food', c.createFood)
 app.post('/meal/food', c.addFoodToMeal)
 app.post('/meal', c.createMeal)
 app.post('/menu', c.createMenu)
 app.post('/menu/meal', c.addMealToMenu)
 
-// app.post('/exercise', c.createExercise)
+app.post('/exercise', c.createExercise)
 // app.post('/workout', c.createWorkout)
+
 
 app.put('/meal/removeFood', c.removeFoodFromMeal)
 app.put('/menu/removeMeal', c.removeMealFromMenu)

@@ -149,7 +149,7 @@ module.exports = {
             }
         })
     },
-
+    
     editMenu: (req, res, next) => {
         const db = req.app.get('db')
         const { menu_id, title, img } = req.body
@@ -163,7 +163,7 @@ module.exports = {
             }
         })
     },
-
+    
     removeFoodFromMeal: (req, res, next) => {
         const db = req.app.get('db')
         const { meal_id, food_id, p, c, f, fib, quantity, meal_food_id } = req.body
@@ -194,12 +194,25 @@ module.exports = {
     },
     
     createExercise: (req, res, next) => {
-        const { name, type, img, video_url } = req.body
-        req.app.get('db').create_exercise([name, type, req.user.user_id, img, video_url]).then( exercise => {
-                res.status(200).send(exercise)
+        const { name, type, muscle, img, video } = req.body
+        req.app.get('db').create_exercise([name, type, muscle, req.user.user_id, img, video]).then( exercise => {
+            res.status(200).send(exercise)
         }) 
     },
-
+    
+    editExercise: (req, res, next) => {
+        const db = req.app.get('db')
+        const { id, name, type, muscle, video, img } = req.body
+        db.get_exercise_by_id([id]).then(ex => {
+            if(req.user.user_id == ex[0].author_id){
+                db.edit_exercise([id, name, type, muscle, video, img]).then(newEx => {
+                    res.status(200).send(newEx[0])
+                })
+            } else {
+                res.status(403).send({message: 'You are not the creator of that exercise and therefore do not have permission to change it. Feel free to create another version of this exercise if you find the information to be incorrect.'})
+            }
+        })
+    },
 // createWorkout: (req, res, next) => {
     //     const { name, type, img, video_url } = req.body
     //     req.app.get('db').create_workout([name, type, req.user.user_id, img, video_url]).then( workout => {

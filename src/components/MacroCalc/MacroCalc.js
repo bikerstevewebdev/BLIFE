@@ -33,7 +33,7 @@ class MacroCalc extends Component{
                 <input type="number" step="0.1" min="2" max="90" className="macro-input" onChange={(e) => this.props.updateBodyfat(e.target.value)} placeholder="% as Number" value={bodyfat} />
                 <p>Activity Level</p>
                 <select className="macro-input" onChange={(e) => this.props.updateActivity(e.target.value)}>
-                    <option value="low">Low (sedentary, low activity job, exercise 1-2 times/week)</option>
+                    <option selected value="low">Low (sedentary, low activity job, exercise 1-2 times/week)</option>
                     <option value="moderate">Moderate (lightly active, some movement at job, exercise 2-3 times/week)</option>
                     <option value="active">Active (above average activity, frequent moving at job, exercise 3-5 times/week)</option>
                     <option value="hi-active">Highly Active (athletic or highly active job, exercise 5-7 times/week)</option>
@@ -43,17 +43,17 @@ class MacroCalc extends Component{
                 <select className="macro-input" onChange={(e) => this.props.updateGoal(e.target.value)}>
                     <option value="gain">Gain Weight</option>
                     <option value="lose">Lose Weight</option>
-                    <option value="maintain">Maintain Current Weight</option>
+                    <option selected value="maintain">Maintain Current Weight</option>
                 </select>
                 <p>Goal Tenacity</p>
                 <select className="macro-input" onChange={(e) => this.props.updateTenacity(e.target.value)}>
                     <option value="intense">Intense (gain/lose 2+ pounds/week)</option>
-                    <option value="steady">Steady (gain/lose 1 pounds/week)</option>
+                    <option selected value="steady">Steady (gain/lose 1 pounds/week)</option>
                     <option value="slow">{"Slow (gain/lose < 1 pound/week)"}</option>
                 </select>
                 <p>Gender</p>
                 <select className="macro-input" onChange={(e) => this.props.updateGender(e.target.value)}>
-                    <option value="m">Male</option>
+                    <option selected value="m">Male</option>
                     <option value="f">Female</option>
                 </select>
                 <button className="calc-btn" onClick={this.calculate} >Calculate</button>
