@@ -200,6 +200,13 @@ module.exports = {
         }) 
     },
     
+    getExerciseById: (req, res, next) => {
+        const { id } = req.params
+        req.app.get('db').get_exercise_by_id([id]).then( exercise => {
+            res.status(200).send(exercise[0])
+        }) 
+    },
+    
     editExercise: (req, res, next) => {
         const db = req.app.get('db')
         const { id, name, type, muscle, video, img } = req.body

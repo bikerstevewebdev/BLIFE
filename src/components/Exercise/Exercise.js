@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { addExToDB, acknowledge, updateExercise, clearExercise} from '../../ducks/fitnessReducer'
+import { addExToDB, acknowledge, updateExercise, clearExercise, getExById } from '../../ducks/fitnessReducer'
 import { Redirect } from 'react-router-dom'
 
 class Exercise extends Component{
@@ -8,8 +8,8 @@ class Exercise extends Component{
         super()
         this.state = {
             nameIn: '',
-            typeIn: 'Full-Body',
-            muscleIn: 'Weights',
+            typeIn: 'Weights',
+            muscleIn: 'Full-Body',
             videoURLIn: '',
             imgURLIn:'',
             isEditing: false,
@@ -27,6 +27,25 @@ class Exercise extends Component{
         const { name, type, muscle, video, img } = this.props.exercise
         const { id } = this.props.match.params
         if(!isNaN(id/1) && id/1 > 0 && !this.state.isEditing){
+            if(name){
+                this.setState({
+                    nameIn: name,
+                    typeIn: type,
+                    muscleIn: muscle,
+                    videoURLIn: video,
+                    imgURLIn: img,
+                    isEditing: true
+                })
+            } else{
+                this.props.getExById(id)
+            }
+        }
+    }
+
+    componentDidUpdate() { 
+        const { name, type, muscle, video, img } = this.props.exercise
+        const { id } = this.props.match.params
+        if(id/1 > 0 && !this.state.nameIn){
             this.setState({
                 nameIn: name,
                 typeIn: type,
@@ -97,8 +116,9 @@ class Exercise extends Component{
                         <h3>Previous data:</h3>
                         <p>Type: {this.props.exercise.type}</p>
                         <p>Major Muscle Group: {this.props.exercise.muscle}</p>
-                        <p>Video URL: </p>
-                        <a href={this.props.exercise.video} target="_blank"/>
+                        <a href={this.props.exercise.video} target="_blank">
+                            Video URL
+                        </a>
                         <p>Image: </p>
                         <img src={this.props.exercise.img} alt={this.props.exercise.img}/>
                     </section>
@@ -151,6 +171,7 @@ class Exercise extends Component{
                     :
                     null
                 }
+                    {/* turn into a modal/alert at some point */}
                 {
                     this.state.doneEditing
                     ?
@@ -158,7 +179,6 @@ class Exercise extends Component{
                     :
                     null
                 }
-                {/* turn into a modal/alert at some point */}
             </section>
         )
     }
@@ -166,8 +186,9 @@ class Exercise extends Component{
 
 function mapStateToProps(state) {
     return {
-        message: state.fitness.dbMessage
+        message: state.fitness.dbMessage,
+        exercise: state.fitness.exercise
     }
 }
 
-export default connect(mapStateToProps, { addExToDB, acknowledge, updateExercise, clearExercise })(Exercise)
+export default connect(mapStateToProps, { addExToDB, acknowledge, updateExercise, clearExercise, getExById })(Exercise)

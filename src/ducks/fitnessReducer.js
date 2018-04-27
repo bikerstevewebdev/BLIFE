@@ -36,7 +36,7 @@ export function acknowledge() {
 }
 
 export function getExById(id){
-    let ex = axios.get(`/exercise/search/${id}`).then(res => {
+    let ex = axios.get(`/exercise/${id}`).then(res => {
         return res.data
     })
     return{
@@ -45,7 +45,7 @@ export function getExById(id){
     }
 }
 
-export function editExercise(id, name, type, muscle, video, img){
+export function updateExercise(id, name, type, muscle, video, img){
     let msg = axios.put(`/exercise`, { id, name, type, muscle, video, img }).then(res => {
         return res.data.message
     })
@@ -76,7 +76,7 @@ export default function(state = initialState, action) {
         case GET_EXERCISE + '_FULFILLED':
             return {...state, exercise: action.payload}
         case EDIT_EXERCISE + '_FULFILLED':
-                return {...state, dbMessage: action.payload, exercise: {}}
+                return {...state, dbMessage: action.payload}
         case CLEAR_EXERCISE:
                 return {...state, exercise: {}}
         case ACKNOWLEDGE:

@@ -98,7 +98,7 @@ app.get('/meal/search/:id', c.getMealById)
 app.get('/MENU/search', c.searchMenus)
 app.get('/menu/search/:id', c.getMenuById)
 
-app.get('/exercise/search/:id', c.getFood)
+app.get('/exercise/:id', c.getExerciseById)
 
 app.put('/user/stats', c.updateStats)
 app.put('/food/edit', c.editFood)
