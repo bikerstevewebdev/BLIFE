@@ -81,15 +81,23 @@ export default function(state = initialState, action) {
         case GET_USER + '_FULFILLED':
         console.log('begin getuser success', action.payload)
 
-        if(action.payload.currMes){
-            const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.currMes
-            console.log('userreducer', action.payload)
-            return { ...state,
-                userData: action.payload.dBUser,
-                curr_mes: {
-                    waist, neck, chest, weight, height, bf, mes_id
-                },
-                isLoggedIn: true}
+            if(action.payload.currMes){
+                const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.currMes
+                const { curr_pro, curr_carb, curr_fat } = action.payload.dBUser
+                console.log('userreducer', action.payload)
+                return { ...state,
+                        userData: action.payload.dBUser,
+                        curr_mes: {
+                            waist, neck, chest, weight, height, bf, mes_id
+                        },
+                        isLoggedIn: true,
+                        current_protein: action.payload.dBUser.curr_pro,
+                        current_carbs: curr_carb,
+                        current_fat: curr_fat,
+                        current_weight: weight,
+                        current_height: height,
+                        current_bf: bf
+                        }
                 } else{
                     return { ...state, userData: action.payload, isLoggedIn: true }
                 }

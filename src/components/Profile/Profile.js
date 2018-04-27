@@ -88,6 +88,7 @@ class Profile extends Component{
         return(
             <section>
                 Proofile Yo
+                <Link to='/'>Back to Login</Link>
                 <Link to='/updateProfile'>Update Profile</Link>
                 <p>Protein: {current_protein}</p>
                 <p>Fat: {current_fat}</p>

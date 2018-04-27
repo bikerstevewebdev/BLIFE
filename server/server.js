@@ -95,7 +95,7 @@ app.get('/food/search/:id', c.getFood)
 app.get('/meal/search', c.searchMeals)
 app.get('/meal/search/:id', c.getMealById)
 
-app.get('/meal/search', c.searchMenus)
+app.get('/MENU/search', c.searchMenus)
 app.get('/menu/search/:id', c.getMenuById)
 
 
@@ -110,6 +110,7 @@ app.post('/food', c.createFood)
 app.post('/meal/food', c.addFoodToMeal)
 app.post('/meal', c.createMeal)
 app.post('/menu', c.createMenu)
+app.post('/menu/meal', c.addMealToMenu)
 
 // app.post('/exercise', c.createExercise)
 // app.post('/workout', c.createWorkout)

@@ -30,10 +30,6 @@ module.exports = {
         const db = req.app.get('db')
         if(req.params.id) {
             db.get_mes_by_id([req.params.id]).then( measurements => {
-                // db
-                //     db
-                //         db
-                //         res.send()
                 res.status(200).send(measurements[0])
             })
         } else{
@@ -113,8 +109,8 @@ module.exports = {
     
     addMealToMenu: (req, res, next) => {
         const db = req.app.get('db')
-        const { menu_id, meal_id, p, c, f, fib, total_p, total_c, total_f, total_fib } = req.body
-        db.add_meal_to_menu([menu_id, meal_id, (p + total_p), (c + total_c), (f + total_f), (fib + total_fib)]).then(newMenu => {
+        const { menu_id, meal_id, p, c, f, fib } = req.body
+        db.add_meal_to_menu([menu_id, meal_id, p, c, f, fib]).then(newMenu => {
             db.get_meals_by_menu_id([menu_id]).then(meals => {
                 let retObj = {
                     meals,
@@ -144,7 +140,7 @@ module.exports = {
         const db = req.app.get('db')
         const { food_id, name, p, c, f, fib, img } = req.body
         db.get_food_by_id([food_id]).then(food => {
-            if(req.user.user_id == food.author_id){
+            if(req.user.user_id == food[0].author_id){
                 db.edit_food([food_id, name, p, c, f, fib, img]).then(newFood => {
                     res.status(200).send(newFood[0])
                 })
@@ -158,7 +154,7 @@ module.exports = {
         const db = req.app.get('db')
         const { menu_id, title, img } = req.body
         db.get_menu_by_id([menu_id]).then(menu => {
-            if(req.user.user_id == menu.author_id){
+            if(req.user.user_id == menu[0].author_id){
                 db.edit_menu([menu_id, title, img]).then(newMenu => {
                     res.status(200).send(newMenu[0])
                 })
@@ -170,8 +166,9 @@ module.exports = {
 
     removeFoodFromMeal: (req, res, next) => {
         const db = req.app.get('db')
-        const { meal_id, food_id, p, c, f, fib, quantity } = req.body
-        db.remove_food_from_meal([meal_id, food_id, (quantity*p), (quantity*c), (quantity*f), (quantity*fib), quantity]).then(newMeal => {
+        const { meal_id, food_id, p, c, f, fib, quantity, meal_food_id } = req.body
+        let q = quantity/1
+        db.remove_food_from_meal([meal_food_id, meal_id, (q*(p/1)), (q*(c/1)), (q*(f/1)), (q*(fib/1))]).then(newMeal => {
             db.get_foods_by_meal_id([meal_id]).then(foods => {
                 let retObj = {
                     foods,
@@ -213,7 +210,7 @@ module.exports = {
     createFood: (req, res, next) => {
             const { name, p, c, f, fib, img } = req.body
             req.app.get('db').create_food([name, req.user.user_id, p, c, f, fib, img]).then( food => {
-                    res.status(200).send(food)
+                    res.status(200).send(food[0])
                 }) 
             },
             
@@ -227,7 +224,7 @@ module.exports = {
     createMenu: (req, res, next) => {
             const { title, img } = req.body
             req.app.get('db').create_menu([title, req.user.user_id, img]).then( menu => {
-                    res.status(200).send(menu)
+                    res.status(200).send(menu[0])
                 }) 
             },
                                 

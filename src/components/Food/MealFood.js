@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { getFoodById, updateFoodQuantity } from '../../ducks/foodReducer'
+import { getFoodById, updateFoodQuantity, removeFromMeal } from '../../ducks/foodReducer'
 // import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 
 class MealFood extends Component{
     constructor(props) {
@@ -10,7 +11,7 @@ class MealFood extends Component{
             needsEdit: false,
             quantityIn: props.quantity
         }
-        this.editFood = this.editFood.bind(this)
+        // this.editFood = this.editFood.bind(this)
         this.deleteFood = this.deleteFood.bind(this)
         this.sendUpdate = this.sendUpdate.bind(this)
         this.changeAmount = this.changeAmount.bind(this)
@@ -24,12 +25,13 @@ class MealFood extends Component{
     // }
 
     deleteFood() {
-        const { food_id, meal_id, pro, carb, fat, fiber, quantity } = this.props
-        this.props.removeFromMeal(meal_id, food_id, pro, carb, fat, fiber, quantity)
+        const { food_id, meal_id, pro, carb, fat, fiber, quantity, meal_food_id } = this.props
+        this.props.removeFromMeal(meal_id, food_id, pro, carb, fat, fiber, quantity, meal_food_id)
     }
 
 
     sendUpdate() {
+        const { food_id, meal_id, pro, carb, fat, fiber, quantity } = this.props        
         const { quantityIn } = this.state
         this.props.updateFoodQuantity(meal_id, food_id, quantityIn, (quantityIn-quantity), pro, carb, fat, fiber)
     }
@@ -41,7 +43,7 @@ class MealFood extends Component{
     }
     
     render() {
-        const { food_id, name, pro, carb, fat, fiber, img, quantity } = this.props
+        const { food_id, name, pro, carb, fat, fiber, img } = this.props
         return(
             <section>
                 <p>Name: {name}</p>
@@ -68,4 +70,4 @@ class MealFood extends Component{
         )
     }
 }
-export default connect(null, { getFoodById, updateFoodQuantity })(MealFood)
+export default connect(null, { getFoodById, removeFromMeal, updateFoodQuantity })(MealFood)

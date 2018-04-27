@@ -12,11 +12,12 @@ function Nav(props) {
                 <h2>BalancedLIFE</h2>
                 <section className="links">
                     <Link to='/dashboard'><button>Dashboard</button></Link>
-                    <Link to='/'><button>Login</button></Link>
                     <Link to='/profile'><button>Profile</button></Link>
                     <Link to='/macroCalc'><button>Macro Calc</button></Link>
                     <Link to='/meal/-1'><button>Meal Viewer</button></Link>
                     <Link to='/mealCreator'><button>Meal Creator</button></Link>
+                    <Link to='/menu/nav'><button>Menu Viewer</button></Link>
+                    <Link to='/menuCreator'><button>Menu Creator</button></Link>
                     <Link to='/food/nav'><button>Food Creator</button></Link>
                 </section>
             </nav>
@@ -24,6 +25,7 @@ function Nav(props) {
             <section className="unauthorized">
                 YOU ARE NOT LOGGED IN<br />
                 YOU DON'T SAY THAT
+                <Link to='/'><button>Login</button></Link>
             </section>
         }
         </header>

@@ -4,10 +4,10 @@ CREATE TABLE users (
     fullname TEXT,
     profile_pic TEXT,
     date_created DATE NOT NULL,
-    curr_pro INTEGER DEFAULT 0,
-    curr_carb INTEGER DEFAULT 0,
-    curr_fat INTEGER DEFAULT 0,
-    curr_mes_id INTEGER DEFAULT 0,
+    curr_pro REAL DEFAULT 0,
+    curr_carb REAL DEFAULT 0,
+    curr_fat REAL DEFAULT 0,
+    curr_mes_id REAL DEFAULT 0,
     auth_id TEXT NOT NULL
 );
 
@@ -27,10 +27,10 @@ CREATE TABLE meals (
     meal_id SERIAL PRIMARY KEY,
     title VARCHAR(25) NOT NULL,
     author_id INTEGER ,
-    total_p INTEGER NOT NULL,
-    total_c INTEGER NOT NULL,
-    total_f INTEGER NOT NULL,
-    total_fib INTEGER,
+    total_p REAL NOT NULL,
+    total_c REAL NOT NULL,
+    total_f REAL NOT NULL,
+    total_fib REAL,
     img_url TEXT
 );
 
@@ -38,10 +38,10 @@ CREATE TABLE foods (
     food_id SERIAL PRIMARY KEY,
     name VARCHAR(25) NOT NULL,
     author_id INTEGER,
-    pro INTEGER NOT NULL,
-    carb INTEGER NOT NULL,
-    fat INTEGER NOT NULL,
-    fiber INTEGER,
+    pro REAL NOT NULL,
+    carb REAL NOT NULL,
+    fat REAL NOT NULL,
+    fiber REAL,
     img TEXT
 );
 
@@ -54,9 +54,9 @@ CREATE TABLE meal_foods (
 
 CREATE TABLE macro_calcs (
     macro_id SERIAL PRIMARY KEY,
-    p INTEGER,
-    c INTEGER,
-    f INTEGER,
+    p REAL,
+    c REAL,
+    f REAL,
     date_calced DATE,
     member_id TEXT
 );
@@ -65,16 +65,16 @@ CREATE TABLE menu_meals (
     menu_meals_id SERIAL PRIMARY KEY,
     menu_id INTEGER,
     meal_id INTEGER
-)
+);
 
 CREATE TABLE menus (
     menu_id SERIAL PRIMARY KEY,
     title VARCHAR(60),
     author_id INTEGER,
-    total_p INTEGER NOT NULL,
-    total_c INTEGER NOT NULL,
-    total_f INTEGER NOT NULL,
-    total_fib INTEGER,
+    total_p REAL NOT NULL,
+    total_c REAL NOT NULL,
+    total_f REAL NOT NULL,
+    total_fib REAL,
     img TEXT    
 );
 ---------------------------------------------------------------------------------------------------

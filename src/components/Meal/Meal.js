@@ -2,14 +2,20 @@ import React, { Component } from 'react'
 import MealFood from '../Food/MealFood'
 import { connect } from 'react-redux'
 import { searchFoods, addFoodToMeal, getMealById } from '../../ducks/foodReducer'
+import { Link } from 'react-router-dom'
 
 class Meal extends Component{
     constructor(){
         super()
         this.state = {
-            searchIn:''
+            searchIn:'',
+            quantityIn: '',
+            addingToMeal: 0
         }
         this.updateSearchIn = this.updateSearchIn.bind(this)
+        this.updateQuantity = this.updateQuantity.bind(this)
+        this.addFoodToMeal = this.addFoodToMeal.bind(this)
+        this.prepareToAdd = this.prepareToAdd.bind(this)
     }
     
     componentDidMount() {
@@ -19,14 +25,34 @@ class Meal extends Component{
         } 
     }
 
+    addFoodToMeal(meal_id, food_id, p, c, f, fib, total_p, total_c, total_f, total_fib, quantity){
+        this.props.addFoodToMeal(meal_id, food_id, p, c, f, fib, total_p, total_c, total_f, total_fib, quantity)
+        this.setState({
+            addingToMeal: 0,
+
+        })
+    }
+
     updateSearchIn(e) {
         this.setState({
             searchIn: e.target.value
         })
     }
+
+    updateQuantity(e){
+        this.setState({
+            quantityIn: e.target.value
+        })
+    }
+
+    prepareToAdd(id){
+        this.setState({
+            addingToMeal: id
+        })
+    }
     
     render() {
-        const { searchIn } = this.state
+        const { searchIn, quantityIn } = this.state
         const { foods, meal, mealFoods } = this.props
         const { total_p, total_c, total_f, total_fib, meal_id, title, img_url } = meal
         const foodResults = foods.map(food => {
@@ -39,13 +65,22 @@ class Meal extends Component{
                     <p>Carb: {carb}</p>
                     <p>Fat: {fat}</p>
                     <p>Fiber: {fiber}</p>
-                    <button onClick={this.props.addFoodToMeal(meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib)}>Add to meal</button>
+                    {this.state.addingToMeal !== food_id
+                    ?
+                        <button onClick={() => this.prepareToAdd(food_id)}>Add to {title}?</button>
+                    :
+                        <section className="add-food-to-meal">
+                            <p>How many?</p>
+                            <input value={quantityIn} onChange={this.updateQuantity} />
+                            <button onClick={() => this.addFoodToMeal(meal_id, food_id, pro, carb, fat, fiber, total_p, total_c, total_f, total_fib,quantityIn/1)}>Add to meal</button>
+                        </section>
+                    }
                 </section>
             )
         })
         const mealFoodList = mealFoods.map(food => {
-            const { food_id, name, pro, carb, fat, fiber, img, quantity } = food
-            return <MealFood key={food_id} food_id name pro carb fat meal_id fiber img quantity />            
+            const { food_id, name, pro, carb, fat, fiber, img, quantity, meal_food_id } = food
+            return <MealFood key={meal_food_id} food_id={food_id} meal_food_id={meal_food_id} name={name} pro={pro} carb={carb} fat={fat} meal_id={meal_id} fiber={fiber} img={img} quantity={quantity} />            
         })
         return(
             <section className="meal">
@@ -61,6 +96,15 @@ class Meal extends Component{
                 <input value={searchIn} placeholder="Search Foods by Name" onChange={this.updateSearchIn}/>
                 <button onClick={() => this.props.searchFoods(searchIn)}>Search for your food!</button>
                 {foodResults}
+                {
+                    this.props.match.params.id === 'menu'
+                    ?
+                    <Link to={{pathname: `/menu/${this.props.location.state.menu_id}`}}>
+                        <button>Go Back to the menu?</button>
+                    </Link>
+                    :
+                    null
+                }
             </section>
         )
     }

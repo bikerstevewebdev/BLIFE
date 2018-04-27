@@ -12,6 +12,8 @@ import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import MealCreator from './components/MealCreator/MealCreator';
+import MenuCreator from './components/MenuCreator/MenuCreator';
+import Menu from './components/Menu/Menu';
 
 
 
@@ -40,6 +42,8 @@ class App extends Component {
           <Route path='/meal/:id' component={Meal} />
           <Route path='/mealCreator' component={MealCreator} />
           <Route path='/food/:from' component={Food} />
+          <Route path='/menu/:from' component={Menu} />
+          <Route path='/menuCreator' component={MenuCreator} />
         </Switch>
       </div>
     );

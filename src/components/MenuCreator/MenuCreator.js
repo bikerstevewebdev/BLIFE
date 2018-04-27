@@ -20,8 +20,6 @@ class Menu extends Component{
         const { titleInput, imgInput } = this.state        
         this.props.createMenu(titleInput, imgInput)
         this.setState({
-            titleInput: '',
-            imgInput: '',
             creating: false
         })
     }
@@ -45,7 +43,7 @@ class Menu extends Component{
                 <input value={this.state.titleInput} onChange={(e) => this.updateMenuTitle(e.target.value)} />
                 <p>Menu Image Url:</p>
                 <input value={this.state.imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
-                <button onClick={() => this.sendMeNUUp()}>Create Menu!</button>
+                <button onClick={() => this.sendMenuUp()}>Create Menu!</button>
                 {
                     this.state.creating
                     ?

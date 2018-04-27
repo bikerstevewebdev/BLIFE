@@ -14,7 +14,8 @@ const initialState = {
     mealSearchResults: [],
     errorMessage: '',
     menu: {},
-    menuMeals: []
+    menuMeals: [],
+    menuSearchResults: []
 }
 ////////////////END initialState declaration/////////
 
@@ -39,6 +40,9 @@ const CREATE_MENU = 'CREATE_MENU'
 const REMOVE_MEAL = 'REMOVE_MEAL'
 const GET_MENU = 'GET_MENU'
 const ADD_MEAL_TO_MENU = 'ADD_MEAL_TO_MENU'
+const EDIT_MENU = 'EDIT_MENU'
+const SEARCH_MENUS = 'SEARCH_MENUS'
+const CLEAR_MEAL_SEARCH = 'CLEAR_MEAL_SEARCH'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
@@ -129,8 +133,8 @@ export function getFoodById(id){
     }
 }
 
-export function removeFromMeal(meal_id, food_id, p, c, f, fib, quantity){
-    let mealWithFoods = axios.put(`/meal/removeFood`, { meal_id, food_id, p, c, f, fib, quantity }).then(res => {
+export function removeFromMeal(meal_id, food_id, p, c, f, fib, quantity, meal_food_id){
+    let mealWithFoods = axios.put(`/meal/removeFood`, { meal_id, food_id, p, c, f, fib, quantity, meal_food_id }).then(res => {
         return res.data
     })
     return {
@@ -138,8 +142,8 @@ export function removeFromMeal(meal_id, food_id, p, c, f, fib, quantity){
         payload: mealWithFoods
     }
 }
-export function removeMealFromMenu(menu_id, menu_meals_id, p, c, f, fib){
-    let menuWithMeals = axios.put(`/meal/removeMeal`, { menu_meals_id, food_id, p, c, f, fib, quantity }).then(res => {
+export function removeMealFromMenu(menu_meals_id, menu_id, p, c, f, fib){
+    let menuWithMeals = axios.put(`/menu/removeMeal`, { menu_meals_id, menu_id, p, c, f, fib }).then(res => {
         return res.data
     })
     return {
@@ -158,6 +162,15 @@ export function searchFoods(name){
     }
 }
 
+export function searchMenus(title){
+    let menus = axios.get(`/menu/search?title=${title}`).then(res => {
+        return res.data
+    })
+    return {
+        type: SEARCH_MENUS,
+        payload: menus
+    }
+}
 export function searchMeals(title){
     let meals = axios.get(`/meal/search?title=${title}`).then(res => {
         return res.data
@@ -206,8 +219,8 @@ export function addFoodToMeal(meal_id, food_id, pro, carb, fat, fiber, total_p, 
         payload: mealData
     }
 }
-export function addMealToMenu(menu_id, meal_id, p, c, f, fib, total_p, total_c, total_f, total_fib){
-    let menuData = axios.post(`/menu/meal`, {menu_id, meal_id, p, c, f, fib, total_p, total_c, total_f, total_fib}).then(res => {
+export function addMealToMenu(menu_id, meal_id, p, c, f, fib){
+    let menuData = axios.post(`/menu/meal`, {menu_id, meal_id, p, c, f, fib}).then(res => {
         return res.data
     })
     return {
@@ -238,12 +251,21 @@ export function createMenu(title, img){
         payload: menu
     }
 }
+
+export function clearMealSearch() {
+    return {
+        type: CLEAR_MEAL_SEARCH,
+        payload: 'nothing fancy'
+    }
+}
 ////////////////END ACTION CREATOR declaration/////////
 
 
 /////////////////BEGIN reducer declaration//////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case CLEAR_MEAL_SEARCH:
+            return { ...state, mealSearchResults: []}
         case UPDATE_NAMEIN:
             return { ...state, name: action.payload}
         case UPDATE_CIN:
@@ -287,7 +309,7 @@ export default function(state = initialState, action) {
                     meal: action.payload.newMeal,
                     mealFoods: action.payload.foods
                 }
-        case REMOVE_MENU + '_FULFILLED':
+        case REMOVE_MEAL + '_FULFILLED':
             return {
                     ...state,
                     menu: action.payload.newMenu,
@@ -301,12 +323,21 @@ export default function(state = initialState, action) {
             return { ...state, foods: action.payload}
         case SEARCH_MEALS + '_FULFILLED':
             return { ...state, mealSearchResults: action.payload}
+        case SEARCH_MENUS + '_FULFILLED':
+            return { ...state, menuSearchResults: action.payload}
         case GET_FOOD + '_FULFILLED':
-                const { p, c, f, fib, img, food_id } = action.payload
-            return { ...state, p, c, f, fib, img, food_id }
+            return { ...state,
+                    name: action.payload.name,
+                    p: action.payload.pro,
+                    c: action.payload.carb,
+                    f: action.payload.fat,
+                    fib: action.payload.fiber,
+                    img: action.payload.img,
+                    food_id: action.payload.food_id
+                    }
         case GET_MEAL + '_FULFILLED':
             if(action.payload.foods){
-                return { ...state, foods: action.payload.foods, meal: action.payload.meal}
+                return { ...state, mealFoods: action.payload.foods, meal: action.payload.meal}
             }else {
                 return { ...state, meal: action.payload}
             }
@@ -317,7 +348,7 @@ export default function(state = initialState, action) {
                 return { ...state, menu: action.payload}
             }
         case UPDATE_FOOD_QUANTITY + '_FULFILLED':
-                return { ...state, foods: action.payload.foods, meal: action.payload.newMeal}
+                return { ...state, mealFoods: action.payload.foods, meal: action.payload.newMeal}
         case EDIT_FOOD + '_FULFILLED':
                 if(action.payload.foods) {
                     return {
@@ -332,7 +363,7 @@ export default function(state = initialState, action) {
                 } else{
                     return { ...state, errorMessage: action.payload.message}
                 }
-        case EDIT_FOOD + '_FULFILLED':
+        case EDIT_MENU + '_FULFILLED':
                 if(action.payload.menu) {
                     return { ...state, menu: action.payload }
                 } else{
