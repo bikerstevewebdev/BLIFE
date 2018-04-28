@@ -43,6 +43,7 @@ const ADD_MEAL_TO_MENU = 'ADD_MEAL_TO_MENU'
 const EDIT_MENU = 'EDIT_MENU'
 const SEARCH_MENUS = 'SEARCH_MENUS'
 const CLEAR_MEAL_SEARCH = 'CLEAR_MEAL_SEARCH'
+const END_NUTRITION_SEARCH = 'END_NUTRITION_SEARCH'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
@@ -252,12 +253,20 @@ export function createMenu(title, img){
     }
 }
 
-export function clearMealSearch() {
+export function endNutritionSearch() {
     return {
-        type: CLEAR_MEAL_SEARCH,
-        payload: 'nothing fancy'
+        type: END_NUTRITION_SEARCH,
+        payload: 'ended'
     }
 }
+
+
+// export function clearMealSearch() {
+//     return {
+//         type: CLEAR_MEAL_SEARCH,
+//         payload: 'nothing fancy'
+//     }
+// }
 ////////////////END ACTION CREATOR declaration/////////
 
 
@@ -278,6 +287,8 @@ export default function(state = initialState, action) {
             return { ...state, fib: action.payload}
         case UPDATE_IMGIN:
             return { ...state, img: action.payload}
+        case END_NUTRITION_SEARCH:
+            return {...state, menuSearchResults: [], mealSearchResults: []}
         case CREATE_MEAL + '_PENDING':
             return {
                     ...state,

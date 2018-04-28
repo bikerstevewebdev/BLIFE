@@ -2,21 +2,27 @@ import React, { Component } from 'react'
 import { getUserData } from '../../ducks/userReducer'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { searchMeals, searchMenus } from '../../ducks/foodReducer'
+import { searchMeals, searchMenus, endNutritionSearch } from '../../ducks/foodReducer'
+import { searchWorkouts, endFitnessSearch } from '../../ducks/fitnessReducer'
 
 
 class Dashboard extends Component{
     constructor() {
         super()
         this.state = {
+            menuSearch: '',
             mealSearch: '',
-            searchingMeal: true,
-            searchingMenu: true
+            workoutSearch: '',
+            searchingMeals: true,
+            searchingMenus: true,
+            searchingWorkouts: true
         }
         this.searchMeals = this.searchMeals.bind(this)
         this.searchMenus = this.searchMenus.bind(this)
         this.updateMealSearch = this.updateMealSearch.bind(this)
         this.updateMenuSearch = this.updateMenuSearch.bind(this)
+        this.updateWorkoutSearch = this.updateWorkoutSearch.bind(this)
+        this.endWorkoutSearch = this.endWorkoutSearch.bind(this)
         this.endMealSearch = this.endMealSearch.bind(this)
         this.endMenuSearch = this.endMenuSearch.bind(this)
     }
@@ -62,17 +68,27 @@ class Dashboard extends Component{
         })
     }
 
-    endMealSearch(){
+    searchWorkouts() {
+        this.props.searchWorkouts(this.state.workoutSearch)
         this.setState({
-            searchingMeal: false
+            workoutSearch: ''
         })
+    }
+
+    updateWorkoutSearch(e) {
+        this.setState({
+            workoutSearch: e.target.value
+        })
+    }
+
+    endSearches(){
+        this.props.endNutritionSearch()
+        this.props.endFitnessSearch()
+        // this.setState({
+        //     searchingMeals: false
+        // })
     }
     
-    endMenuSearch(){
-        this.setState({
-            searchingMenu: false
-        })
-    }
     
     render() {
         const mealResults = this.props.mealSearchResults.map(res => {
@@ -80,7 +96,7 @@ class Dashboard extends Component{
                 <section className="meal-search-result" key={res.meal_id}>
                     <p>{res.title}</p>
                     <img src={res.img_url} alt={res.title} />
-                    <Link to={`/meal/${res.meal_id}`}><button onClick={this.endMealSearch}>Show me this one!</button></Link>
+                    <Link to={`/meal/${res.meal_id}`}><button onClick={this.endSearches}>Show me this one!</button></Link>
                 </section>
             )
         })
@@ -89,7 +105,16 @@ class Dashboard extends Component{
                 <section className="menu-search-result" key={res.menu_id}>
                     <p>{res.title}</p>
                     <img src={res.img} alt={res.title} />
-                    <Link to={`/menu/${res.menu_id}`}><button onClick={this.endMenuSearch}>Take me to this menu!</button></Link>
+                    <Link to={`/menu/${res.menu_id}`}><button onClick={this.endSearches}>Take me to this menu!</button></Link>
+                </section>
+            )
+        })
+        const workoutResults = this.props.workoutSearchResults.map(res => {
+            return(
+                <section className="workout-search-result" key={res.workout_id}>
+                    <p>{res.title}</p>
+                    <img src={res.img} alt={res.title} />
+                    <Link to={`/workout/${res.workout_id}`}><button onClick={this.endSearches}>Take me to this workout!</button></Link>
                 </section>
             )
         })
@@ -99,23 +124,36 @@ class Dashboard extends Component{
                 <h3>Search fo a meal:</h3>
                 <input value={this.state.mealSearch} onChange={this.updateMealSearch} />
                 <button style={{width: "300px"}} onClick={this.searchMeals}>Search!</button>
+                {mealResults}
                 <h3>Search fo a MENU:</h3>
                 <input value={this.state.menuSearch} onChange={this.updateMenuSearch} />
                 <button style={{width: "300px"}} onClick={this.searchMenus}>Search!</button>
-                {
-                    this.state.searchingMeal 
+                {menuResults}
+                <h3>Find your new Workout:</h3>
+                <input value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
+                <button style={{width: "300px"}} onClick={this.searchWorkouts}>Search!</button>
+                {workoutResults}
+                {/* {
+                    this.state.searchingMeals 
                     ? 
                     mealResults
                     :
                     null
                 }
                 {
-                    this.state.searchingMenu 
+                    this.state.searchingMenus 
                     ? 
                     menuResults
                     :
                     null
                 }
+                {
+                    this.state.searchingWorkouts
+                    ?
+                    workoutResults
+                    :
+                    null
+                } */}
             </section>
         )
     }
@@ -129,4 +167,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getUserData, searchMeals, searchMenus })(Dashboard)
+export default connect(mapStateToProps, { getUserData, searchMeals, searchMenus, endNutritionSearch, endFitnessSearch })(Dashboard)

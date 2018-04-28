@@ -86,8 +86,14 @@ CREATE TABLE menus (
 ---------------------------------------------------------------------------------------------------
 CREATE TABLE workout_ex (
     workout_ex_id SERIAL PRIMARY KEY,
-    meal_id INTEGER,
-    food_id INTEGER
+    workout_id INTEGER,
+    order INTEGER,
+    reps INTEGER,
+    sets INTEGER,
+    rest_time INTEGER,
+    weight INTEGER,
+    ex_id INTEGER,
+    notes TEXT
 );
 
 CREATE TABLE exercises (
@@ -104,6 +110,7 @@ CREATE TABLE workouts (
     workout_id SERIAL PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
     author_id INTEGER,
+    img TEXT,
     date_created TEXT
 );
 

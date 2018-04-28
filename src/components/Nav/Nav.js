@@ -20,6 +20,7 @@ function Nav(props) {
                     <Link to='/menuCreator'><button>Menu Creator</button></Link>
                     <Link to='/food/nav'><button>Food Creator</button></Link>
                     <Link to='/exercise/0'><button>Exercise Creator</button></Link>
+                    <Link to='/workoutCreator'><button>Workout Creator</button></Link>
                 </section>
             </nav>
             :

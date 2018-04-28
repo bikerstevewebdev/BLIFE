@@ -1,15 +1,15 @@
 module.exports = {
-
+    
     getUser: (req, res, next) => {
         req.app.get('db').get_user([req.params.id]).then( user => {
             res.status(200).send(user[0])
         })
     },
-
+    
     getUserInfo: (req, res, next) => {
         if(req.user){
             const db      = req.app.get('db'),
-                  userMes = req.user.curr_mes_id
+            userMes = req.user.curr_mes_id
             if(userMes){
                 db.get_mes_by_id([userMes]).then(currMes => {
                     let userObj = {
@@ -36,6 +36,7 @@ module.exports = {
             res.status(404).send({message: 'Measurements do not exist'})
         }
     },
+
     
     getLatestMes: (req, res, next) => {
         req.app.get('db').get_latest_mes([req.params.id]).then( measurements => {
@@ -43,29 +44,111 @@ module.exports = {
         })
     },
 
-    searchFoods: (req, res, next) => {
-        req.app.get('db').get_food_by_query([req.query.name]).then(foods => {
-            res.status(200).send(foods)
+    updateStats: (req, res, next) => {
+        const db = req.app.get('db')
+        const { p, c, f, ht, wt, bf, waist, chest, neck } = req.body
+        let x     = new Date(),
+            tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
+        db.add_measurements([waist, neck, chest, ht, wt, bf, tDate, req.user.user_id]).then( mes => {
+            let newMez = mes[0]
+            db.update_stats([p, c, f, newMez.mes_id, req.user.user_id]).then( upUser => {
+                let user = upUser[0],
+                    retObj = { user, newMez }
+                res.status(200).send(retObj)
+            })
         })
+    },
+    
+    addMez: (req, res, next) => {
+        let x     = new Date(),
+        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
+        const { waist, neck, chest, ht, wt, bf } = req.body
+        req.app.get('db').add_measurements([ waist, neck, chest, ht, wt, bf, tDate, req.user.user_id ]).then( measurements => {
+            res.status(200).send(measurements[0])
+        })
+    },
+                                    
+    newMacroCalc: (req, res, next) => {
+        const { protein, carbs, fat } = req.body
+        let x     = new Date(),
+        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
+        
+        req.app.get('db').add_macro_calc([ protein, carbs, fat, tDate, req.user.user_id ]).then( macros => {
+            res.status(200).send(macros[0])
+        }) 
+    },
+    
+    createFood: (req, res, next) => {
+            const { name, p, c, f, fib, img } = req.body
+            req.app.get('db').create_food([name, req.user.user_id, p, c, f, fib, img]).then( food => {
+                    res.status(200).send(food[0])
+                }) 
     },
 
-    searchMeals: (req, res, next) => {
-        req.app.get('db').get_meals_by_title([req.query.title]).then(meals => {
-            res.status(200).send(meals)
-        })
-    },
-    
-    searchMenus: (req, res, next) => {
-        req.app.get('db').get_menus_by_title([req.query.title]).then(menus => {
-            res.status(200).send(menus)
-        })
-    },
-    
     getFood: (req, res, next) => {
         req.app.get('db').get_food_by_id([req.params.id]).then(food => {
             res.status(200).send(food[0])
         })
     },
+            
+    searchFoods: (req, res, next) => {
+        req.app.get('db').search_foods_by_name([req.query.name]).then(foods => {
+            res.status(200).send(foods)
+        })
+    },
+
+    //////////// Can add an optional button on front end to ask if user want to change food in the database to affect it's use everywhere else or just create a new food with the updated data
+//////////// Drill Weekend kind of thing
+    editFood: (req, res, next) => {
+        const db = req.app.get('db')
+        const { food_id, name, p, c, f, fib, img } = req.body
+        db.get_food_by_id([food_id]).then(food => {
+            if(req.user.user_id == food[0].author_id){
+                db.edit_food([food_id, name, p, c, f, fib, img]).then(newFood => {
+                    res.status(200).send(newFood[0])
+                })
+            } else {
+                res.status(403).send({message: 'You are not the creator of that food and therefore do not have permission to change it. Feel free to create another version of this food if you find the information to be incorrect.'})
+            }
+        })
+    },
+
+
+
+    removeFoodFromMeal: (req, res, next) => {
+        const db = req.app.get('db')
+        const { meal_id, food_id, p, c, f, fib, quantity, meal_food_id } = req.body
+        let q = quantity/1
+        db.remove_food_from_meal([meal_food_id, meal_id, (q*(p/1)), (q*(c/1)), (q*(f/1)), (q*(fib/1))]).then(newMeal => {
+            db.get_foods_by_meal_id([meal_id]).then(foods => {
+                let retObj = {
+                    foods,
+                    newMeal: newMeal[0]
+                }
+                res.status(200).send(retObj)
+            })
+        })
+    },
+
+
+
+        
+    createMeal: (req, res, next) => {
+            const { title, img } = req.body
+            req.app.get('db').create_meal([title, req.user.user_id, img]).then( meal => {
+                    res.status(200).send(meal[0])
+                }) 
+    },
+
+
+
+    searchMeals: (req, res, next) => {
+        req.app.get('db').search_meals_by_title([req.query.title]).then(meals => {
+            res.status(200).send(meals)
+        })
+    },
+
+    
     
     getMealById: (req, res, next) => {
         const db = req.app.get('db')
@@ -106,6 +189,34 @@ module.exports = {
             })
         })
     },
+
+    updateFoodQuantity: (req, res, next) => {
+        const db = req.app.get('db')
+        const { meal_id, food_id, quantity, dif, p, c, f, fib } = req.body
+        db.update_food_quantity([meal_id, food_id, quantity, (dif*p), (dif*c), (dif*f), (dif*fib)]).then(newMeal => {
+            db.get_foods_by_meal_id([meal_id]).then(foods => {
+                    let retObj = {
+                        foods,
+                        newMeal: newMeal[0]
+                    }
+                res.status(200).send(retObj)
+            })
+        })
+    },
+
+    createMenu: (req, res, next) => {
+        const { title, img } = req.body
+        req.app.get('db').create_menu([title, req.user.user_id, img]).then( menu => {
+                res.status(200).send(menu[0])
+            }) 
+        },
+    
+
+    searchMenus: (req, res, next) => {
+        req.app.get('db').search_menus_by_title([req.query.title]).then(menus => {
+            res.status(200).send(menus)
+        })
+    },
     
     addMealToMenu: (req, res, next) => {
         const db = req.app.get('db')
@@ -121,34 +232,7 @@ module.exports = {
         })
     },
     
-    updateFoodQuantity: (req, res, next) => {
-        const db = req.app.get('db')
-        const { meal_id, food_id, quantity, dif, p, c, f, fib } = req.body
-        db.update_food_quantity([meal_id, food_id, quantity, (dif*p), (dif*c), (dif*f), (dif*fib)]).then(newMeal => {
-            db.get_foods_by_meal_id([meal_id]).then(foods => {
-                    let retObj = {
-                        foods,
-                        newMeal: newMeal[0]
-                    }
-                res.status(200).send(retObj)
-            })
-        })
-    },
-//////////// Can add an optional button on front end to ask if user want to change food in the database to affect it's use everywhere else or just create a new food with the updated data
-//////////// Drill Weekend kind of thing
-    editFood: (req, res, next) => {
-        const db = req.app.get('db')
-        const { food_id, name, p, c, f, fib, img } = req.body
-        db.get_food_by_id([food_id]).then(food => {
-            if(req.user.user_id == food[0].author_id){
-                db.edit_food([food_id, name, p, c, f, fib, img]).then(newFood => {
-                    res.status(200).send(newFood[0])
-                })
-            } else {
-                res.status(403).send({message: 'You are not the creator of that food and therefore do not have permission to change it. Feel free to create another version of this food if you find the information to be incorrect.'})
-            }
-        })
-    },
+    
     
     editMenu: (req, res, next) => {
         const db = req.app.get('db')
@@ -164,20 +248,7 @@ module.exports = {
         })
     },
     
-    removeFoodFromMeal: (req, res, next) => {
-        const db = req.app.get('db')
-        const { meal_id, food_id, p, c, f, fib, quantity, meal_food_id } = req.body
-        let q = quantity/1
-        db.remove_food_from_meal([meal_food_id, meal_id, (q*(p/1)), (q*(c/1)), (q*(f/1)), (q*(fib/1))]).then(newMeal => {
-            db.get_foods_by_meal_id([meal_id]).then(foods => {
-                let retObj = {
-                    foods,
-                    newMeal: newMeal[0]
-                }
-                res.status(200).send(retObj)
-            })
-        })
-    },
+    
     
     removeMealFromMenu: (req, res, next) => {
         const db = req.app.get('db')
@@ -193,9 +264,14 @@ module.exports = {
         })
     },
     
-    createExercise: (req, res, next) => {
-        const { name, type, muscle, img, video } = req.body
-        req.app.get('db').create_exercise([name, type, muscle, req.user.user_id, img, video]).then( exercise => {
+//////////////////////////////////////////////////////
+/////////////////////Fitness//////////////////////////
+//////////////////////////////////////////////////////
+
+
+createExercise: (req, res, next) => {
+    const { name, type, muscle, img, video } = req.body
+    req.app.get('db').create_exercise([name, type, muscle, req.user.user_id, img, video]).then( exercise => {
             res.status(200).send(exercise)
         }) 
     },
@@ -220,67 +296,68 @@ module.exports = {
             }
         })
     },
-// createWorkout: (req, res, next) => {
-    //     const { name, type, img, video_url } = req.body
-    //     req.app.get('db').create_workout([name, type, req.user.user_id, img, video_url]).then( workout => {
-        //         res.status(200).send(workout)
-        //     }) 
-        // },
-        
-    createFood: (req, res, next) => {
-            const { name, p, c, f, fib, img } = req.body
-            req.app.get('db').create_food([name, req.user.user_id, p, c, f, fib, img]).then( food => {
-                    res.status(200).send(food[0])
-                }) 
-            },
-            
-    createMeal: (req, res, next) => {
-            const { title, img } = req.body
-            req.app.get('db').create_meal([title, req.user.user_id, img]).then( meal => {
-                    res.status(200).send(meal[0])
-                }) 
-            },
-
-    createMenu: (req, res, next) => {
-            const { title, img } = req.body
-            req.app.get('db').create_menu([title, req.user.user_id, img]).then( menu => {
-                    res.status(200).send(menu[0])
-                }) 
-            },
-                                
-    newMacroCalc: (req, res, next) => {
-        const { protein, carbs, fat } = req.body
-        let x     = new Date(),
-        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-        
-        req.app.get('db').add_macro_calc([ protein, carbs, fat, tDate, req.user.user_id ]).then( macros => {
-            res.status(200).send(macros[0])
+    
+    searchExercises: (req, res, next) => {
+        const { search } = req.query
+        req.app.get('db').search_exercises_by_name([search]).then(exercises => {
+            res.status(200).send(exercises)
         }) 
     },
-        
-    updateStats: (req, res, next) => {
+    
+    createWorkout: (req, res, next) => {
+        const { title, type, img } = req.body
+        req.app.get('db').create_workout([title, req.user.user_id, type, img]).then(workout => {
+            res.status(200).send(workout[0])
+        }) 
+    },
+    
+    getWorkoutById: (req, res, next) => {
+        const { id } = req.params
+        req.app.get('db').get_workout_by_id([id]).then( workout => {
+            res.status(200).send(workout[0])
+        }) 
+    },
+
+    searchWorkouts: (req, res, next) => {
+        const { search } = req.query
+        req.app.get('db').search_workouts_by_title([search]).then(workouts => {
+            res.status(200).send(workouts)
+        }) 
+    },
+    
+    addExerciseToWorkout: (req, res, next) => {
         const db = req.app.get('db')
-        const { p, c, f, ht, wt, bf, waist, chest, neck } = req.body
-        let x     = new Date(),
-            tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-        db.add_measurements([waist, neck, chest, ht, wt, bf, tDate, req.user.user_id]).then( mes => {
-            let newMez = mes[0]
-            db.update_stats([p, c, f, newMez.mes_id, req.user.user_id]).then( upUser => {
-                let user = upUser[0],
-                    retObj = { user, newMez }
-                res.status(200).send(retObj)
+        const { workout_id, ex_id, order } = req.body
+        db.add_ex_to_workout([workout_id, ex_id, order]).then(exercises => {
+            res.status(200).send(exercises)
+        })
+    },
+        
+    updateWorkoutEx: (req, res, next) => {
+        const db = req.app.get('db')
+        const { workout_ex_id, workout_id, reps, sets, restTime, weight, order, notes } = req.body
+        db.edit_workout_ex([workout_ex_id, workout_id, reps, sets, restTime, weight, order, notes]).then(exercises => {
+            res.status(200).send(exercises)
+        })
+    },
+        
+        
+    removeExFromWorkout: (req, res, next) => {
+        const db = req.app.get('db')
+        const { id } = req.params
+        const { workout_id } = req.body
+        db.remove_ex_from_workout([id, workout_id]).then(exs => {
+            exs.forEach(v => {
+                let newOrder = v.order - 1 > 0 ? v.order - 1 : 1
+                db.update_workout_ex_order([v.workout_ex_id, newOrder])
+            })
+            db.get_workout_exercises([workout_id]).then(exercises => {
+                res.status(200).send(exercises)
             })
         })
     },
-    
-    addMez: (req, res, next) => {
-        let x     = new Date(),
-        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-        const { waist, neck, chest, ht, wt, bf } = req.body
-        req.app.get('db').add_measurements([ waist, neck, chest, ht, wt, bf, tDate, req.user.user_id ]).then( measurements => {
-            res.status(200).send(measurements[0])
-        })
-    },
+        
+
         
     sendUserObjs: (req, res, next) => {
         let retObj = {

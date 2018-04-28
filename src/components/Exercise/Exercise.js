@@ -13,7 +13,8 @@ class Exercise extends Component{
             videoURLIn: '',
             imgURLIn:'',
             isEditing: false,
-            doneEditing: false
+            doneEditing: false,
+            addingImg: false
         }
         this.updateImgURLIn = this.updateImgURLIn.bind(this)
         this.updateNameIn = this.updateNameIn.bind(this)
@@ -23,6 +24,7 @@ class Exercise extends Component{
         this.sendExToDB = this.sendExToDB.bind(this)
         this.sendChanges = this.sendChanges.bind(this)
         this.acknowledgeMsg = this.acknowledgeMsg.bind(this)
+        this.prepareToAddImg = this.prepareToAddImg.bind(this)
     }
 
     componentDidMount() {
@@ -98,8 +100,9 @@ class Exercise extends Component{
     }
 
     sendExToDB() {
-        const { nameIn, typeIn, muscleIn, videoURLIn, imgURLIn } = this.state
-        this.props.addExToDB(nameIn, typeIn, muscleIn, videoURLIn, imgURLIn )
+        const { nameIn, typeIn, muscleIn, videoURLIn, imgURLIn } = this.state,
+              img = this.state.addingImg ? imgURLIn : "https://images.unsplash.com/photo-1521804906057-1df8fdb718b7?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f831342881cb6ff58e50698c7f9432de&auto=format&fit=crop&w=500&q=60"
+        this.props.addExToDB(nameIn, typeIn, muscleIn, videoURLIn, img )
     }
 
     sendChanges() {
@@ -111,10 +114,13 @@ class Exercise extends Component{
         })
     }
     
-    componentWillUnmount() {
-        this.props.clearExercise()
+    prepareToAddImg(val) {
+        this.setState({
+            addingImg: true
+        })
     }
-
+    
+    
     acknowledgeMsg() {
         this.setState({
             nameIn: '',
@@ -128,6 +134,10 @@ class Exercise extends Component{
         this.props.acknowledge()
     }
     
+    componentWillUnmount() {
+        this.props.clearExercise()
+    }
+
     render() {
         return(
             <section className="exercise-comp">
@@ -175,8 +185,20 @@ class Exercise extends Component{
                 </select>
                 <p>Video URL:</p>
                 <input type="text" value={this.state.videoURLIn} onChange={this.updateVideoURLIn} />
+
+                {
+                    this.state.addingImg
+                    ?
+                    <section className="exercise-img-input">
+                        <p>Exercise Image Url:</p>
+                        <input type="text" value={this.state.imgURLIn} onChange={this.updateImgURLIn} />
+                    </section>
+                    :
+                    <button onClick={this.prepareToAddImg}>Add an image?</button>
+                }
+                
+                
                 <p>Image URL:</p>
-                <input type="text" value={this.state.imgURLIn} onChange={this.updateImgURLIn} />
                 {
                     this.state.isEditing
                     ?

@@ -10,6 +10,8 @@ class Menu extends Component{
             searchIn: ''
         }
         this.updateSearchIn = this.updateSearchIn.bind(this)
+        this.endSearch = this.endSearch.bind(this)
+        this.addThisMeal = this.addThisMeal.bind(this)
     }
     
     componentDidMount() {
@@ -21,7 +23,7 @@ class Menu extends Component{
     }
 
     componentDidUpdate(){
-        console.log(this.props)
+        console.log('Menu updated props:',this.props)
     }
 
     addThisMeal(menu_id, meal_id, p, c, f, fib){

@@ -15,6 +15,8 @@ import MealCreator from './components/MealCreator/MealCreator';
 import MenuCreator from './components/MenuCreator/MenuCreator';
 import Menu from './components/Menu/Menu';
 import Exercise from './components/Exercise/Exercise';
+import Workout from './components/Workout/Workout';
+import WorkoutCreator from './components/Workout/WorkoutCreator';
 
 
 
@@ -46,6 +48,8 @@ class App extends Component {
           <Route path='/menu/:from' component={Menu} />
           <Route path='/menuCreator' component={MenuCreator} />
           <Route path='/exercise/:id' component={Exercise} />
+          <Route path='/workout/:id' component={Workout} />
+          <Route path='/workoutCreator' component={WorkoutCreator} />
         </Switch>
       </div>
     );
