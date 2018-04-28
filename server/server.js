@@ -104,6 +104,7 @@ app.put('/user/stats', c.updateStats)
 app.put('/food/edit', c.editFood)
 app.put('/meal/foods/quantity', c.updateFoodQuantity)
 app.put('/menu', c.editMenu)
+app.put('/exercise', c.editExercise)
 
 app.post('/user/mez', c.addMez)
 app.post('/macroCalc', c.newMacroCalc)

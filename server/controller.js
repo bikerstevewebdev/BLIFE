@@ -213,7 +213,7 @@ module.exports = {
         db.get_exercise_by_id([id]).then(ex => {
             if(req.user.user_id == ex[0].author_id){
                 db.edit_exercise([id, name, type, muscle, video, img]).then(newEx => {
-                    res.status(200).send(newEx[0])
+                    res.status(200).send({message: 'Exercise successfully updated!'})
                 })
             } else {
                 res.status(403).send({message: 'You are not the creator of that exercise and therefore do not have permission to change it. Feel free to create another version of this exercise if you find the information to be incorrect.'})

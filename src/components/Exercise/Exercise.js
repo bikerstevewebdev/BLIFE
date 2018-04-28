@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addExToDB, acknowledge, updateExercise, clearExercise, getExById } from '../../ducks/fitnessReducer'
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 
 class Exercise extends Component{
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             nameIn: '',
             typeIn: 'Weights',
@@ -21,17 +21,19 @@ class Exercise extends Component{
         this.updateMuscleIn = this.updateMuscleIn.bind(this)
         this.updateVideoURLIn = this.updateVideoURLIn.bind(this)
         this.sendExToDB = this.sendExToDB.bind(this)
+        this.sendChanges = this.sendChanges.bind(this)
+        this.acknowledgeMsg = this.acknowledgeMsg.bind(this)
     }
 
     componentDidMount() {
-        const { name, type, muscle, video, img } = this.props.exercise
+        const { name, type, main_muscle_group, video, img } = this.props.exercise
         const { id } = this.props.match.params
         if(!isNaN(id/1) && id/1 > 0 && !this.state.isEditing){
             if(name){
                 this.setState({
                     nameIn: name,
                     typeIn: type,
-                    muscleIn: muscle,
+                    muscleIn: main_muscle_group,
                     videoURLIn: video,
                     imgURLIn: img,
                     isEditing: true
@@ -39,17 +41,25 @@ class Exercise extends Component{
             } else{
                 this.props.getExById(id)
             }
+        }else if(id === 0){
+            this.setState({
+                nameIn: '',
+                typeIn: 'Weights',
+                muscleIn: 'Full-Body',
+                videoURLIn: '',
+                imgURLIn:''
+            })
         }
     }
 
     componentDidUpdate() { 
-        const { name, type, muscle, video, img } = this.props.exercise
+        const { name, type, main_muscle_group, video, img } = this.props.exercise
         const { id } = this.props.match.params
-        if(id/1 > 0 && !this.state.nameIn){
+        if(id/1 > 0 && !this.state.isEditing && !this.state.doneEditing){
             this.setState({
                 nameIn: name,
                 typeIn: type,
-                muscleIn: muscle,
+                muscleIn: main_muscle_group,
                 videoURLIn: video,
                 imgURLIn: img,
                 isEditing: true
@@ -104,6 +114,19 @@ class Exercise extends Component{
     componentWillUnmount() {
         this.props.clearExercise()
     }
+
+    acknowledgeMsg() {
+        this.setState({
+            nameIn: '',
+            typeIn: 'Weights',
+            muscleIn: 'Full-Body',
+            videoURLIn: '',
+            doneEditing: true,
+            isEditing: false,
+            imgURLIn:''
+        })
+        this.props.acknowledge()
+    }
     
     render() {
         return(
@@ -115,7 +138,7 @@ class Exercise extends Component{
                         <h2>Updating: {this.props.exercise.name}</h2>
                         <h3>Previous data:</h3>
                         <p>Type: {this.props.exercise.type}</p>
-                        <p>Major Muscle Group: {this.props.exercise.muscle}</p>
+                        <p>Major Muscle Group: {this.props.exercise.main_muscle_group}</p>
                         <a href={this.props.exercise.video} target="_blank">
                             Video URL
                         </a>
@@ -157,7 +180,7 @@ class Exercise extends Component{
                 {
                     this.state.isEditing
                     ?
-                    <button onClick={this.sendChanges}>Update {this.state.nameIn}</button>
+                    <button onClick={this.sendChanges}>Update This Exercise</button>
                     :
                     <button onClick={this.sendExToDB}>Create Exercise</button>
                 }
@@ -166,19 +189,19 @@ class Exercise extends Component{
                     ?
                     <section className="db-message">
                         <h2>{this.props.message}</h2>
-                        <button onClick={this.props.acknowledge}>You Got It!</button>
+                        <button onClick={this.acknowledgeMsg}>You Got It!</button>
                     </section>
                     :
                     null
                 }
                     {/* turn into a modal/alert at some point */}
-                {
+                {/* {
                     this.state.doneEditing
                     ?
                     <Redirect to='/exercise/0' />
                     :
                     null
-                }
+                } */}
             </section>
         )
     }
