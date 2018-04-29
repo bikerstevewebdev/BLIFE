@@ -83,13 +83,21 @@ class Profile extends Component{
             current_fat,
             current_weight,
             current_height,
-            current_bf 
+            current_bf,
+            userData
         } = this.props
         return(
             <section>
                 Proofile Yo
-                <Link to='/'>Back to Login</Link>
-                <Link to='/updateProfile'>Update Profile</Link>
+                <Link to='/'><button>Back to Login</button></Link>
+                <Link to='/updateProfile'><button>Update Profile</button></Link>
+                {
+                    userData.coach_id > 0
+                    ?
+                    <Link to={`/coachManager/${userData.coach_id}`}><button>Coach Manager</button></Link>
+                    :
+                    null
+                }
                 <p>Protein: {current_protein}g</p>
                 <p>Fat: {current_fat}g</p>
                 <p>Carbs: {current_carbs}g</p>

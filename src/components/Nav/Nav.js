@@ -21,6 +21,13 @@ function Nav(props) {
                     <Link to='/food/nav'><button>Food Creator</button></Link>
                     <Link to='/exercise/0'><button>Exercise Creator</button></Link>
                     <Link to='/workoutCreator'><button>Workout Creator</button></Link>
+                    {
+                        props.coach_id > 0
+                        ?
+                        <Link to={`/coachManager/${props.coach_id}`}>Coach Manager</Link>
+                        :
+                        null
+                    }
                 </section>
             </nav>
             :
@@ -36,7 +43,8 @@ function Nav(props) {
 
 function mapStateToProps(state) {
     return {
-        isLoggedIn: state.users.isLoggedIn
+        isLoggedIn: state.users.isLoggedIn,
+        coach: state.users.userData.coach_id
     }
 }
 

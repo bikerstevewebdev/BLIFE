@@ -1,5 +1,7 @@
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
+    coach_id DEFAULT 0,
+    is_admin BOOLEAN DEFAULT false
     username VARCHAR(25) NOT NULL,
     fullname TEXT,
     profile_pic TEXT,
@@ -7,8 +9,9 @@ CREATE TABLE users (
     curr_pro REAL DEFAULT 0,
     curr_carb REAL DEFAULT 0,
     curr_fat REAL DEFAULT 0,
-    curr_mes_id REAL DEFAULT 0,
-    auth_id TEXT NOT NULL
+    curr_mes_id INTEGER DEFAULT 0,
+    auth_id TEXT NOT NULL,
+    last_login DATE
 );
 
 CREATE TABLE measurements (
@@ -114,6 +117,39 @@ CREATE TABLE workouts (
     type VARCHAR(45),
     date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE user_workout (
+    user_workout_id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    workout_id INTEGER,
+    current BOOLEAN DEFAULT true,
+    assigned BOOLEAN DEFAULT false
+);
+
+CREATE TABLE coach_request (
+    req_id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    req_id INTEGER,
+    accepted BOOLEAN DEFAULT false,
+    active BOOLEAN DEFAULT true
+);
+
+CREATE TABLE user_menu (
+    user_menu_id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    menu_id INTEGER,
+    current BOOLEAN DEFAULT true,
+    assigned BOOLEAN DEFAULT false
+);
+
+CREATE TABLE client_coach (
+    client_coach_id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    coach_id INTEGER,
+    current BOOLEAN DEFAULT true,
+);
+
+
 
 CREATE TABLE progress_pics (
     pic_id SERIAL PRIMARY KEY,

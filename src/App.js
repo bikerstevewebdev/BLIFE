@@ -17,6 +17,8 @@ import Menu from './components/Menu/Menu';
 import Exercise from './components/Exercise/Exercise';
 import Workout from './components/Workout/Workout';
 import WorkoutCreator from './components/Workout/WorkoutCreator';
+import ClientManager from './components/Coach/ClientManager';
+import CoachManager from './components/Coach/CoachManager';
 
 
 
@@ -50,6 +52,8 @@ class App extends Component {
           <Route path='/exercise/:id' component={Exercise} />
           <Route path='/workout/:id' component={Workout} />
           <Route path='/workoutCreator' component={WorkoutCreator} />
+          <Route path='/coachManager/:id' component={CoachManager} />
+          <Route path='/clientManager/:id' component={ClientManager} />
         </Switch>
       </div>
     );
