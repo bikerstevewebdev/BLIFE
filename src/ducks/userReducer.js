@@ -111,7 +111,8 @@ export default function(state = initialState, action) {
                         current_fat: curr_fat,
                         current_weight: action.payload.currMes.weight,
                         current_height: action.payload.currMes.height,
-                        current_bf: action.payload.currMes.bf
+                        current_bf: action.payload.currMes.bf,
+                        profile_pic: action.payload.dBUser.profile_pic
                         }
                     }
                 // } else{

@@ -5,10 +5,10 @@ const initialState = {
     age: '',
     weight: '',
     bodyfat: '',
-    goal: '',
-    gender: '',
-    activity: '',
-    tenacity: '',
+    goal: 'maintain',
+    gender: 'm',
+    activity: 'low',
+    tenacity: 'steady',
     macros: {
         protein: 0,
         carbs: 0,
@@ -32,7 +32,7 @@ const activityLevel = (level) => {
         case "extreme":
             return 1.9
         default:
-            return 0
+            return 1
     }
 }
 const tenacityLevel = (level) => {

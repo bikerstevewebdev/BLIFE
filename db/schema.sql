@@ -87,7 +87,7 @@ CREATE TABLE menus (
 CREATE TABLE workout_ex (
     workout_ex_id SERIAL PRIMARY KEY,
     workout_id INTEGER,
-    order INTEGER,
+    ex_order INTEGER,
     reps INTEGER,
     sets INTEGER,
     rest_time INTEGER,
@@ -111,7 +111,8 @@ CREATE TABLE workouts (
     title VARCHAR(50) NOT NULL,
     author_id INTEGER,
     img TEXT,
-    date_created TEXT
+    type VARCHAR(45),
+    date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE progress_pics (

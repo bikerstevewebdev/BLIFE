@@ -49,13 +49,13 @@ passport.use( new Auth0Strategy({
             let x = new Date(),
                 tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
             db.create_user([displayName, picture, id, tDate]).then( createdUser => {
-            return done(null, createdUser)
+                return done(null, createdUser)
         } ) }
     } ).catch(err => {
         console.log(err)
     })
-    done(null, profile)
     console.log('listening?')
+    done(null, profile)
 }) )
 
 // When done, adds user to req.session.user
@@ -67,8 +67,7 @@ passport.serializeUser((user, done) => {
 
 // When done, adds second parameter to req.user
 passport.deserializeUser((user, done) => {
-    app.get('db').find_session_user([user.id])
-    .then( dbUser => {
+    app.get('db').find_session_user([user.id]).then( dbUser => {
         console.log(`Deserial User should be DB User: ${dbUser.id}, in case its an array: ${dbUser[0]}`)
         return done(null, dbUser[0]);
     })
@@ -81,7 +80,7 @@ app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3000/#/dashboard',
     failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
-app.get('/auth/me', c.sendUserObjs)
+// app.get('/auth/me', c.sendUserObjs)
 
 app.get('/user/:id', c.getUser)
 app.get('/userInfo', c.getUserInfo)
@@ -95,13 +94,13 @@ app.get('/food/search/:id', c.getFood)
 app.get('/meal/search', c.searchMeals)
 app.get('/meal/search/:id', c.getMealById)
 
-app.get('/MENU/search', c.searchMenus)
+app.get('/menu/search', c.searchMenus)
 app.get('/menu/search/:id', c.getMenuById)
 
-app.get('/exercise/:id', c.getExerciseById)
 app.get('/exercise/search', c.searchExercises)
-app.get('/workout/:id', c.getWorkoutById)
 app.get(`/workout/search`, c.searchWorkouts)
+app.get('/exercise/:id', c.getExerciseById)
+app.get('/workout/:id', c.getWorkoutById)
 
 app.put('/user/stats', c.updateStats)
 app.put('/food/edit', c.editFood)

@@ -261,12 +261,12 @@ export function endNutritionSearch() {
 }
 
 
-// export function clearMealSearch() {
-//     return {
-//         type: CLEAR_MEAL_SEARCH,
-//         payload: 'nothing fancy'
-//     }
-// }
+export function clearMealSearch() {
+    return {
+        type: CLEAR_MEAL_SEARCH,
+        payload: 'nothing fancy'
+    }
+}
 ////////////////END ACTION CREATOR declaration/////////
 
 

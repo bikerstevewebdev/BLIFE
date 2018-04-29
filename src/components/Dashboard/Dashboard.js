@@ -19,12 +19,14 @@ class Dashboard extends Component{
         }
         this.searchMeals = this.searchMeals.bind(this)
         this.searchMenus = this.searchMenus.bind(this)
+        this.searchWorkouts = this.searchWorkouts.bind(this)
         this.updateMealSearch = this.updateMealSearch.bind(this)
         this.updateMenuSearch = this.updateMenuSearch.bind(this)
         this.updateWorkoutSearch = this.updateWorkoutSearch.bind(this)
-        this.endWorkoutSearch = this.endWorkoutSearch.bind(this)
-        this.endMealSearch = this.endMealSearch.bind(this)
-        this.endMenuSearch = this.endMenuSearch.bind(this)
+        this.endSearches = this.endSearches.bind(this)
+        // this.endWorkoutSearch = this.endWorkoutSearch.bind(this)
+        // this.endMealSearch = this.endMealSearch.bind(this)
+        // this.endMenuSearch = this.endMenuSearch.bind(this)
     }
     componentDidMount() {
         if(!this.props.userData.user_id){
@@ -163,8 +165,9 @@ function mapStateToProps(state){
     return {
         userData: state.users.userData,
         mealSearchResults: state.foods.mealSearchResults,
-        menuSearchResults: state.foods.menuSearchResults
+        menuSearchResults: state.foods.menuSearchResults,
+        workoutSearchResults: state.fitness.workoutSearchResults
     }
 }
 
-export default connect(mapStateToProps, { getUserData, searchMeals, searchMenus, endNutritionSearch, endFitnessSearch })(Dashboard)
+export default connect(mapStateToProps, { getUserData, searchMeals, searchMenus, endNutritionSearch, endFitnessSearch, searchWorkouts })(Dashboard)

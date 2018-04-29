@@ -1,21 +1,27 @@
 module.exports = {
     
+    // getUser: (req, res, next) => {
+    //     req.app.get('db').get_user([req.params.id]).then( user => {
+    //         console.log('Getting user')
+    //         res.status(200).send(user[0])
+    //     })
+    // },
     getUser: (req, res, next) => {
-        req.app.get('db').get_user([req.params.id]).then( user => {
-            res.status(200).send(user[0])
-        })
+            res.status(200).send(req.user)
     },
     
     getUserInfo: (req, res, next) => {
         if(req.user){
             const db      = req.app.get('db'),
-            userMes = req.user.curr_mes_id
+                  userMes = req.user.curr_mes_id
             if(userMes){
+                console.log('Preparing user object')
                 db.get_mes_by_id([userMes]).then(currMes => {
                     let userObj = {
                         dBUser: req.user,
                         currMes: currMes[0]
                     }
+                    console.log('Sending user object')        
                     res.status(200).send(userObj)
                 })
             } else{
@@ -264,14 +270,14 @@ module.exports = {
         })
     },
     
-//////////////////////////////////////////////////////
-/////////////////////Fitness//////////////////////////
-//////////////////////////////////////////////////////
-
-
-createExercise: (req, res, next) => {
-    const { name, type, muscle, img, video } = req.body
-    req.app.get('db').create_exercise([name, type, muscle, req.user.user_id, img, video]).then( exercise => {
+    //////////////////////////////////////////////////////
+    /////////////////////Fitness//////////////////////////
+    //////////////////////////////////////////////////////
+    
+    
+    createExercise: (req, res, next) => {
+        const { name, type, muscle, img, video } = req.body
+        req.app.get('db').create_exercise([name, type, muscle, req.user.user_id, img, video]).then( exercise => {
             res.status(200).send(exercise)
         }) 
     },
@@ -298,8 +304,8 @@ createExercise: (req, res, next) => {
     },
     
     searchExercises: (req, res, next) => {
-        const { search } = req.query
-        req.app.get('db').search_exercises_by_name([search]).then(exercises => {
+        console.log('query name: ', req.query.name)
+        req.app.get('db').search_exercises_by_name([req.query.name]).then(exercises => {
             res.status(200).send(exercises)
         }) 
     },
@@ -312,23 +318,30 @@ createExercise: (req, res, next) => {
     },
     
     getWorkoutById: (req, res, next) => {
-        const { id } = req.params
-        req.app.get('db').get_workout_by_id([id]).then( workout => {
-            res.status(200).send(workout[0])
+        const { id } = req.params,
+              db     = req.app.get('db')
+        db.get_workout_by_id([id]).then( workout => {
+            db.get_workout_exercises([id]).then(exercises => {
+                let retObj = {
+                    exercises,
+                    workout: workout[0]
+                }
+                res.status(200).send(retObj)
+            })
         }) 
     },
 
     searchWorkouts: (req, res, next) => {
-        const { search } = req.query
-        req.app.get('db').search_workouts_by_title([search]).then(workouts => {
+        console.log('query: ',req.query.title)
+        req.app.get('db').search_workouts_by_title([req.query.title]).then(workouts => {
             res.status(200).send(workouts)
         }) 
     },
     
     addExerciseToWorkout: (req, res, next) => {
         const db = req.app.get('db')
-        const { workout_id, ex_id, order } = req.body
-        db.add_ex_to_workout([workout_id, ex_id, order]).then(exercises => {
+        const { workout_id, ex_id, ex_order } = req.body
+        db.add_ex_to_workout([workout_id, ex_id, ex_order]).then(exercises => {
             res.status(200).send(exercises)
         })
     },

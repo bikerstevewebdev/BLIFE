@@ -3,14 +3,15 @@ import { connect } from 'react-redux'
 import { updateWorkoutEx, removeExFromWorkout } from '../../ducks/fitnessReducer'
 
 class WorkoutEx extends Component{
-    constructor() {
-        super() 
+    constructor(props) {
+        super(props) 
         this.state = {
-            repsIn: '',
-            setsIn: '',
-            restTimeIn: '',
-            weight: '',
-            notesIn: '',
+            repsIn: props.reps,
+            setsIn: props.sets,
+            restTimeIn: props.rest_time,
+            weight: props.weight ,
+            notesIn: props.notes,
+            orderIn: props.ex_order,
             addingNotes: false
         }
         this.updateRepsIn = this.updateRepsIn.bind(this)
@@ -19,18 +20,20 @@ class WorkoutEx extends Component{
         this.updateWeightIn = this.updateWeightIn.bind(this)
         this.updateOrderIn = this.updateOrderIn.bind(this)
         this.updateNotesIn = this.updateNotesIn.bind(this)
+        this.sendUpdate = this.sendUpdate.bind(this)
     }
 
-    componentDidMount(){
-        const { notes, reps, sets, rest_time, weight } = this.props
-        this.setState({
-            repsIn: reps,
-            setsIn: sets,
-            restTimeIn: rest_time,
-            weightIn: weight,
-            notesIn: notes
-        })
-    }
+    // componentDidMount(){
+    //     const { notes, reps, sets, rest_time, weight, ex_order } = this.props
+    //     this.setState({
+    //         repsIn: reps,
+    //         setsIn: sets,
+    //         restTimeIn: rest_time,
+    //         weightIn: weight,
+    //         notesIn: notes,
+    //         orderIn: ex_order
+    //     })
+    // }
 
     updateRepsIn(e) {
         this.setState({
@@ -56,7 +59,7 @@ class WorkoutEx extends Component{
         })
     }
 
-    updateOrder(e) {
+    updateOrderIn(e) {
         this.setState({
             orderIn: e.target.value
         })
@@ -81,11 +84,11 @@ class WorkoutEx extends Component{
     }
 
     render() {
-        const { repsIn, setsIn, restTimeIn, weightIn, notesIn, orderIn, addingNotes } = this.state,
-              { type, name, img, numExs, workout_ex_id, workout_id } = this.props
+        const { repsIn, setsIn, restTimeIn, weightIn, notesIn, addingNotes } = this.state,
+              { type, name, img, numExs, workout_ex_id, ex_id, workout_id } = this.props
         return (
             <section className="workout-ex">
-                <select onChange={this.updateOrder}>
+                <select onChange={this.updateOrderIn}>
                     {numExs.map((v, i) => {
                         return <option key={ex_id + "-" + i} value={i+1}>{i+1}</option>
                     })}
@@ -120,6 +123,7 @@ class WorkoutEx extends Component{
                     :
                     <button onClick={this.prepareToAddNotes}>Add Notes?</button>
                 }
+                <button style={{backgroundColor: "yellow"}} onClick={this.sendUpdate}>Save Changes</button>
                 <button className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove From Workout</button>
             </section>
         )

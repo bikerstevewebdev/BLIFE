@@ -6,7 +6,6 @@ const initialState = {
     exSearchResults: [],
     workout: {},
     workoutExs: [],
-    exSearchResults: [],
     workoutSearchResults: []
 }
 ///////////END initialState declaration/////////////
@@ -34,7 +33,8 @@ const REMOVE_EX_FROM_WORKOUT = 'REMOVE_EX_FROM_WORKOUT'
 
 /////////////////Exporting action creators//////////////////////
 export function searchExercises(name){
-    let exs = axios.get(`/exercise/search?search=${name}`).then(res => {
+    console.log('Searching exercises with: ', name)
+    let exs = axios.get(`/exercise/search?name=${name}`).then(res => {
         return res.data
     })
     return{
@@ -51,7 +51,8 @@ export function endFitnessSearch() {
 }
 
 export function searchWorkouts(title){
-    let workouts = axios.get(`/workout/search?search=${title}`).then(res => {
+    console.log('Searching workouts with: ', title)
+    let workouts = axios.get(`/workout/search?title=${title}`).then(res => {
         return res.data
     })
     return{
@@ -62,7 +63,7 @@ export function searchWorkouts(title){
 
 export function addWorkoutToDB(title, type, img) {
     let newWorkout = axios.post('/workout', { title, type, img }).then(res => {
-        return res.data.message
+        return res.data
     })    
     return{
         type: CREATE_WORKOUT,
@@ -80,18 +81,18 @@ export function addExToDB(name, type, muscle, video, img) {
     }    
 }    
 
-export function addExToWorkout(workout_id, ex_id, order) {
-    let msg = axios.post('/workout/exercise', { workout_id, ex_id, order }).then(res => {
-        return res.data.message
+export function addExToWorkout(workout_id, ex_id, ex_order) {
+    let exercises = axios.post('/workout/exercise', { workout_id, ex_id, ex_order }).then(res => {
+        return res.data
     })    
     return{
         type: ADD_EX_TO_WORKOUT,
-        payload: msg
+        payload: exercises
     }    
 }    
 
-export function updateWorkoutEx(workout_ex_id, workout_id, reps, sets, restTime, weight, order, notes) {
-    let exs = axios.put('/workout/exercise', { workout_ex_id, workout_id, reps, sets, restTime, weight, order, notes }).then(res => {
+export function updateWorkoutEx(workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes) {
+    let exs = axios.put('/workout/exercise', { workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes }).then(res => {
         return res.data
     })    
     return{
@@ -155,7 +156,7 @@ export function clearExercise(){
 }
 
 export function removeExFromWorkout(workout_ex_id, workout_id){
-    let exercises = app.put(`/workout/removeExercise/${workout_ex_id}`, { workout_id }).then(res => {
+    let exercises = axios.put(`/workout/removeExercise/${workout_ex_id}`, { workout_id }).then(res => {
         return res.data
     })
     return {
@@ -194,9 +195,11 @@ export default function(state = initialState, action) {
         case GET_EXERCISE + '_FULFILLED':
             return {...state, exercise: action.payload}
         case ADD_EX_TO_WORKOUT + '_FULFILLED':
-            return {...state, workout: action.payload, exSearchResults: []}
+            return {...state, workoutExs: action.payload, exSearchResults: []}
+        case REMOVE_EX_FROM_WORKOUT + '_FULFILLED':
+            return {...state, workoutExs: action.payload}
         case GET_WORKOUT + '_FULFILLED':
-            return {...state, workout: action.payload}
+            return {...state, workout: action.payload.workout, workoutExs: action.payload.exercises}
         case SEARCH_EXERCISES + '_FULFILLED':
             return {...state, exSearchResults: action.payload}
         case SEARCH_WORKOUTS + '_FULFILLED':

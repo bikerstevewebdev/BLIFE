@@ -90,14 +90,14 @@ class Profile extends Component{
                 Proofile Yo
                 <Link to='/'>Back to Login</Link>
                 <Link to='/updateProfile'>Update Profile</Link>
-                <p>Protein: {current_protein}</p>
-                <p>Fat: {current_fat}</p>
-                <p>Carbs: {current_carbs}</p>
+                <p>Protein: {current_protein}g</p>
+                <p>Fat: {current_fat}g</p>
+                <p>Carbs: {current_carbs}g</p>
                 <p>Pofile Pic: </p>
                 <img src={profile_pic} alt="users pic"/>
-                <p>Weight: {current_weight}</p>
-                <p>Height: {current_height}</p>
-                <p>Bodyfat: {current_bf}</p>
+                <p>Weight: {current_weight}pounds</p>
+                <p>Height: {current_height}inches</p>
+                <p>Bodyfat: {current_bf}%</p>
                 {
                     this.props.isUpdating
                     ?

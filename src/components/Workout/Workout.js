@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
-import { searchExs, addExToWorkout, getWorkoutById } from '../../ducks/fitnessReducer'
+import { searchExercises, addExToWorkout, getWorkoutById } from '../../ducks/fitnessReducer'
+import WorkoutEx from '../Exercise/WorkoutEx'
 // import { Redirect } from 'react-router-dom'
 
 class Workout extends Component{
@@ -18,8 +19,8 @@ class Workout extends Component{
     componentDidMount() {
         console.log(this.props)
         const { id } = this.props.match.params
-        if(!isNaN(id) && from > 0 && !this.props.workout.workout_id){
-            this.props.getWorkoutById(from)
+        if(!isNaN(id/1) && id/1 > 0 && !this.props.workout.workout_id){
+            this.props.getWorkoutById(id)
         } 
     }
 
@@ -27,8 +28,8 @@ class Workout extends Component{
         console.log('Workout updated props:',this.props)
     }
 
-    addThisEx(workout_id, ex_id, order){
-        this.props.addExToWorkout(workout_id, ex_id, order)
+    addThisEx(workout_id, ex_id, ex_order){
+        this.props.addExToWorkout(workout_id, ex_id, ex_order)
         this.endSearch()
     }
 
@@ -57,12 +58,12 @@ class Workout extends Component{
                         <p>Exercise Name: {name}</p>
                         <p>Category: {_ex.type}</p>
                         <p>Major Muscle Group: {_ex.main_muscle_group}</p>
-                        <button onClick={() => this.addThisEx(workout_id, ex_id, numExs.length + 1)}>Add to {this.props.workout.title}</button>
+                        <button onClick={() => this.addThisEx(workout_id, ex_id, workoutExs.length + 1)}>Add to {this.props.workout.title}</button>
                     </section>
                 ) }),
               workoutExsList = workoutExs.map(exercise => {
-                    const { ex_id, name, workout_ex_id, type, main_muscle_group, notes, order } = exercise
-                    return <WorkoutEx key={workout_ex_id} numExs={numExs} workout_id={workout_id} main_muscle_group={main_muscle_group} notes={notes} order={order} type={type} ex_id={ex_id} workout_ex_id={workout_ex_id} name={name} img={exercise.img} />            
+                    const { ex_id, name, workout_ex_id, type, main_muscle_group, notes, ex_order } = exercise
+                    return <WorkoutEx key={workout_ex_id} numExs={numExs} workout_id={workout_id} main_muscle_group={main_muscle_group} notes={notes} ex_order={ex_order} type={type} ex_id={ex_id} workout_ex_id={workout_ex_id} name={name} img={exercise.img} />            
                  })
         return(
             <section className="workout">
@@ -71,7 +72,7 @@ class Workout extends Component{
                 <h3>Exercises in this Workout:</h3>
                 {workoutExsList}
                 <input value={searchIn} placeholder="Search Exercises by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
-                <button onClick={() => this.props.searchExs(searchIn)}>Search the exercise database!</button>
+                <button onClick={() => this.props.searchExercises(searchIn)}>Search the exercise database!</button>
                 {exerciseResults}
             </section>
         )
@@ -80,10 +81,10 @@ class Workout extends Component{
 
 function mapStateToProps(state) {
     return {
-        workoutExs: state.fitness.menuMeals,
+        workoutExs: state.fitness.workoutExs,
         exSearchResults: state.fitness.exSearchResults,
         workout: state.fitness.workout
     }
 }
 
-export default connect(mapStateToProps, { searchExs, addExToWorkout, getWorkoutById })(Workout)
+export default connect(mapStateToProps, { searchExercises, addExToWorkout, getWorkoutById })(Workout)
