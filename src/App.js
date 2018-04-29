@@ -19,6 +19,7 @@ import Workout from './components/Workout/Workout';
 import WorkoutCreator from './components/Workout/WorkoutCreator';
 import ClientManager from './components/Coach/ClientManager';
 import CoachManager from './components/Coach/CoachManager';
+import FirstLogin from './components/Login/FirstLogin';
 
 
 
@@ -54,6 +55,8 @@ class App extends Component {
           <Route path='/workoutCreator' component={WorkoutCreator} />
           <Route path='/coachManager/:id' component={CoachManager} />
           <Route path='/clientManager/:id' component={ClientManager} />
+          <Route path='/firstLogin' component={FirstLogin} />
+          <Route path='/measurements' component={Measurements} />
         </Switch>
       </div>
     );

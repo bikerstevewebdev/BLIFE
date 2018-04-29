@@ -84,6 +84,8 @@ app.get('/auth/callback', passport.authenticate('auth0', {
 
 app.get('/user/:id', c.getUser)
 app.get('/userInfo', c.getUserInfo)
+app.get('/userMenus', c.getUserMenus)
+app.get('/userWorkouts', c.getUserWorkouts)
 
 app.get('/measurements/:id', c.getMeasurements)
 app.get('/measurements/latest/:id', c.getLatestMes)

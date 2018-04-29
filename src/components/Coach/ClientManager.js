@@ -55,6 +55,7 @@ class ClientManager extends Component{
                   })
         return (
             <section className="client-manager">
+                <Link to={`/coachManager/${props.coach_id}`}><button>Back to Coach Manager</button></Link>
                 <h1>{username}</h1>
                 <section className="client-stats">
                     <h2>Current Stats</h2>
@@ -103,6 +104,7 @@ class ClientManager extends Component{
 
 function mapStateToProps(state) {
     return {
+        coach_id: state.users.userData.coach_id,
         currentClient: state.coach.currentClient,
         clientMenus: state.coach.clientMenus,
         clientWorkouts: state.coach.clientWorkouts

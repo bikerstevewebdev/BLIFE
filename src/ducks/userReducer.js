@@ -14,7 +14,8 @@ const initialState = {
         current_height: 0,
         current_bf: 0
     },
-    curr_mes: { waist: 0,
+    curr_mes: { 
+        waist: 0,
         neck: 0,
         chest: 0,
         weight: 0,
@@ -22,7 +23,9 @@ const initialState = {
         bf: 0,
         mes_id: 0
     },
-    isLoggedIn: false
+    isLoggedIn: false,
+    userWorkouts: [],
+    userMenus: []
     
 }
 /////////////////END initial state declaration////////////////////
@@ -32,6 +35,9 @@ const initialState = {
 const GET_USER = 'GET_USER'
 const UPDATE_STATS = 'UPDATE_STATS'
 const MACRO_CALCED = 'MACRO_CALCED'
+const UPDATE_MES = 'UPDATE_MES'
+const GET_USER_WORKOUTS = 'GET_USER_WORKOUTS'
+const GET_USER_MENUS = 'GET_USER_MENUS'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
@@ -46,6 +52,26 @@ export function getUserData() {
     }
 }
 
+export function getUserMenus() {
+    let menus = axios.get('/userMenus').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_USER_MENUS,
+        payload: menus
+    }
+}
+
+export function getUserWorkouts() {
+    let workouts = axios.get('/userWorkouts').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_USER_WORKOUTS,
+        payload: workouts
+    }
+}
+
 export function updateUserStats(p, c, f, wt, ht, bf, waist, chest, neck) {
     let data = axios.put('/user/stats', { p, c, f, ht, wt, bf, waist, chest, neck }).then(res => {
         return res.data
@@ -53,6 +79,16 @@ export function updateUserStats(p, c, f, wt, ht, bf, waist, chest, neck) {
     return {
         type: UPDATE_STATS,
         payload: data
+    }
+}
+
+export function addMeasurement(wt, ht, bf, waist, chest, neck) {
+    let newStats = axios.post('/user/mez', { ht, wt, bf, waist, chest, neck }).then(res => {
+        return res.data
+    })    
+    return {
+        type: UPDATE_MES,
+        payload: newStats
     }
 }
 
@@ -80,11 +116,22 @@ export function addMacrosToState(p, c, f, bf, wt, ht, currMes_id){
 export default function(state = initialState, action) {
     switch(action.type){
         case UPDATE_STATS + '_FULFILLED':
-                const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.newMez
+                let { waist, neck, chest, weight, height, bf, mes_id } = action.payload.newMez
                 return { ...state,
                     userData: action.payload.user,
                     curr_mes: { waist, neck, chest, weight, height, bf, mes_id }
                      }
+        case UPDATE_MES + '_FULFILLED':
+        /////////// Prior declaration might cause a problem with this destructuring
+                let { waist, neck, chest, weight, height, bf, mes_id } = action.payload.newMez
+                return { ...state,
+                    userData: action.payload.user,
+                    curr_mes: { waist, neck, chest, weight, height, bf, mes_id }
+                     }
+        case GET_USER_MENUS + '_FULFILLED':
+                     return { ...state, userMenus: action.payload }
+        case GET_USER_WORKOUTS + '_FULFILLED':
+                     return { ...state, userWorkouts: action.payload }
         case GET_USER + '_FULFILLED':
             console.log('begin getuser success', action.payload)
 
@@ -121,6 +168,7 @@ export default function(state = initialState, action) {
         case MACRO_CALCED:
                 console.log('macros sent to be updated on user state')
             return {...state, 
+                // Users info not changed on backend yet; userData has original macros.mes_id
                     user: {
                         ...state.user,
                         current_protein: action.payload.p,

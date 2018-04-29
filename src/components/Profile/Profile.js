@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserData, updateUserStats, addMacrosToState } from '../../ducks/userReducer';
+import { getUserData, updateUserStats, addMacrosToState, getUserMenus, getUserWorkouts } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
 
 
@@ -19,6 +19,9 @@ class Profile extends Component{
 
     componentDidMount() {
         console.log(this.props)
+        const { user_id } = this.props.userData
+        this.props.getUserMenus(user_id)
+        this.props.getUserWorkouts(user_id)
         // const { pro, carbs, fat, curr_mes, userData, bodyfat, weight, height } = this.props
         // if(curr_mes.mes_id !== userData.curr_mes && pro > 0){
         //     this.props.addMacrosToState(pro, carbs, fat, bodyfat, weight, height)
@@ -35,6 +38,8 @@ class Profile extends Component{
         console.log('profile updated:', this.props)
         const { pro, carbs, fat, bodyfat, weight, height, current_protein, current_carbs, current_fat, userData } = this.props
         // console.log(curr_mes.mes_id, userData.curr_mes_id, pro)
+        // Checking to see if macros were calced, and add them to state in userReducer if so
+        // User can update their measurements and macros if they want to keep the new numbers or discard them
         if(pro !== current_protein || carbs !== current_carbs || fat !== current_fat){
             this.props.addMacrosToState(pro, carbs, fat, bodyfat/1, weight/1, height/1, userData.curr_mes)
             // this.setState({
@@ -47,11 +52,11 @@ class Profile extends Component{
         //     })
         // }
     }
-
-    updateNewMes() {
-        const { current_protein,
-            current_carbs,
-            current_fat,
+//////////////////////Handles Macro Changes///////////////////
+updateNewMes() {
+    const { current_protein,
+        current_carbs,
+        current_fat,
             current_weight,
             current_height,
             current_bf
@@ -66,17 +71,18 @@ class Profile extends Component{
             waist, 
             chest,
             neck )
-        this.props.changeUpdating()
-        console.log('updating measurements')
-    }
-    
-    discardNewMes() {
-        this.props.clearMacroEntry()
-        console.log('discarding new measurements')
-    }
-    
-    render() {
-        const {
+            this.props.changeUpdating()
+            console.log('updating measurements')
+        }
+        
+        discardNewMes() {
+            this.props.clearMacroEntry()
+            console.log('discarding new measurements')
+        }
+//////////////////////Handles Macro Changes///////////////////
+        
+        render() {
+            const {
             profile_pic,
             current_protein,
             current_carbs,
@@ -144,4 +150,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getUserMenus, getUserWorkouts })(Profile)

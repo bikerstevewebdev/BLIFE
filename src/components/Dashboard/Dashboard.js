@@ -5,20 +5,22 @@ import { connect } from 'react-redux'
 import SearchMeal from '../Search/SearchMeals'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
+import { Redirect } from 'react-router-dom'
 
 
 class Dashboard extends Component{
-    // constructor() {
-        // super()
-        // this.state = {
+    constructor() {
+        super()
+        this.state = {
+            firstVisit: false
             // searchingMeals: true,
             // searchingMenus: true,
             // searchingWorkouts: true
-        // }
+        }
         // this.endWorkoutSearch = this.endWorkoutSearch.bind(this)
         // this.endMealSearch = this.endMealSearch.bind(this)
         // this.endMenuSearch = this.endMenuSearch.bind(this)
-    // }
+    }
     componentDidMount() {
         if(!this.props.userData.user_id){
             this.props.getUserData()
@@ -28,6 +30,11 @@ class Dashboard extends Component{
 
     componentDidUpdate() {
         console.log('DBoard updated props', this.props)
+        if(!(this.props.userData.username.length > 0)){
+            this.setState({
+                firstVisit: true
+            })
+        }
     }
 
     // getUserObjs() {
@@ -44,6 +51,13 @@ class Dashboard extends Component{
                 <SearchMeal />
                 <SearchMenu />
                 <SearchWorkout />
+                {
+                    this.state.firstVisit
+                    ?
+                    <Redirect to={`/firstLogin`} />
+                    :
+                    null
+                }
             </section>
         )
     }

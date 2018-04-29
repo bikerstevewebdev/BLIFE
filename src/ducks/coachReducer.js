@@ -18,8 +18,10 @@ const initialState = {
             date_taken: ''
         },
         last_login: ''
-    }
-    
+    },
+    clients: [],
+    coaches: [],
+    coachRequests: []
     
 }
 /////////////////END initial state declaration////////////////////
@@ -27,6 +29,7 @@ const initialState = {
 
 /////////////////START String Literals//////////////////////
 const GET_CLIENT = 'GET_CLIENT'
+const GET_CLIENTS = 'GET_CLIENTS'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
@@ -37,6 +40,16 @@ export function getClientData() {
     return {
         type: GET_CLIENT,
         payload: data
+    }
+}
+
+export function getClients(coach_id) {
+    let clients = axios.get(`/clients/${coach_id}`).then(res => {
+        return res.data
+    })
+    return {
+        type: GET_CLIENTS,
+        payload: clients
     }
 }
 

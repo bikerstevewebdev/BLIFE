@@ -3,7 +3,7 @@ CREATE TABLE users (
     coach_id DEFAULT 0,
     is_admin BOOLEAN DEFAULT false
     username VARCHAR(25) NOT NULL,
-    fullname TEXT,
+    fullname VARCHAR(100),
     profile_pic TEXT,
     date_created DATE NOT NULL,
     curr_pro REAL DEFAULT 0,

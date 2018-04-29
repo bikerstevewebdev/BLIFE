@@ -10,6 +10,20 @@ module.exports = {
             res.status(200).send(req.user)
     },
     
+    getUserMenus: (req, res, next) => {
+        const db = req.app.get('db')
+        db.get_current_menus_by_user_id([req.user.user_id]).then(menus => {
+            res.status(200).send(menus)
+        })
+    },
+    
+    getUserWorkouts: (req, res, next) => {
+        const db = req.app.get('db')
+        db.get_current_workouts_by_user_id([req.user.user_id]).then(workouts => {
+            res.status(200).send(workouts)
+        })
+    },
+    
     getUserInfo: (req, res, next) => {
         if(req.user){
             const db      = req.app.get('db'),
@@ -68,9 +82,16 @@ module.exports = {
     addMez: (req, res, next) => {
         let x     = new Date(),
         tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-        const { waist, neck, chest, ht, wt, bf } = req.body
-        req.app.get('db').add_measurements([ waist, neck, chest, ht, wt, bf, tDate, req.user.user_id ]).then( measurements => {
-            res.status(200).send(measurements[0])
+        const { waist, neck, chest, ht, wt, bf } = req.body,
+              db                                 = req.app.get('db')
+        db.add_measurements([ waist, neck, chest, ht, wt, bf, tDate, req.user.user_id ]).then( measurements => {
+            db.update_mes_id([req.user.user_id, measurements[0].mes_id]).then(user => {
+                let retObj = {
+                    newMez: measurements[0],
+                    user: user[0]
+                }
+                res.status(200).send(retObj)
+            })
         })
     },
                                     
@@ -363,6 +384,7 @@ module.exports = {
             exs.forEach(v => {
                 let newOrder = v.order - 1 > 0 ? v.order - 1 : 1
                 db.update_workout_ex_order([v.workout_ex_id, newOrder])
+                // MIGHT NEED TO ADD NEXT/ASYNC CODE TO HANDLE THIS DATA
             })
             db.get_workout_exercises([workout_id]).then(exercises => {
                 res.status(200).send(exercises)
