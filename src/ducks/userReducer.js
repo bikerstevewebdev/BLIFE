@@ -25,7 +25,10 @@ const initialState = {
     },
     isLoggedIn: false,
     userWorkouts: [],
-    userMenus: []
+    userMenus: [],
+    coachReqs: [],
+    activeCoaches: [],
+    warningMsg: ''
     
 }
 /////////////////END initial state declaration////////////////////
@@ -38,6 +41,11 @@ const MACRO_CALCED = 'MACRO_CALCED'
 const UPDATE_MES = 'UPDATE_MES'
 const GET_USER_WORKOUTS = 'GET_USER_WORKOUTS'
 const GET_USER_MENUS = 'GET_USER_MENUS'
+const UPDATE_USERNAME = 'UPDATE_USERNAME'
+const UPDATE_FULLNAME = 'UPDATE_FULLNAME'
+const UPDATE_PROFILE_PIC = 'UPDATE_PROFILE_PIC'
+const REQ_COACH_ACCESS = 'REQ_COACH_ACCESS'
+const GET_ADMIN_INFO = 'GET_ADMIN_INFO'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
@@ -49,6 +57,15 @@ export function getUserData() {
     return {
         type: GET_USER,
         payload: data
+    }
+}
+export function getAdminInfo() {
+    let adminData = axios.get('/adminInfo').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_ADMIN_INFO,
+        payload: adminData
     }
 }
 
@@ -79,6 +96,47 @@ export function updateUserStats(p, c, f, wt, ht, bf, waist, chest, neck) {
     return {
         type: UPDATE_STATS,
         payload: data
+    }
+}
+
+export function updateUsername(username) {
+    let user = axios.put('/user/username', { username }).then(res => {
+        return res.data
+    })    
+    return {
+        type: UPDATE_USERNAME,
+        payload: user
+    }
+}
+
+export function updateFullname(fullname) {
+    let user = axios.put('/user/fullname', { fullname }).then(res => {
+        return res.data
+    })    
+    return {
+        type: UPDATE_FULLNAME,
+        payload: user
+    }
+}
+
+export function requestCoachAccess() {
+    // might get error because not sending any req.body or params
+    let user = axios.put('/coach/request').then(res => {
+        return res.data
+    })    
+    return {
+        type: REQ_COACH_ACCESS,
+        payload: user
+    }
+}
+
+export function updateProfilePic(profile_pic) {
+    let user = axios.put('/user/profilePic', { profile_pic }).then(res => {
+        return res.data
+    })    
+    return {
+        type: UPDATE_PROFILE_PIC,
+        payload: user
     }
 }
 
@@ -132,6 +190,15 @@ export default function(state = initialState, action) {
                      return { ...state, userMenus: action.payload }
         case GET_USER_WORKOUTS + '_FULFILLED':
                      return { ...state, userWorkouts: action.payload }
+        case REQ_COACH_ACCESS + '_FULFILLED':
+                     return { ...state, userData: action.payload }
+        case GET_ADMIN_INFO + '_FULFILLED':
+            const { message, coachReqs, activeCoaches } = action.payload
+            if(message){
+                return { ...state, coachReqs, activeCoaches }
+            } else{
+                return { ...state, warningMsg: message }
+            }
         case GET_USER + '_FULFILLED':
             console.log('begin getuser success', action.payload)
 
@@ -183,6 +250,12 @@ export default function(state = initialState, action) {
                         mes_id: action.payload.currMes_id
                         }
                 }
+            case UPDATE_USERNAME +'_FULFILLED':
+                return { ...state, user: {...state.user, username: action.payload.username}, userData: action.payload}
+            case UPDATE_FULLNAME +'_FULFILLED':
+                return { ...state, userData: action.payload}
+            case UPDATE_PROFILE_PIC +'_FULFILLED':
+                return { ...state, user: {...state.user, profile_pic: action.payload.profile_pic}, userData: action.payload}
         default:
             return state
     }

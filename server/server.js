@@ -84,6 +84,7 @@ app.get('/auth/callback', passport.authenticate('auth0', {
 
 app.get('/user/:id', c.getUser)
 app.get('/userInfo', c.getUserInfo)
+app.get('/adminInfo', c.getAdminInfo)
 app.get('/userMenus', c.getUserMenus)
 app.get('/userWorkouts', c.getUserWorkouts)
 
@@ -105,6 +106,10 @@ app.get('/exercise/:id', c.getExerciseById)
 app.get('/workout/:id', c.getWorkoutById)
 
 app.put('/user/stats', c.updateStats)
+app.put('/user/username', c.updateUsername)
+app.put('/user/fullname', c.updateFullname)
+app.put('/user/profilePic', c.updateProfilePic)
+app.put('/coach/request', c.requestCoachAccess)
 app.put('/food/edit', c.editFood)
 app.put('/meal/foods/quantity', c.updateFoodQuantity)
 app.put('/menu', c.editMenu)

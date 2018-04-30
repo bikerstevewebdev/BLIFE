@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { updateUsername, updateFullname, updateProfilePic } from '../../ducks/userReducer'
+import { updateUsername, updateFullname, updateProfilePic, requestCoachAccess } from '../../ducks/userReducer'
 import { connect } from 'react-redux';
 import Measurements from '../Measurements/Measurements'
 
@@ -9,10 +9,12 @@ class UpdateProfile extends Component{
         this.state = {
             usernameIn: props.userData.username,
             fullnameIn: props.userData.fullname,
-            profile_picIn: props.userData.profile_pic,
-            // changingMeasurements: false
+            profile_picIn: props.userData.profile_pic
         }
         this.updateUsernameIn = this.updateUsernameIn.bind(this)
+        this.updateFullnameIn = this.updateFullnameIn.bind(this)
+        this.updateProfilePicIn = this.updateProfilePicIn.bind(this)
+        this.requestAccess = this.requestAccess.bind(this)
     }
 
     updateUsernameIn(val) {
@@ -33,20 +35,26 @@ class UpdateProfile extends Component{
         })
     }
 
-    // prepareToChangeMeasurements(val) {
-    //     this.setState({
-    //         changingMeasurements: true
-    //     })
-    // }
-
-
+    requestAccess(val) {
+        val ? this.props.requestCoachAccess() : null
+    }
     
     render() {
         const { usernameIn, fullnameIn, profile_picIn } = this.state,
-              { updateFullname, updateProfilePic, updateUsername } = this.props,
+              { updateFullname, updateProfilePic, updateUsername, userData } = this.props,
             //   { current_weight, current_height, current_bf } = curr_mes
         return(
-            <section>
+            <section className="update-profile">
+                {
+                    userData.coach_id > 0
+                    ?
+                    null
+                    :
+                    <section className="coach-request">
+                        <h2>Looking to become a coach?</h2>
+                        <button style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</button>
+                    </section>
+                }
                 <p>Change your username:</p>
                 <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
                 <button onClick={() => updateUsername(usernameIn)}>Update</button>
@@ -57,23 +65,6 @@ class UpdateProfile extends Component{
                 <input value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
                 <button onClick={() => updateProfilePic(profile_picIn)}>Update</button>
                 <Measurements />
-                {/* {
-                    this.state.changingMeasurements
-                    ?
-                    :
-                    <section className="change-measurements">
-                        <ul>
-                            <li>{height}</li>
-                            <li>{weight}</li>
-                            <li>{bf}</li>
-                            <li>{waist}</li>
-                            <li>{neck}</li>
-                            <li>{chest}</li>
-                            <li>{chest}</li>
-                        </ul>
-                        <button onClick={this.prepareToChangeMeasurements}>Change Measurements?</button>
-                    </section>
-                } */}
             </section>
         )
     }
@@ -82,8 +73,7 @@ class UpdateProfile extends Component{
 function mapStateToProps(state) {
     return {
         userData: state.users.userData,
-        // user: state.users.user
     }
 }
 
-export default connect(mapStateToProps, { updateUsername, updateFullname, updateProfilePic })(UpdateProfile)
+export default connect(mapStateToProps, { updateUsername, updateFullname, updateProfilePic, requestCoachAccess })(UpdateProfile)

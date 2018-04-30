@@ -129,9 +129,9 @@ CREATE TABLE user_workout (
 CREATE TABLE coach_request (
     req_id SERIAL PRIMARY KEY,
     user_id INTEGER,
-    req_id INTEGER,
     accepted BOOLEAN DEFAULT false,
-    active BOOLEAN DEFAULT true
+    active BOOLEAN DEFAULT false,
+    processing DEFAULT true
 );
 
 CREATE TABLE user_menu (

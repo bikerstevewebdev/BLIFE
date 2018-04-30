@@ -45,6 +45,77 @@ module.exports = {
             res.status(404).send({message: 'Not Logged In'})
         }
     },
+
+    getAdminInfo: (req, res, next) => {
+        const db      = req.app.get('db')
+            , { auth_id } = req.user
+        db.check_admin_status([auth_id]).then(adminTruth => {
+            if(adminTruth[0]){
+                db.get_pending_coach_requests().then(coachReqs => {
+                    db.get_acive_coaches().then(activeCoaches => {
+                        let retObj = {
+                            activeCoaches,
+                            coachReqs
+                        }
+                        res.status(200).send(retObj)
+                    })
+                })
+            } else {
+                res.status(401).send({message: "You are not authorized to access that information."})
+            }
+        })
+    },
+    
+    requestCoachAccess: (req, res, next) => {
+        if(req.user.coach_id != -1){
+            const db = req.app.get('db')
+                , { user_id } = req.user
+            db.request_coach_access([user_id]).then(user => {
+                res.status(200).send(user[0])
+            })
+        }
+    },
+    
+    
+    updateUsername: (req, res, next) => {
+        const db = req.app.get('db')
+        , { username } = req.body
+        db.update_username([req.user.user_id, username]).then( user => {
+            res.status(200).send(user[0])
+        })
+    },
+    
+    updateFullname: (req, res, next) => {
+        const db = req.app.get('db')
+        , { fullname } = req.body
+        db.update_fullname([req.user.user_id, fullname]).then( user => {
+            res.status(200).send(user[0])
+        })
+    },
+    
+    updateProfilePic: (req, res, next) => {
+        const db = req.app.get('db')
+        , { profile_pic } = req.body
+        db.update_profile_pic([req.user.user_id, profile_pic]).then( user => {
+            res.status(200).send(user[0])
+        })
+    },
+    ///////////////////MES/STATS METHODS////////////////
+    addMez: (req, res, next) => {
+        let x     = new Date(),
+        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
+        const { waist, neck, chest, ht, wt, bf } = req.body,
+        db                                 = req.app.get('db')
+        db.add_measurements([ waist, neck, chest, ht, wt, bf, tDate, req.user.user_id ]).then( measurements => {
+            db.update_mes_id([req.user.user_id, measurements[0].mes_id]).then(user => {
+                let retObj = {
+                    newMez: measurements[0],
+                    user: user[0]
+                }
+                res.status(200).send(retObj)
+            })
+        })
+    },
     
     getMeasurements: (req, res, next) => {
         const db = req.app.get('db')
@@ -57,7 +128,6 @@ module.exports = {
         }
     },
 
-    
     getLatestMes: (req, res, next) => {
         req.app.get('db').get_latest_mes([req.params.id]).then( measurements => {
             res.status(200).send(measurements[0])
@@ -78,23 +148,7 @@ module.exports = {
             })
         })
     },
-    
-    addMez: (req, res, next) => {
-        let x     = new Date(),
-        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-        const { waist, neck, chest, ht, wt, bf } = req.body,
-              db                                 = req.app.get('db')
-        db.add_measurements([ waist, neck, chest, ht, wt, bf, tDate, req.user.user_id ]).then( measurements => {
-            db.update_mes_id([req.user.user_id, measurements[0].mes_id]).then(user => {
-                let retObj = {
-                    newMez: measurements[0],
-                    user: user[0]
-                }
-                res.status(200).send(retObj)
-            })
-        })
-    },
-                                    
+////////////////////MACRO METHODS////////////////////////
     newMacroCalc: (req, res, next) => {
         const { protein, carbs, fat } = req.body
         let x     = new Date(),
@@ -104,7 +158,7 @@ module.exports = {
             res.status(200).send(macros[0])
         }) 
     },
-    
+//////////////////////FOOD METHODS//////////////////////
     createFood: (req, res, next) => {
             const { name, p, c, f, fib, img } = req.body
             req.app.get('db').create_food([name, req.user.user_id, p, c, f, fib, img]).then( food => {

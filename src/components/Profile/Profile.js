@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getUserData, updateUserStats, addMacrosToState, getUserMenus, getUserWorkouts } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
+import MenuCard from '../Menu/MenuCard'
+import WorkoutCard from '../Workout/WorkoutCard'
 
 
 class Profile extends Component{
@@ -82,16 +84,9 @@ updateNewMes() {
 //////////////////////Handles Macro Changes///////////////////
         
         render() {
-            const {
-            profile_pic,
-            current_protein,
-            current_carbs,
-            current_fat,
-            current_weight,
-            current_height,
-            current_bf,
-            userData
-        } = this.props
+            const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus } = this.props
+                  menusList = userMenus.map(menu => <MenuCard key={user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>),
+                  workoutsList = userWorkouts.map(workout => <WorkoutCard key={user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
         return(
             <section>
                 Proofile Yo
@@ -104,6 +99,10 @@ updateNewMes() {
                     :
                     null
                 }
+                {/* Displays user's current menus: */}
+                {menusList}
+                {/* Displays user's current workouts: */}
+                {workoutsList}
                 <p>Protein: {current_protein}g</p>
                 <p>Fat: {current_fat}g</p>
                 <p>Carbs: {current_carbs}g</p>
@@ -130,23 +129,29 @@ updateNewMes() {
 }
 
 function mapStateToProps(state){
+    const { user, curr_mes, userData } = state.users,
+          { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf } = user,
+          { macros, weight, height, bodyfat, isUpdating } = state.macros,
+          { userMenus, userWorkouts } = state.coach
     return{
-        profile_pic: state.users.user.profile_pic,
-        current_protein: state.users.user.current_protein,
-        current_carbs: state.users.user.current_carbs,
-        current_fat: state.users.user.current_fat,
-        current_weight: state.users.user.current_weight,
-        current_height: state.users.user.current_height,
-        current_bf: state.users.user.current_bf,
-        userData: state.users.userData,
-        curr_mes: state.users.curr_mes,
-        pro: state.macros.macros.protein,
-        carbs: state.macros.macros.carbs,
-        fat: state.macros.macros.fat,
-        weight: state.macros.weight,
-        height: state.macros.height,
-        bodyfat: state.macros.bodyfat,
-        isUpdating: state.macros.isUpdating
+        profile_pic,
+        current_protein,
+        current_carbs,
+        current_fat,
+        current_weight,
+        current_height,
+        current_bf,
+        userData,
+        curr_mes,
+        pro: macros.protein,
+        carbs: macros.carbs,
+        fat: macros.fat,
+        weight,
+        height,
+        bodyfat,
+        isUpdating,
+        userMenus,
+        userWorkouts
     }
 }
 
