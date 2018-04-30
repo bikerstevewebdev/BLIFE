@@ -32,15 +32,16 @@ class SearchMenu extends Component{
 
 
     render() {
-        const menuResults = this.props.menuSearchResults.map(res => {
+        const { arg2, arg3, handleBtnClick, btnMsg, doSomething, menuSearchResults } = this.props
+        const menuResults = menuSearchResults.map(res => {
             return(
                 <section className="menu-search-result" key={res.menu_id}>
                     <p>{res.title}</p>
                     <img src={res.img} alt={res.title} />
                     {
-                        this.props.doSomething
+                        doSomething
                         ?
-                        <button onClick={this.props.handleBtnClick}>{this.props.btnMsg}</button>
+                        <button onClick={() => handleBtnClick(res.menu_id, arg2, arg3)}>{btnMsg}</button>
                         :
                         <Link to={`/menu/${res.menu_id}`}><button onClick={this.endSearches}>Take me to this menu!</button></Link>
                     }
@@ -49,7 +50,7 @@ class SearchMenu extends Component{
         })
         return (
             <section className="menu-search">
-                <h3>Search fo a MENU:</h3>
+                <h3>Search for a MENU:</h3>
                 <input value={this.state.menuSearch} onChange={this.updateMenuSearch} />
                 <button style={{width: "300px"}} onClick={this.searchMenus}>Search!</button>
                 {menuResults}

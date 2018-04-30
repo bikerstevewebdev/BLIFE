@@ -32,15 +32,16 @@ class SearchWorkout extends Component{
 
 
     render() {
-        const workoutResults = this.props.workoutSearchResults.map(res => {
+        const { arg2, arg3, handleBtnClick, btnMsg, doSomething, workoutSearchResults } = this.props
+        const workoutResults = workoutSearchResults.map(res => {
             return(
                 <section className="workout-search-result" key={res.workout_id}>
                     <p>{res.title}</p>
                     <img src={res.img} alt={res.title} />
                     {
-                        this.props.doSomething
+                        doSomething
                         ?
-                        <button onClick={this.props.handleBtnClick}>{this.props.btnMsg}</button>
+                        <button onClick={() => handleBtnClick(res.workout_id, arg2, arg3)}>{btnMsg}</button>
                         :
                         <Link to={`/workout/${res.workout_id}`}><button onClick={this.endSearches}>Take me to this workout!</button></Link>
                     }
@@ -48,7 +49,7 @@ class SearchWorkout extends Component{
             )
         })
         return (
-            <section className="menu-search">
+            <section className="workout-search">
                 <h3>Find your new Workout:</h3>
                 <input value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
                 <button style={{width: "300px"}} onClick={this.searchWorkouts}>Search!</button>

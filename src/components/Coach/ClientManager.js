@@ -44,7 +44,7 @@ class ClientManager extends Component{
     render() {
         // const { messageInput } = this.state,
             const { currentClient, sendClientMsg } = this.props,
-                  { username, curr_macros, last_login, current_stats, fullname, menus,  } = currentClient,
+                  { username, curr_macros, last_login, current_stats, fullname, menus, client_id, client_coach_id } = currentClient,
                   { waist, neck, chest, height, weight, bf, date_taken } = current_stats,
                   { pro, carb, fat } = curr_macros,
                   menus = clientMenus.map(v => {
@@ -78,7 +78,7 @@ class ClientManager extends Component{
                     {
                         this.state.addingWorkout
                         ?
-                        <SearchWorkout doSomething={true} btnMsg={`Add this workout to ${username}'s plan`} handleBtnClick={this.props.assignWorkoutToClient.bind(this)} />
+                        <SearchWorkout doSomething={true} arg2={client_coach_id} arg3={client_id} btnMsg={`Add this workout to ${username}'s plan`} handleBtnClick={this.props.assignWorkoutToClient.bind(this)} />
                         :
                         <button onClick={this.prepareToAddWorkout}>Add a workout to {username}'s plan?</button>
                     }
@@ -89,7 +89,7 @@ class ClientManager extends Component{
                     {
                         this.state.addingMenu
                         ?
-                        <SearchMenu doSomething={true} btnMsg={`Add this menu to ${username}'s plan`} handleBtnClick={this.props.assignMenuToClient.bind(this)} />
+                        <SearchMenu doSomething={true} arg2={client_coach_id} arg3={client_id} btnMsg={`Add this menu to ${username}'s plan`} handleBtnClick={this.props.assignMenuToClient.bind(this)} />
                         :
                         <button onClick={this.prepareToAddMenu}>Add a menu to {username}'s plan?</button>
                     }

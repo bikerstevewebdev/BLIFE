@@ -39,7 +39,7 @@ passport.use( new Auth0Strategy({
     callbackURL: CALLBACK_URL,
     scope: 'openid email profile'
 }, (accessToken, refreshToken, extraParams, profile, done) => {
-    const { id, displayName, picture } = profile
+    const { id, displayName, picture, email } = profile
     const db = app.get('db') 
     db.get_user([id]).then( users => {        
         if ( users[0] ){
@@ -48,7 +48,7 @@ passport.use( new Auth0Strategy({
         else { //when someone is logginG in for the first time.             
             let x = new Date(),
                 tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-            db.create_user([displayName, picture, id, tDate]).then( createdUser => {
+            db.create_user([displayName, email, picture, id, tDate]).then( createdUser => {
                 return done(null, createdUser)
         } ) }
     } ).catch(err => {
@@ -88,6 +88,11 @@ app.get('/adminInfo', c.getAdminInfo)
 app.get('/userMenus', c.getUserMenus)
 app.get('/userWorkouts', c.getUserWorkouts)
 
+app.get('/client/assigned/menus', c.getAssignedMenus)
+app.get('/client/assigned/workouts', c.getAssignedWorkouts)
+app.get('/coach/clients/:id', c.getClients)
+axios.get('/search/clients/:email', c.searchForClient)
+
 app.get('/measurements/:id', c.getMeasurements)
 app.get('/measurements/latest/:id', c.getLatestMes)
 
@@ -109,7 +114,10 @@ app.put('/user/stats', c.updateStats)
 app.put('/user/username', c.updateUsername)
 app.put('/user/fullname', c.updateFullname)
 app.put('/user/profilePic', c.updateProfilePic)
+
 app.put('/coach/request', c.requestCoachAccess)
+app.put('/coach/approve', c.approveCoachAccess)
+app.put('/coach/deny', c.denyCoachAccess)
 app.put('/food/edit', c.editFood)
 app.put('/meal/foods/quantity', c.updateFoodQuantity)
 app.put('/menu', c.editMenu)
@@ -118,6 +126,10 @@ app.put('/workout/exercise', c.updateWorkoutEx)
 
 app.post('/user/mez', c.addMez)
 app.post('/macroCalc', c.newMacroCalc)
+app.post('/userMenus', c.addMenuToUser)
+app.post('/userWorkouts', c.addWorkoutToUser)
+app.post('/client/menus', c.assignMenuToClient)
+app.post('/client/workouts', c.assignWorkoutToClient)
 
 app.post('/food', c.createFood)
 app.post('/meal/food', c.addFoodToMeal)

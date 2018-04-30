@@ -3,6 +3,7 @@ CREATE TABLE users (
     coach_id DEFAULT 0,
     is_admin BOOLEAN DEFAULT false
     username VARCHAR(25) NOT NULL,
+    email VARCHAR(125),
     fullname VARCHAR(100),
     profile_pic TEXT,
     date_created DATE NOT NULL,
@@ -126,7 +127,7 @@ CREATE TABLE user_workout (
     assigned BOOLEAN DEFAULT false
 );
 
-CREATE TABLE coach_request (
+CREATE TABLE coach_requests (
     req_id SERIAL PRIMARY KEY,
     user_id INTEGER,
     accepted BOOLEAN DEFAULT false,

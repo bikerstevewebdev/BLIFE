@@ -7,33 +7,40 @@ class AdminManager extends Component{
     constructor(){
         super()
         this.state = {
-            
+            dblChk: 0
         }
+        this.areYouSure = this.areYouSure.bind(this)
     }
 
     componentDidMount(){
-        this.props.getAdminInfo(this.props.match.params.id)
+        this.props.getAdminInfo()
+    }
+
+    areYouSure(val){
+        this.setState({
+            dblChk: val/1
+        })
     }
 
 
     render() {
-        const { clientEmailInput } = this.state,
-              { username, searchForClient, coachRequests, coaches, approveCoach, denyCoach } = this.props,
-              coachRequests = coachRequests.map(req => {
+        const { clientEmailInput, dblChk } = this.state,
+              { username, searchForClient, coachReqs, coaches, approveCoach, denyCoach } = this.props,
+              coachReqs = coachReqs.map(req => {
                   return (
                       <section className="coach-request">
                         <p>Request Number: {req.req_id}</p>
                         <p>Username: {req.username}</p>
-                        <button onClick={() => denyCoach(req.req_id)}>Deny Request</button>
-                        <button onClick={() => approveCoach(req.req_id)}>Approve Request</button>
+                        <button onClick={() => denyCoach(req.req_id, req.user_id)}>Deny Request</button>
+                        <button onClick={() => approveCoach(req.req_id, req.user_id)}>Approve Request</button>
                       </section>
                   )
               }),
-              coachList = coaches.map(client => <CoachCard fullname={coach.fullname} last_login={coach.last_login} user_id={coach.user_id}/>)
+              coachList = coaches.map(client => <CoachCard fullname={coach.fullname} areYouSure={this.areYouSure} dblChk={dblChk} last_login={coach.last_login} coach_id={coach.coach_id}/>)
         return (
             <section className="coach-manager">
                 <h1>Welcome Manager {username}!</h1>
-                {coachRequests}                
+                {coachReqs}                
                 {coachList}
             </section>
         )
@@ -41,11 +48,11 @@ class AdminManager extends Component{
 }
 
 function mapStateToProps(state) {
-    const { coaches, coachRequests } = state.coach
+    const { coaches, coachReqs } = state.coach
     return {
         username: state.users.userData.username,
         coaches,
-        coachRequests
+        coachReqs
     }
 }
 

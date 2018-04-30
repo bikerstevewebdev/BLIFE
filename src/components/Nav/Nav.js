@@ -41,12 +41,22 @@ function Nav(props) {
             props.warningMsg
             ?
             <section className="unauthorized">
-                {props.warningMsg}<br />
+                {props.authWarningMsg}<br />
                 <Link to='/'><button>Please Hang Up and Try Again</button></Link>
             </section>
             :
             null
         }
+        {/* {
+            props.warningMsg
+            ?
+            <section className="unauthorized">
+                {props.authWarningMsg}<br />
+                <Link to='/'><button>Please Hang Up and Try Again</button></Link>
+            </section>
+            :
+            null
+        } */}
         </header>
     )
 }
@@ -55,7 +65,8 @@ function mapStateToProps(state) {
     return {
         isLoggedIn: state.users.isLoggedIn,
         coach: state.users.userData.coach_id,
-        warningMsg: state.users.warningMsg
+        authWarningMsg: state.users.warningMsg
+        // coachWarningMsg: state.coach.warningMsg
     }
 }
 

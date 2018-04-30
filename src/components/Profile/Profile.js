@@ -1,29 +1,39 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserData, updateUserStats, addMacrosToState, getUserMenus, getUserWorkouts } from '../../ducks/userReducer';
+import { getUserData, updateUserStats, addMacrosToState, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
 import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
+import SearchMenus from '../Search/SearchMenus'
+import SearchWorkouts from '../Search/SearchWorkouts'
 
 
 class Profile extends Component{
     constructor() {
         super()
-        // this.state = {
-        //     updatedHtWtBf: false
-        // }
+        this.state = {
+            showingAssigned: false
+            // updatedHtWtBf: false
+        }
         this.updateNewMes = this.updateNewMes.bind(this)
         this.discardNewMes = this.discardNewMes.bind(this)
+        this.showAssigned = this.showAssigned.bind(this)
     }
 
     
 
     componentDidMount() {
         console.log(this.props)
-        const { user_id } = this.props.userData
-        this.props.getUserMenus(user_id)
-        this.props.getUserWorkouts(user_id)
+        const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus } = this.props
+        const { user_id, has_coach } = userData
+        if(has_coach){
+            getAssignedMenus()
+            getAssignedWorkouts()
+        } else{
+            getUserMenus()
+            getUserWorkouts()
+        }
         // const { pro, carbs, fat, curr_mes, userData, bodyfat, weight, height } = this.props
         // if(curr_mes.mes_id !== userData.curr_mes && pro > 0){
         //     this.props.addMacrosToState(pro, carbs, fat, bodyfat, weight, height)
@@ -54,6 +64,13 @@ class Profile extends Component{
         //     })
         // }
     }
+
+    showAssigned(){
+        this.setState({
+            showingAssigned: true
+        })
+    }
+    
 //////////////////////Handles Macro Changes///////////////////
 updateNewMes() {
     const { current_protein,
@@ -84,14 +101,17 @@ updateNewMes() {
 //////////////////////Handles Macro Changes///////////////////
         
         render() {
-            const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus } = this.props
-                  menusList = userMenus.map(menu => <MenuCard key={user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>),
-                  workoutsList = userWorkouts.map(workout => <WorkoutCard key={user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+            const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus, assignedWorkouts, assignedMenus } = this.props
+                  menusList = userMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>),
+                  workoutsList = userWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />),
+                  /////////////////assigned//////////////
+                  assignedMenuList = assignedMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>),
+                  assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
         return(
             <section>
-                Proofile Yo
-                <Link to='/'><button>Back to Login</button></Link>
-                <Link to='/updateProfile'><button>Update Profile</button></Link>
+                <h1>Welcome Home</h1>
+                <Link to='/'><button style={{backgroundColor: "yellow"}}>Back to Login</button></Link>
+                <Link to='/updateProfile'><button style={{backgroundColor: "orange"}}>Update Profile</button></Link>
                 {
                     userData.coach_id > 0
                     ?
@@ -100,9 +120,29 @@ updateNewMes() {
                     null
                 }
                 {/* Displays user's current menus: */}
-                {menusList}
+                <h2>Your Menus:</h2>
+                {
+                    this.state.showingAssigned
+                    ?
+                    assignedMenuList
+                    :
+                    menusList
+
+                }
+                <button onClick={this.showAssigned}>Show me my coach's plan</button>
+                <SearchMenus doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addMenuToUser.bind(this)} />
                 {/* Displays user's current workouts: */}
-                {workoutsList}
+                <h2>Your Workouts:</h2>
+                {
+                    this.state.showingAssigned
+                    ?
+                    assignedWorkoutList
+                    :
+                    workoutsist
+
+                }
+                <SearchWorkouts doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addWorkoutToUser.bind(this)} />
+                <h2>Current Stats</h2>
                 <p>Protein: {current_protein}g</p>
                 <p>Fat: {current_fat}g</p>
                 <p>Carbs: {current_carbs}g</p>
@@ -129,7 +169,7 @@ updateNewMes() {
 }
 
 function mapStateToProps(state){
-    const { user, curr_mes, userData } = state.users,
+    const { user, curr_mes, userData, assignedMenus, assignedWorkouts } = state.users,
           { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf } = user,
           { macros, weight, height, bodyfat, isUpdating } = state.macros,
           { userMenus, userWorkouts } = state.coach
@@ -151,8 +191,10 @@ function mapStateToProps(state){
         bodyfat,
         isUpdating,
         userMenus,
-        userWorkouts
+        userWorkouts,
+        assignedMenus,
+        assignedWorkouts
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getUserMenus, getUserWorkouts })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts })(Profile)

@@ -4,12 +4,23 @@ import { connect } from 'react-redux';
 import { revokeCoach } from '../../ducks/coachReducer'
 
 function CoachCard(props) {
-    const { coach_id, fullname, last_login, revokeCoach } = this.props
+    const { coach_id, fullname, last_login, revokeCoach, areYouSure, dblChk } = this.props
     return(
         <section className="coach-card">
             <h3>{props.fullname}</h3>
             <p>Last Login: {props.last_login}</p>
-            <button onClick={() => revokeCoach(coach_id)}>Revoke Coach Access</button>
+            <button onClick={() => areYouSure(coach_id)}>Revoke Coach Access</button>
+            {
+                dblChk > 0
+                ?
+                <section className="dbl-chk">
+                    <p>Are you sure?</p>
+                    <button onClick={() => revokeCoach(coach_id)}>Yes, revoke {fullname}'s coach access.</button>
+                </section>
+                :
+                null
+            }
+
             {/* <Link to={`/coach/${props.user_id}`}><button>Go to client's page</button></Link> */}
         </section>
     )

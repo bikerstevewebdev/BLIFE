@@ -25,7 +25,7 @@ class CoachManager extends Component{
     render() {
         const { clientEmailInput } = this.state,
               { username, searchForClient, clients } = this.props,
-              clientList = clients.map(client => <ClientCard fullname={client.fullname} last_login={client.last_login} user_id={client.user_id}/>)
+              clientList = clients.map(client => <ClientCard fullname={client.fullname} last_login={client.last_login} client_id={client.client_id}/>)
         return (
             <section className="coach-manager">
                 <h1>Welcome Coach {username}!</h1>

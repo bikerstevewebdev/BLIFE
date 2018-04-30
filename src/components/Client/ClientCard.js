@@ -6,7 +6,7 @@ function ClientCard() {
         <section className="client-card">
             <h3>{props.fullname}</h3>
             <p>Last Login: {props.last_login}</p>
-            <Link to={`/client/${props.user_id}`}><button>Go to client's page</button></Link>
+            <Link to={`/client/${props.client_id}`}><button>Go to client's page</button></Link>
         </section>
     )
 }

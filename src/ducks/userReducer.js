@@ -26,8 +26,8 @@ const initialState = {
     isLoggedIn: false,
     userWorkouts: [],
     userMenus: [],
-    coachReqs: [],
-    activeCoaches: [],
+    assignedMenus: [],
+    assignedWorkouts: [],
     warningMsg: ''
     
 }
@@ -45,7 +45,11 @@ const UPDATE_USERNAME = 'UPDATE_USERNAME'
 const UPDATE_FULLNAME = 'UPDATE_FULLNAME'
 const UPDATE_PROFILE_PIC = 'UPDATE_PROFILE_PIC'
 const REQ_COACH_ACCESS = 'REQ_COACH_ACCESS'
-const GET_ADMIN_INFO = 'GET_ADMIN_INFO'
+const ADD_WORKOUT_TO_USER = 'ADD_WORKOUT_TO_USER'
+const ADD_MENU_TO_USER = 'ADD_MENU_TO_USER'
+const GET_ASSIGNED_WORKOUTS = 'GET_ASSIGNED_WORKOUTS'
+const GET_ASSIGNED_MENUS = 'GET_ASSIGNED_MENUS'
+
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
@@ -59,15 +63,6 @@ export function getUserData() {
         payload: data
     }
 }
-export function getAdminInfo() {
-    let adminData = axios.get('/adminInfo').then(res => {
-        return res.data
-    })
-    return {
-        type: GET_ADMIN_INFO,
-        payload: adminData
-    }
-}
 
 export function getUserMenus() {
     let menus = axios.get('/userMenus').then(res => {
@@ -79,6 +74,26 @@ export function getUserMenus() {
     }
 }
 
+export function addMenuToUser(menu_id) {
+    let menus = axios.post('/userMenus', { menu_id }).then(res => {
+        return res.data
+    })
+    return {
+        type: ADD_MENU_TO_USER,
+        payload: menus
+    }
+}
+
+export function addWorkoutToUser(workout_id) {
+    let menus = axios.post('/userWorkouts', { workout_id }).then(res => {
+        return res.data
+    })
+    return {
+        type: ADD_WORKOUT_TO_USER,
+        payload: menus
+    }
+}
+
 export function getUserWorkouts() {
     let workouts = axios.get('/userWorkouts').then(res => {
         return res.data
@@ -86,6 +101,26 @@ export function getUserWorkouts() {
     return {
         type: GET_USER_WORKOUTS,
         payload: workouts
+    }
+}
+
+export function getAssignedWorkouts() {
+    let workouts = axios.get('/client/assigned/workouts').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_ASSIGNED_WORKOUTS,
+        payload: workouts
+    }
+}
+
+export function getAssignedMenus() {
+    let menus = axios.get('/client/assigned/menus').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_ASSIGNED_MENUS,
+        payload: menus
     }
 }
 
@@ -188,17 +223,14 @@ export default function(state = initialState, action) {
                      }
         case GET_USER_MENUS + '_FULFILLED':
                      return { ...state, userMenus: action.payload }
+        case GET_ASSIGNED_MENUS + '_FULFILLED':
+                     return { ...state, assignedMenus: action.payload }
         case GET_USER_WORKOUTS + '_FULFILLED':
                      return { ...state, userWorkouts: action.payload }
+        case GET_ASSIGNED_WORKOUTS + '_FULFILLED':
+                     return { ...state, assignedWorkouts: action.payload }
         case REQ_COACH_ACCESS + '_FULFILLED':
                      return { ...state, userData: action.payload }
-        case GET_ADMIN_INFO + '_FULFILLED':
-            const { message, coachReqs, activeCoaches } = action.payload
-            if(message){
-                return { ...state, coachReqs, activeCoaches }
-            } else{
-                return { ...state, warningMsg: message }
-            }
         case GET_USER + '_FULFILLED':
             console.log('begin getuser success', action.payload)
 
@@ -256,6 +288,10 @@ export default function(state = initialState, action) {
                 return { ...state, userData: action.payload}
             case UPDATE_PROFILE_PIC +'_FULFILLED':
                 return { ...state, user: {...state.user, profile_pic: action.payload.profile_pic}, userData: action.payload}
+            case ADD_WORKOUT_TO_USER +'_FULFILLED':
+                return { ...state, userWorkouts: action.payload}
+            case ADD_MENU_TO_USER +'_FULFILLED':
+                return { ...state, userMenus: action.payload}
         default:
             return state
     }
