@@ -28,6 +28,13 @@ function Nav(props) {
                         :
                         null
                     }
+                    {
+                        props.coach_id > 0
+                        ?
+                        <Link to={`/coachManager/${props.coach_id}`}>Coach Manager</Link>
+                        :
+                        null
+                    }
                 </section>
             </nav>
             :
@@ -64,7 +71,7 @@ function Nav(props) {
 function mapStateToProps(state) {
     return {
         isLoggedIn: state.users.isLoggedIn,
-        coach: state.users.userData.coach_id,
+        coach_id: state.users.userData.coach_id,
         authWarningMsg: state.users.warningMsg
         // coachWarningMsg: state.coach.warningMsg
     }

@@ -225,7 +225,14 @@ export default function(state = initialState, action) {
                         height: action.payload.newMez.height,
                         bf: action.payload.newMez.bf,
                         mes_id: action.payload.newMez.mes_id
-                        }
+                        },
+                        user: {
+                            ...state.user,
+                            current_weight: action.payload.newMez.weight,
+                            current_height: action.payload.newMez.height,
+                            current_bf: action.payload.newMez.bf,
+                            profile_pic: action.payload.user.profile_pic
+                            }
                     }
         case GET_USER_MENUS + '_FULFILLED':
                      return { ...state, userMenus: action.payload }

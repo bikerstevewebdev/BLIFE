@@ -7,9 +7,9 @@ class UpdateProfile extends Component{
     constructor(props){
         super(props)
         this.state = {
-            usernameIn: props.userData.username,
-            fullnameIn: props.userData.fullname,
-            profile_picIn: props.userData.profile_pic
+            usernameIn: props.userData.username || '',
+            fullnameIn: props.userData.fullname || '',
+            profile_picIn: props.userData.profile_pic || ''
         }
         this.updateUsernameIn = this.updateUsernameIn.bind(this)
         this.updateFullnameIn = this.updateFullnameIn.bind(this)
@@ -36,7 +36,10 @@ class UpdateProfile extends Component{
     }
 
     requestAccess(val) {
-        val ? this.props.requestCoachAccess() : null
+        if(val){
+            this.props.requestCoachAccess()
+        }
+
     }
     
     render() {
@@ -46,7 +49,7 @@ class UpdateProfile extends Component{
         return(
             <section className="update-profile">
                 {
-                    userData.coach_id > 0
+                    userData.coach_id/1 !== 0
                     ?
                     null
                     :
@@ -64,7 +67,7 @@ class UpdateProfile extends Component{
                 <p>Change your profile picture:</p>
                 <input value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
                 <button onClick={() => updateProfilePic(profile_picIn)}>Update</button>
-                <Measurements />
+                <Measurements location={this.props.location} />
             </section>
         )
     }

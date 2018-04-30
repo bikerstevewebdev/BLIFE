@@ -198,10 +198,11 @@ module.exports = {
     },
     
     requestCoachAccess: (req, res, next) => {
-        if(req.user.coach_id != -1){
+        const { coach_id } = req.user
+        if(coach_id != -1){
             const db = req.app.get('db')
                 , { user_id } = req.user
-            db.request_coach_access([coach_id]).then(user => {
+            db.request_coach_access([user_id]).then(user => {
                 res.status(200).send(user[0])
             })
         }

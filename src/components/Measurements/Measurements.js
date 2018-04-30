@@ -9,9 +9,9 @@ class Measurements extends Component{
         this.state = {
             weightIn: props.user.current_weight || 0,
             heightIn: props.user.current_height || 0,
-            waistIn: props.user.current_waist || 0,
-            neckIn: props.user.current_neck || 0,
-            chestIn: props.user.current_chest || 0,
+            waistIn: props.curr_mes.waist || 0,
+            neckIn: props.curr_mes.neck || 0,
+            chestIn: props.curr_mes.chest || 0,
             bfIn: props.user.current_bf || 0,
             addingMes: true
         }
@@ -62,7 +62,7 @@ class Measurements extends Component{
         })
     }
 
-    updateupdateBfIn(val) {
+    updateBfIn(val) {
         this.setState({
             bfIn: val
         })
@@ -89,9 +89,9 @@ class Measurements extends Component{
                 {
                     this.state.addingMes && this.props.location.pathname === '/measurements'
                     ?
-                    null
-                    :
                     <Redirect to={`/profile`} />
+                    :
+                    null
                 }
             </section>
         )
@@ -99,10 +99,11 @@ class Measurements extends Component{
 }
 
 function mapStateToProps(state){
-    const { userData, user } = state.users
+    const { userData, user, curr_mes } = state.users
     return {
-        userData: userData,
-        user: user
+        userData,
+        user,
+        curr_mes
         }
 }
 

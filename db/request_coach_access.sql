@@ -7,7 +7,7 @@
 -- );
 
 
-INSERT INTO coach_request (user_id)
+INSERT INTO coach_requests (user_id)
 VALUES ($1);
 UPDATE users SET coach_id = -1
 WHERE user_id = $1;
