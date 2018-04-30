@@ -26,7 +26,7 @@ class Profile extends Component{
     componentDidMount() {
         console.log(this.props)
         const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus } = this.props
-        const { user_id, has_coach } = userData
+        const { has_coach } = userData
         if(has_coach){
             getAssignedMenus()
             getAssignedWorkouts()
@@ -102,11 +102,28 @@ updateNewMes() {
         
         render() {
             const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus, assignedWorkouts, assignedMenus } = this.props
-                  menusList = userMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>),
-                  workoutsList = userWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />),
-                  /////////////////assigned//////////////
-                  assignedMenuList = assignedMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>),
-                  assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+            let assignedMenuList, assignedWorkoutList, workoutsList, menusList
+                if(userMenus){
+                    menusList = userMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
+                }else{
+                    menusList = null
+                }
+                if(userWorkouts){
+                    workoutsList = userWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+                }else{
+                    workoutsList = null
+                }
+                /////////////////assigned//////////////
+                if(assignedMenus){
+                    assignedMenuList = assignedMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
+                }else{
+                    assignedMenuList = null
+                }
+                if(assignedWorkouts){
+                    assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+                }else{
+                    assignedWorkoutList = null
+                }
         return(
             <section>
                 <h1>Welcome Home</h1>
@@ -122,23 +139,29 @@ updateNewMes() {
                 {/* Displays user's current menus: */}
                 <h2>Your Menus:</h2>
                 {
-                    this.state.showingAssigned
+                    this.state.showingAssigned && assignedMenus
                     ?
                     assignedMenuList
                     :
                     menusList
 
                 }
-                <button onClick={this.showAssigned}>Show me my coach's plan</button>
+                {
+                    userData.has_coach
+                    ?
+                    <button onClick={this.showAssigned}>Show me my coach's plan</button>
+                    :
+                    null
+                }
                 <SearchMenus doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addMenuToUser.bind(this)} />
                 {/* Displays user's current workouts: */}
                 <h2>Your Workouts:</h2>
                 {
-                    this.state.showingAssigned
+                    this.state.showingAssigned && assignedWorkouts
                     ?
                     assignedWorkoutList
                     :
-                    workoutsist
+                    workoutsList
 
                 }
                 <SearchWorkouts doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addWorkoutToUser.bind(this)} />
@@ -169,10 +192,10 @@ updateNewMes() {
 }
 
 function mapStateToProps(state){
-    const { user, curr_mes, userData, assignedMenus, assignedWorkouts } = state.users,
+    const { user, curr_mes, userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = state.users,
           { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf } = user,
           { macros, weight, height, bodyfat, isUpdating } = state.macros,
-          { userMenus, userWorkouts } = state.coach
+          {  } = state.coach
     return{
         profile_pic,
         current_protein,

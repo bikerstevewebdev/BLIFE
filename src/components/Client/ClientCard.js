@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-function ClientCard() {
+function ClientCard(props) {
     return(
         <section className="client-card">
             <h3>{props.fullname}</h3>

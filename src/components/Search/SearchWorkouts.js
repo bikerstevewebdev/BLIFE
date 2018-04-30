@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchWorkouts, endFitnessSearch } from '../../ducks/fitnessReducer'
+import { Link } from 'react-router-dom'
 
-class SearchWorkout extends Component{
+
+class SearchWorkouts extends Component{
     constructor(){
         super()
         this.state = {

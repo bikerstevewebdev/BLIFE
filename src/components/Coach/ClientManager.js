@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
-import { getClientById, assignWorkoutToClient, assignMenuToClient } from '../../ducks/coachReducer'
+import { getClientData, assignWorkoutToClient, assignMenuToClient } from '../../ducks/coachReducer'
 
 class ClientManager extends Component{
     constructor(){
@@ -20,7 +21,7 @@ class ClientManager extends Component{
     }
 
     componentDidMount(){
-        this.props.getClientById(this.props.match.params.id)
+        this.props.getClientData(this.props.match.params.id)
     }
 
     // updateMessageInput(e){
@@ -44,24 +45,24 @@ class ClientManager extends Component{
     render() {
         // const { messageInput } = this.state,
             const { currentClient, sendClientMsg } = this.props,
-                  { username, curr_macros, last_login, current_stats, fullname, menus, client_id, client_coach_id } = currentClient,
+                  { username, curr_macros, last_login, current_stats, fullname, menus, client_id, client_coach_id, workouts } = currentClient,
                   { waist, neck, chest, height, weight, bf, date_taken } = current_stats,
                   { pro, carb, fat } = curr_macros,
-                  menus = clientMenus.map(v => {
+                  clientMenus = menus.map(v => {
                       return <MenuCard key={v.menu_id} menu_id={v.menu_id} total_p={v.total_p} total_c={v.total_c} total_f={v.total_f} total_fib={v.total_fib} img={v.img} />
                   }),
-                  workouts = clientWorkouts.map(v => {
+                  clientWorkouts = workouts.map(v => {
                       return <WorkoutCard key={v.workout_id} workout_id={v.workout_id} title={v.title} img={v.img} type={v.type} />
                   })
         return (
             <section className="client-manager">
-                <Link to={`/coachManager/${props.coach_id}`}><button>Back to Coach Manager</button></Link>
+                <Link to={`/coachManager/${this.props.coach_id}`}><button>Back to Coach Manager</button></Link>
                 <h1>{username}</h1>
                 <section className="client-stats">
                     <h2>Current Stats</h2>
                     <h3>Macros:</h3>
                     <p>Protein: {pro}</p>
-                    <p>Carbs: {carbs}</p>
+                    <p>Carbs: {carb}</p>
                     <p>Protein: {fat}</p>
                     <h3>Measurements:</h3>
                     <p>Height: {height} inches</p>
@@ -105,10 +106,8 @@ class ClientManager extends Component{
 function mapStateToProps(state) {
     return {
         coach_id: state.users.userData.coach_id,
-        currentClient: state.coach.currentClient,
-        clientMenus: state.coach.clientMenus,
-        clientWorkouts: state.coach.clientWorkouts
+        currentClient: state.coach.currentClient
     }
 }
 
-export default connect(mapStateToProps, { getClientById, assignWorkoutToClient, assignMenuToClient })(ClientManager)
+export default connect(mapStateToProps, { getClientData, assignWorkoutToClient, assignMenuToClient })(ClientManager)

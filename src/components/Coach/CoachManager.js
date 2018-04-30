@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { getClients, searchForClient } from '../../ducks/userReducer'
+import { getClients, searchForClient } from '../../ducks/coachReducer'
 import ClientCard from '../Client/ClientCard'
 
 class CoachManager extends Component{

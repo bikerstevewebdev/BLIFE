@@ -1,6 +1,6 @@
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    coach_id DEFAULT 0,
+    coach_id INTEGER DEFAULT 0,
     is_admin BOOLEAN DEFAULT false
     username VARCHAR(25) NOT NULL,
     email VARCHAR(125),
@@ -132,7 +132,7 @@ CREATE TABLE coach_requests (
     user_id INTEGER,
     accepted BOOLEAN DEFAULT false,
     active BOOLEAN DEFAULT false,
-    processing DEFAULT true
+    processing BOOLEAN DEFAULT true
 );
 
 CREATE TABLE user_menu (

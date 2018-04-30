@@ -87,7 +87,7 @@ class Measurements extends Component{
                 <input type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
                 <button onClick={this.sendUpdates}>Save your stats!</button>
                 {
-                    this.state.addingMes && this.props.location.pathname == '/measurements'
+                    this.state.addingMes && this.props.location.pathname === '/measurements'
                     ?
                     null
                     :

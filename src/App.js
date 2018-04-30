@@ -20,6 +20,7 @@ import WorkoutCreator from './components/Workout/WorkoutCreator';
 import ClientManager from './components/Coach/ClientManager';
 import CoachManager from './components/Coach/CoachManager';
 import FirstLogin from './components/Login/FirstLogin';
+import Measurements from './components/Measurements/Measurements';
 
 
 

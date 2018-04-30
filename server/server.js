@@ -39,7 +39,7 @@ passport.use( new Auth0Strategy({
     callbackURL: CALLBACK_URL,
     scope: 'openid email profile'
 }, (accessToken, refreshToken, extraParams, profile, done) => {
-    const { id, displayName, picture, email } = profile
+    const { id, displayName, picture, emails } = profile
     const db = app.get('db') 
     db.get_user([id]).then( users => {        
         if ( users[0] ){
@@ -48,7 +48,7 @@ passport.use( new Auth0Strategy({
         else { //when someone is logginG in for the first time.             
             let x = new Date(),
                 tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-            db.create_user([displayName, email, picture, id, tDate]).then( createdUser => {
+            db.create_user([displayName, emails[0].value, picture, id, tDate]).then( createdUser => {
                 return done(null, createdUser)
         } ) }
     } ).catch(err => {
@@ -80,18 +80,19 @@ app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3000/#/dashboard',
     failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
-// app.get('/auth/me', c.sendUserObjs)
+app.get('/auth/me', c.sendUserObjs)
 
 app.get('/user/:id', c.getUser)
 app.get('/userInfo', c.getUserInfo)
+app.get('/clientInfo', c.getClientInfo)
 app.get('/adminInfo', c.getAdminInfo)
 app.get('/userMenus', c.getUserMenus)
 app.get('/userWorkouts', c.getUserWorkouts)
 
 app.get('/client/assigned/menus', c.getAssignedMenus)
 app.get('/client/assigned/workouts', c.getAssignedWorkouts)
-app.get('/coach/clients/:id', c.getClients)
-axios.get('/search/clients/:email', c.searchForClient)
+app.get('/coach/clients', c.getClients)
+app.get('/search/clients/:email', c.searchForClient)
 
 app.get('/measurements/:id', c.getMeasurements)
 app.get('/measurements/latest/:id', c.getLatestMes)

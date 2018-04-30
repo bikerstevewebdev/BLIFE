@@ -44,8 +44,8 @@ const ASSIGN_WORKOUT = 'ASSIGN_WORKOUT'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
-export function getClientData() {
-    let data = axios.get('/clientInfo').then(res => {
+export function getClientData(id) {
+    let data = axios.get(`/clientInfo/${id}`).then(res => {
         return res.data
     })
     return {
@@ -55,7 +55,7 @@ export function getClientData() {
 }
 
 export function getClients() {
-    let clients = axios.get(`/coach/clients/${coach_id}`).then(res => {
+    let clients = axios.get(`/coach/clients`).then(res => {
         return res.data
     })
     return {
@@ -150,47 +150,41 @@ export default function(state = initialState, action) {
         case GET_CLIENTS + '_FULFILLED': 
                 return { ...state, clients: action.payload }
         case SEARCH_FOR_CLIENT + '_FULFILLED': 
-                const { message } = action.payload
-                if(message){
-                    return { ...state, warningMsg: message }
+                if(action.payload.message){
+                    return { ...state, warningMsg: action.payload.message }
                 } else{
                     return { ...state, potentialClient: action.payload }
                 }
         case ASSIGN_MENU + '_FULFILLED': 
-                const { message } = action.payload
-                if(message){
-                    return { ...state, warningMsg: message }
+                if(action.payload.message){
+                    return { ...state, warningMsg: action.payload.message }
                 } else{
                     return { ...state, clientMenus: action.payload }
                 }
         case ASSIGN_WORKOUT + '_FULFILLED': 
-                const { message } = action.payload
-                if(message){
-                    return { ...state, warningMsg: message }
+                if(action.payload.message){
+                    return { ...state, warningMsg: action.payload.message }
                 } else{
                     return { ...state, clientWorkouts: action.payload }
                 }
         case GET_ADMIN_INFO + '_FULFILLED':
-            const { message, coachReqs, activeCoaches } = action.payload
-            if(message){
-                return { ...state, warningMsg: message }
-            } else{
-                return { ...state, coachReqs, activeCoaches }
-            }
+                if(action.payload.message){
+                    return { ...state, warningMsg: action.payload.message }
+                } else{
+                    return { ...state, coachReqs: action.payload.coachReqs, activeCoaches: action.payload.activeCoaches }
+                }
         case APPROVE_COACH_ACCESS + '_FULFILLED':
-            const { message, coachReqs, activeCoaches } = action.payload
-            if(message){
-                return { ...state, warningMsg: message }
-            } else{
-                return { ...state, coachReqs, activeCoaches }
-            }
+                if(action.payload.message){
+                    return { ...state, warningMsg: action.payload.message }
+                } else{
+                    return { ...state, coachReqs: action.payload.coachReqs, activeCoaches: action.payload.activeCoaches }
+                }
         case DENY_COACH_ACCESS + '_FULFILLED':
-            const { message } = action.payload
-            if(message){
-                return { ...state, warningMsg: message }
-            } else{
-                return { ...state, coachReqs: action.payload }
-            }
+                if(action.payload.message){
+                    return { ...state, warningMsg: action.payload.message }
+                } else{
+                    return { ...state, coachReqs: action.payload }
+                }
         default:
             return state
     }

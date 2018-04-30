@@ -56,9 +56,24 @@ module.exports = {
     
     getClients: (req, res, next) => {
         const db = req.app.get('db')
+            , { coach_id } = req.params
+        db.get_current_clients([coach_id]).then(clients => {
+            res.status(200).send(clients)
+        })
+    },
+    
+    getClientInfo: (req, res, next) => {
+        const db = req.app.get('db')
             , { id } = req.params
-        db.get_current_clients([id]).then(menus => {
-            res.status(200).send(menus)
+            , { coach_id } = req.user
+        db.check_coach_auth([client_id, coach_id]).then(client => {
+            if(client[0]){
+                db.get_client_info([coach_id, id]).then(client => {
+                    res.status(200).send(client)
+                }) 
+            } else{
+                res.status(401).send({message: "You are not authorized to coach this client."})
+            }
         })
     },
     
@@ -78,7 +93,7 @@ module.exports = {
         const db = req.app.get('db')
         , { workout_id, coach_client_id, client_id } = req.body
         , { user } = req
-        db.check_coach_auth([coach_client_id, client_id, user.coach_id]).then(client => {
+        db.check_coach_auth([client_id, user.coach_id]).then(client => {
             if(client[0]){
                 db.add_workout_to_client([client_id, workout_id]).then(workouts => {
                     res.status(200).send(workouts)

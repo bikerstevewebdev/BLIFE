@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchMeals, endNutritionSearch } from '../../ducks/foodReducer'
+import { Link } from 'react-router-dom'
+
 
 class SearchMeal extends Component{
     constructor(){

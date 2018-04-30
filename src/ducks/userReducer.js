@@ -55,7 +55,7 @@ const GET_ASSIGNED_MENUS = 'GET_ASSIGNED_MENUS'
 /////////////////Exporting action creators//////////////////////
 export function getUserData() {
     let data = axios.get('/userInfo').then(res => {
-        console.log(`data from backend: ${res.data.dBUser},${res.data.currMes} is here`)
+        console.log(`data from backend: ${res.data.message} ${res.data.dBUser},${res.data.currMes} is here`)
         return res.data
     })
     return {
@@ -216,11 +216,17 @@ export default function(state = initialState, action) {
                      }
         case UPDATE_MES + '_FULFILLED':
         /////////// Prior declaration might cause a problem with this destructuring
-                let { waist, neck, chest, weight, height, bf, mes_id } = action.payload.newMez
                 return { ...state,
                     userData: action.payload.user,
-                    curr_mes: { waist, neck, chest, weight, height, bf, mes_id }
-                     }
+                    curr_mes: { waist: action.payload.newMez.waist,
+                        neck: action.payload.newMez.neck,
+                        chest: action.payload.newMez.chest,
+                        weight: action.payload.newMez.weight,
+                        height: action.payload.newMez.height,
+                        bf: action.payload.newMez.bf,
+                        mes_id: action.payload.newMez.mes_id
+                        }
+                    }
         case GET_USER_MENUS + '_FULFILLED':
                      return { ...state, userMenus: action.payload }
         case GET_ASSIGNED_MENUS + '_FULFILLED':
@@ -234,7 +240,7 @@ export default function(state = initialState, action) {
         case GET_USER + '_FULFILLED':
             console.log('begin getuser success', action.payload)
 
-            // if(action.payload.currMes){
+            if(action.payload.currMes){
                 // const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.currMes
             const { curr_pro, curr_carb, curr_fat } = action.payload.dBUser
             console.log('userreducer', action.payload)
@@ -261,9 +267,9 @@ export default function(state = initialState, action) {
                         profile_pic: action.payload.dBUser.profile_pic
                         }
                     }
-                // } else{
-                    // return { ...state, userData: action.payload, isLoggedIn: true }
-                // }
+                } else{
+                    return { ...state, userData: action.payload, isLoggedIn: true }
+                }
         case MACRO_CALCED:
                 console.log('macros sent to be updated on user state')
             return {...state, 

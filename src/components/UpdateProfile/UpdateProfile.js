@@ -41,7 +41,7 @@ class UpdateProfile extends Component{
     
     render() {
         const { usernameIn, fullnameIn, profile_picIn } = this.state,
-              { updateFullname, updateProfilePic, updateUsername, userData } = this.props,
+              { updateFullname, updateProfilePic, updateUsername, userData } = this.props
             //   { current_weight, current_height, current_bf } = curr_mes
         return(
             <section className="update-profile">
