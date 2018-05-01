@@ -40,7 +40,7 @@ CREATE TABLE meals (
 
 CREATE TABLE foods (
     food_id SERIAL PRIMARY KEY,
-    name VARCHAR(25) NOT NULL,
+    name VARCHAR(75) NOT NULL,
     author_id INTEGER,
     pro REAL NOT NULL,
     carb REAL NOT NULL,
@@ -53,7 +53,8 @@ CREATE TABLE meal_foods (
     meal_food_id SERIAL PRIMARY KEY,
     meal_id INTEGER,
     food_id INTEGER,
-    quantity INTEGER DEFAULT 1
+    quantity INTEGER DEFAULT 1,
+    units VARC
 );
 
 CREATE TABLE macro_calcs (

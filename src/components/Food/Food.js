@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { updateNameIn, updatePIn, updateCIn, updateFIn, updateFibIn, updateImgIn, addFoodToDB, getFoodById, searchExternalFoods, addExternalFoodToDB } from '../../ducks/foodReducer'
+import { updateNameIn, updatePIn, updateCIn, updateFIn, updateFibIn, updateImgIn, addFoodToDB, getFoodById, searchExternalFoods, endNutritionSearch } from '../../ducks/foodReducer'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import ExternalFoodCard from '../Food/ExternalFoodCard'
@@ -8,12 +8,15 @@ class Food extends Component{
     constructor() {
         super()
         this.state = {
-            searchExternalFoods: false,
+            searchingExternal: false,
+            branded: false,
             externalSearchIn: ''
         }
         this.sendEdits = this.sendEdits.bind(this)
-        this.beginExternalSearch = this.beginExternalSearch.bind(this)
+        this.toggleExternalSearch = this.toggleExternalSearch.bind(this)
         this.updateExternalSearch = this.updateExternalSearch.bind(this)
+        this.addFood = this.addFood.bind(this)
+        this.changeBranded = this.changeBranded.bind(this)
     }
 
     componentDidMount() {
@@ -28,24 +31,41 @@ class Food extends Component{
         this.props.editFood( food_id, name, p, c, f, fib, img )
     }
 
+    addFood(name, p, c, f, fib, img, external){
+        this.props.addFoodToDB(name, p, c, f, fib, img)
+        if(external){
+            this.setState({
+                searchingExternal: false,
+                externalSearchIn: ''
+            })
+            this.props.endNutritionSearch()
+        }
+    }
+
     updateExternalSearch(e){
         this.setState({
             externalSearchIn: e.target.value
         })
     }
     
-    beginExternalSearch(){
+    toggleExternalSearch(curr){
         this.setState({
-            searchExternalFoods: true
+            searchingExternal: !curr
+        })
+    }
+    
+    changeBranded(curr){
+        this.setState({
+            branded: !curr
         })
     }
     
     render() {
-        const { name, p, c, f, fib, img, errorMessage, searchExternalFoods, externalFoods, addExternalFoodToDB } = this.props
-        const { searchingExternal, externalSearchIn } = this.state
-        const externalList = externalFoods.map(f => {
+        const { name, p, c, f, fib, img, errorMessage, searchExternalFoods, externalFoods } = this.props
+        const { searchingExternal, externalSearchIn, branded } = this.state
+        const externalList = externalFoods.map((f, i) => {
             return(
-                <ExternalFoodCard name={f.name} p={f.p} c={f.c} f={f.f} fib={f.fib} img={f.img} addFood={addExternalFoodToDB} />
+                <ExternalFoodCard key={i} name={f.name} p={f.p} c={f.c} f={f.f} fib={f.fib} img={f.img} addFood={this.addFood} />
             )
         })
         return(
@@ -78,17 +98,28 @@ class Food extends Component{
                         <Link to={`meal/${this.props.meal.meal_id}`}>Back to Meal</Link>
                     </section>
                     :
-                    <button onClick={() => this.props.addFoodToDB(name, p, c, f, fib, img)}>Add Food</button>
+                    <button onClick={() => this.addFood(name, p, c, f, fib, img)}>Add Food</button>
                 }
                 {
                     searchingExternal
                     ?
                     <section className="external-food-search">
                         <input value={externalSearchIn} placeholder="Type in a food name" onChange={this.updateExternalSearch} />
-                        <button onClick={()=>searchExternalFoods(externalSearchIn)}>Search!</button>
+                        <button onClick={()=>searchExternalFoods(externalSearchIn, branded)}>Search!</button>
+                        {
+                            branded
+                            ?
+                            <section className="external-food-search">
+                                <button onClick={()=>this.changeBranded(branded)}>Search Whole/Common Foods Only</button>
+                            </section>
+                            :
+                            <button onClick={()=>this.changeBranded(branded)}>Search for Brand Foods</button>
+                        }
+                        {externalList}
+                        <button onClick={() => this.toggleExternalSearch(searchingExternal)}>Just kidding, get the search out of here</button>
                     </section>
                     :
-                    <button onClick={this.beginExternalSearch}>Need some inspiration?</button>
+                    <button onClick={() => this.toggleExternalSearch(searchingExternal)}>Need some inspiration?</button>
                 }
             </section>
         )
@@ -109,4 +140,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { updateNameIn, updatePIn, updateCIn, updateFIn, updateFibIn, updateImgIn, addFoodToDB, getFoodById, searchExternalFoods, addExternalFoodToDB })(Food)
+export default connect(mapStateToProps, { updateNameIn, updatePIn, updateCIn, updateFIn, updateFibIn, updateImgIn, addFoodToDB, getFoodById, searchExternalFoods, endNutritionSearch })(Food)

@@ -99,7 +99,6 @@ app.get('/coach/clients', c.getClients)
 
 
 app.get('/food/search', c.searchFoods)
-app.get('/food/external/search', fc.searchExternalFoods)
 app.get('/meal/search', c.searchMeals)
 app.get('/menu/search', c.searchMenus)
 
@@ -131,6 +130,7 @@ app.post('/userWorkouts', c.addWorkoutToUser)
 app.post('/client/menus', c.assignMenuToClient)
 app.post('/client/workouts', c.assignWorkoutToClient)
 
+app.post('/food/external/search', fc.searchExternalFoods)
 app.post('/food', c.createFood)
 app.post('/meal/food', c.addFoodToMeal)
 app.post('/meal', c.createMeal)
@@ -164,4 +164,4 @@ massive(process.env.CONNECTION_STRING).then( db => {
     app.listen(port, () => {
         console.log(`Build your new Life on Port ${port}`)
     })
-  })
+})

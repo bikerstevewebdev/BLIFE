@@ -45,6 +45,7 @@ const EDIT_MENU = 'EDIT_MENU'
 const SEARCH_MENUS = 'SEARCH_MENUS'
 const CLEAR_MEAL_SEARCH = 'CLEAR_MEAL_SEARCH'
 const END_NUTRITION_SEARCH = 'END_NUTRITION_SEARCH'
+const SEARCH_EXTERNAL_FOODS = 'SEARCH_EXTERNAL_FOODS'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
@@ -164,8 +165,8 @@ export function searchFoods(name){
     }
 }
 
-export function searchExternalFoods(name){
-    let foods = axios.get(`/food/external/search?foodName=${name}`).then(res => {
+export function searchExternalFoods(name, branded){
+    let foods = axios.post(`/food/external/search?foodName=${name}`, { branded }).then(res => {
         return res.data
     })
     return {
@@ -299,7 +300,7 @@ export default function(state = initialState, action) {
         case UPDATE_IMGIN:
             return { ...state, img: action.payload}
         case END_NUTRITION_SEARCH:
-            return {...state, menuSearchResults: [], mealSearchResults: []}
+            return {...state, menuSearchResults: [], mealSearchResults: [], externalFoods: []}
         case CREATE_MEAL + '_PENDING':
             return {
                     ...state,
