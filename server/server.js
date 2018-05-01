@@ -1,13 +1,14 @@
 require('dotenv').config()
 
 const express          = require('express'),
-      Auth0Strategy = require('passport-auth0'),
+      Auth0Strategy    = require('passport-auth0'),
       cors             = require('cors') ,
       passport         = require('passport'),
       session          = require('express-session'),
       massive          = require('massive'),
       { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT, DOMAIN, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env,
       c                = require('./controller'),
+      fc               = require('./foodController'),
       port             = SERVER_PORT, // || 3000
       S3 = require('./awsS3.js')
 
@@ -98,7 +99,7 @@ app.get('/coach/clients', c.getClients)
 
 
 app.get('/food/search', c.searchFoods)
-
+app.get('/food/external/search', fc.searchExternalFoods)
 app.get('/meal/search', c.searchMeals)
 app.get('/menu/search', c.searchMenus)
 

@@ -15,7 +15,8 @@ const initialState = {
     errorMessage: '',
     menu: {},
     menuMeals: [],
-    menuSearchResults: []
+    menuSearchResults: [],
+    externalFoods: []
 }
 ////////////////END initialState declaration/////////
 
@@ -159,6 +160,16 @@ export function searchFoods(name){
     })
     return {
         type: SEARCH_FOODS,
+        payload: foods
+    }
+}
+
+export function searchExternalFoods(name){
+    let foods = axios.get(`/food/external/search?foodName=${name}`).then(res => {
+        return res.data
+    })
+    return {
+        type: SEARCH_EXTERNAL_FOODS,
         payload: foods
     }
 }
@@ -332,6 +343,8 @@ export default function(state = initialState, action) {
             return { ...state, menu: action.payload.newMenu, menuMeals: action.payload.meals }
         case SEARCH_FOODS + '_FULFILLED':
             return { ...state, foods: action.payload}
+        case SEARCH_EXTERNAL_FOODS + '_FULFILLED':
+            return { ...state, externalFoods: action.payload}
         case SEARCH_MEALS + '_FULFILLED':
             return { ...state, mealSearchResults: action.payload}
         case SEARCH_MENUS + '_FULFILLED':
