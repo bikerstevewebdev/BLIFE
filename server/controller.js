@@ -126,12 +126,15 @@ module.exports = {
             if(userMes){
                 console.log('Preparing user object')
                 db.get_mes_by_id([userMes]).then(currMes => {
-                    let userObj = {
-                        dBUser: req.user,
-                        currMes: currMes[0]
-                    }
-                    console.log('Sending user object')        
-                    res.status(200).send(userObj)
+                    db.get_current_photos([req.user.user_id]).then(pics => {
+                        let userObj = {
+                            dBUser: req.user,
+                            currMes: currMes[0],
+                            pics
+                        }
+                        console.log('Sending user object')        
+                        res.status(200).send(userObj)
+                    })
                 })
             } else{
                 res.status(200).send(req.user)
@@ -232,6 +235,29 @@ module.exports = {
             res.status(200).send(user[0])
         })
     },
+
+    makePicNotCurrent: (req, res, next) => {
+        const db = req.app.get('db')
+        , { photo_id } = req.body
+        db.change_photo_current([req.user.user_id, photo_id]).then( photos => {
+            res.status(200).send(photos)
+        })
+    },
+
+    getCurrentPhotos: (req, res, next) => {
+        const db = req.app.get('db')
+        db.get_current_photos([req.user.user_id]).then( photos => {
+            res.status(200).send(photos)
+        })
+    },
+
+    getAllProgressPhotos: (req, res, next) => {
+        const db = req.app.get('db')
+        db.get_all_progress_photos([req.user.user_id]).then( photos => {
+            res.status(200).send(photos)
+        })
+    },
+    
     ///////////////////MES/STATS METHODS////////////////
     addMez: (req, res, next) => {
         let x     = new Date(),
@@ -420,7 +446,13 @@ module.exports = {
     createMenu: (req, res, next) => {
         const { title, img } = req.body
         req.app.get('db').create_menu([title, req.user.user_id, img]).then( menu => {
+            if(req.user.coach_id > 0){
                 res.status(200).send(menu[0])
+            } else{
+                db.add_menu_to_user([req.user.user_id, menu[0].menu_id]).then(menus => {
+                    res.status(200).send(menu[0])
+                })
+            }
             }) 
         },
     
@@ -520,7 +552,13 @@ module.exports = {
     createWorkout: (req, res, next) => {
         const { title, type, img } = req.body
         req.app.get('db').create_workout([title, req.user.user_id, type, img]).then(workout => {
-            res.status(200).send(workout[0])
+                if(req.user.coach_id > 0){
+                    res.status(200).send(workout[0])
+                } else{
+                    db.add_workout_to_user([req.user.user_id, workout[0].workout_id]).then(workouts => {
+                        res.status(200).send(workout[0])
+                    })
+                }
         }) 
     },
     

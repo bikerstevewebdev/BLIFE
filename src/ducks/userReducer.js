@@ -12,7 +12,8 @@ const initialState = {
         current_fat: 0,
         current_weight: 0,
         current_height: 0,
-        current_bf: 0
+        current_bf: 0,
+        progress_pics: []
     },
     curr_mes: { 
         waist: 0,
@@ -49,6 +50,10 @@ const ADD_WORKOUT_TO_USER = 'ADD_WORKOUT_TO_USER'
 const ADD_MENU_TO_USER = 'ADD_MENU_TO_USER'
 const GET_ASSIGNED_WORKOUTS = 'GET_ASSIGNED_WORKOUTS'
 const GET_ASSIGNED_MENUS = 'GET_ASSIGNED_MENUS'
+const UPLOAD_PHOTO = 'UPLOAD_PHOTO'
+const DEPRECATE_PHOTO = 'DEPRECATE_PHOTO'
+const GET_ALL_PROGRESS_PICS = 'GET_ALL_PROGRESS_PICS'
+const GET_CURRENT_PICS = 'GET_CURRENT_PICS'
 
 /////////////////END String Literals//////////////////////
 
@@ -71,6 +76,46 @@ export function getUserMenus() {
     return {
         type: GET_USER_MENUS,
         payload: menus
+    }
+}
+
+export function uploadPhoto(picObj) {
+    let photos = axios.post('/user/uploadPhoto', picObj).then(res => {
+        return res.data
+    })
+    return {
+        type: UPLOAD_PHOTO,
+        payload: photos
+    }
+}
+
+export function deprecatePhoto(photo_id) {
+    let photos = axios.put('/user/progressPic/decurrentize', { photo_id }).then(res => {
+        return res.data
+    })
+    return {
+        type: DEPRECATE_PHOTO,
+        payload: photos
+    }
+}
+
+export function getAllProgressPics() {
+    let photos = axios.get('/user/progressPics').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_ALL_PROGRESS_PICS,
+        payload: photos
+    }
+}
+
+export function getCurrentPhotos() {
+    let photos = axios.get('/user/currentPics').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_CURRENT_PICS,
+        payload: photos
     }
 }
 
@@ -249,7 +294,7 @@ export default function(state = initialState, action) {
 
             if(action.payload.currMes){
                 // const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.currMes
-            const { curr_pro, curr_carb, curr_fat } = action.payload.dBUser
+            const { curr_pro, curr_carb, curr_fat, username, user_id, profile_pic } = action.payload.dBUser
             console.log('userreducer', action.payload)
             return { ...state,
                     userData: action.payload.dBUser,
@@ -264,14 +309,16 @@ export default function(state = initialState, action) {
                     },
                     isLoggedIn: true,
                     user: {
-                        ...state.user,
+                        username,
+                        user_id,
+                        profile_pic,
                         current_protein: curr_pro,
                         current_carbs: curr_carb,
                         current_fat: curr_fat,
                         current_weight: action.payload.currMes.weight,
                         current_height: action.payload.currMes.height,
                         current_bf: action.payload.currMes.bf,
-                        profile_pic: action.payload.dBUser.profile_pic
+                        progress_pics: action.payload.pics
                         }
                     }
                 } else{
@@ -295,6 +342,14 @@ export default function(state = initialState, action) {
                         mes_id: action.payload.currMes_id
                         }
                 }
+            case GET_CURRENT_PICS +'_FULFILLED':
+                return { ...state, user: {...state.user, progress_pics: action.payload}}
+            case GET_ALL_PROGRESS_PICS +'_FULFILLED':
+                return { ...state, user: {...state.user, progress_pics: action.payload}}
+            case UPLOAD_PHOTO +'_FULFILLED':
+                return { ...state, user: {...state.user, progress_pics: action.payload}}
+            case DEPRECATE_PHOTO +'_FULFILLED':
+                return { ...state, user: {...state.user, progress_pics: action.payload}}
             case UPDATE_USERNAME +'_FULFILLED':
                 return { ...state, user: {...state.user, username: action.payload.username}, userData: action.payload}
             case UPDATE_FULLNAME +'_FULFILLED':

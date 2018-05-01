@@ -31,7 +31,9 @@ nav.nav{
 .links{
   display: flex;
 }
-
+ img {
+   width: 200px;
+ }
 
 /* form validation for inputs example:
 

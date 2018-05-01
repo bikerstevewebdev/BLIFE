@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserData, updateUserStats, addMacrosToState, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts } from '../../ducks/userReducer';
+import { getUserData, updateUserStats, addMacrosToState, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts, getAllProgressPics, getCurrentPhotos } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
 import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
 import SearchMenus from '../Search/SearchMenus'
 import SearchWorkouts from '../Search/SearchWorkouts'
+import PhotoUpload from '../Photos/PhotoUpload'
+import PhotoCard from '../Photos/PhotoCard'
+
 
 
 class Profile extends Component{
     constructor() {
         super()
         this.state = {
-            showingAssigned: false
+            showingAssigned: false,
+            showingAllProgressPics: false
             // updatedHtWtBf: false
         }
         this.updateNewMes = this.updateNewMes.bind(this)
@@ -25,12 +29,12 @@ class Profile extends Component{
 
     componentDidMount() {
         console.log(this.props)
-        const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus } = this.props
+        const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = this.props
         const { has_coach } = userData
-        if(has_coach){
+        if(has_coach && assignedMenus.length < 1 && assignedWorkouts.length < 1){
             getAssignedMenus()
             getAssignedWorkouts()
-        } else{
+        } else if(userMenus.length < 1 && userWorkouts.length < 1){
             getUserMenus()
             getUserWorkouts()
         }
@@ -48,16 +52,16 @@ class Profile extends Component{
     }
     componentDidUpdate() {
         console.log('profile updated:', this.props)
-        const { pro, carbs, fat, bodyfat, weight, height, current_protein, current_carbs, current_fat, userData } = this.props
+        const { pro, carbs, fat, bodyfat, weight, height, userData, isUpdating } = this.props
+        if(isUpdating){
+            this.props.addMacrosToState(pro, carbs, fat, bodyfat/1, weight/1, height/1, userData.curr_mes)
+        }
         // console.log(curr_mes.mes_id, userData.curr_mes_id, pro)
         // Checking to see if macros were calced, and add them to state in userReducer if so
         // User can update their measurements and macros if they want to keep the new numbers or discard them
-        if(pro !== current_protein || carbs !== current_carbs || fat !== current_fat){
-            this.props.addMacrosToState(pro, carbs, fat, bodyfat/1, weight/1, height/1, userData.curr_mes)
             // this.setState({
             //     updatedHtWtBf: true
             // })
-        }
         // }else if(curr_mes.mes_id !== userData.curr_mes_id){
         //     this.setState({
         //         updatedHtWtBf: true
@@ -65,35 +69,32 @@ class Profile extends Component{
         // }
     }
 
-    showAssigned(){
-        this.setState({
-            showingAssigned: true
-        })
-    }
+        showAssigned(){
+            this.setState({
+                showingAssigned: true
+            })
+        }
+    
+        showAllProgressPics(val){
+            if(val){
+                this.props.getAllProgressPics()
+            }else{
+                this.props.getCurrentPhotos()
+            }
+            this.setState({
+                showingAllProgressPics: val
+            })
+        }
     
 //////////////////////Handles Macro Changes///////////////////
-updateNewMes() {
-    const { current_protein,
-        current_carbs,
-        current_fat,
-            current_weight,
-            current_height,
-            current_bf
-        } = this.props
-        const { waist, neck, chest } = this.props.curr_mes
-        this.props.updateUserStats(current_protein,
-            current_carbs,
-            current_fat,
-            current_weight,
-            current_height,
-            current_bf, 
-            waist, 
-            chest,
-            neck )
+        updateNewMes() {
+            const { current_protein, current_carbs, current_fat, current_weight, current_height, current_bf } = this.props
+            const { waist, neck, chest } = this.props.curr_mes
+            this.props.updateUserStats(current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, waist, chest, neck)
             this.props.changeUpdating()
             console.log('updating measurements')
         }
-        
+
         discardNewMes() {
             this.props.clearMacroEntry()
             console.log('discarding new measurements')
@@ -101,32 +102,43 @@ updateNewMes() {
 //////////////////////Handles Macro Changes///////////////////
         
         render() {
-            const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus, assignedWorkouts, assignedMenus } = this.props
+            const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus, assignedWorkouts, assignedMenus, progress_pics } = this.props
             let assignedMenuList, assignedWorkoutList, workoutsList, menusList
-                if(userMenus){
-                    menusList = userMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
-                }else{
-                    menusList = null
-                }
-                if(userWorkouts){
-                    workoutsList = userWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
-                }else{
-                    workoutsList = null
-                }
-                /////////////////assigned//////////////
-                if(assignedMenus){
-                    assignedMenuList = assignedMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
-                }else{
-                    assignedMenuList = null
-                }
-                if(assignedWorkouts){
-                    assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
-                }else{
-                    assignedWorkoutList = null
-                }
+            const progressPics = progress_pics.map(pic => <PhotoCard key={pic.photo_id} date_added={pic.date_added} src={pic.url} photo_id={pic.photo_id} alt={userData.username + ' ' + pic.type} />)
+            /////////////////Users Menus/Workouts////////////////////
+            if(userMenus){
+                menusList = userMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
+            }else{
+                menusList = null
+            }
+            if(userWorkouts){
+                workoutsList = userWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+            }else{
+                workoutsList = null
+            }
+            /////////////////assigned//////////////
+            if(assignedMenus){
+                assignedMenuList = assignedMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
+            }else{
+                assignedMenuList = null
+            }
+            if(assignedWorkouts){
+                assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+            }else{
+                assignedWorkoutList = null
+            }
         return(
             <section>
                 <h1>Welcome Home</h1>
+                <PhotoUpload />
+                {progressPics}
+                {
+                    this.state.showingAllProgressPics
+                    ?
+                    <button onClick={()=>this.showAllProgressPics(false)}>Just Show Me My Current Progress Pictures</button>
+                    :
+                    <button onClick={()=>this.showAllProgressPics(true)}>Show me all my progress pictures</button>
+                }
                 <Link to='/'><button style={{backgroundColor: "yellow"}}>Back to Login</button></Link>
                 <Link to='/updateProfile'><button style={{backgroundColor: "orange"}}>Update Profile</button></Link>
                 {
@@ -146,6 +158,7 @@ updateNewMes() {
                     menusList
 
                 }
+                
                 {
                     userData.has_coach
                     ?
@@ -153,7 +166,7 @@ updateNewMes() {
                     :
                     null
                 }
-                <SearchMenus doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addMenuToUser.bind(this)} />
+                <SearchMenus style={{width: "200px"}} doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addMenuToUser.bind(this)} />
                 {/* Displays user's current workouts: */}
                 <h2>Your Workouts:</h2>
                 {
@@ -164,13 +177,13 @@ updateNewMes() {
                     workoutsList
 
                 }
-                <SearchWorkouts doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addWorkoutToUser.bind(this)} />
+                <SearchWorkouts style={{width: "200px"}} doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addWorkoutToUser.bind(this)} />
                 <h2>Current Stats</h2>
                 <p>Protein: {current_protein}g</p>
                 <p>Fat: {current_fat}g</p>
                 <p>Carbs: {current_carbs}g</p>
                 <p>Pofile Pic: </p>
-                <img src={profile_pic} alt="users pic"/>
+                <img style={{width: "200px"}} src={profile_pic} alt="users pic"/>
                 <p>Weight: {current_weight}pounds</p>
                 <p>Height: {current_height}inches</p>
                 <p>Bodyfat: {current_bf}%</p>
@@ -193,9 +206,8 @@ updateNewMes() {
 
 function mapStateToProps(state){
     const { user, curr_mes, userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = state.users,
-          { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf } = user,
-          { macros, weight, height, bodyfat, isUpdating } = state.macros,
-          {  } = state.coach
+          { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, progress_pics } = user,
+          { macros, weight, height, bodyfat, isUpdating } = state.macros
     return{
         profile_pic,
         current_protein,
@@ -216,8 +228,9 @@ function mapStateToProps(state){
         userMenus,
         userWorkouts,
         assignedMenus,
-        assignedWorkouts
+        assignedWorkouts,
+        progress_pics
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts, getAllProgressPics, getCurrentPhotos })(Profile)

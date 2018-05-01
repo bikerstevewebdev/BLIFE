@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "aws-sdk": "^2.229.1",
     "axios": "^0.18.0",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",

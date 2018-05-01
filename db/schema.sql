@@ -152,51 +152,57 @@ CREATE TABLE client_coach (
 
 
 
-CREATE TABLE progress_pics (
-    pic_id SERIAL PRIMARY KEY,
+CREATE TABLE photos (
+    photo_id SERIAL PRIMARY KEY,
     url TEXT,
-    member_id INTEGER    
+    member_id INTEGER,
+    type VARCHAR(25) DEFAULT 'progress',
+    current BOOLEAN DEFAULT true,
+    date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 
-INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)
-VALUES (32, 17, 48, 75, 250, 20, '04-25-2017', 1)
-returning *
-INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)
-VALUES (34, 16.5, 47, 75, 255, 21, '05-25-2017', 1)
-returning *
-INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)
-VALUES (35, 16, 46.5, 75, 257, 21.5, '06-25-2017', 1)
-returning *
+-- INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)
+-- VALUES (32, 17, 48, 75, 250, 20, '04-25-2017', 1)
+-- returning *
+-- INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)
+-- VALUES (34, 16.5, 47, 75, 255, 21, '05-25-2017', 1)
+-- returning *
+-- INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)
+-- VALUES (35, 16, 46.5, 75, 257, 21.5, '06-25-2017', 1)
+-- returning *
 
 
-INSERT INTO foods (name, pro, carb, fat, fiber, img)
-VALUES ('lucy', 17, 48, 75, 20, 'something yummy');
-INSERT INTO foods (name, pro, carb, fat, fiber, img)
-VALUES ('nasty', 1, 61, 7, 2, 'something nasty');
-INSERT INTO foods (name, pro, carb, fat, fiber, img)
-VALUES ('tatste', 17, 48, 75, 20, 'something tasty');
-INSERT INTO foods (name, pro, carb, fat, fiber, img)
-VALUES ('junk', 17, 84, 35, 0, 'glorious yummy');
+-- INSERT INTO foods (name, pro, carb, fat, fiber, img)
+-- VALUES ('lucy', 17, 48, 75, 20, 'something yummy');
+-- INSERT INTO foods (name, pro, carb, fat, fiber, img)
+-- VALUES ('nasty', 1, 61, 7, 2, 'something nasty');
+-- INSERT INTO foods (name, pro, carb, fat, fiber, img)
+-- VALUES ('tatste', 17, 48, 75, 20, 'something tasty');
+-- INSERT INTO foods (name, pro, carb, fat, fiber, img)
+-- VALUES ('junk', 17, 84, 35, 0, 'glorious yummy');
 
 
-INSERT INTO meals (title, total_p, total_c, total_f, total_fib, img_url)
-VALUES ('junk', 7, 84, 5, 9, 'awesome carbs');
-INSERT INTO meals (title, total_p, total_c, total_f, total_fib, img_url)
-VALUES ('junk', 83, 143, 69, 10, 'greatness');
+-- INSERT INTO meals (title, total_p, total_c, total_f, total_fib, img_url)
+-- VALUES ('junk', 7, 84, 5, 9, 'awesome carbs');
+-- INSERT INTO meals (title, total_p, total_c, total_f, total_fib, img_url)
+-- VALUES ('junk', 83, 143, 69, 10, 'greatness');
 
 
-INSERT INTO meal_foods (meal_id, food_id)
-VALUES (1, 1);
-INSERT INTO meal_foods (meal_id, food_id)
-VALUES (2, 2);
-INSERT INTO meal_foods (meal_id, food_id)
-VALUES (2, 1);
-INSERT INTO meal_foods (meal_id, food_id)
-VALUES (3, 1);
-INSERT INTO meal_foods (meal_id, food_id)
-VALUES (1, 3);
-INSERT INTO meal_foods (meal_id, food_id)
-VALUES (1, 4);
-INSERT INTO meal_foods (meal_id, food_id)
-VALUES (1, 5);
+-- INSERT INTO meal_foods (meal_id, food_id)
+-- VALUES (1, 1);
+-- INSERT INTO meal_foods (meal_id, food_id)
+-- VALUES (2, 2);
+-- INSERT INTO meal_foods (meal_id, food_id)
+-- VALUES (2, 1);
+-- INSERT INTO meal_foods (meal_id, food_id)
+-- VALUES (3, 1);
+-- INSERT INTO meal_foods (meal_id, food_id)
+-- VALUES (1, 3);
+-- INSERT INTO meal_foods (meal_id, food_id)
+-- VALUES (1, 4);
+-- INSERT INTO meal_foods (meal_id, food_id)
+-- VALUES (1, 5);
+
+-- INSERT INTO photos (url, MEMBER_id, type)
+-- VALUES ('test', 4, 'progress');

@@ -1,56 +1,39 @@
-// const AWS = require('aws-sdk')
+const AWS = require('aws-sdk')
 
-// AWS.config.update({
-//     accessKeyId: process.env.AWS_ACCESSKEY,
-//     secretAccessKey: process.env.AWS_SECRETKEY,
-//     region: process.env.AWS_REGION
-// })
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESSKEY,
+    secretAccessKey: process.env.AWS_SECRETKEY,
+    region: process.env.AWS_REGION
+})
 
-// const S3 = new AWS.S3()
-
-
-// function uploadPhoto(req, res) {
-//     let photo = req.body,
-//         buf = new Buffer(photo.file.replace(/^data:image\/\w+;base64,/, ""), 'base64'),
-//         params = {
-//             Bucket: process.env.AWS_S3_BUCKET,
-//             Body: buf,
-//             Key: photo.filename,
-//             ContentType: photo.filetype,
-//             ACL: 'public-read'
-//         }
-
-//     console.log(buf)
-
-//     S3.upload(params, (err, data) => {
-//         console.log(err, data)
-//         let response, code
-//         err ? (resopnse = err, code = 500) : (response = data, code = 200)
-//         res.status(code).send(response)
-//     })
-// }
-// module.exports = function (app) {
-//     app.post('/api/photoUpload', uploadPhoto)
-// }
+const S3 = new AWS.S3()
 
 
+function uploadPhoto(req, res) {
+    let { photo, type } = req.body,
+        buf = new Buffer(photo.file.replace(/^data:image\/\w+;base64,/, ""), 'base64'),
+        params = {
+            Bucket: process.env.AWS_S3_BUCKET,
+            Body: buf,
+            Key: photo.filename,
+            ContentType: photo.filetype,
+            ACL: 'public-read'
+        }
 
-// Array.reduce((s,c) => {
-//     return s + c.price
-// })
+    console.log(buf)
 
-
-
-// // require('dotenv').config({path: './.dev.env'})
-// const express = require('express')
-//     , cors = require('cors')
-//     , bodyParser = require('body-parser')
-//     , app = express()
-//     , S3 = require('./S3.js')
-
-// app.use(cors())
-// app.use(bodyParser.json())
-
-// S3(app)
-
-// app.listen(3001, _=>{console.log('(I)...(I)')})
+    S3.upload(params, (err, data) => {
+        console.log(err, data)
+        if (err) {
+          res.status(500).send(err)
+        } else {
+          const db = req.app.get("db")
+          db.add_photo([data.Location, req.user.user_id, 'progress']).then(photos => {            
+                  res.status(200).send(photos)
+          })
+        }
+    })
+}
+module.exports = function (app) {
+    app.post('/user/uploadPhoto', uploadPhoto)
+}

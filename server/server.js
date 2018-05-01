@@ -8,11 +8,13 @@ const express          = require('express'),
       massive          = require('massive'),
       { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT, DOMAIN, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env,
       c                = require('./controller'),
-      port             = SERVER_PORT // || 3000
+      port             = SERVER_PORT, // || 3000
+      S3 = require('./awsS3.js')
+
+
       
       
-      
-      
+
 const app = express()
 
 app.use(express.json())
@@ -82,39 +84,33 @@ app.get('/auth/callback', passport.authenticate('auth0', {
 }))
 app.get('/auth/me', c.sendUserObjs)
 
-app.get('/user/:id', c.getUser)
 app.get('/userInfo', c.getUserInfo)
 app.get('/clientInfo', c.getClientInfo)
 app.get('/adminInfo', c.getAdminInfo)
 app.get('/userMenus', c.getUserMenus)
 app.get('/userWorkouts', c.getUserWorkouts)
+app.get('/user/progressPics', c.getAllProgressPhotos)
+app.get('/user/currentPics', c.getCurrentPhotos)
 
 app.get('/client/assigned/menus', c.getAssignedMenus)
 app.get('/client/assigned/workouts', c.getAssignedWorkouts)
 app.get('/coach/clients', c.getClients)
-app.get('/search/clients/:email', c.searchForClient)
 
-app.get('/measurements/:id', c.getMeasurements)
-app.get('/measurements/latest/:id', c.getLatestMes)
 
 app.get('/food/search', c.searchFoods)
-app.get('/food/search/:id', c.getFood)
 
 app.get('/meal/search', c.searchMeals)
-app.get('/meal/search/:id', c.getMealById)
-
 app.get('/menu/search', c.searchMenus)
-app.get('/menu/search/:id', c.getMenuById)
+
 
 app.get('/exercise/search', c.searchExercises)
 app.get(`/workout/search`, c.searchWorkouts)
-app.get('/exercise/:id', c.getExerciseById)
-app.get('/workout/:id', c.getWorkoutById)
 
 app.put('/user/stats', c.updateStats)
 app.put('/user/username', c.updateUsername)
 app.put('/user/fullname', c.updateFullname)
 app.put('/user/profilePic', c.updateProfilePic)
+app.put('/user/progressPic/decurrentize', c.makePicNotCurrent)
 
 app.put('/coach/request', c.requestCoachAccess)
 app.put('/coach/approve', c.approveCoachAccess)
@@ -124,6 +120,8 @@ app.put('/meal/foods/quantity', c.updateFoodQuantity)
 app.put('/menu', c.editMenu)
 app.put('/exercise', c.editExercise)
 app.put('/workout/exercise', c.updateWorkoutEx)
+
+S3(app)
 
 app.post('/user/mez', c.addMez)
 app.post('/macroCalc', c.newMacroCalc)
@@ -147,13 +145,22 @@ app.put('/meal/removeFood', c.removeFoodFromMeal)
 app.put('/menu/removeMeal', c.removeMealFromMenu)
 app.put('/workout/removeExercise/:id', c.removeExFromWorkout)
 
+app.get('/exercise/:id', c.getExerciseById)
+app.get('/workout/:id', c.getWorkoutById)
+app.get('/user/:id', c.getUser)
+app.get('/search/clients/:email', c.searchForClient)
+app.get('/measurements/latest/:id', c.getLatestMes)
+app.get('/measurements/:id', c.getMeasurements)
+app.get('/food/search/:id', c.getFood)
+app.get('/meal/search/:id', c.getMealById)
+app.get('/menu/search/:id', c.getMenuById)
 
-  
+
 
 // Connecting to the DB prior to staring up the server so the DB is working for sure
 massive(process.env.CONNECTION_STRING).then( db => {
     app.set('db', db);
     app.listen(port, () => {
         console.log(`Build your new Life on Port ${port}`)
-      })
+    })
   })

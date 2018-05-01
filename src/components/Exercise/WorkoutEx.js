@@ -99,8 +99,6 @@ class WorkoutEx extends Component{
                 <input type="number" value={repsIn} onChange={this.updateRepsIn} />
                 <p>Sets:</p>
                 <input type="number" value={setsIn} onChange={this.updateSetsIn} />
-                <p>Rest Time:</p>
-                <input type="number" value={restTimeIn} onChange={this.updateRestTimeIn} />
                 {
                     type !== "Bodyweight"
                     ?

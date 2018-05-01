@@ -44,7 +44,7 @@ class ClientManager extends Component{
 
     render() {
         // const { messageInput } = this.state,
-            const { currentClient, sendClientMsg } = this.props,
+            const { currentClient } = this.props,
                   { username, curr_macros, last_login, current_stats, fullname, menus, client_id, client_coach_id, workouts } = currentClient,
                   { waist, neck, chest, height, weight, bf, date_taken } = current_stats,
                   { pro, carb, fat } = curr_macros,
@@ -57,7 +57,8 @@ class ClientManager extends Component{
         return (
             <section className="client-manager">
                 <Link to={`/coachManager/${this.props.coach_id}`}><button>Back to Coach Manager</button></Link>
-                <h1>{username}</h1>
+                <h1>{fullname}/{username}</h1>
+                <h3>Last Login: {last_login}</h3>
                 <section className="client-stats">
                     <h2>Current Stats</h2>
                     <h3>Macros:</h3>
@@ -75,7 +76,7 @@ class ClientManager extends Component{
                 </section>
                 <section className="client-workouts">
                     <h2>Current Fitness Plan</h2>
-                    {workouts}
+                    {clientWorkouts}
                     {
                         this.state.addingWorkout
                         ?
@@ -86,7 +87,7 @@ class ClientManager extends Component{
                 </section>
                 <section className="client-menus">
                     <h2>Current Meal Plan</h2>
-                    {menus}
+                    {clientMenus}
                     {
                         this.state.addingMenu
                         ?
