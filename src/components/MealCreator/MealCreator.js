@@ -16,8 +16,12 @@ class MealCreator extends Component{
         this.sendMealUp = this.sendMealUp.bind(this)
     }
 
+    
     sendMealUp() {
         const { mealTitle, imgInput } = this.state        
+        if(this.props.fromRecipe){
+            this.props.changeCreating(false)
+        }
         this.props.createMeal(mealTitle, imgInput)
         this.setState({
             titleInput: '',
@@ -48,7 +52,7 @@ class MealCreator extends Component{
                 <input value={imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
                 <button onClick={() => this.sendMealUp()}>Create Meal!</button>
                 {
-                    this.state.creating
+                    this.props.fromRecipe && this.state.creating
                     ?
                     null
                     :

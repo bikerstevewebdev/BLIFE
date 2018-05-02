@@ -19,10 +19,12 @@ class Meal extends Component{
     }
     
     componentDidMount() {
-        const { id } = this.props.match.params
-        if(!isNaN(id) && id > 0){
-            this.props.getMealById(id)
-        } 
+        if(this.props.match.params){
+            const { id } = this.props.match.params
+            if(!isNaN(id) && id > 0){
+                this.props.getMealById(id)
+            } 
+        }
     }
 
     addFoodToMeal(meal_id, food_id, p, c, f, fib, total_p, total_c, total_f, total_fib, quantity){
@@ -97,7 +99,7 @@ class Meal extends Component{
                 <button onClick={() => this.props.searchFoods(searchIn)}>Search for your food!</button>
                 {foodResults}
                 {
-                    this.props.match.params.id === 'menu'
+                    this.props.match && this.props.match.params.id === 'menu'
                     ?
                     <Link to={{pathname: `/menu/${this.props.location.state.menu_id}`}}>
                         <button>Go Back to the menu?</button>

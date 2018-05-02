@@ -1,6 +1,10 @@
 const axios = require('axios')
 require('dotenv').config()
 
+function urlEncode(str){
+    return str.trim().replace(/\W+/g, "+")
+}
+
 module.exports = {
     searchExternalFoods: (req, res, next) => {
         const db = req.app.get('db')
@@ -40,6 +44,22 @@ module.exports = {
                 }
                 res.status(200).send(retArr)
             })
+    },
+    
+    getRecipes: (req, res, next) => {
+        console.log(req.query.name)
+        const { name } = req.query
+        let encodedName = urlEncode(name)
+        axios.get(`http://api.yummly.com/v1/api/recipes?_app_id=${process.env.APP_ID2}&_app_key=${process.env.API_KEY2}&q=${encodedName}&requirePictures=true&maxResult=10&start=10`).then(results => {
+        let recipes = results.data.matches.map(v => {
+            return {
+                name: v.recipeName,
+                ingredients: v.ingredients,
+                img: v.imageUrlsBySize["90"]
+            }
+        })
+        res.status(200).send(recipes)
+    })
     }
 }
 
@@ -55,3 +75,5 @@ module.exports = {
 //     c = results.data.foods[0].nf_total_carbohydrate
 //     res.status(200).send({ p, c, f })
 // })
+
+// axios.get(`http://api.yummly.com/v1/api/recipes?_app_id=${process.env.APP_ID2}&_app_key=${process.env.API_KEY2}&q=${encodedName}&requirePictures=true&maxResult=10&start=10`)

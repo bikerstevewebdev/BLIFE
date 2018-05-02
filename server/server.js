@@ -98,6 +98,7 @@ app.get('/client/assigned/workouts', c.getAssignedWorkouts)
 app.get('/coach/clients', c.getClients)
 
 
+app.get('/recipes', fc.getRecipes)
 app.get('/food/search', c.searchFoods)
 app.get('/meal/search', c.searchMeals)
 app.get('/menu/search', c.searchMenus)
