@@ -21,7 +21,7 @@ function Nav(props) {
                     <Link to='/food/nav'><button>Food Creator</button></Link>
                     <Link to='/exercise/0'><button>Exercise Creator</button></Link>
                     <Link to='/workoutCreator'><button>Workout Creator</button></Link>
-                    <Link to='/mealFromRecipe'><button>Meal From Recipe</button></Link>
+                    {/* <Link to='/mealFromRecipe'><button>Meal From Recipe</button></Link> */}
                     {
                         props.coach_id > 0
                         ?

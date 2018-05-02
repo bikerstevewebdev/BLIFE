@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 import { searchExercises, addExToWorkout, getWorkoutById } from '../../ducks/fitnessReducer'
-import WorkoutEx from '../Exercise/WorkoutEx'
+import ExerciseCard from '../Exercise/ExerciseCard'
+// import Exercise from '../Exercise/Exercise';
 // import { Redirect } from 'react-router-dom'
 
 class Workout extends Component{
@@ -19,7 +20,7 @@ class Workout extends Component{
     componentDidMount() {
         console.log(this.props)
         const { id } = this.props.match.params
-        if(!isNaN(id/1) && id/1 > 0 && !this.props.workout.workout_id){
+        if(!isNaN(id/1) && id/1 > 0 && id !== this.props.workout.workout_id){
             this.props.getWorkoutById(id)
         } 
     }
@@ -62,8 +63,8 @@ class Workout extends Component{
                     </section>
                 ) }),
               workoutExsList = workoutExs.map(exercise => {
-                    const { ex_id, name, workout_ex_id, type, main_muscle_group, notes, ex_order } = exercise
-                    return <WorkoutEx key={workout_ex_id} numExs={numExs} workout_id={workout_id} main_muscle_group={main_muscle_group} notes={notes} ex_order={ex_order} type={type} ex_id={ex_id} workout_ex_id={workout_ex_id} name={name} img={exercise.img} />            
+                    const { ex_id, name, workout_ex_id, type, main_muscle_group, notes, ex_order, reps, sets, rest_time } = exercise
+                    return <ExerciseCard key={workout_ex_id} numExs={numExs} workout_id={workout_id} main_muscle_group={main_muscle_group} notes={notes} reps={reps} sets={sets} ex_order={ex_order} type={type} rest_time={rest_time} ex_id={ex_id} workout_ex_id={workout_ex_id} name={name} img={exercise.img} />            
                  })
         return(
             <section className="workout">

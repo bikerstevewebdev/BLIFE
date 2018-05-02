@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { searchExternalFoods } from '../../ducks/foodReducer'
+import { searchExternalFoods, addFoodToDBAndMeal } from '../../ducks/foodReducer'
 import MealCreator from '../MealCreator/MealCreator'
 // import Meal from './Meal'
 import Food from '../Food/Food'
@@ -48,14 +48,24 @@ class MealFromRecipe extends Component{
             recipeSearchIn: e.target.value
         })
     }
+
     changeCreatingMeal(val) {
         this.setState({
             creatingMeal: val,
-            mealCreated: true,
+            mealCreated: true
+        })
+    }
+
+    addFoodToDBMeal(food, p, c, f, fib, img){
+        this.props.addFoodToDBAndMeal(this.props.meal.meal_id, food, p, c, f, fib, img)
+        let newArr = this.state.rIngredients.filter(v => v !== food)
+        this.setState({
+            rIngredients: newArr
         })
     }
 
     pickRecipe(rName, rIngredients, rImg){
+        console.log(rIngredients)
         this.setState({ 
             searchingRecipe: false,
             creatingMeal: true,
@@ -66,8 +76,8 @@ class MealFromRecipe extends Component{
     }
     
     render() {
-        const { rIngredients, recipeSearchIn, creatingMeal, recipeResults, mealCreated, searchingRecipe } = this.state
-        const { mealFoods, meal } = this.props
+        const { rIngredients, recipeSearchIn, creatingMeal, recipeResults, rName, rImg, mealCreated, searchingRecipe } = this.state
+        const { mealFoods, meal, searchExternalFoods } = this.props
         const { total_p, total_c, total_f, total_fib, meal_id, title, img_url } = meal        
         
             const mealFoodList = mealFoods.map(food => {
@@ -87,12 +97,12 @@ class MealFromRecipe extends Component{
             )
         })
         let ingredients = rIngredients.map((v, i) => {
-            return <button key={i} onClick={() => searchExternalFoods(v)}>{v}</button>
+            return <button key={i} onClick={() => searchExternalFoods(v, false)}>{v}</button>
         })
         return(
             <section className="meal-from-recipe">
                 <input onChange={this.updateRecipeSearchIn} value={recipeSearchIn} placeholder="Search for a recipe by name"/>
-                <button onClick={this.searchRecipes}>Search!</button>
+                <button onClick={this.searchRecipes}>Search for a recipe!</button>
                 
                 {
                     searchingRecipe
@@ -115,12 +125,12 @@ class MealFromRecipe extends Component{
                         <h3>Foods in this meal:</h3>
                         {mealFoodList}
                         {ingredients}
-                        <Food match={this.props.match}/>
+                        <Food fromRecipe={true} match={this.props.match}/>
                     </section>
                     :
                         creatingMeal
                         ?
-                            <MealCreator changeCreating={this.changeCreatingMeal} fromRecipe={true}/>
+                            <MealCreator rName={rName} rImg={rImg} changeCreating={this.changeCreatingMeal} fromRecipe={true}/>
                         :
                         null
                 }
@@ -136,4 +146,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { searchExternalFoods })(MealFromRecipe)
+export default connect(mapStateToProps, { searchExternalFoods, addFoodToDBAndMeal })(MealFromRecipe)

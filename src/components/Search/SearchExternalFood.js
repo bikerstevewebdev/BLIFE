@@ -12,7 +12,7 @@ class SearchExternalFood extends Component{
             branded: false,
             externalSearchIn: ''
         }
-        this.SearchExternalFoods = this.SearchExternalFoods.bind(this)
+        this.searchExternalFoods = this.searchExternalFoods.bind(this)
         this.updateExternalSearch = this.updateExternalSearch.bind(this)
         this.endSearches = this.endSearches.bind(this)
         this.changeBranded = this.changeBranded.bind(this)

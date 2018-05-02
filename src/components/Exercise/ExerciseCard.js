@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { updateWorkoutEx, removeExFromWorkout } from '../../ducks/fitnessReducer'
 
-class WorkoutEx extends Component{
+class ExerciseCard extends Component{
     constructor(props) {
         super(props) 
         this.state = {
-            repsIn: props.reps,
-            setsIn: props.sets,
-            restTimeIn: props.rest_time,
-            weight: props.weight ,
-            notesIn: props.notes,
-            orderIn: props.ex_order,
+            repsIn: '',
+            setsIn: '',
+            restTimeIn: '',
+            weight: '' ,
+            notesIn: '',
+            orderIn: '',
             addingNotes: false
         }
         this.updateRepsIn = this.updateRepsIn.bind(this)
@@ -21,19 +21,20 @@ class WorkoutEx extends Component{
         this.updateOrderIn = this.updateOrderIn.bind(this)
         this.updateNotesIn = this.updateNotesIn.bind(this)
         this.sendUpdate = this.sendUpdate.bind(this)
+        this.prepareToAddNotes = this.prepareToAddNotes.bind(this)
     }
 
-    // componentDidMount(){
-    //     const { notes, reps, sets, rest_time, weight, ex_order } = this.props
-    //     this.setState({
-    //         repsIn: reps,
-    //         setsIn: sets,
-    //         restTimeIn: rest_time,
-    //         weightIn: weight,
-    //         notesIn: notes,
-    //         orderIn: ex_order
-    //     })
-    // }
+    componentDidMount(){
+        const { notes, reps, sets, rest_time, weight, ex_order } = this.props
+        this.setState({
+            repsIn: reps,
+            setsIn: sets,
+            restTimeIn: rest_time,
+            weightIn: weight,
+            notesIn: notes,
+            orderIn: ex_order
+        })
+    }
 
     updateRepsIn(e) {
         this.setState({
@@ -85,10 +86,10 @@ class WorkoutEx extends Component{
 
     render() {
         const { repsIn, setsIn, restTimeIn, weightIn, notesIn, addingNotes } = this.state,
-              { type, name, img, numExs, workout_ex_id, ex_id, workout_id } = this.props
+              { type, name, img, numExs, workout_ex_id, ex_id, workout_id, ex_order } = this.props
         return (
             <section className="workout-ex">
-                <select onChange={this.updateOrderIn}>
+                <select defaultValue={ex_order} onChange={this.updateOrderIn}>
                     {numExs.map((v, i) => {
                         return <option key={ex_id + "-" + i} value={i+1}>{i+1}</option>
                     })}
@@ -134,4 +135,4 @@ class WorkoutEx extends Component{
 //     }
 // }
 
-export default connect(null, { updateWorkoutEx, removeExFromWorkout })(WorkoutEx)
+export default connect(null, { updateWorkoutEx, removeExFromWorkout })(ExerciseCard)

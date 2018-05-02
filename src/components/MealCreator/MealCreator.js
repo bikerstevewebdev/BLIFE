@@ -7,7 +7,7 @@ class MealCreator extends Component{
     constructor() {
         super()
         this.state = {
-            titleInput: '',
+            mealTitle: '',
             imgInput: '',
             creating: true
         }
@@ -16,15 +16,24 @@ class MealCreator extends Component{
         this.sendMealUp = this.sendMealUp.bind(this)
     }
 
+    componentDidMount() {
+        if(this.props.fromRecipe){
+            this.setState({
+                mealTitle: this.props.rName,
+                imgInput: this.props.rImg
+            })
+        }
+    }
+
     
     sendMealUp() {
         const { mealTitle, imgInput } = this.state        
+        this.props.createMeal(mealTitle, imgInput)
         if(this.props.fromRecipe){
             this.props.changeCreating(false)
         }
-        this.props.createMeal(mealTitle, imgInput)
         this.setState({
-            titleInput: '',
+            mealTitle: '',
             imgInput: '',
             creating: false
         })
@@ -52,7 +61,8 @@ class MealCreator extends Component{
                 <input value={imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
                 <button onClick={() => this.sendMealUp()}>Create Meal!</button>
                 {
-                    this.props.fromRecipe && this.state.creating
+                    this.state.creating
+                    // this.props.fromRecipe && this.state.creating
                     ?
                     null
                     :

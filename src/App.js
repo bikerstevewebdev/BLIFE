@@ -21,7 +21,7 @@ import ClientManager from './components/Coach/ClientManager';
 import CoachManager from './components/Coach/CoachManager';
 import FirstLogin from './components/Login/FirstLogin';
 import Measurements from './components/Measurements/Measurements';
-import MealFromRecipe from './components/Meal/MealFromRecipe';
+// import MealFromRecipe from './components/Meal/MealFromRecipe';
 
 
 
@@ -59,7 +59,7 @@ class App extends Component {
           <Route path='/clientManager/:id' component={ClientManager} />
           <Route path='/firstLogin' component={FirstLogin} />
           <Route path='/measurements' component={Measurements} />
-          <Route path='/mealFromRecipe' component={MealFromRecipe} />
+          {/* <Route path='/mealFromRecipe' component={MealFromRecipe} /> */}
         </Switch>
       </div>
     );

@@ -137,6 +137,7 @@ app.post('/meal/food', c.addFoodToMeal)
 app.post('/meal', c.createMeal)
 app.post('/menu', c.createMenu)
 app.post('/menu/meal', c.addMealToMenu)
+app.post('/meal/newFood', fc.addFoodToDBAndMeal)
 
 app.post('/exercise', c.createExercise)
 app.post('/workout', c.createWorkout)

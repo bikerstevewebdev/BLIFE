@@ -2,7 +2,7 @@ CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     coach_id INTEGER DEFAULT 0,
     is_admin BOOLEAN DEFAULT false
-    username VARCHAR(25) NOT NULL,
+    username VARCHAR(45) NOT NULL,
     email VARCHAR(125),
     fullname VARCHAR(100),
     profile_pic TEXT,
@@ -29,7 +29,7 @@ CREATE TABLE measurements (
 
 CREATE TABLE meals (
     meal_id SERIAL PRIMARY KEY,
-    title VARCHAR(25) NOT NULL,
+    title VARCHAR(75) NOT NULL,
     author_id INTEGER ,
     total_p REAL NOT NULL,
     total_c REAL NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE menu_meals (
 
 CREATE TABLE menus (
     menu_id SERIAL PRIMARY KEY,
-    title VARCHAR(60),
+    title VARCHAR(75),
     author_id INTEGER,
     total_p REAL NOT NULL,
     total_c REAL NOT NULL,
@@ -103,8 +103,8 @@ CREATE TABLE workout_ex (
 
 CREATE TABLE exercises (
     ex_id SERIAL PRIMARY KEY,
-    name VARCHAR(60) NOT NULL,
-    type VARCHAR(25) NOT NULL,
+    name VARCHAR(75) NOT NULL,
+    type VARCHAR(30) NOT NULL,
     main_muscle_group VARCHAR(25),
     author_id INTEGER,
     img TEXT,

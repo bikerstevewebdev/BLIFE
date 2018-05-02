@@ -12,7 +12,6 @@ class Food extends Component{
         }
         this.sendEdits = this.sendEdits.bind(this)
         this.toggleExternalSearch = this.toggleExternalSearch.bind(this)
-        this.updateExternalSearch = this.updateExternalSearch.bind(this)
         this.addFood = this.addFood.bind(this)
     }
 
@@ -79,15 +78,19 @@ class Food extends Component{
                         <Link to={`meal/${this.props.meal.meal_id}`}>Back to Meal</Link>
                     </section>
                     :
-                    <button onClick={() => this.addFood(name, p, c, f, fib, img)}>Add Food</button>
+                    <button onClick={() => this.addFood(name, p, c, f, fib, img)}>Add Food to the Database</button>
+                }
+                {
+                    searchingExternal //|| this.props.fromRecipe
+                    ?
+                    <SearchExternalFood addFood={this.addFood} />
+                    :
+                    null
                 }
                 {
                     searchingExternal
                     ?
-                    <section className="food-external-search">
-                        <button onClick={() => this.toggleExternalSearch(searchingExternal)}>Just kidding, get the search out of here</button>
-                        <SearchExternalFood addFood={this.addFood} />
-                    </section>
+                    <button onClick={() => this.toggleExternalSearch(searchingExternal)}>Just kidding, get the search out of here</button>
                     :
                     <button onClick={() => this.toggleExternalSearch(searchingExternal)}>Need some inspiration?</button>
                 }

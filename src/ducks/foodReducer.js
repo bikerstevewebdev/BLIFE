@@ -46,6 +46,7 @@ const SEARCH_MENUS = 'SEARCH_MENUS'
 const CLEAR_MEAL_SEARCH = 'CLEAR_MEAL_SEARCH'
 const END_NUTRITION_SEARCH = 'END_NUTRITION_SEARCH'
 const SEARCH_EXTERNAL_FOODS = 'SEARCH_EXTERNAL_FOODS'
+const NEW_FOOD_MEAL_ADD = 'NEW_FOOD_MEAL_ADD'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
@@ -90,12 +91,23 @@ export function updateImgIn(val) {
         payload: val
     }
 }
+
 export function addFoodToDB(name, p, c, f, fib, img) {
     let data = axios.post('/food', { name, p, c, f, fib, img }).then(res => {
         return res.data
     })
     return {
         type: ADD_FOOD,
+        payload: data
+    }
+}
+
+export function addFoodToDBAndMeal(meal_id, name, p, c, f, fib, img) {
+    let data = axios.post('/meal/newFood', { meal_id, name, p, c, f, fib, img }).then(res => {
+        return res.data
+    })
+    return {
+        type: NEW_FOOD_MEAL_ADD,
         payload: data
     }
 }
@@ -325,7 +337,16 @@ export default function(state = initialState, action) {
                 menu: action.payload
             }
         case ADD_FOOD + '_FULFILLED':
-            return initialState
+            return {...state,
+                    foods: [],
+                    name: '',
+                    p: 0,
+                    c: 0,
+                    f: 0,
+                    fib: 0,
+                    img: '',
+                    externalFoods: []
+                    }
         case REMOVE_FOOD + '_FULFILLED':
             return {
                     ...state,
@@ -339,6 +360,19 @@ export default function(state = initialState, action) {
                     menuMeals: action.payload.meals
                 }
         case ADD_FOOD_TO_MEAL + '_FULFILLED':
+            return { ...state,
+                    meal: action.payload.newMeal,
+                    mealFoods: action.payload.foods,
+                    foods: [],
+                    name: '',
+                    p: 0,
+                    c: 0,
+                    f: 0,
+                    fib: 0,
+                    img: '',
+                    externalFoods: []
+                }
+        case NEW_FOOD_MEAL_ADD + '_FULFILLED':
             return { ...state, meal: action.payload.newMeal, mealFoods: action.payload.foods }
         case ADD_MEAL_TO_MENU + '_FULFILLED':
             return { ...state, menu: action.payload.newMenu, menuMeals: action.payload.meals }

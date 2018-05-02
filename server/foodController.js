@@ -17,8 +17,8 @@ module.exports = {
                     "x-app-key": `${process.env.API_KEY1}`
                 }
         }).then(results => {
-                let retArr
-                if(branded){
+                let retArr = []
+                if(branded && results.data.branded.length > 0){
                     retArr = results.data.branded.map(v => {
                         return {
                             name: v.brand_name + " " + v.food_name,
@@ -29,16 +29,27 @@ module.exports = {
                             img: v.photo.thumb
                         }
                     })
-                } else{
+                } else if(results.data.common.length > 0){
                     retArr = results.data.common.map(v => {
-                        let nut = v.full_nutrients
-                        return {
-                            name: v.food_name,
-                            p: nut.find(v => v.attr_id/1 === 203).value.toFixed(),
-                            f: nut.find(v => v.attr_id/1 === 204).value.toFixed(),
-                            c: nut.find(v => v.attr_id/1 === 205).value.toFixed(),
-                            fib: nut.find(v => v.attr_id/1 === 291).value.toFixed(),
-                            img: v.photo.thumb
+                        if(v.full_nutrients){
+                            let nut = v.full_nutrients
+                            return {
+                                name: v.food_name,
+                                p: nut.find(val => val.attr_id/1 === 203).value.toFixed() || 0,
+                                f: nut.find(val => val.attr_id/1 === 204).value.toFixed() || 0,
+                                c: nut.find(val => val.attr_id/1 === 205).value.toFixed() || 0,
+                                fib: nut.find(val => val.attr_id/1 === 291).value.toFixed() || 0,
+                                img: v.photo.thumb
+                            }
+                        }else{
+                            return {
+                                name: v.food_name,
+                                p: 0,
+                                f: 0,
+                                c: 0,
+                                fib: 0,
+                                img: v.photo.thumb
+                            }
                         }
                     })
                 }
@@ -51,16 +62,33 @@ module.exports = {
         const { name } = req.query
         let encodedName = urlEncode(name)
         axios.get(`http://api.yummly.com/v1/api/recipes?_app_id=${process.env.APP_ID2}&_app_key=${process.env.API_KEY2}&q=${encodedName}&requirePictures=true&maxResult=10&start=10`).then(results => {
-        let recipes = results.data.matches.map(v => {
-            return {
-                name: v.recipeName,
-                ingredients: v.ingredients,
-                img: v.imageUrlsBySize["90"]
-            }
+            let recipes = results.data.matches.map(v => {
+                return {
+                    name: v.recipeName,
+                    ingredients: v.ingredients,
+                    img: v.imageUrlsBySize["90"]
+                }
+            })
+            res.status(200).send(recipes)
         })
-        res.status(200).send(recipes)
-    })
-    }
+    },
+    
+    addFoodToDBAndMeal: (req, res, next) => {
+        const db = req.app.get('db')
+            , { meal_id, name, p, c, f, fib, img } = req.body
+        db.create_food([name, req.user.user_id, p, c, f, fib, img]).then(food => {
+            db.add_food_to_meal_no_total([meal_id, food[0].food_id, p, c, f, fib]).then(newMeal => {
+                db.get_foods_by_meal_id([meal_id]).then(foods => {
+                    let retObj = {
+                        foods,
+                        newMeal: newMeal[0]
+                    }
+                    res.status(200).send(retObj)
+                })
+            })
+        })
+    },
+    // axios.post('/meal/food/new', { meal_id, name, p, c, f, fib, img })
 }
 
 

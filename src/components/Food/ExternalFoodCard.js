@@ -11,7 +11,7 @@ function ExternalFoodCard(props) {
     return(
         <section className="external-food-card">
             <h3>{name}</h3>
-            <img src={truImg} alt={name} />
+            {(truImg && truImg.length > 0) ? <img src={truImg} alt={name} /> : null}
             <p>Protein: {p}</p>
             <p>Carbs: {c}</p>
             <p>Fat: {f}</p>
