@@ -1,10 +1,12 @@
 import React from 'react'
+import RaisedButton from 'material-ui/RaisedButton'
+
 
 function Login() {
     return(
         <nav>
             <a href={process.env.REACT_APP_LOGIN}>
-                <button width="200px">Login</button>
+                <RaisedButton primary={true} style={{width: "200px"}}>Login</RaisedButton>
             </a>
         </nav>
     )

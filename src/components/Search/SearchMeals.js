@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchMeals, endNutritionSearch } from '../../ducks/foodReducer'
 import { Link } from 'react-router-dom'
-
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton'
 
 class SearchMeal extends Component{
     constructor(){
@@ -44,10 +45,11 @@ class SearchMeal extends Component{
             )
         })
         return (
-            <section className="menu-search">
+            <section className="meal-search">
                 <h3>Search fo a meal:</h3>
-                <input value={this.state.mealSearch} onChange={this.updateMealSearch} />
-                <button style={{width: "300px"}} onClick={this.searchMeals}>Search!</button>
+                <TextField floatingLabelText="Search the meal database" value={this.state.mealSearch} onChange={this.updateMealSearch} />
+                <RaisedButton onClick={this.searchMeals} style={{width: "300px"}} label="Search Meals!" primary={true} />
+                {/* <button  >!</button> */}
                 {mealResults}
             </section>
         )

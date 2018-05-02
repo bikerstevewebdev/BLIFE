@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchMenus, endNutritionSearch } from '../../ducks/foodReducer'
 import { Link } from 'react-router-dom'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton'
 
 
 class SearchMenu extends Component{
@@ -45,7 +47,7 @@ class SearchMenu extends Component{
                         ?
                         <button onClick={() => handleBtnClick(res.menu_id, arg2, arg3)}>{btnMsg}</button>
                         :
-                        <Link to={`/menu/${res.menu_id}`}><button onClick={this.endSearches}>Take me to this menu!</button></Link>
+                        <Link to={`/menu/${res.menu_id}`}><RaisedButton secondary={true} onClick={this.endSearches}>Take me to this menu!</RaisedButton></Link>
                     }
                 </section>
             )
@@ -53,8 +55,9 @@ class SearchMenu extends Component{
         return (
             <section className="menu-search">
                 <h3>Search for a MENU:</h3>
-                <input value={this.state.menuSearch} onChange={this.updateMenuSearch} />
-                <button style={{width: "300px"}} onClick={this.searchMenus}>Search!</button>
+                <TextField floatingLabelText="Search the menu database" value={this.state.menuSearch}  onChange={this.updateMenuSearch} />
+                <RaisedButton onClick={this.searchMenus} style={{width: "300px"}} label="Search Menus!" primary={true} />
+                {/* <button style={{width: "300px"}} >Search!</button> */}
                 {menuResults}
             </section>
         )

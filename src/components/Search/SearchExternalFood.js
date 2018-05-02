@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchExternalFoods, endNutritionSearch } from '../../ducks/foodReducer'
 import ExternalFoodCard from '../Food/ExternalFoodCard'
+import TextField from 'material-ui/TextField';
 
 
 
@@ -53,7 +54,7 @@ class SearchExternalFood extends Component{
         })
         return (
             <section className="external-food-search">
-                <input value={externalSearchIn} placeholder="Type in a food name" onChange={this.updateExternalSearch} />
+                <TextField value={externalSearchIn} placeholder="Type in a food name" onChange={this.updateExternalSearch} />
                 <button onClick={()=>searchExternalFoods(externalSearchIn, branded)}>Search!</button>
                 {
                     branded

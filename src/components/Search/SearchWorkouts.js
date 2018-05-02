@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchWorkouts, endFitnessSearch } from '../../ducks/fitnessReducer'
 import { Link } from 'react-router-dom'
+import TextField from 'material-ui/TextField';
+import Search from 'material-ui/svg-icons/action/search'
+import RaisedButton from 'material-ui/RaisedButton'
 
 
 class SearchWorkouts extends Component{
@@ -53,8 +56,9 @@ class SearchWorkouts extends Component{
         return (
             <section className="workout-search">
                 <h3>Find your new Workout:</h3>
-                <input value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
-                <button style={{width: "300px"}} onClick={this.searchWorkouts}>Search!</button>
+                <TextField floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
+                <RaisedButton secondary={true} icon={<Search />} style={{width: "300px"}} onClick={this.searchWorkouts}/>
+                {/* <button style={} >Search!</button> */}
                 {workoutResults}
             </section>
         )

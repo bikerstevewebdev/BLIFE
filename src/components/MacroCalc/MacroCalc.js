@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { calculate, updateActivity, updateAge, updateBodyfat, updateGoal, updateGender, updateHeight, updateTenacity, updateWeight } from '../../ducks/macroCalcReducer'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton'
+
 
 class MacroCalc extends Component{
     constructor() {
@@ -24,13 +27,13 @@ class MacroCalc extends Component{
         return(
             <section>
                 <p>Age</p>
-                <input type="number" step="1" min="8" max="120" className="macro-input" onChange={(e) => this.props.updateAge(e.target.value)} placeholder="Years" value={age} />
+                <TextField floatingLabelText="Years" type="number" step="1" min="8" max="120" className="macro-input" onChange={(e) => this.props.updateAge(e.target.value)} value={age} />
                 <p>Height</p>
-                <input type="number" step="1" min="36" max="100" className="macro-input" onChange={(e) => this.props.updateHeight(e.target.value)} placeholder="Total Inches" value={height} />
+                <TextField type="number" step="1" min="36" max="100" className="macro-input" onChange={(e) => this.props.updateHeight(e.target.value)} floatingLabelText="Total Inches" value={height} />
                 <p>Weight</p>
-                <input type="number" step="0.1" min="50" max="600" className="macro-input" onChange={(e) => this.props.updateWeight(e.target.value)} placeholder="pounds" value={weight} />
+                <TextField type="number" step="0.1" min="50" max="600" className="macro-input" onChange={(e) => this.props.updateWeight(e.target.value)} floatingLabelText="pounds" value={weight} />
                 <p>Bodyfat</p>
-                <input type="number" step="0.1" min="2" max="90" className="macro-input" onChange={(e) => this.props.updateBodyfat(e.target.value)} placeholder="% as Number" value={bodyfat} />
+                <TextField type="number" step="0.1" min="2" max="90" className="macro-input" onChange={(e) => this.props.updateBodyfat(e.target.value)} floatingLabelText="% as Number" value={bodyfat} />
                 <p>Activity Level</p>
                 <select defaultValue="low"className="macro-input" onChange={(e) => this.props.updateActivity(e.target.value)}>
                     <option  value="low">Low (sedentary, low activity job, exercise 1-2 times/week)</option>
@@ -56,7 +59,7 @@ class MacroCalc extends Component{
                     <option  value="m">Male</option>
                     <option value="f">Female</option>
                 </select>
-                <button className="calc-btn" onClick={this.calculate} >Calculate</button>
+                <RaisedButton primary={true} style={{width: "200px"}} className="calc-btn" onClick={this.calculate} >Calculate</RaisedButton>
                 {this.state.isCalculating
                 ?
                 null
