@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { getUserData } from '../../ducks/userReducer'
 import { connect } from 'react-redux'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import SearchMeal from '../Search/SearchMeals'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
 import { Redirect } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 
 class Dashboard extends Component{
@@ -46,8 +47,9 @@ class Dashboard extends Component{
     
     render() {
         return(
-            <section>
+            <section className="comp dashboard">
                 <h1>Welcome back {this.props.userData.username}</h1>
+                <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
                 <SearchMeal />
                 <SearchMenu />
                 <SearchWorkout />

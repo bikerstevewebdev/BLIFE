@@ -41,6 +41,7 @@ const APPROVE_COACH_ACCESS = 'APPROVE_COACH_ACCESS'
 const DENY_COACH_ACCESS = 'DENY_COACH_ACCESS'
 const ASSIGN_MENU = 'ASSIGN_MENU'
 const ASSIGN_WORKOUT = 'ASSIGN_WORKOUT'
+const CLEAR_COACH_MESSAGE = 'CLEAR_COACH_MESSAGE'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
@@ -124,10 +125,19 @@ export function denyCoach() {
     }
 }
 
+export function clearCoachMessage() {
+    return {
+        type: CLEAR_COACH_MESSAGE,
+        payload: ''
+    }
+}
+
 
 ////////////////BEGIN REDUCER//////////////////////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case CLEAR_COACH_MESSAGE:
+            return { ...state, warningMsg: action.payload }
         case GET_CLIENT_BY_ID + '_FULFILLED':
             return { ...state,
                     client: {

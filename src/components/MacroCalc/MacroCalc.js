@@ -5,6 +5,10 @@ import { calculate, updateActivity, updateAge, updateBodyfat, updateGoal, update
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
 
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+
+
 
 class MacroCalc extends Component{
     constructor() {
@@ -23,9 +27,10 @@ class MacroCalc extends Component{
         })
     }
     render() {
-        const { height, age, weight, bodyfat } = this.props        
+        const { height, age, weight, bodyfat, tenacity, goal, activity, gender } = this.props        
+        const selectWidth = {width: "450px"}
         return(
-            <section>
+            <section className="comp macro-calc">
                 <p>Age</p>
                 <TextField floatingLabelText="Years" type="number" step="1" min="8" max="120" className="macro-input" onChange={(e) => this.props.updateAge(e.target.value)} value={age} />
                 <p>Height</p>
@@ -35,30 +40,30 @@ class MacroCalc extends Component{
                 <p>Bodyfat</p>
                 <TextField type="number" step="0.1" min="2" max="90" className="macro-input" onChange={(e) => this.props.updateBodyfat(e.target.value)} floatingLabelText="% as Number" value={bodyfat} />
                 <p>Activity Level</p>
-                <select defaultValue="low"className="macro-input" onChange={(e) => this.props.updateActivity(e.target.value)}>
-                    <option  value="low">Low (sedentary, low activity job, exercise 1-2 times/week)</option>
-                    <option value="moderate">Moderate (lightly active, some movement at job, exercise 2-3 times/week)</option>
-                    <option value="active">Active (above average activity, frequent moving at job, exercise 3-5 times/week)</option>
-                    <option value="hi-active">Highly Active (athletic or highly active job, exercise 5-7 times/week)</option>
-                    <option value="extreme">Extremely Active (athletic and highly active job, exercise 6-7 times/week)</option>
-                </select>
+                <SelectField style={selectWidth} value={activity} defaultValue="low"className="macro-input" onChange={(e) => this.props.updateActivity(e.target.value)}>
+                    <MenuItem  value="low">Low (sedentary, low activity job, exercise 1-2 times/week)</MenuItem>
+                    <MenuItem value="moderate">Moderate (lightly active, some movement at job, exercise 2-3 times/week)</MenuItem>
+                    <MenuItem value="active">Active (above average activity, frequent moving at job, exercise 3-5 times/week)</MenuItem>
+                    <MenuItem value="hi-active">Highly Active (athletic or highly active job, exercise 5-7 times/week)</MenuItem>
+                    <MenuItem value="extreme">Extremely Active (athletic and highly active job, exercise 6-7 times/week)</MenuItem>
+                </SelectField>
                 <p>Goal</p>
-                <select defaultValue="maintain" className="macro-input" onChange={(e) => this.props.updateGoal(e.target.value)}>
-                    <option value="gain">Gain Weight</option>
-                    <option value="lose">Lose Weight</option>
-                    <option value="maintain">Maintain Current Weight</option>
-                </select>
+                <SelectField style={selectWidth} defaultValue="maintain" value={goal} className="macro-input" onChange={(e) => this.props.updateGoal(e.target.value)}>
+                    <MenuItem value="gain">Gain Weight</MenuItem>
+                    <MenuItem value="lose">Lose Weight</MenuItem>
+                    <MenuItem value="maintain">Maintain Current Weight</MenuItem>
+                </SelectField>
                 <p>Goal Tenacity</p>
-                <select defaultValue="steady" className="macro-input" onChange={(e) => this.props.updateTenacity(e.target.value)}>
-                    <option value="intense">Intense (gain/lose 2+ pounds/week)</option>
-                    <option  value="steady">Steady (gain/lose 1 pounds/week)</option>
-                    <option value="slow">{"Slow (gain/lose < 1 pound/week)"}</option>
-                </select>
+                <SelectField style={selectWidth} defaultValue="steady" value={tenacity} className="macro-input" onChange={(e) => this.props.updateTenacity(e.target.value)}>
+                    <MenuItem value="intense">Intense (gain/lose 2+ pounds/week)</MenuItem>
+                    <MenuItem  value="steady">Steady (gain/lose 1 pounds/week)</MenuItem>
+                    <MenuItem value="slow">{"Slow (gain/lose < 1 pound/week)"}</MenuItem>
+                </SelectField>
                 <p>Gender</p>
-                <select defaultValue="m" className="macro-input" onChange={(e) => this.props.updateGender(e.target.value)}>
-                    <option  value="m">Male</option>
-                    <option value="f">Female</option>
-                </select>
+                <SelectField value={gender} style={selectWidth} defaultValue="m" className="macro-input" onChange={(e) => this.props.updateGender(e.target.value)}>
+                    <MenuItem  value="m">Male</MenuItem>
+                    <MenuItem value="f">Female</MenuItem>
+                </SelectField>
                 <RaisedButton primary={true} style={{width: "200px"}} className="calc-btn" onClick={this.calculate} >Calculate</RaisedButton>
                 {this.state.isCalculating
                 ?

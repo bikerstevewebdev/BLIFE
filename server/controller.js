@@ -208,6 +208,8 @@ module.exports = {
             db.request_coach_access([user_id]).then(user => {
                 res.status(200).send(user[0])
             })
+        }else{
+            res.status(400).send({message: "You have already requested coach access. The administrators will get back to you as quickly as possible."})
         }
     },
     

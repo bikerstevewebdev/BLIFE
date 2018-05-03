@@ -6,6 +6,7 @@ import WorkoutCard from '../Workout/WorkoutCard'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
 import { getClientData, assignWorkoutToClient, assignMenuToClient } from '../../ducks/coachReducer'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class ClientManager extends Component{
     constructor(){
@@ -55,8 +56,8 @@ class ClientManager extends Component{
                       return <WorkoutCard key={v.workout_id} workout_id={v.workout_id} title={v.title} img={v.img} type={v.type} />
                   })
         return (
-            <section className="client-manager">
-                <Link to={`/coachManager/${this.props.coach_id}`}><button>Back to Coach Manager</button></Link>
+            <section className="comp client-manager">
+                <Link to={`/coachManager/${this.props.coach_id}`}><RaisedButton secondary={true}>Back to Coach Manager</RaisedButton></Link>
                 <h1>{fullname}/{username}</h1>
                 <h3>Last Login: {last_login}</h3>
                 <section className="client-stats">
@@ -82,7 +83,7 @@ class ClientManager extends Component{
                         ?
                         <SearchWorkout doSomething={true} arg2={client_coach_id} arg3={client_id} btnMsg={`Add this workout to ${username}'s plan`} handleBtnClick={this.props.assignWorkoutToClient.bind(this)} />
                         :
-                        <button onClick={this.prepareToAddWorkout}>Add a workout to {username}'s plan?</button>
+                        <RaisedButton secondary={true} onClick={this.prepareToAddWorkout}>Add a workout to {username}'s plan?</RaisedButton>
                     }
                 </section>
                 <section className="client-menus">
@@ -93,7 +94,7 @@ class ClientManager extends Component{
                         ?
                         <SearchMenu doSomething={true} arg2={client_coach_id} arg3={client_id} btnMsg={`Add this menu to ${username}'s plan`} handleBtnClick={this.props.assignMenuToClient.bind(this)} />
                         :
-                        <button onClick={this.prepareToAddMenu}>Add a menu to {username}'s plan?</button>
+                        <RaisedButton secondary={true} onClick={this.prepareToAddMenu}>Add a menu to {username}'s plan?</RaisedButton>
                     }
                 </section>
                 {/* <p>Send {fullname} a message.</p>

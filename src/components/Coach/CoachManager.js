@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { getClients, searchForClient } from '../../ducks/coachReducer'
 import ClientCard from '../Client/ClientCard'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class CoachManager extends Component{
     constructor(){
@@ -27,12 +28,12 @@ class CoachManager extends Component{
               { username, searchForClient, clients } = this.props,
               clientList = clients.map(client => <ClientCard fullname={client.fullname} last_login={client.last_login} client_id={client.client_id}/>)
         return (
-            <section className="coach-manager">
+            <section className="comp coach-manager">
                 <h1>Welcome Coach {username}!</h1>
                 {clientList}
                 <p>Add a new client by email (must be exact)</p>
                 <input value={clientEmailInput} onChange={this.updateClientEmailInput} />
-                <button onClick={() => searchForClient(clientEmailInput)}>Send request to your new client</button>
+                <RaisedButton secondary={true} onClick={() => searchForClient(clientEmailInput)}>Send request to your new client</RaisedButton>
             </section>
         )
     }

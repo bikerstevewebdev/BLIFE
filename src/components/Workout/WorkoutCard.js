@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 function WorkoutCard(props) {
     const { workout_id, title, img, type } = props
@@ -8,7 +9,7 @@ function WorkoutCard(props) {
             <h3>{title}</h3>
             <img src={img} alt={title} />
             <p>Type: {type}</p>
-            <Link to={`/workout/${workout_id}`}><button>View {title} Details</button></Link>
+            <Link to={`/workout/${workout_id}`}><RaisedButton secondary={true} >View {title} Details</RaisedButton></Link>
         </section>
     )
 }

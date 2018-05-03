@@ -9,6 +9,7 @@ import SearchMenus from '../Search/SearchMenus'
 import SearchWorkouts from '../Search/SearchWorkouts'
 import PhotoUpload from '../Photos/PhotoUpload'
 import PhotoCard from '../Photos/PhotoCard'
+import RaisedButton from 'material-ui/RaisedButton'
 
 
 
@@ -128,23 +129,23 @@ class Profile extends Component{
                 assignedWorkoutList = null
             }
         return(
-            <section>
+            <section className="comp profile">
                 <h1>Welcome Home</h1>
                 <PhotoUpload />
                 {progressPics}
                 {
                     this.state.showingAllProgressPics
                     ?
-                    <button onClick={()=>this.showAllProgressPics(false)}>Just Show Me My Current Progress Pictures</button>
+                    <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(false)}>Just Show Me My Current Progress Pictures</RaisedButton>
                     :
-                    <button onClick={()=>this.showAllProgressPics(true)}>Show me all my progress pictures</button>
+                    <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(true)}>Show me all my progress pictures</RaisedButton>
                 }
-                <Link to='/'><button style={{backgroundColor: "yellow"}}>Back to Login</button></Link>
-                <Link to='/updateProfile'><button style={{backgroundColor: "orange"}}>Update Profile</button></Link>
+                <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link>
+                <Link to='/updateProfile'><RaisedButton secondary={true} style={{backgroundColor: "orange"}}>Update Profile</RaisedButton></Link>
                 {
                     userData.coach_id > 0
                     ?
-                    <Link to={`/coachManager/${userData.coach_id}`}><button>Coach Manager</button></Link>
+                    <Link to={`/coachManager/${userData.coach_id}`}><RaisedButton>secondary={true} Coach Manager</RaisedButton></Link>
                     :
                     null
                 }
@@ -162,7 +163,7 @@ class Profile extends Component{
                 {
                     userData.has_coach
                     ?
-                    <button onClick={this.showAssigned}>Show me my coach's plan</button>
+                    <RaisedButton secondary={true} onClick={this.showAssigned}>Show me my coach's plan</RaisedButton>
                     :
                     null
                 }
@@ -193,8 +194,8 @@ class Profile extends Component{
                     <section className="new-mes-logic">
                         <p>Looks like you've got some new measurements.</p>
                         <p>Would you like to update them?</p>
-                        <button onClick={this.updateNewMes}>Yes</button>
-                        <button onClick={this.discardNewMes}>No, get rid of them.</button>
+                        <RaisedButton secondary={true} onClick={this.updateNewMes}>Yes</RaisedButton>
+                        <RaisedButton secondary={true} onClick={this.discardNewMes}>No, get rid of them.</RaisedButton>
                     </section>
                     :
                     null

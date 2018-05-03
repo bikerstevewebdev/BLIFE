@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addWorkoutToDB } from '../../ducks/fitnessReducer'
 import { Redirect } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Workout extends Component{
     constructor() {
@@ -100,9 +101,9 @@ class Workout extends Component{
                         <input value={this.state.imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
                     </section>
                     :
-                    <button onClick={this.prepareToAddImg}>Add an image?</button>
+                    <RaisedButton secondary={true} onClick={this.prepareToAddImg}>Add an image?</RaisedButton>
                 }
-                <button onClick={() => this.sendWorkoutUp()}>Create Workout!</button>
+                <RaisedButton secondary={true} onClick={() => this.sendWorkoutUp()}>Create Workout!</RaisedButton>
                 {
                     this.state.creating
                     ?

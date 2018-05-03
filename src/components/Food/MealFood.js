@@ -3,6 +3,7 @@ import { getFoodById, updateFoodQuantity, removeFromMeal } from '../../ducks/foo
 // import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class MealFood extends Component{
     constructor(props) {
@@ -55,10 +56,10 @@ class MealFood extends Component{
                 <Link to={{
                     pathname: `/food/meal`,
                     state: { food_id, name, pro, carb, fat, fiber, img }
-                }}><button onClick={() => this.props.getFoodById(food_id)}>Edit Food</button></Link>
-                <button onClick={this.deleteFood}>Remove From Meal</button>
+                }}><RaisedButton secondary={true} onClick={() => this.props.getFoodById(food_id)}>Edit Food</RaisedButton></Link>
+                <RaisedButton secondary={true} onClick={this.deleteFood}>Remove From Meal</RaisedButton>
                 <input type="number" min="1" max="100" value={this.state.quantityIn} onChange={this.changeAmount} className="food-quantity" />
-                <button onClick={this.sendUpdate}>Update the quantity</button>
+                <RaisedButton secondary={true} onClick={this.sendUpdate}>Update the quantity</RaisedButton>
                 {/* {
                     this.state.needsEdit
                     ?

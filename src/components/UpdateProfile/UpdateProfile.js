@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { updateUsername, updateFullname, updateProfilePic, requestCoachAccess } from '../../ducks/userReducer'
 import { connect } from 'react-redux';
 import Measurements from '../Measurements/Measurements'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class UpdateProfile extends Component{
     constructor(props){
@@ -55,18 +56,18 @@ class UpdateProfile extends Component{
                     :
                     <section className="coach-request">
                         <h2>Looking to become a coach?</h2>
-                        <button style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</button>
+                        <RaisedButton secondary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton>
                     </section>
                 }
                 <p>Change your username:</p>
                 <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
-                <button onClick={() => updateUsername(usernameIn)}>Update</button>
+                <RaisedButton secondary={true} onClick={() => updateUsername(usernameIn)}>Update</RaisedButton>
                 <p>Change your full name:</p>
                 <input value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} />
-                <button onClick={() => updateFullname(fullnameIn)}>Update</button>
+                <RaisedButton secondary={true} onClick={() => updateFullname(fullnameIn)}>Update</RaisedButton>
                 <p>Change your profile picture:</p>
                 <input value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
-                <button onClick={() => updateProfilePic(profile_picIn)}>Update</button>
+                <RaisedButton secondary={true} onClick={() => updateProfilePic(profile_picIn)}>Update</RaisedButton>
                 <Measurements location={this.props.location} />
             </section>
         )

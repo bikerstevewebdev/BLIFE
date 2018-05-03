@@ -3,6 +3,7 @@ import { updateNameIn, updatePIn, updateCIn, updateFIn, updateFibIn, updateImgIn
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import SearchExternalFood from '../Search/SearchExternalFood'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Food extends Component{
     constructor() {
@@ -49,7 +50,7 @@ class Food extends Component{
         const { name, p, c, f, fib, img, errorMessage } = this.props
         const { searchingExternal } = this.state
         return(
-            <section>
+            <section className="comp food-creator">
                 <p>Add a Food to the BLIFE Database</p>
                 <p>Name:</p>
                 <input className="food-name" value={name} onChange={(e) => this.props.updateNameIn(e.target.value)} placeholder="food name"/>
@@ -74,11 +75,11 @@ class Food extends Component{
                     this.props.match.params.from === 'meal'
                     ?
                     <section className="update-food">
-                        <button onClick={this.sendEdits}>UpdateFood</button>
+                        <RaisedButton secondary={true} onClick={this.sendEdits}>UpdateFood</RaisedButton>
                         <Link to={`meal/${this.props.meal.meal_id}`}>Back to Meal</Link>
                     </section>
                     :
-                    <button onClick={() => this.addFood(name, p, c, f, fib, img)}>Add Food to the Database</button>
+                    <RaisedButton secondary={true} onClick={() => this.addFood(name, p, c, f, fib, img)}>Add Food to the Database</RaisedButton>
                 }
                 {
                     searchingExternal //|| this.props.fromRecipe
@@ -90,9 +91,9 @@ class Food extends Component{
                 {
                     searchingExternal
                     ?
-                    <button onClick={() => this.toggleExternalSearch(searchingExternal)}>Just kidding, get the search out of here</button>
+                    <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)}>Just kidding, get the search out of here</RaisedButton>
                     :
-                    <button onClick={() => this.toggleExternalSearch(searchingExternal)}>Need some inspiration?</button>
+                    <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)}>Need some inspiration?</RaisedButton>
                 }
             </section>
         )

@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const initialState = {
     exercise: {},
-    dbMessage: '',
+    warningMsg: '',
     exSearchResults: [],
     workout: {},
     workoutExs: [],
@@ -27,6 +27,7 @@ const ADD_EX_TO_WORKOUT = 'ADD_EX_TO_WORKOUT'
 const END_FITNESS_SEARCH = 'END_FITNESS_SEARCH'
 const UPDATE_WORKOUT_EX = 'UPDATE_WORKOUT_EX'
 const REMOVE_EX_FROM_WORKOUT = 'REMOVE_EX_FROM_WORKOUT'
+const CLEAR_FITNESS_MESSAGE = 'CLEAR_FITNESS_MESSAGE'
 
 /////////////////END String Literals//////////////////////
 
@@ -179,6 +180,13 @@ export function clearWorkout(){
     }
 }
 
+export function clearFitnessMessage(){
+    return{
+        type: CLEAR_FITNESS_MESSAGE,
+        payload: ''
+    }
+}
+
 
 /////////////////END exporting action creators//////////////////////
 
@@ -189,7 +197,7 @@ export function clearWorkout(){
 export default function(state = initialState, action) {
     switch(action.type) {
         case CREATE_EX + '_FULFILLED':
-            return {...state, dbMessage: action.payload}
+            return {...state, warningMsg: action.payload}
         case CREATE_WORKOUT + '_FULFILLED':
             return {...state, workout: action.payload}
         case GET_EXERCISE + '_FULFILLED':
@@ -205,21 +213,23 @@ export default function(state = initialState, action) {
         case SEARCH_WORKOUTS + '_FULFILLED':
             return {...state, workoutSearchResults: action.payload}
         case EDIT_EXERCISE + '_FULFILLED':
-                return {...state, dbMessage: action.payload}
+                return {...state, warningMsg: action.payload}
         case EDIT_WORKOUT + '_FULFILLED':
-                return {...state, dbMessage: action.payload}
+                return {...state, warningMsg: action.payload}
         case UPDATE_WORKOUT_EX + '_FULFILLED':
                 return {...state, workoutExs: action.payload}
         case CLEAR_EXERCISE:
                 return {...state, exercise: {}}
         case CLEAR_WORKOUT:
                 return {...state, workout: {}}
+        case CLEAR_FITNESS_MESSAGE:
+                return {...state, warningMsg: action.payload}
         case END_FITNESS_SEARCH:
                 return {...state, exSearchResults: [], workoutSearchResults: []}
         // case CLEAR_EX_SEARCH:
         //         return {...state, exSearchResults: []}
         case ACKNOWLEDGE:
-            return {...state, dbMessage: ''}
+            return {...state, warningMsg: ''}
         default:
             return state
     }

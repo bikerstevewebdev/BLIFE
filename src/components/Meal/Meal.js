@@ -85,7 +85,7 @@ class Meal extends Component{
             return <MealFood key={meal_food_id} food_id={food_id} meal_food_id={meal_food_id} name={name} pro={pro} carb={carb} fat={fat} meal_id={meal_id} fiber={fiber} img={img} quantity={quantity} />            
         })
         return(
-            <section className="meal">
+            <section className="comp meal">
                 <h2>{title}</h2>
                 {img_url ? <img src={img_url} alt={title} /> : null}
                 <h3>Total Macros for {title}:</h3>

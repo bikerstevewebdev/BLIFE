@@ -1,4 +1,5 @@
 import React from 'react'
+import RaisedButton from 'material-ui/RaisedButton'
 
 function ExternalFoodCard(props) {
     const { name, p, c, f, fib, img, addFood } = props
@@ -16,7 +17,7 @@ function ExternalFoodCard(props) {
             <p>Carbs: {c}</p>
             <p>Fat: {f}</p>
             <p>Fiber: {fib}</p>
-            <button onClick={() => addFood(name, p, c, f, fib, truImg, true)}>Add {name}</button>
+            <RaisedButton secondary={true} onClick={() => addFood(name, p, c, f, fib, truImg, true)}>Add {name}</RaisedButton>
         </section>
     )
 }

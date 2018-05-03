@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MenuMeal from '../Meal/MenuMeal'
 import { connect } from 'react-redux'
 import { searchMeals, addMealToMenu, getMenuById, clearMealSearch } from '../../ducks/foodReducer'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Menu extends Component{
     constructor() {
@@ -57,7 +58,7 @@ class Menu extends Component{
                         <p>Carb: {total_c}</p>
                         <p>Fat: {total_f}</p>
                         <p>Fiber: {total_fib}</p>
-                        <button onClick={() => this.addThisMeal(menu_id, meal_id, total_p, total_c, total_f, total_fib)}>Add to {this.props.menu.title}</button>
+                        <RaisedButton secondary={true} onClick={() => this.addThisMeal(menu_id, meal_id, total_p, total_c, total_f, total_fib)}>Add to {this.props.menu.title}</RaisedButton>
                     </section>
                 ) }),
               menuMealsList = menuMeals.map(meal => {
@@ -76,7 +77,7 @@ class Menu extends Component{
                 <h3>Meals in this menu:</h3>
                 {menuMealsList}
                 <input value={searchIn} placeholder="Search Meals by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
-                <button onClick={() => this.props.searchMeals(searchIn)}>Search for your meal!</button>
+                <RaisedButton secondary={true} onClick={() => this.props.searchMeals(searchIn)}>Search for your meal!</RaisedButton>
                 {mealResults}
             </section>
         )

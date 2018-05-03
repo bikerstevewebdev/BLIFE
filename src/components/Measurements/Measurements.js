@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addMeasurement } from '../../ducks/userReducer'
 import { Redirect } from 'react-router-dom'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Measurements extends Component{
     constructor(props) {
@@ -72,22 +74,22 @@ class Measurements extends Component{
     render() {
         const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn } = this.state
         return(
-            <section className="measurements-form" >
+            <section className="comp measurements-form" >
                 <p>Weight: (in pounds)</p>
-                <input type="number" min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
+                <TextField type="number" min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
                 <p>Height: (in inches)</p>
-                <input type="number" min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
+                <TextField type="number" min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
                 <p>Waist: (in inches)</p>
-                <input type="number" min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
+                <TextField type="number" min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
                 <p>Neck: (in inches)</p>
-                <input type="number" min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
+                <TextField type="number" min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
                 <p>Chest: (in inches)</p>
-                <input type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
+                <TextField type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
                 <p>Bodyfat: (enter in percent as a number, i.e. "11" for 11 percent, not "0.11")</p>
-                <input type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
-                <button onClick={this.sendUpdates}>Save your stats!</button>
+                <TextField type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
+                <RaisedButton primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
                 {
-                    this.state.addingMes && this.props.location.pathname === '/measurements'
+                    !this.state.addingMes && this.props.location.pathname === '/measurements'
                     ?
                     <Redirect to={`/profile`} />
                     :

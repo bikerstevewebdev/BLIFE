@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { getCoaches, denyCoach, approveCoach, getAdminInfo } from '../../ducks/coachReducer'
 import CoachCard from '../Coach/CoachCard'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class AdminManager extends Component{
     constructor(){
@@ -31,14 +32,14 @@ class AdminManager extends Component{
                       <section className="coach-request">
                         <p>Request Number: {req.req_id}</p>
                         <p>Username: {req.username}</p>
-                        <button onClick={() => denyCoach(req.req_id, req.user_id)}>Deny Request</button>
-                        <button onClick={() => approveCoach(req.req_id, req.user_id)}>Approve Request</button>
+                        <RaisedButton secondary={true} onClick={() => denyCoach(req.req_id, req.user_id)}>Deny Request</RaisedButton>
+                        <RaisedButton secondary={true} onClick={() => approveCoach(req.req_id, req.user_id)}>Approve Request</RaisedButton>
                       </section>
                   )
               }),
               coachList = coaches.map(client => <CoachCard fullname={coach.fullname} areYouSure={this.areYouSure} dblChk={dblChk} last_login={coach.last_login} coach_id={coach.coach_id}/>)
         return (
-            <section className="coach-manager">
+            <section className="comp coach-manager">
                 <h1>Welcome Manager {username}!</h1>
                 {coachReqs}                
                 {coachList}

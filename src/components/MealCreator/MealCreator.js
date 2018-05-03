@@ -54,7 +54,7 @@ class MealCreator extends Component{
     render() {
         const { mealTitle, imgInput } = this.state
         return(
-            <section className="meal-creator" >
+            <section className="comp meal-creator" >
                 <p>Title of the Meal:</p>
                 <input value={mealTitle} onChange={(e) => this.updateMealTitle(e.target.value)} />
                 <p>Meal Image Url:</p>

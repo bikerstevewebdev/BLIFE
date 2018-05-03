@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { updateWorkoutEx, removeExFromWorkout } from '../../ducks/fitnessReducer'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class ExerciseCard extends Component{
     constructor(props) {
@@ -120,10 +121,10 @@ class ExerciseCard extends Component{
                         <textarea maxLength="500" value={notesIn} placeholder="Limit 500 characters" onChange={this.updateNotesIn} />
                     </section>
                     :
-                    <button onClick={this.prepareToAddNotes}>Add Notes?</button>
+                    <RaisedButton secondary={true} onClick={this.prepareToAddNotes}>Add Notes?</RaisedButton>
                 }
-                <button style={{backgroundColor: "yellow"}} onClick={this.sendUpdate}>Save Changes</button>
-                <button className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove From Workout</button>
+                <RaisedButton secondary={true} style={{backgroundColor: "yellow"}} onClick={this.sendUpdate}>Save Changes</RaisedButton>
+                <RaisedButton secondary={true} className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove From Workout</RaisedButton>
             </section>
         )
     }

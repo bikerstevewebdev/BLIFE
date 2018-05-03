@@ -54,10 +54,18 @@ const UPLOAD_PHOTO = 'UPLOAD_PHOTO'
 const DEPRECATE_PHOTO = 'DEPRECATE_PHOTO'
 const GET_ALL_PROGRESS_PICS = 'GET_ALL_PROGRESS_PICS'
 const GET_CURRENT_PICS = 'GET_CURRENT_PICS'
+const CLEAR_USER_MESSAGE = 'CLEAR_USER_MESSAGE'
 
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
+export function clearUserMessage() {
+    return {
+        type: CLEAR_USER_MESSAGE,
+        payload: ''
+    }
+}
+
 export function getUserData() {
     let data = axios.get('/userInfo').then(res => {
         console.log(`data from backend: ${res.data.message} ${res.data.dBUser},${res.data.currMes} is here`)
@@ -202,7 +210,7 @@ export function updateFullname(fullname) {
 export function requestCoachAccess() {
     // might get error because not sending any req.body or params
     let user = axios.put('/coach/request').then(res => {
-        return res.data
+            return res.data
     })    
     return {
         type: REQ_COACH_ACCESS,
@@ -253,6 +261,8 @@ export function addMacrosToState(p, c, f, bf, wt, ht, currMes_id){
 ////////////////BEGIN REDUCER//////////////////////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case CLEAR_USER_MESSAGE:
+                return { ...state, warningMsg: action.payload }
         case UPDATE_STATS + '_FULFILLED':
                 let { waist, neck, chest, weight, height, bf, mes_id } = action.payload.newMez
                 return { ...state,
@@ -287,6 +297,8 @@ export default function(state = initialState, action) {
                      return { ...state, userWorkouts: action.payload }
         case GET_ASSIGNED_WORKOUTS + '_FULFILLED':
                      return { ...state, assignedWorkouts: action.payload }
+        case REQ_COACH_ACCESS + '_REJECTED':
+                     return { ...state, warningMsg: action.payload.response.data.message }
         case REQ_COACH_ACCESS + '_FULFILLED':
                      return { ...state, userData: action.payload }
         case GET_USER + '_FULFILLED':

@@ -11,6 +11,9 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import Fitness from 'material-ui/svg-icons/places/fitness-center'
+import RaisedButton from 'material-ui/RaisedButton'
+import seaVid from '../../seaVid.mp4'
+
 
 const nutrition = (
     <IconMenu
@@ -80,7 +83,7 @@ const home = (
 // const title = <h1>BalancedLIFE</h1>
 const titleStyles = {
     // display: "flex",
-    alignSelf: "center",
+    justifySelf: "center",
     margin: "0",
     letterSpacing: "3px",
     WebkitMarginBefore: "0",
@@ -90,15 +93,15 @@ const rightStyles = {
     display: "flex",
     justifyContent: "flex-end"
 }
-const styles = {display: "flex", justifyContent: "space-between", height: "80px", alignItems: "center"}
+const styles = {display: "flex", padding: "1.25em", width: "100vw", justifyContent: "space-between", height: "80px", alignItems: "center"}
 
 
 function Nav(props) {
     return(
-        <header className="nav-comp">
-        {
+        
             props.isLoggedIn
             ?
+    (<header className="nav-comp">
         <AppBar iconElementLeft={home} title={<h2>BalancedLIFE</h2>} titleStyle={titleStyles} style={styles} iconStyleRight={rightStyles} iconElementRight={rightIcons}>
                 <section className="links">
                     {/* <Link to='/dashboard'><button>Dashboard</button></Link> */}
@@ -119,43 +122,23 @@ function Nav(props) {
                         :
                         null
                     }
-                    {
-                        props.coach_id > 0
-                        ?
-                        <Link to={`/coachManager/${props.coach_id}`}>Coach Manager</Link>
-                        :
-                        null
-                    }
                 </section>
-            </AppBar>
+        </AppBar>
+    </header>)
             :
-            <section className="unauthorized">
-                YOU ARE NOT LOGGED IN<br />
-                YOU DON'T SAY THAT
-                <Link to='/'><button>Login</button></Link>
+            (<section className="unauthorized">
+            <section className="message">
+                <h1>YOU ARE NOT LOGGED IN<br />
+                YOU DON'T SAY THAT</h1>
+                <a id="arg" href={process.env.REACT_APP_LOGIN}>
+                    <RaisedButton primary={true} >Login</RaisedButton>
+                </a>
             </section>
-        }
-        {
-            props.warningMsg
-            ?
-            <section className="unauthorized">
-                {props.authWarningMsg}<br />
-                <Link to='/'><button>Please Hang Up and Try Again</button></Link>
-            </section>
-            :
-            null
-        }
-        {/* {
-            props.warningMsg
-            ?
-            <section className="unauthorized">
-                {props.authWarningMsg}<br />
-                <Link to='/'><button>Please Hang Up and Try Again</button></Link>
-            </section>
-            :
-            null
-        } */}
-        </header>
+            <video autoPlay muted loop id="video-background">
+                <source src={seaVid} type="video/mp4" />
+            </video>
+          </section>)
+        
     )
 }
 

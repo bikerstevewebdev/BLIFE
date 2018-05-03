@@ -4,7 +4,7 @@ import { searchMenus, endNutritionSearch } from '../../ducks/foodReducer'
 import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
-
+// import MenuCard from '../Menu/MenuCard'
 
 class SearchMenu extends Component{
     constructor(){
@@ -38,6 +38,8 @@ class SearchMenu extends Component{
     render() {
         const { arg2, arg3, handleBtnClick, btnMsg, doSomething, menuSearchResults } = this.props
         const menuResults = menuSearchResults.map(res => {
+            //     return <MenuCard menu_id={res.menu_id} title={res.title} total_p={res.total_p} total_c={res.total_c} total_f={res.total_f} total_fib={res.total_fib} img={res.img} parentFn={() => handleBtnClick(res.menu_id, arg2, arg3)} action2={this.endSearches} />
+            // }
             return(
                 <section className="menu-search-result" key={res.menu_id}>
                     <p>{res.title}</p>
@@ -45,13 +47,14 @@ class SearchMenu extends Component{
                     {
                         doSomething
                         ?
-                        <button onClick={() => handleBtnClick(res.menu_id, arg2, arg3)}>{btnMsg}</button>
+                        <RaisedButton secondary={true} onClick={() => handleBtnClick(res.menu_id, arg2, arg3)}>{btnMsg}</RaisedButton>
                         :
                         <Link to={`/menu/${res.menu_id}`}><RaisedButton secondary={true} onClick={this.endSearches}>Take me to this menu!</RaisedButton></Link>
                     }
                 </section>
             )
-        })
+        }
+    )
         return (
             <section className="menu-search">
                 <h3>Search for a MENU:</h3>

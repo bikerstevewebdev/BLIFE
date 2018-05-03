@@ -6,6 +6,7 @@ import MealCreator from '../MealCreator/MealCreator'
 // import Meal from './Meal'
 import Food from '../Food/Food'
 import MealFood from '../Food/MealFood'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class MealFromRecipe extends Component{
     constructor(){
@@ -92,17 +93,17 @@ class MealFromRecipe extends Component{
                     <img src={img} alt={name} />
                     <p>Food Name: {name}</p>
                     {ingredients.map((v, j) => <li key={j}>{v}</li>)}
-                    <button onClick={() => this.pickRecipe(name, ingredients, img)}>Recreate This Recipe</button>
+                    <RaisedButton secondary={true} onClick={() => this.pickRecipe(name, ingredients, img)}>Recreate This Recipe</RaisedButton>
                 </section>
             )
         })
         let ingredients = rIngredients.map((v, i) => {
-            return <button key={i} onClick={() => searchExternalFoods(v, false)}>{v}</button>
+            return <RaisedButton secondary={true} key={i} onClick={() => searchExternalFoods(v, false)}>{v}</RaisedButton>
         })
         return(
             <section className="meal-from-recipe">
                 <input onChange={this.updateRecipeSearchIn} value={recipeSearchIn} placeholder="Search for a recipe by name"/>
-                <button onClick={this.searchRecipes}>Search for a recipe!</button>
+                <RaisedButton secondary={true} onClick={this.searchRecipes}>Search for a recipe!</RaisedButton>
                 
                 {
                     searchingRecipe

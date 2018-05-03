@@ -3,6 +3,7 @@ import { getMealById, removeMealFromMenu } from '../../ducks/foodReducer'
 // import { Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import RaisedButton from 'material-ui/RaisedButton'
 
 class MenuMeal extends Component{
     constructor(props) {
@@ -32,8 +33,8 @@ class MenuMeal extends Component{
                 <Link to={{
                     pathname: `/meal/menu`,
                     state: { menu_id, meal_id, menu_meals_id }
-                }}><button onClick={() => this.props.getMealById(meal_id)}>Edit Meal</button></Link>
-                <button style={{backgroundColor: "red"}} onClick={this.deleteMeal}>Remove From Menu</button>
+                }}><RaisedButton secondary={true} onClick={() => this.props.getMealById(meal_id)}>Edit Meal</RaisedButton></Link>
+                <RaisedButton secondary={true} onClick={this.deleteMeal}>Remove From Menu</RaisedButton>
                 {/* {
                     this.state.needsEdit
                     ?

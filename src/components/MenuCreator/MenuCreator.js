@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createMenu } from '../../ducks/foodReducer'
 import { Redirect } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Menu extends Component{
     constructor() {
@@ -43,7 +44,7 @@ class Menu extends Component{
                 <input value={this.state.titleInput} onChange={(e) => this.updateMenuTitle(e.target.value)} />
                 <p>Menu Image Url:</p>
                 <input value={this.state.imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
-                <button onClick={() => this.sendMenuUp()}>Create Menu!</button>
+                <RaisedButton secondary={true} onClick={() => this.sendMenuUp()}>Create Menu!</RaisedButton>
                 {
                     this.state.creating
                     ?

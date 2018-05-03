@@ -12,7 +12,7 @@ const initialState = {
     meal: {},
     mealFoods: [],
     mealSearchResults: [],
-    errorMessage: '',
+    warningMsg: '',
     menu: {},
     menuMeals: [],
     menuSearchResults: [],
@@ -47,9 +47,17 @@ const CLEAR_MEAL_SEARCH = 'CLEAR_MEAL_SEARCH'
 const END_NUTRITION_SEARCH = 'END_NUTRITION_SEARCH'
 const SEARCH_EXTERNAL_FOODS = 'SEARCH_EXTERNAL_FOODS'
 const NEW_FOOD_MEAL_ADD = 'NEW_FOOD_MEAL_ADD'
+const CLEAR_FOOD_MESSAGE = 'CLEAR_FOOD_MESSAGE'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
+
+export function clearFoodMessage() {
+    return {
+        type: CLEAR_FOOD_MESSAGE,
+        payload: ''
+    }
+}
 
 export function updateNameIn(val) {
     return {
@@ -297,6 +305,8 @@ export function clearMealSearch() {
 /////////////////BEGIN reducer declaration//////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case CLEAR_FOOD_MESSAGE:
+                return { ...state, warningMsg: action.payload }
         case CLEAR_MEAL_SEARCH:
             return { ...state, mealSearchResults: []}
         case UPDATE_NAMEIN:
@@ -420,13 +430,13 @@ export default function(state = initialState, action) {
                             img: action.payload.img 
                         }
                 } else{
-                    return { ...state, errorMessage: action.payload.message}
+                    return { ...state, warningMsg: action.payload.message}
                 }
         case EDIT_MENU + '_FULFILLED':
                 if(action.payload.menu) {
                     return { ...state, menu: action.payload }
                 } else{
-                    return { ...state, errorMessage: action.payload.message}
+                    return { ...state, warningMsg: action.payload.message}
                 }
         default:
             return state

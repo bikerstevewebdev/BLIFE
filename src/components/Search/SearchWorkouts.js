@@ -46,9 +46,9 @@ class SearchWorkouts extends Component{
                     {
                         doSomething
                         ?
-                        <button onClick={() => handleBtnClick(res.workout_id, arg2, arg3)}>{btnMsg}</button>
+                        <RaisedButton secondary={true} onClick={() => handleBtnClick(res.workout_id, arg2, arg3)}>{btnMsg}</RaisedButton>
                         :
-                        <Link to={`/workout/${res.workout_id}`}><button onClick={this.endSearches}>Take me to this workout!</button></Link>
+                        <Link to={`/workout/${res.workout_id}`}><RaisedButton secondary={true} onClick={this.endSearches}>Take me to this workout!</RaisedButton></Link>
                     }
                 </section>
             )

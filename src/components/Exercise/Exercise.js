@@ -140,7 +140,7 @@ class Exercise extends Component{
 
     render() {
         return(
-            <section className="exercise-comp">
+            <section className="comp exercise-comp">
                 {
                     this.state.isEditing
                     ?

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { uploadPhoto } from '../../ducks/userReducer'
+import RaisedButton from 'material-ui/RaisedButton'
 
 
 class PhotoUpload extends Component {
@@ -56,7 +57,7 @@ class PhotoUpload extends Component {
                 this.state.file &&
                 <img src={this.state.file} alt="preview" className="file-preview"/>  
                 }
-                <button onClick={this.sendPhoto}>Upload this Photo</button>
+                <RaisedButton secondary={true} onClick={this.sendPhoto}>Upload this Photo</RaisedButton>
             </div>
         )
     }

@@ -5,6 +5,7 @@ import { searchExercises, addExToWorkout, getWorkoutById } from '../../ducks/fit
 import ExerciseCard from '../Exercise/ExerciseCard'
 // import Exercise from '../Exercise/Exercise';
 // import { Redirect } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Workout extends Component{
     constructor(props) {
@@ -59,7 +60,7 @@ class Workout extends Component{
                         <p>Exercise Name: {name}</p>
                         <p>Category: {_ex.type}</p>
                         <p>Major Muscle Group: {_ex.main_muscle_group}</p>
-                        <button onClick={() => this.addThisEx(workout_id, ex_id, workoutExs.length + 1)}>Add to {this.props.workout.title}</button>
+                        <RaisedButton secondary={true} onClick={() => this.addThisEx(workout_id, ex_id, workoutExs.length + 1)}>Add to {this.props.workout.title}</RaisedButton>
                     </section>
                 ) }),
               workoutExsList = workoutExs.map(exercise => {
@@ -73,7 +74,7 @@ class Workout extends Component{
                 <h3>Exercises in this Workout:</h3>
                 {workoutExsList}
                 <input value={searchIn} placeholder="Search Exercises by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
-                <button onClick={() => this.props.searchExercises(searchIn)}>Search the exercise database!</button>
+                <RaisedButton secondary={true} onClick={() => this.props.searchExercises(searchIn)}>Search the exercise database!</RaisedButton>
                 {exerciseResults}
             </section>
         )
