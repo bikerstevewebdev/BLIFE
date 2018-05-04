@@ -2,69 +2,26 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import AppBar from 'material-ui/AppBar'
-import ActionHome from 'material-ui/svg-icons/action/home';
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
-import PieChart from 'material-ui/svg-icons/editor/pie-chart-outlined';
-import Dining from 'material-ui/svg-icons/maps/local-dining';
-// import EventNote from 'material-ui/svg-icons/notification/event-note';
 import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu'
-import MenuItem from 'material-ui/MenuItem'
-import Fitness from 'material-ui/svg-icons/places/fitness-center'
+import ActionHome from 'material-ui/svg-icons/action/home';
 import RaisedButton from 'material-ui/RaisedButton'
 import seaVid from '../../seaVid.mp4'
-
-
-const nutrition = (
-    <IconMenu
-      iconButtonElement={<IconButton><Dining /></IconButton>}
-      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-      targetOrigin={{horizontal: 'right', vertical: 'top'}}
-    >
-      <Link to="/mealCreator">
-        <MenuItem primaryText="Meal Creator" />
-      </Link>
-      <Link to="/menuCreator">
-        <MenuItem primaryText="Menu Creator" />
-      </Link>
-      <Link to="/food/nav">
-        <MenuItem primaryText="Food Creator" />
-      </Link>
-    </IconMenu>
-)
-const fitness = (
-    <IconMenu
-      iconButtonElement={<IconButton><Fitness /></IconButton>}
-      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-      targetOrigin={{horizontal: 'right', vertical: 'top'}}
-    >
-      <Link to="/workoutCreator">
-        <MenuItem primaryText="Workout Creator" />
-      </Link>
-      <Link to="/exercise/0">
-        <MenuItem primaryText="Exercise Creator" />
-      </Link>
-    </IconMenu>
-)
+import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
+import { toggleSideNav } from '../../ducks/userReducer'
+// import PieChart from 'material-ui/svg-icons/editor/pie-chart-outlined';
+// import Dining from 'material-ui/svg-icons/maps/local-dining';
+// import Fitness from 'material-ui/svg-icons/places/fitness-center'
+// import EventNote from 'material-ui/svg-icons/notification/event-note';
+// import IconMenu from 'material-ui/IconMenu'
+// import MenuItem from 'material-ui/MenuItem'
 
 
 
-const rightIcons = (
-    <section className="icons">
-        <IconButton tooltip="Profile">
-            <Link to="/profile">
-                <PersonOutline />
-            </Link>
-        </IconButton>
-        <IconButton tooltip="Macro Calculator">
-            <Link to="/macroCalc">
-                <PieChart />
-            </Link>
-        </IconButton>
-        {nutrition}
-        {fitness}
-    </section>
-)
+
+
+
+
 
 const home = (
     <IconButton tooltip="Dashboard">
@@ -97,6 +54,18 @@ const styles = {display: "flex", padding: "1.25em", width: "100vw", justifyConte
 
 
 function Nav(props) {
+    const rightIcons = (
+        <section className="icons">
+            <IconButton tooltip="Profile">
+                <Link to="/profile">
+                    <PersonOutline />
+                </Link>
+            </IconButton>
+            <IconButton onClick={() => props.toggleSideNav(true)}>
+                <ChromeReader />
+            </IconButton>
+        </section>
+    )
     return(
         
             props.isLoggedIn
@@ -151,4 +120,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(Nav)
+export default connect(mapStateToProps, { toggleSideNav })(Nav)

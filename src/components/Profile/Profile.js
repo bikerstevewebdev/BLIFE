@@ -10,8 +10,15 @@ import SearchWorkouts from '../Search/SearchWorkouts'
 import PhotoUpload from '../Photos/PhotoUpload'
 import PhotoCard from '../Photos/PhotoCard'
 import RaisedButton from 'material-ui/RaisedButton'
-
-
+// import { Image } from 'semantic-ui-react'
+import {List, ListItem} from 'material-ui/List'
+import MobileTearSheet from '../MobileTearSheet/MobileTearSheet'
+import Divider from 'material-ui/Divider'
+import Subheader from 'material-ui/Subheader'
+import ActionAssignment from 'material-ui/svg-icons/action/assignment';
+import {blue500, yellow600} from 'material-ui/styles/colors';
+import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
+import Avatar from 'material-ui/Avatar';
 
 class Profile extends Component{
     constructor() {
@@ -27,8 +34,9 @@ class Profile extends Component{
     }
 
     
-
     componentDidMount() {
+            this.props.getUserData()
+        
         console.log(this.props)
         const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = this.props
         const { has_coach } = userData
@@ -180,14 +188,30 @@ class Profile extends Component{
                 }
                 <SearchWorkouts style={{width: "200px"}} doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addWorkoutToUser.bind(this)} />
                 <h2>Current Stats</h2>
-                <p>Protein: {current_protein}g</p>
+                {/* <p>Protein: {current_protein}g</p>
                 <p>Fat: {current_fat}g</p>
-                <p>Carbs: {current_carbs}g</p>
+                <p>Carbs: {current_carbs}g</p> */}
                 <p>Pofile Pic: </p>
-                <img style={{width: "200px"}} src={profile_pic} alt="users pic"/>
-                <p>Weight: {current_weight}pounds</p>
+                {/* <Image src={profile_pic} size='medium' circular /> */}
+                <img style={{width: "200px", height: "200px", borderRadius: "50%", overFlow: "hidden"}} src={profile_pic} alt="users pic"/>
+                {/* <p>Weight: {current_weight}pounds</p>
                 <p>Height: {current_height}inches</p>
-                <p>Bodyfat: {current_bf}%</p>
+                <p>Bodyfat: {current_bf}%</p> */}
+                <MobileTearSheet >
+                    <Subheader>Current Measurements</Subheader>
+                    <List>
+                        <ListItem leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600}/>} primaryText="Weight" secondaryText={current_weight} />
+                        <ListItem insetChildren={true} primaryText="Height" secondaryText={current_height} />
+                        <ListItem insetChildren={true} primaryText="Bodyfat" secondaryText={current_bf} />
+                    </List>
+                    <Divider inset={true} />
+                    <Subheader>Current Macros</Subheader>
+                    <List>
+                        <ListItem  leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />} primaryText={`Protein`} secondaryText={`${current_protein}g`} />
+                        <ListItem insetChildren={true} primaryText={`Fat`} secondaryText={`${current_fat}g`} />
+                        <ListItem insetChildren={true} primaryText={`Carbs`} secondaryText={`${current_carbs}g`} />
+                    </List>
+                </MobileTearSheet>
                 {
                     this.props.isUpdating
                     ?

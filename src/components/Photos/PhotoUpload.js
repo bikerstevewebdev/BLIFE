@@ -51,13 +51,18 @@ class PhotoUpload extends Component {
         return (
             <div className="photo-upload">
                 <h3>Upload a Progress Picture</h3>
-                <input type="file" onChange={this.handlePhoto}/>
+                <RaisedButton style={{width: "200px"}} secondary={true} >
+                Choose a File
+                    <label htmlFor="file-input">
+                        <input style={{width: "100%", height: "36px", display: "none"}} type="file" id="file-input" onChange={this.handlePhoto}/>
+                    </label>
+                </RaisedButton>
                 <br/>
                 {
                 this.state.file &&
                 <img src={this.state.file} alt="preview" className="file-preview"/>  
                 }
-                <RaisedButton secondary={true} onClick={this.sendPhoto}>Upload this Photo</RaisedButton>
+                <RaisedButton style={{width: "200px"}} secondary={true} onClick={this.sendPhoto}>Upload this Photo</RaisedButton>
             </div>
         )
     }

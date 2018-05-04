@@ -29,8 +29,8 @@ const initialState = {
     userMenus: [],
     assignedMenus: [],
     assignedWorkouts: [],
-    warningMsg: ''
-    
+    warningMsg: '',
+    sideNavOpen: false
 }
 /////////////////END initial state declaration////////////////////
 
@@ -55,10 +55,18 @@ const DEPRECATE_PHOTO = 'DEPRECATE_PHOTO'
 const GET_ALL_PROGRESS_PICS = 'GET_ALL_PROGRESS_PICS'
 const GET_CURRENT_PICS = 'GET_CURRENT_PICS'
 const CLEAR_USER_MESSAGE = 'CLEAR_USER_MESSAGE'
+const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV'
 
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
+export function toggleSideNav(bool) {
+    return {
+        type: TOGGLE_SIDE_NAV,
+        payload: bool
+    }
+}
+
 export function clearUserMessage() {
     return {
         type: CLEAR_USER_MESSAGE,
@@ -289,6 +297,8 @@ export default function(state = initialState, action) {
                             profile_pic: action.payload.user.profile_pic
                             }
                     }
+        case TOGGLE_SIDE_NAV:
+                     return { ...state, sideNavOpen: action.payload }
         case GET_USER_MENUS + '_FULFILLED':
                      return { ...state, userMenus: action.payload }
         case GET_ASSIGNED_MENUS + '_FULFILLED':

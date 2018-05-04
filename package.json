@@ -6,6 +6,7 @@
   "dependencies": {
     "aws-sdk": "^2.229.1",
     "axios": "^0.18.0",
+    "chart.js": "^2.7.2",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
@@ -23,7 +24,8 @@
     "react-stripe-elements": "^1.6.0",
     "react-tap-event-plugin": "^3.0.2",
     "redux": "^4.0.0",
-    "redux-promise-middleware": "^5.1.1"
+    "redux-promise-middleware": "^5.1.1",
+    "semantic-ui-react": "^0.80.0"
   },
   "scripts": {
     "start": "react-scripts start",

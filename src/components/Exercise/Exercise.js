@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addExToDB, acknowledge, updateExercise, clearExercise, getExById } from '../../ducks/fitnessReducer'
 // import { Redirect } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class Exercise extends Component{
     constructor(props) {
@@ -194,7 +195,7 @@ class Exercise extends Component{
                         <input type="text" value={this.state.imgURLIn} onChange={this.updateImgURLIn} />
                     </section>
                     :
-                    <button onClick={this.prepareToAddImg}>Add an image?</button>
+                    <RaisedButton primary={true} onClick={this.prepareToAddImg}>Add an image?</RaisedButton>
                 }
                 
                 
@@ -202,16 +203,16 @@ class Exercise extends Component{
                 {
                     this.state.isEditing
                     ?
-                    <button onClick={this.sendChanges}>Update This Exercise</button>
+                    <RaisedButton primary={true} onClick={this.sendChanges}>Update This Exercise</RaisedButton>
                     :
-                    <button onClick={this.sendExToDB}>Create Exercise</button>
+                    <RaisedButton primary={true} onClick={this.sendExToDB}>Create Exercise</RaisedButton>
                 }
                 {
                     this.props.message
                     ?
                     <section className="db-message">
                         <h2>{this.props.message}</h2>
-                        <button onClick={this.acknowledgeMsg}>You Got It!</button>
+                        <RaisedButton primary={true} onClick={this.acknowledgeMsg}>You Got It!</RaisedButton>
                     </section>
                     :
                     null

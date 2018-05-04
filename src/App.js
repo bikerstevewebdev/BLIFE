@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import Nav from './components/Nav/Nav'
+import SideNav from './components/Nav/SideNav'
 import Dashboard from './components/Dashboard/Dashboard'
 import Login from './components/Login/Login'
 import Profile from './components/Profile/Profile'
@@ -88,30 +89,30 @@ class App extends Component {
           :
           <Nav />
         }
-        
-            <section id="main-content">
-              <Switch className="main-div">
-                <Route path='/' exact component={Login} />
-                <Route path='/dashboard' component={Dashboard} />
-                <Route path='/profile' component={Profile} />
-                <Route path='/updateProfile' component={UpdateProfile} />
-                <Route path='/macroCalc' component={MacroCalc} />
-                <Route path='/meal/:id' component={Meal} />
-                <Route path='/mealCreator' component={MealCreator} />
-                <Route path='/food/:from' component={Food} />
-                <Route path='/menu/:from' component={Menu} />
-                <Route path='/menuCreator' component={MenuCreator} />
-                <Route path='/exercise/:id' component={Exercise} />
-                <Route path='/workout/:id' component={Workout} />
-                <Route path='/workoutCreator' component={WorkoutCreator} />
-                <Route path='/coachManager/:id' component={CoachManager} />
-                <Route path='/clientManager/:id' component={ClientManager} />
-                <Route path='/firstLogin' component={FirstLogin} />
-                <Route path='/measurements' component={Measurements} />
-                {/* <Route path='/mealFromRecipe' component={MealFromRecipe} /> */}
-              </Switch>
-              <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onRequestClose={this.close} onActionClick={this.close} open={this.state.open} />
-            </section>
+          <section id="main-content">
+            <Switch className="main-div">
+              <Route path='/' exact component={Login} />
+              <Route path='/dashboard' component={Dashboard} />
+              <Route path='/profile' component={Profile} />
+              <Route path='/updateProfile' component={UpdateProfile} />
+              <Route path='/macroCalc' component={MacroCalc} />
+              <Route path='/meal/:id' component={Meal} />
+              <Route path='/mealCreator' component={MealCreator} />
+              <Route path='/food/:from' component={Food} />
+              <Route path='/menu/:from' component={Menu} />
+              <Route path='/menuCreator' component={MenuCreator} />
+              <Route path='/exercise/:id' component={Exercise} />
+              <Route path='/workout/:id' component={Workout} />
+              <Route path='/workoutCreator' component={WorkoutCreator} />
+              <Route path='/coachManager/:id' component={CoachManager} />
+              <Route path='/clientManager/:id' component={ClientManager} />
+              <Route path='/firstLogin' component={FirstLogin} />
+              <Route path='/measurements' component={Measurements} />
+              {/* <Route path='/mealFromRecipe' component={MealFromRecipe} /> */}
+            </Switch>
+          <SideNav />
+          <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onRequestClose={this.close} onActionClick={this.close} open={this.state.open} />
+          </section>
       </div>
     );
   }

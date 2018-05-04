@@ -1,16 +1,29 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import RaisedButton from 'material-ui/RaisedButton'
+// import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 
 function WorkoutCard(props) {
     const { workout_id, title, img, type } = props
     return(
-        <section className="menu-card">
-            <h3>{title}</h3>
-            <img src={img} alt={title} />
-            <p>Type: {type}</p>
-            <Link to={`/workout/${workout_id}`}><RaisedButton secondary={true} >View {title} Details</RaisedButton></Link>
-        </section>
+        <Card style={{width: "20%"}} >
+            <CardMedia  >
+                <img src={img} alt={title} />
+            </CardMedia>
+            <CardTitle title={title} />
+            <CardText>
+                <p>Type: {type}</p>
+            </CardText>
+            <CardActions>
+                <Link to={`/menu/${workout_id}`}><FlatButton label="Details" /></Link>
+                <FlatButton label="Archive" />
+            </CardActions>
+        </Card>
+        
     )
 }
 export default WorkoutCard
+
+
+

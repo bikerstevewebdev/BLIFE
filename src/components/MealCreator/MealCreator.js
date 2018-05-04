@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createMeal } from '../../ducks/foodReducer'
 import { Redirect } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
 
 class MealCreator extends Component{
     constructor() {
@@ -59,7 +60,7 @@ class MealCreator extends Component{
                 <input value={mealTitle} onChange={(e) => this.updateMealTitle(e.target.value)} />
                 <p>Meal Image Url:</p>
                 <input value={imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
-                <button onClick={() => this.sendMealUp()}>Create Meal!</button>
+                <RaisedButton primary={true} onClick={() => this.sendMealUp()}>Create Meal!</RaisedButton>
                 {
                     this.state.creating
                     // this.props.fromRecipe && this.state.creating

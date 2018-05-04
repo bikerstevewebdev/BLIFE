@@ -27,7 +27,27 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }));
-
+app.use((req, res, next)=>{
+    if(process.env.DEV_MODE){
+        req.user = {
+            auth_id:"google-oauth2|111122040963068924095",
+            coach_id:-1,
+            curr_carb:209,
+            curr_fat:77,
+            curr_mes_id:13,
+            curr_pro:199,
+            date_created:"2018-03-30T06:00:00.000Z",
+            email:"bikerstevefitness@gmail.com",
+            fullname:"",
+            has_coach:false,
+            is_admin:false,
+            last_login:null,
+            profile_pic:"https://images.unsplash.com/photo-1500068865647-1e1ce6b80f13?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=18c9049136182c9aba2fcd208054d3b3&auto=format&fit=crop&w=500&q=60",
+            user_id:2,
+            username:"BikerSteve Fitness"
+        }
+    }next()
+})
   // Initializing Passport
   app.use(passport.initialize());
   // Handing express-session over to passport
@@ -78,6 +98,10 @@ passport.deserializeUser((user, done) => {
 
 
 app.get('/auth', passport.authenticate('auth0'))
+app.get('auth/logout', (req, res)=>{
+    req.logout()
+    res.redirect('/')
+})
 
 app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3000/#/dashboard',
