@@ -16,13 +16,6 @@ import { toggleSideNav } from '../../ducks/userReducer'
 // import IconMenu from 'material-ui/IconMenu'
 // import MenuItem from 'material-ui/MenuItem'
 
-
-
-
-
-
-
-
 const home = (
     <IconButton tooltip="Dashboard">
         <Link to="/dashboard">
@@ -39,8 +32,8 @@ const home = (
 // const rightIcons = [profile, macroCalc, mealCreator, menuCreator]
 // const title = <h1>BalancedLIFE</h1>
 const titleStyles = {
-    // display: "flex",
-    justifySelf: "center",
+    display: "flex",
+    justifyContent: "center",
     margin: "0",
     letterSpacing: "3px",
     WebkitMarginBefore: "0",
@@ -50,7 +43,7 @@ const rightStyles = {
     display: "flex",
     justifyContent: "flex-end"
 }
-const styles = {display: "flex", padding: "1.25em", width: "100vw", justifyContent: "space-between", height: "80px", alignItems: "center"}
+const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "80px", alignItems: "center"}
 
 
 function Nav(props) {

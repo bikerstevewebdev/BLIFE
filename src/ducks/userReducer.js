@@ -22,7 +22,8 @@ const initialState = {
         weight: 0,
         height: 0,
         bf: 0,
-        mes_id: 0
+        mes_id: 0,
+        date_taken: ''
     },
     isLoggedIn: false,
     userWorkouts: [],
@@ -30,7 +31,15 @@ const initialState = {
     assignedMenus: [],
     assignedWorkouts: [],
     warningMsg: '',
-    sideNavOpen: false
+    sideNavOpen: false,
+    mezHistory: {
+        weights: [],
+        bfs: [],
+        necks: [],
+        waists: [],
+        chests: [],
+        dates: []
+    }
 }
 /////////////////END initial state declaration////////////////////
 
@@ -56,6 +65,7 @@ const GET_ALL_PROGRESS_PICS = 'GET_ALL_PROGRESS_PICS'
 const GET_CURRENT_PICS = 'GET_CURRENT_PICS'
 const CLEAR_USER_MESSAGE = 'CLEAR_USER_MESSAGE'
 const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV'
+const GET_PAST_MEASUREMENTS = 'GET_PAST_MEASUREMENTS'
 
 /////////////////END String Literals//////////////////////
 
@@ -236,8 +246,8 @@ export function updateProfilePic(profile_pic) {
     }
 }
 
-export function addMeasurement(wt, ht, bf, waist, chest, neck) {
-    let newStats = axios.post('/user/mez', { ht, wt, bf, waist, chest, neck }).then(res => {
+export function addMeasurement(wt, ht, bf, waist, chest, neck, date) {
+    let newStats = axios.post('/user/mez', { ht, wt, bf, waist, chest, neck, date }).then(res => {
         return res.data
     })    
     return {
@@ -252,15 +262,17 @@ export function addMacrosToState(p, c, f, bf, wt, ht, currMes_id){
         payload: { p, c, f, bf, wt, ht, currMes_id }
     }
 }
-// user: {
-//     ...state.user,
-//     current_protein: action.payload.p,
-//     current_carbs: action.payload.c,
-//     current_fat: action.payload.f,
-//     current_bf: action.meta.bf,
-//     current_weight: action.meta.weight,
-//     current_height: action.meta.height
-//     }
+
+export function getPastMeasurements(){
+    let measurements = axios.get('/history/user/measurements').then(res => {
+        return res.data
+    })
+    return {
+        type: GET_PAST_MEASUREMENTS,
+        payload: measurements
+    }
+}
+
 /////////////////END exporting action creators//////////////////////
 
 
@@ -271,6 +283,8 @@ export default function(state = initialState, action) {
     switch(action.type){
         case CLEAR_USER_MESSAGE:
                 return { ...state, warningMsg: action.payload }
+        case GET_PAST_MEASUREMENTS + '_FULFILLED':
+                return { ...state, mezHistory: action.payload }
         case UPDATE_STATS + '_FULFILLED':
                 let { waist, neck, chest, weight, height, bf, mes_id } = action.payload.newMez
                 return { ...state,
@@ -287,7 +301,8 @@ export default function(state = initialState, action) {
                         weight: action.payload.newMez.weight,
                         height: action.payload.newMez.height,
                         bf: action.payload.newMez.bf,
-                        mes_id: action.payload.newMez.mes_id
+                        mes_id: action.payload.newMez.mes_id,
+                        date_taken: action.payload.date_taken
                         },
                         user: {
                             ...state.user,
@@ -314,7 +329,7 @@ export default function(state = initialState, action) {
         case GET_USER + '_FULFILLED':
             console.log('begin getuser success', action.payload)
 
-            if(action.payload.currMes){
+            if(action.payload.currMes ){
                 // const { waist, neck, chest, weight, height, bf, mes_id } = action.payload.currMes
             const { curr_pro, curr_carb, curr_fat, username, user_id, profile_pic } = action.payload.dBUser
             console.log('userreducer', action.payload)

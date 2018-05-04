@@ -262,11 +262,10 @@ module.exports = {
     
     ///////////////////MES/STATS METHODS////////////////
     addMez: (req, res, next) => {
-        let x     = new Date(),
-        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-        const { waist, neck, chest, ht, wt, bf } = req.body,
-        db                                 = req.app.get('db')
-        db.add_measurements([ waist, neck, chest, ht, wt, bf, tDate, req.user.user_id ]).then( measurements => {
+        const { waist, neck, chest, ht, wt, bf, date } = req.body
+            , db                                       = req.app.get('db')
+        let msDate = date.getTime()
+        db.add_measurements([ waist, neck, chest, ht, wt, bf, msDate, req.user.user_id ]).then( measurements => {
             db.update_mes_id([req.user.user_id, measurements[0].mes_id]).then(user => {
                 let retObj = {
                     newMez: measurements[0],
@@ -288,6 +287,23 @@ module.exports = {
         }
     },
 
+    getMezHistory: (req, res, next) => {
+        const db = req.app.get('db')
+        db.get_user_mes_history([req.user.user_id]).then( measurements => {
+            let weights = [], bfs = [], necks = [], waists = [], chests = [], dates = [] 
+            measurements.forEach(v => {
+                weights.push(v.weight)
+                bfs.push(v.bf)
+                necks.push(v.neck)
+                waists.push(v.waist)
+                chests.push(v.chest)
+                dates.push(v.date_taken)
+            })
+            let mesObj = {weights, bfs, necks, waists, chests, dates}
+            res.status(200).send(mesObj)
+        })
+    },
+
     getLatestMes: (req, res, next) => {
         req.app.get('db').get_latest_mes([req.params.id]).then( measurements => {
             res.status(200).send(measurements[0])
@@ -298,8 +314,8 @@ module.exports = {
         const db = req.app.get('db')
         const { p, c, f, ht, wt, bf, waist, chest, neck } = req.body
         let x     = new Date(),
-            tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-        db.add_measurements([waist, neck, chest, ht, wt, bf, tDate, req.user.user_id]).then( mes => {
+            msDate = x.getTime()
+        db.add_measurements([waist, neck, chest, ht, wt, bf, msDate, req.user.user_id]).then( mes => {
             let newMez = mes[0]
             db.update_stats([p, c, f, newMez.mes_id, req.user.user_id]).then( upUser => {
                 let user = upUser[0],
@@ -311,10 +327,10 @@ module.exports = {
 ////////////////////MACRO METHODS////////////////////////
     newMacroCalc: (req, res, next) => {
         const { protein, carbs, fat } = req.body
-        let x     = new Date(),
-        tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
+        let x  = new Date(),
+        msDate = x.getTime()
         
-        req.app.get('db').add_macro_calc([ protein, carbs, fat, tDate, req.user.user_id ]).then( macros => {
+        req.app.get('db').add_macro_calc([ protein, carbs, fat, msDate, req.user.user_id ]).then( macros => {
             res.status(200).send(macros[0])
         }) 
     },

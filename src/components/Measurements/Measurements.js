@@ -4,6 +4,7 @@ import { addMeasurement } from '../../ducks/userReducer'
 import { Redirect } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
+import DatePicker from 'material-ui/DatePicker'
 
 class Measurements extends Component{
     constructor(props) {
@@ -15,6 +16,7 @@ class Measurements extends Component{
             neckIn: props.curr_mes.neck || 0,
             chestIn: props.curr_mes.chest || 0,
             bfIn: props.user.current_bf || 0,
+            dateIn: '',
             addingMes: true
         }
         this.updateWeightIn = this.updateWeightIn.bind(this)
@@ -24,11 +26,12 @@ class Measurements extends Component{
         this.updateNeckIn = this.updateNeckIn.bind(this)
         this.updateBfIn = this.updateBfIn.bind(this)
         this.sendUpdates = this.sendUpdates.bind(this)
+        this.updateDateIn = this.updateDateIn.bind(this)
     }
 
     sendUpdates() {
-        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn } = this.state  
-        this.props.addMeasurement(heightIn, weightIn, bfIn, waistIn, chestIn, neckIn)
+        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn } = this.state  
+        this.props.addMeasurement(heightIn, weightIn, bfIn, waistIn, chestIn, neckIn, dateIn)
         this.setState({
             addingMes: false
         })
@@ -70,9 +73,17 @@ class Measurements extends Component{
         })
     }
 
+    updateDateIn(e, date) {
+        
+        console.log("date arg: ", date.getTime())
+        this.setState({
+            dateIn: date
+        })
+    }
+
         
     render() {
-        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn } = this.state
+        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn } = this.state
         return(
             <section className="comp measurements-form" >
                 <p>Weight: (in pounds)</p>
@@ -87,7 +98,8 @@ class Measurements extends Component{
                 <TextField type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
                 <p>Bodyfat: (enter in percent as a number, i.e. "11" for 11 percent, not "0.11")</p>
                 <TextField type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
-                <RaisedButton primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
+                <DatePicker onChange={this.updateDateIn} hintText="Date these measurements were taken" mode="landscape" />
+                <RaisedButton value={dateIn} primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
                 {
                     !this.state.addingMes && this.props.location.pathname === '/measurements'
                     ?

@@ -7,7 +7,7 @@ import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
 import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
-
+import ProgressChart from '../Measurements/ProgressChart'
 
 class Dashboard extends Component{
     constructor() {
@@ -23,19 +23,20 @@ class Dashboard extends Component{
         // this.endMenuSearch = this.endMenuSearch.bind(this)
     }
     componentDidMount() {
-        if(!this.props.userData.user_id){
+        // const { user_id } = this.props.userData
+        // if(!user_id && user_id <= 0){
             this.props.getUserData()
-        }
+        // }
         console.log('DBoard props', this.props)
     }
 
     componentDidUpdate() {
         console.log('DBoard updated props', this.props)
-        if(!(this.props.userData.username.length > 0)){
-            this.setState({
-                firstVisit: true
-            })
-        }
+        // if(!(this.props.userData.username.length > 0)){
+        //     this.setState({
+        //         firstVisit: true
+        //     })
+        // }
     }
 
     // getUserObjs() {
@@ -49,6 +50,7 @@ class Dashboard extends Component{
         return(
             <section className="comp dashboard">
                 <h1>Welcome back {this.props.userData.username}</h1>
+                <ProgressChart />
                 <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
                 <SearchMeal />
                 <SearchMenu />

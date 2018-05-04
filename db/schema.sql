@@ -6,13 +6,13 @@ CREATE TABLE users (
     email VARCHAR(125),
     fullname VARCHAR(100),
     profile_pic TEXT,
-    date_created DATE NOT NULL,
+    date_created INTEGER NOT NULL,
     curr_pro REAL DEFAULT 0,
     curr_carb REAL DEFAULT 0,
     curr_fat REAL DEFAULT 0,
     curr_mes_id INTEGER DEFAULT 0,
     auth_id TEXT NOT NULL,
-    last_login DATE
+    last_login INTEGER
 );
 
 CREATE TABLE measurements (
@@ -23,7 +23,7 @@ CREATE TABLE measurements (
     height REAL,
     weight REAL,
     bf REAL,
-    date_taken TEXT,
+    date_taken INTEGER,
     member_id INTEGER
 );
 
@@ -62,7 +62,7 @@ CREATE TABLE macro_calcs (
     p REAL,
     c REAL,
     f REAL,
-    date_calced DATE,
+    date_calced INTEGER,
     member_id TEXT
 );
 

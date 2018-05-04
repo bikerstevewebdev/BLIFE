@@ -34,7 +34,7 @@ app.use((req, res, next)=>{
             coach_id:-1,
             curr_carb:209,
             curr_fat:77,
-            curr_mes_id:13,
+            curr_mes_id:3,
             curr_pro:199,
             date_created:"2018-03-30T06:00:00.000Z",
             email:"bikerstevefitness@gmail.com",
@@ -43,7 +43,7 @@ app.use((req, res, next)=>{
             is_admin:false,
             last_login:null,
             profile_pic:"https://images.unsplash.com/photo-1500068865647-1e1ce6b80f13?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=18c9049136182c9aba2fcd208054d3b3&auto=format&fit=crop&w=500&q=60",
-            user_id:2,
+            user_id:1,
             username:"BikerSteve Fitness"
         }
     }next()
@@ -69,9 +69,9 @@ passport.use( new Auth0Strategy({
             return done(null, users[0])
         } 
         else { //when someone is logginG in for the first time.             
-            let x = new Date(),
-                tDate = `${x.getMonth()}-${x.getDate()}-${x.getFullYear()}`
-            db.create_user([displayName, emails[0].value, picture, id, tDate]).then( createdUser => {
+            let x      = new Date()
+              , msDate = x.getTime()
+            db.create_user([displayName, emails[0].value, picture, id, msDate]).then( createdUser => {
                 return done(null, createdUser)
         } ) }
     } ).catch(err => {
@@ -115,7 +115,7 @@ app.get('/adminInfo', c.getAdminInfo)
 app.get('/userMenus', c.getUserMenus)
 app.get('/userWorkouts', c.getUserWorkouts)
 app.get('/user/progressPics', c.getAllProgressPhotos)
-app.get('/user/currentPics', c.getCurrentPhotos)
+app.get('/history/user/measurements', c.getMezHistory)
 
 app.get('/client/assigned/menus', c.getAssignedMenus)
 app.get('/client/assigned/workouts', c.getAssignedWorkouts)

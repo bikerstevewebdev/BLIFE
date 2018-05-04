@@ -35,7 +35,7 @@ class MacroCalc extends Component{
         })
     }
     render() {
-        const { height, age, weight, bodyfat, tenacity, goal, activity, gender, user } = this.props        
+        const { height, age, weight, bodyfat, tenacity, goal, activity, gender } = this.props        
         // const { current_height, current_weight, current_bf } = user        
         const selectWidth = {width: "450px"}
         const compStyles = {

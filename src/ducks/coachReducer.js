@@ -15,7 +15,7 @@ const initialState = {
             height: 0,
             weight: 0,
             bf: 0,
-            date_taken: ''
+            date_taken: 0
         },
         last_login: '',
         workouts: [],
