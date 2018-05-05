@@ -7,7 +7,7 @@ import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Car
 function WorkoutCard(props) {
     const { workout_id, title, img, type } = props
     return(
-        <Card style={{width: "20%"}} >
+        <Card style={{width: "100%"}} >
             <CardMedia  >
                 <img src={img} alt={title} />
             </CardMedia>
@@ -16,7 +16,7 @@ function WorkoutCard(props) {
                 <p>Type: {type}</p>
             </CardText>
             <CardActions>
-                <Link to={`/menu/${workout_id}`}><FlatButton label="Details" /></Link>
+                <Link to={`/workout/${workout_id}`}><FlatButton label="Details" /></Link>
                 <FlatButton label="Archive" />
             </CardActions>
         </Card>

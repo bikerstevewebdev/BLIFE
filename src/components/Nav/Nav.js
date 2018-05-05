@@ -45,6 +45,27 @@ const rightStyles = {
 }
 const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "80px", alignItems: "center"}
 
+// const rightIcons = (
+//     <section className="icons">
+//         <IconButton tooltip="Macro Calculator">
+//             <Link to="/macroCalc">
+//                 <PieChart />
+//             </Link>
+//         </IconButton>
+//         <IconButton tooltip="Macro Calculator">
+//             <Link to="/macroCalc">
+//                 <PieChart />
+//             </Link>
+//         </IconButton>
+//         <IconButton tooltip="Macro Calculator">
+//             <Link to="/macroCalc">
+//                 <PieChart />
+//             </Link>
+//         </IconButton>
+//         {nutrition}
+//         {fitness}
+//     </section>
+// )
 
 function Nav(props) {
     const rightIcons = (

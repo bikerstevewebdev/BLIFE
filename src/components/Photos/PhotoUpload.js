@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { uploadPhoto } from '../../ducks/userReducer'
 import RaisedButton from 'material-ui/RaisedButton'
+import AddPhoto from 'material-ui/svg-icons/image/add-a-photo'
+import FileUpload from 'material-ui/svg-icons/file/file-upload'
 
 
 class PhotoUpload extends Component {
@@ -51,8 +53,8 @@ class PhotoUpload extends Component {
         return (
             <div className="photo-upload">
                 <h3>Upload a Progress Picture</h3>
-                <RaisedButton style={{width: "200px"}} secondary={true} >
-                Choose a File
+                <RaisedButton style={{display: "flex", alignItems: "center", width: "200px"}} secondary={true} >
+                    <FileUpload/>Choose a File
                     <label htmlFor="file-input">
                         <input style={{width: "100%", height: "36px", display: "none"}} type="file" id="file-input" onChange={this.handlePhoto}/>
                     </label>
@@ -62,7 +64,7 @@ class PhotoUpload extends Component {
                 this.state.file &&
                 <img src={this.state.file} alt="preview" className="file-preview"/>  
                 }
-                <RaisedButton style={{width: "200px"}} secondary={true} onClick={this.sendPhoto}>Upload this Photo</RaisedButton>
+                <RaisedButton style={{width: "200px"}} secondary={true} onClick={this.sendPhoto}>Upload this Photo<AddPhoto /></RaisedButton>
             </div>
         )
     }

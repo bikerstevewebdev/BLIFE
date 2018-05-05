@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { updateWorkoutEx, removeExFromWorkout } from '../../ducks/fitnessReducer'
 import RaisedButton from 'material-ui/RaisedButton'
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 
 class ExerciseCard extends Component{
     constructor(props) {
@@ -90,35 +93,35 @@ class ExerciseCard extends Component{
               { type, name, img, numExs, workout_ex_id, ex_id, workout_id, ex_order } = this.props
         return (
             <section className="workout-ex">
-                <select defaultValue={ex_order} onChange={this.updateOrderIn}>
+                <DropDownMenu defaultValue={ex_order} onChange={this.updateOrderIn}>
                     {numExs.map((v, i) => {
-                        return <option key={ex_id + "-" + i} value={i+1}>{i+1}</option>
+                        return <MenuItem key={ex_id + "-" + i} value={i+1}>{i+1}</MenuItem>
                     })}
-                </select>
+                </DropDownMenu>
                 <img src={img} alt={name} />
                 <h3>{name}</h3>
                 <p>Reps:</p>
-                <input type="number" value={repsIn} onChange={this.updateRepsIn} />
+                <TextField type="number" value={repsIn} onChange={this.updateRepsIn} />
                 <p>Sets:</p>
-                <input type="number" value={setsIn} onChange={this.updateSetsIn} />
+                <TextField type="number" value={setsIn} onChange={this.updateSetsIn} />
                 {
                     type !== "Bodyweight"
                     ?
                     <section className="weight-input">
                         <p>Weight:</p>
-                        <input type="number" value={weightIn} onChange={this.updateWeightIn} />
+                        <TextField type="number" value={weightIn} onChange={this.updateWeightIn} />
                     </section>
                     :
                     null
                 }
                 <p>Rest Time:</p>
-                <input type="number" value={restTimeIn} onChange={this.updateRestTimeIn} />
+                <TextField type="number" value={restTimeIn} onChange={this.updateRestTimeIn} />
                 {
                     addingNotes
                     ?
                     <section className="notes-input">
                         <p>Notes:</p>
-                        <textarea maxLength="500" value={notesIn} placeholder="Limit 500 characters" onChange={this.updateNotesIn} />
+                        <TextField maxLength="500" value={notesIn} placeholder="Limit 500 characters" onChange={this.updateNotesIn} />
                     </section>
                     :
                     <RaisedButton secondary={true} onClick={this.prepareToAddNotes}>Add Notes?</RaisedButton>

@@ -97,13 +97,13 @@ class App extends Component {
               <Route path='/updateProfile' component={UpdateProfile} />
               <Route path='/macroCalc' component={MacroCalc} />
               <Route path='/meal/:id' component={Meal} />
-              <Route path='/mealCreator' component={MealCreator} />
+              <Route path='/mealCreator' component={MealCreator} /> {/* modal */}
               <Route path='/food/:from' component={Food} />
               <Route path='/menu/:from' component={Menu} />
-              <Route path='/menuCreator' component={MenuCreator} />
+              <Route path='/menuCreator' component={MenuCreator} /> {/* modal */}
               <Route path='/exercise/:id' component={Exercise} />
               <Route path='/workout/:id' component={Workout} />
-              <Route path='/workoutCreator' component={WorkoutCreator} />
+              <Route path='/workoutCreator' component={WorkoutCreator} /> {/* modal */}
               <Route path='/coachManager/:id' component={CoachManager} />
               <Route path='/clientManager/:id' component={ClientManager} />
               <Route path='/firstLogin' component={FirstLogin} />

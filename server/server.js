@@ -7,8 +7,10 @@ const express          = require('express'),
       session          = require('express-session'),
       massive          = require('massive'),
       { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT, DOMAIN, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env,
-      c                = require('./controller'),
+      uc                = require('./userController'),
       fc               = require('./foodController'),
+      cc               = require('./coachController'),
+      fitc             = require('./fitnessController'),
       port             = SERVER_PORT, // || 3000
       S3 = require('./awsS3.js')
 
@@ -107,80 +109,80 @@ app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3000/#/dashboard',
     failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
-app.get('/auth/me', c.sendUserObjs)
+app.get('/auth/me', uc.sendUserObjs)
 
-app.get('/userInfo', c.getUserInfo)
-app.get('/clientInfo', c.getClientInfo)
-app.get('/adminInfo', c.getAdminInfo)
-app.get('/userMenus', c.getUserMenus)
-app.get('/userWorkouts', c.getUserWorkouts)
-app.get('/user/progressPics', c.getAllProgressPhotos)
-app.get('/history/user/measurements', c.getMezHistory)
+app.get('/userInfo', uc.getUserInfo)
+app.get('/clientInfo', cc.getClientInfo)
+app.get('/adminInfo', cc.getAdminInfo)
+app.get('/userMenus', uc.getUserMenus)
+app.get('/userWorkouts', uc.getUserWorkouts)
+app.get('/user/progressPics', uc.getAllProgressPhotos)
+app.get('/history/user/measurements', uc.getMezHistory)
 
-app.get('/client/assigned/menus', c.getAssignedMenus)
-app.get('/client/assigned/workouts', c.getAssignedWorkouts)
-app.get('/coach/clients', c.getClients)
+app.get('/client/assigned/menus', uc.getAssignedMenus)
+app.get('/client/assigned/workouts', uc.getAssignedWorkouts)
+app.get('/coach/clients', cc.getClients)
 
 
 app.get('/recipes', fc.getRecipes)
-app.get('/food/search', c.searchFoods)
-app.get('/meal/search', c.searchMeals)
-app.get('/menu/search', c.searchMenus)
+app.get('/food/search', fc.searchFoods)
+app.get('/meal/search', fc.searchMeals)
+app.get('/menu/search', fc.searchMenus)
 
 
-app.get('/exercise/search', c.searchExercises)
-app.get(`/workout/search`, c.searchWorkouts)
+app.get('/exercise/search', fitc.searchExercises)
+app.get(`/workout/search`, fitc.searchWorkouts)
 
-app.put('/user/stats', c.updateStats)
-app.put('/user/username', c.updateUsername)
-app.put('/user/fullname', c.updateFullname)
-app.put('/user/profilePic', c.updateProfilePic)
-app.put('/user/progressPic/decurrentize', c.makePicNotCurrent)
+app.put('/user/stats', uc.updateStats)
+app.put('/user/username', uc.updateUsername)
+app.put('/user/fullname', uc.updateFullname)
+app.put('/user/profilePic', uc.updateProfilePic)
+app.put('/user/progressPic/decurrentize', uc.makePicNotCurrent)
 
-app.put('/coach/request', c.requestCoachAccess)
-app.put('/coach/approve', c.approveCoachAccess)
-app.put('/coach/deny', c.denyCoachAccess)
-app.put('/food/edit', c.editFood)
-app.put('/meal/foods/quantity', c.updateFoodQuantity)
-app.put('/menu', c.editMenu)
-app.put('/exercise', c.editExercise)
-app.put('/workout/exercise', c.updateWorkoutEx)
+app.put('/coach/request', cc.requestCoachAccess)
+app.put('/coach/approve', cc.approveCoachAccess)
+app.put('/coach/deny', cc.denyCoachAccess)
+app.put('/food/edit', fc.editFood)
+app.put('/meal/foods/quantity', fc.updateFoodQuantity)
+app.put('/menu', fc.editMenu)
+app.put('/exercise', fitc.editExercise)
+app.put('/workout/exercise', fitc.updateWorkoutEx)
 
 S3(app)
 
-app.post('/user/mez', c.addMez)
-app.post('/macroCalc', c.newMacroCalc)
-app.post('/userMenus', c.addMenuToUser)
-app.post('/userWorkouts', c.addWorkoutToUser)
-app.post('/client/menus', c.assignMenuToClient)
-app.post('/client/workouts', c.assignWorkoutToClient)
+app.post('/user/mez', uc.addMez)
+app.post('/macroCalc', uc.newMacroCalc)
+app.post('/userMenus', uc.addMenuToUser)
+app.post('/userWorkouts', uc.addWorkoutToUser)
+app.post('/client/menus', cc.assignMenuToClient)
+app.post('/client/workouts', cc.assignWorkoutToClient)
 
 app.post('/food/external/search', fc.searchExternalFoods)
-app.post('/food', c.createFood)
-app.post('/meal/food', c.addFoodToMeal)
-app.post('/meal', c.createMeal)
-app.post('/menu', c.createMenu)
-app.post('/menu/meal', c.addMealToMenu)
+app.post('/food', fc.createFood)
+app.post('/meal/food', fc.addFoodToMeal)
+app.post('/meal', fc.createMeal)
+app.post('/menu', fc.createMenu)
+app.post('/menu/meal', fc.addMealToMenu)
 app.post('/meal/newFood', fc.addFoodToDBAndMeal)
 
-app.post('/exercise', c.createExercise)
-app.post('/workout', c.createWorkout)
-app.post('/workout/exercise', c.addExerciseToWorkout)
+app.post('/exercise', fitc.createExercise)
+app.post('/workout', fitc.createWorkout)
+app.post('/workout/exercise', fitc.addExerciseToWorkout)
 
 
-app.put('/meal/removeFood', c.removeFoodFromMeal)
-app.put('/menu/removeMeal', c.removeMealFromMenu)
-app.put('/workout/removeExercise/:id', c.removeExFromWorkout)
+app.put('/meal/removeFood', fc.removeFoodFromMeal)
+app.put('/menu/removeMeal', fc.removeMealFromMenu)
+app.put('/workout/removeExercise/:id', fitc.removeExFromWorkout)
 
-app.get('/exercise/:id', c.getExerciseById)
-app.get('/workout/:id', c.getWorkoutById)
-app.get('/user/:id', c.getUser)
-app.get('/search/clients/:email', c.searchForClient)
-app.get('/measurements/latest/:id', c.getLatestMes)
-app.get('/measurements/:id', c.getMeasurements)
-app.get('/food/search/:id', c.getFood)
-app.get('/meal/search/:id', c.getMealById)
-app.get('/menu/search/:id', c.getMenuById)
+app.get('/exercise/:id', fitc.getExerciseById)
+app.get('/workout/:id', fitc.getWorkoutById)
+app.get('/user/:id', uc.getUser)
+app.get('/search/clients/:email', cc.searchForClient)
+app.get('/measurements/latest/:id', uc.getLatestMes)
+app.get('/measurements/:id', uc.getMeasurements)
+app.get('/food/search/:id', fc.getFood)
+app.get('/meal/search/:id', fc.getMealById)
+app.get('/menu/search/:id', fc.getMenuById)
 
 
 

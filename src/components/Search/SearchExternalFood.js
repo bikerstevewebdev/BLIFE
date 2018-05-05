@@ -22,7 +22,7 @@ class SearchExternalFood extends Component{
     }
 
     searchExternalFoods() {
-        this.props.searchExternalFoods(this.state.externalSearchIn)
+        this.props.searchExternalFoods(this.state.externalSearchIn, this.state.branded)
         this.setState({
             externalSearchIn: ''
         })

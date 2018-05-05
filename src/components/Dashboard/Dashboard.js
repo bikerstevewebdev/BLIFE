@@ -7,7 +7,6 @@ import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
 import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
-import ProgressChart from '../Measurements/ProgressChart'
 
 class Dashboard extends Component{
     constructor() {
@@ -48,9 +47,8 @@ class Dashboard extends Component{
     
     render() {
         return(
-            <section className="comp dashboard">
+            <section style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}} className="comp dashboard">
                 <h1>Welcome back {this.props.userData.username}</h1>
-                <ProgressChart />
                 <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
                 <SearchMeal />
                 <SearchMenu />

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import Search from 'material-ui/svg-icons/action/search'
 import RaisedButton from 'material-ui/RaisedButton'
-
+import WorkoutCard from '../Workout/WorkoutCard'
 
 class SearchWorkouts extends Component{
     constructor(){
@@ -40,24 +40,34 @@ class SearchWorkouts extends Component{
         const { arg2, arg3, handleBtnClick, btnMsg, doSomething, workoutSearchResults } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
-                <section className="workout-search-result" key={res.workout_id}>
-                    <p>{res.title}</p>
-                    <img src={res.img} alt={res.title} />
-                    {
-                        doSomething
-                        ?
-                        <RaisedButton secondary={true} onClick={() => handleBtnClick(res.workout_id, arg2, arg3)}>{btnMsg}</RaisedButton>
-                        :
-                        <Link to={`/workout/${res.workout_id}`}><RaisedButton secondary={true} onClick={this.endSearches}>Take me to this workout!</RaisedButton></Link>
-                    }
-                </section>
+                <WorkoutCard workout_id={res.workout_id} title={res.title} img={res.img} type={res.type} />
+                // <section className="workout-search-result" key={res.workout_id}>
+                //     <p>{res.title}</p>
+                //     <img src={res.img} alt={res.title} />
+                //     {
+                //         doSomething
+                //         ?
+                //         <RaisedButton secondary={true} onClick={() => handleBtnClick(res.workout_id, arg2, arg3)}>{btnMsg}</RaisedButton>
+                //         :
+                //         <Link to={`/workout/${res.workout_id}`}><RaisedButton secondary={true} onClick={this.endSearches}>Take me to this workout!</RaisedButton></Link>
+                //     }
+                // </section>
             )
         })
+        const workSearchStyle = {
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            width: "80%",
+            gridGap: "20px",
+            justifyContent: "center"
+        }
         return (
-            <section className="workout-search">
-                <h3>Find your new Workout:</h3>
-                <TextField floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
-                <RaisedButton secondary={true} icon={<Search />} style={{width: "300px"}} onClick={this.searchWorkouts}/>
+            <section style={workSearchStyle} className="workout-search">
+                <section style={{gridColumn: "1 / 4", display: "flex", alignItems: "flex-end", justifyContent: "center"}}>
+                    <h2>Find your new Workout:</h2>
+                    <TextField floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
+                    <RaisedButton secondary={true} icon={<Search />} style={{alignSelf: "center", width: "300px"}} onClick={this.searchWorkouts}/>
+                </section>
                 {/* <button style={} >Search!</button> */}
                 {workoutResults}
             </section>

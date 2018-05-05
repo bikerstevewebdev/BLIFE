@@ -50,14 +50,14 @@ const tenacityLevel = (level) => {
 ///////////////END extra logic functions/////////////
 
 /////////////////////BEGIN String Literal Declaration///////////
-const UPDATE_HEIGHT = 'UPDATE_HEIGHT'
-const UPDATE_WEIGHT = 'UPDATE_WEIGHT'
-const UPDATE_AGE = 'UPDATE_AGE'
-const UPDATE_BODYFAT = 'UPDATE_BODYFAT'
-const UPDATE_GOAL = 'UPDATE_GOAL'
-const UPDATE_TENACITY = 'UPDATE_TENACITY'
-const UPDATE_GENDER = 'UPDATE_GENDER'
-const UPDATE_ACTIVITY = 'UPDATE_ACTIVITY'
+// const UPDATE_HEIGHT = 'UPDATE_HEIGHT'
+// const UPDATE_WEIGHT = 'UPDATE_WEIGHT'
+// const UPDATE_AGE = 'UPDATE_AGE'
+// const UPDATE_BODYFAT = 'UPDATE_BODYFAT'
+// const UPDATE_GOAL = 'UPDATE_GOAL'
+// const UPDATE_TENACITY = 'UPDATE_TENACITY'
+// const UPDATE_GENDER = 'UPDATE_GENDER'
+// const UPDATE_ACTIVITY = 'UPDATE_ACTIVITY'
 const CALCULATE = 'CALCULATE'
 const CHANGE_UPDATING = 'CHANGE_UPDATING'
 const CLEAR_MACRO_ENTRY = 'CLEAR_MACRO_ENTRY'
@@ -75,66 +75,6 @@ export function changeUpdating() {
     return {
         type: CHANGE_UPDATING,
         payload: 'something'
-    }
-}
-
-export function updateHeight(val) {
-    return {
-        type: UPDATE_HEIGHT,
-        payload: val/1
-    }
-}
-
-export function updateWeight(val) {
-    return {
-        type: UPDATE_WEIGHT,
-        payload: val/1
-    }
-}
-
-export function updateAge(val) {
-    return {
-        type: UPDATE_AGE,
-        payload: val/1
-    }
-}
-
-export function updateBodyfat(val) {
-    return {
-        type: UPDATE_BODYFAT,
-        payload: val/1
-    }
-}
-
-export function updateGoal(val) {
-    console.log(val)
-    return {
-        type: UPDATE_GOAL,
-        payload: val
-    }
-}
-
-export function updateTenacity(val) {
-    console.log(val)
-    return {
-        type: UPDATE_TENACITY,
-        payload: val
-    }
-}
-
-export function updateGender(val) {
-    console.log(val)
-    return {
-        type: UPDATE_GENDER,
-        payload: val
-    }
-}
-
-export function updateActivity(val) {
-    console.log(val)
-    return {
-        type: UPDATE_ACTIVITY,
-        payload: val
     }
 }
 
@@ -182,7 +122,13 @@ export function calculate( height, age, weight, bodyfat, activity, gender, tenac
         meta:  {
             bf: ((bf/1)*100),
             weight: weight/1,
-            height: height/1
+            height: height/1,
+            age,
+            goal,
+            gender,
+            activity,
+            tenacity,
+
         }
     }
 }
@@ -224,25 +170,33 @@ Women
 export default function(state = initialState, action) {
     console.log(action)
     switch(action.type){
-        case UPDATE_WEIGHT:
-        return { ...state, weight: action.payload }
-        case UPDATE_HEIGHT:
-        return { ...state, height: action.payload }
-        case UPDATE_AGE:
-        return { ...state, age: action.payload }
-        case UPDATE_GOAL:
-        return { ...state, goal: action.payload }
-        case UPDATE_ACTIVITY:
-        return { ...state, activity: action.payload }
-        case UPDATE_GENDER:
-        return { ...state, gender: action.payload }
-        case UPDATE_TENACITY:
-        return { ...state, tenacity: action.payload }
-        case UPDATE_BODYFAT:
-        return { ...state, bodyfat: action.payload }
+        // case UPDATE_WEIGHT:
+        // return { ...state, weight: action.payload }
+        // case UPDATE_HEIGHT:
+        // return { ...state, height: action.payload }
+        // case UPDATE_AGE:
+        // return { ...state, age: action.payload }
+        // case UPDATE_GOAL:
+        // return { ...state, goal: action.payload }
+        // case UPDATE_ACTIVITY:
+        // return { ...state, activity: action.payload }
+        // case UPDATE_GENDER:
+        // return { ...state, gender: action.payload }
+        // case UPDATE_TENACITY:
+        // return { ...state, tenacity: action.payload }
+        // case UPDATE_BODYFAT:
+        // return { ...state, bodyfat: action.payload }
         case CALCULATE + '_FULFILLED':
         return {
             ...state,
+            height: action.payload.meta.height,
+            age: action.payload.meta.age,
+            weight: action.payload.meta.wight,
+            bodyfat: action.payload.meta.bodyfat,
+            goal: action.payload.meta.goal,
+            gender: action.payload.meta.gender,
+            activity: action.payload.meta.activity,
+            tenacity: action.payload.meta.tenacity,
             macros: {
                 protein: action.payload.p,
                 carbs: action.payload.c,

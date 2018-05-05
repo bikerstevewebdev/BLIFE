@@ -11,19 +11,38 @@ class ProgressData extends Component {
             labels: [],
             datasets: [
                 {
-                    label: 'Weight',
-                    data: [],
-                    backgroundColor: 'pink',
-                    fill: false
-                    // yAxisID: "pounds"
-                },
-                {
                     label: 'Bodyfat',
                     data: [],
                     backgroundColor: "green",
                     fill: false
-                    
-                    // yAxisID: "%"            
+                },
+                {
+                    label: 'Weight',
+                    data: [],
+                    backgroundColor: 'pink',
+                    fill: false,
+                    hidden: true
+                },
+                {
+                    label: 'Neck',
+                    data: [],
+                    backgroundColor: "green",
+                    fill: false,
+                    hidden: true
+                },
+                {
+                    label: 'Chest',
+                    data: [],
+                    backgroundColor: "green",
+                    fill: false,
+                    hidden: true
+                },
+                {
+                    label: 'Waist',
+                    data: [],
+                    backgroundColor: "green",
+                    fill: false,
+                    hidden: true
                 }
             ],
         },
@@ -49,7 +68,7 @@ class ProgressData extends Component {
         //     },
         //   },
         animation: {
-            duration: 2000,
+            duration: 2500,
         }
   
         }
@@ -85,15 +104,31 @@ class ProgressData extends Component {
                                     data: this.props.mezHistory.weights,
                                     backgroundColor: "red",
                                     fill: false
-                                    
                                 },
                                 {
                                     label: 'Bodyfat',
                                     data: this.props.mezHistory.bfs,
                                     backgroundColor: "blue",
                                     fill: false
-                                    
-                                }
+                                },
+                                {
+                                    label: 'Neck',
+                                    data: this.props.mezHistory.necks,
+                                    backgroundColor: "yellow",
+                                    fill: false
+                                },
+                                {
+                                    label: 'Chest',
+                                    data: this.props.mezHistory.chests,
+                                    backgroundColor: "brown",
+                                    fill: false
+                                },
+                                {
+                                    label: 'Waist',
+                                    data: this.props.mezHistory.waists,
+                                    backgroundColor: "purple",
+                                    fill: false
+                                },
                             ]
                          }
 
