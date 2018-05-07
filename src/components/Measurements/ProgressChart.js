@@ -68,7 +68,7 @@ class ProgressData extends Component {
         //     },
         //   },
         animation: {
-            duration: 2500,
+            duration: 1500,
         }
   
         }
@@ -137,7 +137,7 @@ class ProgressData extends Component {
     }
     render() {
       return (
-        <div>
+        <div style={{...this.props.styles}}>
           <Line data={this.state.chartData} options={this.state.chartOptions} />
         </div>
       )

@@ -50,8 +50,20 @@ class PhotoUpload extends Component {
     }
 
     render(){
+        const uploadStyles = {
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignItems: "center",
+            boxShadow: "1px 1px 2px 0px rgb(25, 39, 31)",
+            borderRadius: "3px",
+            backgroundColor: "#99d066"
+        }
+        
         return (
-            <div className="photo-upload">
+            <div style={{...uploadStyles}} className="photo-upload">
                 <h3>Upload a Progress Picture</h3>
                 <RaisedButton style={{display: "flex", alignItems: "center", width: "200px"}} secondary={true} >
                     <FileUpload/>Choose a File
@@ -59,7 +71,6 @@ class PhotoUpload extends Component {
                         <input style={{width: "100%", height: "36px", display: "none"}} type="file" id="file-input" onChange={this.handlePhoto}/>
                     </label>
                 </RaisedButton>
-                <br/>
                 {
                 this.state.file &&
                 <img src={this.state.file} alt="preview" className="file-preview"/>  

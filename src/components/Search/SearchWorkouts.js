@@ -35,12 +35,15 @@ class SearchWorkouts extends Component{
         this.props.endFitnessSearch()
     }
 
+    componentWillUnmount(){
+        this.props.endFitnessSearch()
+    }
 
     render() {
-        const { arg2, arg3, handleBtnClick, btnMsg, doSomething, workoutSearchResults } = this.props
+        const { arg2, arg3, handleBtnClick, btnMsg, doSomething, workoutSearchResults, btn2Fn } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
-                <WorkoutCard workout_id={res.workout_id} title={res.title} img={res.img} type={res.type} />
+                <WorkoutCard workout_id={res.workout_id} btn2Fn={btn2Fn} btn2Label={"Add to my workouts"} title={res.title} img={res.img} type={res.type} />
                 // <section className="workout-search-result" key={res.workout_id}>
                 //     <p>{res.title}</p>
                 //     <img src={res.img} alt={res.title} />
@@ -54,20 +57,19 @@ class SearchWorkouts extends Component{
                 // </section>
             )
         })
-        const workSearchStyle = {
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            width: "80%",
-            gridGap: "20px",
-            justifyContent: "center"
-        }
+        // const workSearchStyle = {
+        //     width: "100%",
+        //     display: "grid",
+        //     gridTemplateRows: "auto",
+        //     gridTemplateColumns: "1fr 1fr",
+        //     justifyContent: "center",
+        //     gridGap: "0.75em"
+        // }
         return (
-            <section style={workSearchStyle} className="workout-search">
-                <section style={{gridColumn: "1 / 4", display: "flex", alignItems: "flex-end", justifyContent: "center"}}>
-                    <h2>Find your new Workout:</h2>
-                    <TextField floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
-                    <RaisedButton secondary={true} icon={<Search />} style={{alignSelf: "center", width: "300px"}} onClick={this.searchWorkouts}/>
-                </section>
+            <section style={{...this.props.style}} className="workout-search">
+                    <h2 style={{gridColumn: "1/3", justifySelf: "center"}}>Find your new Workout:</h2>
+                    <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)", borderRadius: "3px"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
+                    <RaisedButton secondary={true} icon={<Search />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchWorkouts}>Search for a new Workout</RaisedButton>
                 {/* <button style={} >Search!</button> */}
                 {workoutResults}
             </section>

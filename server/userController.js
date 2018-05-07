@@ -54,6 +54,22 @@ module.exports = {
         })
     },
     
+    archiveMenu: (req, res, next) => {
+        const db = req.app.get('db')
+            , { user_menu_id } = req.body
+        db.archive_menu([req.user.user_id, user_menu_id]).then(menus => {
+            res.status(200).send(menus)
+        })
+    },
+    
+    archiveWorkout: (req, res, next) => {
+        const db = req.app.get('db')
+            , { user_workout_id } = req.body
+        db.archive_workout([req.user.user_id, user_workout_id]).then(workouts => {
+            res.status(200).send(workouts)
+        })
+    },
+    
     getUserInfo: (req, res, next) => {
         if(req.user){
             const db      = req.app.get('db'),

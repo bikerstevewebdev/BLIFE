@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserData, updateUserStats, addMacrosToState, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts, getAllProgressPics, getCurrentPhotos } from '../../ducks/userReducer';
+import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
 import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
@@ -25,29 +25,30 @@ class Profile extends Component{
     constructor() {
         super()
         this.state = {
-            showingAssigned: false,
-            showingAllProgressPics: false
+            // showingAssigned: false,
+            showingAllProgressPics: false,
+            picturesRetrieved: false
             // updatedHtWtBf: false
         }
         this.updateNewMes = this.updateNewMes.bind(this)
         this.discardNewMes = this.discardNewMes.bind(this)
-        this.showAssigned = this.showAssigned.bind(this)
+        // this.showAssigned = this.showAssigned.bind(this)
     }
 
     
     componentDidMount() {
             this.props.getUserData()
         
-        console.log(this.props)
-        const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = this.props
-        const { has_coach } = userData
-        if(has_coach && assignedMenus.length < 1 && assignedWorkouts.length < 1){
-            getAssignedMenus()
-            getAssignedWorkouts()
-        } else if(userMenus.length < 1 && userWorkouts.length < 1){
-            getUserMenus()
-            getUserWorkouts()
-        }
+        // console.log(this.props)
+        // const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = this.props
+        // const { has_coach } = userData
+        // if(has_coach && assignedMenus.length < 1 && assignedWorkouts.length < 1){
+        //     getAssignedMenus()
+        //     getAssignedWorkouts()
+        // } else if(userMenus.length < 1 && userWorkouts.length < 1){
+        //     getUserMenus()
+        //     getUserWorkouts()
+        // }
         // const { pro, carbs, fat, curr_mes, userData, bodyfat, weight, height } = this.props
         // if(curr_mes.mes_id !== userData.curr_mes && pro > 0){
         //     this.props.addMacrosToState(pro, carbs, fat, bodyfat, weight, height)
@@ -79,12 +80,6 @@ class Profile extends Component{
         // }
     }
 
-        showAssigned(){
-            this.setState({
-                showingAssigned: true
-            })
-        }
-    
         showAllProgressPics(val){
             if(val){
                 this.props.getAllProgressPics()
@@ -113,45 +108,52 @@ class Profile extends Component{
         
         render() {
             const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus, assignedWorkouts, assignedMenus, progress_pics } = this.props
-            let assignedMenuList, assignedWorkoutList, workoutsList, menusList
             const progressPics = progress_pics.map(pic => <PhotoCard key={pic.photo_id} date_added={pic.date_added} src={pic.url} photo_id={pic.photo_id} alt={userData.username + ' ' + pic.type} />)
-            /////////////////Users Menus/Workouts////////////////////
-            if(userMenus){
-                menusList = userMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
-            }else{
-                menusList = null
+            const profileStyles = {
+                height: "100%",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateRows: "150px",
+                gridAutoFlow: "rows",
+                // gridAutoRows: "150px",
+                width: "100%",
+                gridGap: "0.75em"            
             }
-            if(userWorkouts){
-                workoutsList = userWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
-            }else{
-                workoutsList = null
-            }
-            /////////////////assigned//////////////
-            if(assignedMenus){
-                assignedMenuList = assignedMenus.map(menu => <MenuCard key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
-            }else{
-                assignedMenuList = null
-            }
-            if(assignedWorkouts){
-                assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
-            }else{
-                assignedWorkoutList = null
+            const statsStyles = {
+                gridArea: "3/3/4/4",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
             }
         return(
-            <section className="comp profile">
-                <h1>Welcome Home</h1>
-                <ProgressChart />
-                <PhotoUpload />
-                {progressPics}
-                {
-                    this.state.showingAllProgressPics
-                    ?
-                    <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(false)}>Just Show Me My Current Progress Pictures</RaisedButton>
-                    :
-                    <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(true)}>Show me all my progress pictures</RaisedButton>
-                }
-                <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link>
-                <Link to='/updateProfile'><RaisedButton secondary={true} style={{backgroundColor: "orange"}}>Update Profile</RaisedButton></Link>
+            <section style={{...profileStyles}} className="comp profile">
+                <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={profile_pic} alt="users pic"/>
+                <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "2em"}}>Welcome Home</h1>
+                <section style={{gridArea: "1/3/2/4", display: "flex", flexDirection: "column", width: "100%", height: "100%", justifyContent: "space-around"}}>
+                    <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link>
+                    <Link to='/updateProfile'><RaisedButton secondary={true} style={{backgroundColor: "orange"}}>Update Profile</RaisedButton></Link>
+                </section>
+                <section style={{...profileStyles, gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em"}} className="progress-pics">
+                    <section style={{gridArea: "1/1/2/2"}} className="progress-pic-btn">
+                        {
+                            this.state.showingAllProgressPics
+                            ?
+                            <section>
+                                <h3>All of your Progress Pics:</h3>
+                                <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(false)}>Just Show Me My Current Progress Pictures</RaisedButton>
+                            </section>
+                            :
+                            <section>
+                                <h3>Your Current Progress Pics:</h3>
+                                <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(true)}>Show me all my progress pictures</RaisedButton>
+                            </section>
+                        }
+                    </section>
+                    {progressPics}
+                    <PhotoUpload  />
+                </section>
+                <ProgressChart styles={{gridArea: "3/1/4/3"}}/>
                 {
                     userData.coach_id > 0
                     ?
@@ -159,61 +161,35 @@ class Profile extends Component{
                     :
                     null
                 }
-                {/* Displays user's current menus: */}
-                <h2>Your Menus:</h2>
-                {
-                    this.state.showingAssigned && assignedMenus
-                    ?
-                    assignedMenuList
-                    :
-                    menusList
-
-                }
-                
-                {
-                    userData.has_coach
-                    ?
-                    <RaisedButton secondary={true} onClick={this.showAssigned}>Show me my coach's plan</RaisedButton>
-                    :
-                    null
-                }
-                <SearchMenus style={{width: "200px"}} doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addMenuToUser.bind(this)} />
-                {/* Displays user's current workouts: */}
-                <h2>Your Workouts:</h2>
-                {
-                    this.state.showingAssigned && assignedWorkouts
-                    ?
-                    assignedWorkoutList
-                    :
-                    workoutsList
-
-                }
-                <SearchWorkouts style={{width: "200px"}} doSomething={true} btnMsg={`Add this workout to your plan`} handleBtnClick={this.props.addWorkoutToUser.bind(this)} />
-                <h2>Current Stats</h2>
+                {/* <h2>Current Stats</h2> */}
                 {/* <p>Protein: {current_protein}g</p>
                 <p>Fat: {current_fat}g</p>
                 <p>Carbs: {current_carbs}g</p> */}
-                <p>Pofile Pic: </p>
+                {/* <p>Pofile Pic: </p> */}
                 {/* <Image src={profile_pic} size='medium' circular /> */}
-                <img style={{width: "200px", height: "200px", borderRadius: "50%", overFlow: "hidden"}} src={profile_pic} alt="users pic"/>
+                
                 {/* <p>Weight: {current_weight}pounds</p>
                 <p>Height: {current_height}inches</p>
                 <p>Bodyfat: {current_bf}%</p> */}
-                <MobileTearSheet >
-                    <Subheader>Current Measurements</Subheader>
-                    <List>
-                        <ListItem leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600}/>} primaryText="Weight" secondaryText={current_weight} />
-                        <ListItem insetChildren={true} primaryText="Height" secondaryText={current_height} />
-                        <ListItem insetChildren={true} primaryText="Bodyfat" secondaryText={current_bf} />
-                    </List>
-                    <Divider inset={true} />
-                    <Subheader>Current Macros</Subheader>
-                    <List>
-                        <ListItem  leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />} primaryText={`Protein`} secondaryText={`${current_protein}g`} />
-                        <ListItem insetChildren={true} primaryText={`Fat`} secondaryText={`${current_fat}g`} />
-                        <ListItem insetChildren={true} primaryText={`Carbs`} secondaryText={`${current_carbs}g`} />
-                    </List>
-                </MobileTearSheet>
+                <section style={{...statsStyles}} className="current-stats">
+                    <MobileTearSheet >
+                        <Subheader>Current Measurements</Subheader>
+                        <List>
+                            <ListItem leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600}/>} primaryText="Weight" secondaryText={current_weight} />
+                            <ListItem insetChildren={true} primaryText="Height" secondaryText={current_height} />
+                            <ListItem insetChildren={true} primaryText="Bodyfat" secondaryText={current_bf} />
+                        </List>
+                        {/* <Divider inset={true} /> */}
+                    </MobileTearSheet>
+                    <MobileTearSheet >
+                        <Subheader>Current Macros</Subheader>
+                        <List>
+                            <ListItem  leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />} primaryText={`Protein`} secondaryText={`${current_protein}g`} />
+                            <ListItem insetChildren={true} primaryText={`Fat`} secondaryText={`${current_fat}g`} />
+                            <ListItem insetChildren={true} primaryText={`Carbs`} secondaryText={`${current_carbs}g`} />
+                        </List>
+                    </MobileTearSheet >
+                </section>
                 {
                     this.props.isUpdating
                     ?
@@ -252,12 +228,8 @@ function mapStateToProps(state){
         height,
         bodyfat,
         isUpdating,
-        userMenus,
-        userWorkouts,
-        assignedMenus,
-        assignedWorkouts,
         progress_pics
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getUserMenus, getUserWorkouts, addMenuToUser, addWorkoutToUser, getAssignedMenus, getAssignedWorkouts, getAllProgressPics, getCurrentPhotos })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getAllProgressPics, getCurrentPhotos })(Profile)

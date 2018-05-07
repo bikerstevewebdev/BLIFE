@@ -13,6 +13,7 @@ import {
      lightGreenA200,
      fullBlack
      } from 'material-ui/styles/colors'
+// import '../semantic/dist/semantic.min.css'
 import {fade} from 'material-ui/utils/colorManipulator'
 import './index.css';
 import App from './App';
@@ -23,6 +24,7 @@ import { HashRouter as Router } from 'react-router-dom'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 // import muiThemeable from 'material-ui/styles/muiThemeable'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+// import { StripeProvider } from 'react-stripe-elements'
 
 const muiTheme = getMuiTheme({
     palette: {
@@ -47,11 +49,12 @@ const muiTheme = getMuiTheme({
   })
 
 ReactDOM.render(
-<Provider store={store}>
-    <Router>
-        <MuiThemeProvider muiTheme={muiTheme}>
-            <App />
-        </MuiThemeProvider>
-    </Router>
-</Provider>, document.getElementById('root'));
+    <Provider store={store}>
+        <Router>
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <App />
+            </MuiThemeProvider>
+        </Router>
+    </Provider>,
+ document.getElementById('root'));
 // registerServiceWorker();

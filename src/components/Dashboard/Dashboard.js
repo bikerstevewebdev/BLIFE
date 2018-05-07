@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getUserData } from '../../ducks/userReducer'
+import { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu } from '../../ducks/userReducer'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import SearchMeal from '../Search/SearchMeals'
@@ -7,25 +7,38 @@ import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
 import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
+import MenuCard from '../Menu/MenuCard'
+import WorkoutCard from '../Workout/WorkoutCard'
 
 class Dashboard extends Component{
     constructor() {
         super()
         this.state = {
-            firstVisit: false
+            firstVisit: false,
+            showingAssigned: false
             // searchingMeals: true,
             // searchingMenus: true,
             // searchingWorkouts: true
         }
+        this.showAssigned = this.showAssigned.bind(this)
+        
         // this.endWorkoutSearch = this.endWorkoutSearch.bind(this)
         // this.endMealSearch = this.endMealSearch.bind(this)
         // this.endMenuSearch = this.endMenuSearch.bind(this)
     }
     componentDidMount() {
-        // const { user_id } = this.props.userData
-        // if(!user_id && user_id <= 0){
+        const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = this.props
+        const { has_coach, user_id } = userData
+        // if(user_id === 0){
             this.props.getUserData()
         // }
+        if(has_coach && assignedMenus.length < 1 && assignedWorkouts.length < 1){
+            getAssignedMenus()
+            getAssignedWorkouts()
+        } else if(userMenus.length < 1 && userWorkouts.length < 1){
+            getUserMenus()
+            getUserWorkouts()
+        }
         console.log('DBoard props', this.props)
     }
 
@@ -38,21 +51,119 @@ class Dashboard extends Component{
         // }
     }
 
-    // getUserObjs() {
-    //     axios.get('/auth/me').then(res => {
-    //         console.log(res.data)
-    //     })
-    // }
-    
-    
+    showAssigned(){
+        this.setState({
+            showingAssigned: true
+        })
+    }
+
     render() {
+        const { userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts, archiveWorkout, archiveMenu } =this.props
+        const { curr_pro, curr_carb, curr_fat } = userData
+        let assignedMenuList, assignedWorkoutList, workoutsList, menusList
+        const menuSearchStyle = {
+            width: "100%",
+            display: "grid",
+            gridTemplateRows: "auto",
+            gridTemplateColumns: "1fr 1fr",
+            justifyContent: "center",
+            gridGap: "0.75em",
+            gridColumn: "1/3",
+            alignContent: "baseline"
+        }
+        const workSearchStyle = {
+            width: "100%",
+            display: "grid",
+            gridTemplateRows: "auto",
+            gridTemplateColumns: "1fr 1fr",
+            justifyContent: "center",
+            gridGap: "0.75em",
+            gridColumn: "3/5",
+            alignContent: "baseline"
+        }
+        const dbStyles = {
+            height: "100%",
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gridTemplateRows: "150px",
+            // gridAutoRows: "150px",
+            width: "100%",
+            gridGap: "0.75em"            
+        }
+        const macroStyles = {
+            width: "100%",
+            gridColumn: "4/5",
+            justifyContent: "space-around",
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            padding: "10% 0"
+        }
+        /////////////////Users Menus/Workouts////////////////////
+        if(userMenus){
+            menusList = userMenus.map(menu => <MenuCard btn2Fn={archiveMenu} user_menu_id={menu.user_menu_id} btn2Label="Archive" key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
+        }else{
+            menusList = null
+        }
+        if(userWorkouts){
+            workoutsList = userWorkouts.map(workout => <WorkoutCard btn2Fn={archiveWorkout} user_workout_id={workout.user_workout_id} btn2Label="Archive" key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+        }else{
+            workoutsList = null
+        }
+        /////////////////assigned//////////////
+        if(assignedMenus){
+            assignedMenuList = assignedMenus.map(menu => <MenuCard  user_menu_id={menu.user_menu_id} key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
+        }else{
+            assignedMenuList = null
+        }
+        if(assignedWorkouts){
+            assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard user_workout_id={workout.user_workout_id} key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+        }else{
+            assignedWorkoutList = null
+        }
         return(
-            <section style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%"}} className="comp dashboard">
-                <h1>Welcome back {this.props.userData.username}</h1>
+            <section style={{...dbStyles}} className="comp dashboard">
+                <h1 style={{gridColumn: "2/4", fontSize: "2em", alignSelf: "center"}}>Welcome back {this.props.userData.username}</h1>
+                <section style={macroStyles}>
+                    <h3>Your Current Macros:</h3>
+                    <section style={{display: "flex", justifyContent: "space-around"}}>
+                        <p>Protein: {curr_pro}</p>
+                        <p>Carbs: {curr_carb}</p>
+                        <p>Fat: {curr_fat}</p>
+                    </section>
+                </section>
+                {
+                    userData.has_coach
+                    ?
+                    <RaisedButton secondary={true} onClick={this.showAssigned}>Show me my coach's plan</RaisedButton>
+                    :
+                    null
+                }
+                <section style={{...menuSearchStyle, gridArea: "2/1/4/3"}} className="user-menus">
+                    <h2 style={{gridArea: "1/1/2/3"}} >Your Menus:</h2>
+                    {
+                        this.state.showingAssigned && assignedMenus
+                        ?
+                        assignedMenuList
+                        :
+                        menusList
+                        
+                    }
+                </section>
+                <section style={{...workSearchStyle, gridArea: "2/3/4/5"}} className="user-workouts">
+                    <h2 style={{gridArea: "1/1/2/3"}} >Your Workouts:</h2>
+                    {
+                        this.state.showingAssigned && assignedWorkouts
+                        ?
+                        assignedWorkoutList
+                        :
+                        workoutsList
+
+                    }
+                </section>
+                <SearchMenu btn2Fn={this.props.addMenuToUser} style={{...menuSearchStyle}}/>
+                <SearchWorkout btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
                 <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
-                <SearchMeal />
-                <SearchMenu />
-                <SearchWorkout />
                 {
                     this.state.firstVisit
                     ?
@@ -66,9 +177,16 @@ class Dashboard extends Component{
 }
 
 function mapStateToProps(state){
+    const { curr_mes, userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = state.users
+    
     return {
-        userData: state.users.userData
+        userData: state.users.userData,
+        userMenus,
+        userWorkouts,
+        assignedMenus,
+        assignedWorkouts,
+        curr_mes
     }
 }
 
-export default connect(mapStateToProps, { getUserData })(Dashboard)
+export default connect(mapStateToProps, { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu })(Dashboard)

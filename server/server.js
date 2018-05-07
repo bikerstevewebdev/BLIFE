@@ -7,10 +7,11 @@ const express          = require('express'),
       session          = require('express-session'),
       massive          = require('massive'),
       { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT, DOMAIN, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env,
-      uc                = require('./userController'),
+      uc               = require('./userController'),
       fc               = require('./foodController'),
       cc               = require('./coachController'),
       fitc             = require('./fitnessController'),
+      stripe           = require('stripe')(process.env.S_STRIPE_KEY),
       port             = SERVER_PORT, // || 3000
       S3 = require('./awsS3.js')
 
@@ -116,6 +117,7 @@ app.get('/clientInfo', cc.getClientInfo)
 app.get('/adminInfo', cc.getAdminInfo)
 app.get('/userMenus', uc.getUserMenus)
 app.get('/userWorkouts', uc.getUserWorkouts)
+app.get('/user/currentPics', uc.getCurrentPhotos)
 app.get('/user/progressPics', uc.getAllProgressPhotos)
 app.get('/history/user/measurements', uc.getMezHistory)
 
@@ -147,8 +149,22 @@ app.put('/meal/foods/quantity', fc.updateFoodQuantity)
 app.put('/menu', fc.editMenu)
 app.put('/exercise', fitc.editExercise)
 app.put('/workout/exercise', fitc.updateWorkoutEx)
-
+app.put('/user/menus/archive', uc.archiveMenu)
+app.put('/user/workouts/archive', uc.archiveWorkout)
 S3(app)
+
+app.post('/api/charge', function(req, res){
+    const db = app.get('db')
+    console.log(req.body.amount)
+    const charge = stripe.charges.create({
+        amount: req.body.amount,
+        currency: 'usd',
+        source: req.body.token.id,
+        description: 'Example charge'
+      })
+      res.sendStatus(200) // clear out cart here
+})
+
 
 app.post('/user/mez', uc.addMez)
 app.post('/macroCalc', uc.newMacroCalc)

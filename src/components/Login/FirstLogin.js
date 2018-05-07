@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { requestCoachAccess, updateUsername, updateFullname } from '../../ducks/userReducer'
 import RaisedButton from 'material-ui/RaisedButton'
 import './FirstLogin.css'
+import StripeDefault from '../Stripe/StripeDefault'
+
 
 
 class FirstLogin extends Component{
@@ -150,6 +152,7 @@ class FirstLogin extends Component{
                     isRequesting
                     ?
                     <section className="coach-request-edit">
+                        <StripeDefault total={39} />
                         <h2>Are you here to coach others?</h2>
                         <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton >
                         <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(false)}>No thanks, just here to find a healthy balance.</RaisedButton >

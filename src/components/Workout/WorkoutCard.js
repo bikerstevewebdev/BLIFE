@@ -5,10 +5,10 @@ import FlatButton from 'material-ui/FlatButton'
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 
 function WorkoutCard(props) {
-    const { workout_id, title, img, type } = props
+    const { workout_id, title, img, type, btn2Label, btn2Fn, user_workout_id } = props
     return(
         <Card style={{width: "100%"}} >
-            <CardMedia  >
+            <CardMedia style={{height: "12.5em"}} >
                 <img src={img} alt={title} />
             </CardMedia>
             <CardTitle title={title} />
@@ -17,7 +17,7 @@ function WorkoutCard(props) {
             </CardText>
             <CardActions>
                 <Link to={`/workout/${workout_id}`}><FlatButton label="Details" /></Link>
-                <FlatButton label="Archive" />
+                <FlatButton onClick={() => btn2Fn(user_workout_id || workout_id)} label={btn2Label} />
             </CardActions>
         </Card>
         

@@ -66,6 +66,8 @@ const GET_CURRENT_PICS = 'GET_CURRENT_PICS'
 const CLEAR_USER_MESSAGE = 'CLEAR_USER_MESSAGE'
 const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV'
 const GET_PAST_MEASUREMENTS = 'GET_PAST_MEASUREMENTS'
+const ARCHIVE_WORKOUT = 'ARCHIVE_WORKOUT'
+const ARCHIVE_MENU = 'ARCHIVE_MENU'
 
 /////////////////END String Literals//////////////////////
 
@@ -145,6 +147,17 @@ export function getCurrentPhotos() {
     }
 }
 
+export function archiveMenu(user_menu_id) {
+    let menus = axios.put('/user/menus/archive', { user_menu_id }).then(res => {
+        return res.data
+    })
+    return {
+        type: ARCHIVE_MENU,
+        payload: menus
+    }
+}
+
+
 export function addMenuToUser(menu_id) {
     let menus = axios.post('/userMenus', { menu_id }).then(res => {
         return res.data
@@ -155,16 +168,26 @@ export function addMenuToUser(menu_id) {
     }
 }
 
-export function addWorkoutToUser(workout_id) {
-    let menus = axios.post('/userWorkouts', { workout_id }).then(res => {
+export function archiveWorkout(user_workout_id) {
+    let workouts = axios.put('/user/workouts/archive', { user_workout_id }).then(res => {
         return res.data
     })
     return {
-        type: ADD_WORKOUT_TO_USER,
-        payload: menus
+        type: ARCHIVE_WORKOUT,
+        payload: workouts
     }
 }
 
+export function addWorkoutToUser(workout_id) {
+    let menus = axios.post('/userWorkouts', { workout_id }).then(res => {    
+        return res.data        
+    })            
+    return {                
+        type: ADD_WORKOUT_TO_USER,                    
+        payload: menus                        
+    }                            
+}                                
+                                    
 export function getUserWorkouts() {
     let workouts = axios.get('/userWorkouts').then(res => {
         return res.data
@@ -395,7 +418,11 @@ export default function(state = initialState, action) {
                 return { ...state, user: {...state.user, profile_pic: action.payload.profile_pic}, userData: action.payload}
             case ADD_WORKOUT_TO_USER +'_FULFILLED':
                 return { ...state, userWorkouts: action.payload}
+            case ARCHIVE_WORKOUT +'_FULFILLED':
+                return { ...state, userWorkouts: action.payload}
             case ADD_MENU_TO_USER +'_FULFILLED':
+                return { ...state, userMenus: action.payload}
+            case ARCHIVE_MENU +'_FULFILLED':
                 return { ...state, userMenus: action.payload}
         default:
             return state
