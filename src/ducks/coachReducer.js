@@ -42,6 +42,7 @@ const DENY_COACH_ACCESS = 'DENY_COACH_ACCESS'
 const ASSIGN_MENU = 'ASSIGN_MENU'
 const ASSIGN_WORKOUT = 'ASSIGN_WORKOUT'
 const CLEAR_COACH_MESSAGE = 'CLEAR_COACH_MESSAGE'
+const REQUEST_A_COACH = 'REQUEST_A_COACH'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
@@ -125,6 +126,16 @@ export function denyCoach() {
     }
 }
 
+export function requestACoach() {
+    let msg = axios.post('/client/coach/request').then(res => {
+        return res.data
+    })
+    return {
+        type: REQUEST_A_COACH,
+        payload: msg
+    }
+}
+
 export function clearCoachMessage() {
     return {
         type: CLEAR_COACH_MESSAGE,
@@ -165,6 +176,10 @@ export default function(state = initialState, action) {
                 } else{
                     return { ...state, potentialClient: action.payload }
                 }
+        case REQUEST_A_COACH + '_FULFILLED': 
+                    return { ...state, warningMsg: action.payload.message }
+        case REQUEST_A_COACH + '_REJECTED':
+                    return { ...state, warningMsg: action.payload.response.data.message }
         case ASSIGN_MENU + '_FULFILLED': 
                 if(action.payload.message){
                     return { ...state, warningMsg: action.payload.message }

@@ -12,6 +12,7 @@ CREATE TABLE users (
     curr_fat REAL DEFAULT 0,
     curr_mes_id INTEGER DEFAULT 0,
     auth_id TEXT NOT NULL,
+    has_coach BOOLEAN DEFAULT false,
     last_login INTEGER
 );
 
@@ -148,7 +149,9 @@ CREATE TABLE client_coach (
     client_coach_id SERIAL PRIMARY KEY,
     user_id INTEGER,
     coach_id INTEGER,
-    current BOOLEAN DEFAULT true,
+    req_pending BOOLEAN DEFAULT true,
+    accepted BOOLEAN DEFAULT false,
+    current BOOLEAN DEFAULT true
 );
 
 

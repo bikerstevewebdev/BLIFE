@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu } from '../../ducks/userReducer'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import SearchMeal from '../Search/SearchMeals'
+// import SearchMeal from '../Search/SearchMeals'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
 import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
+import { requestACoach } from '../../ducks/coachReducer'
 
 class Dashboard extends Component{
     constructor() {
@@ -28,7 +29,7 @@ class Dashboard extends Component{
     }
     componentDidMount() {
         const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = this.props
-        const { has_coach, user_id } = userData
+        const { has_coach } = userData
         // if(user_id === 0){
             this.props.getUserData()
         // }
@@ -85,7 +86,7 @@ class Dashboard extends Component{
             height: "100%",
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
-            gridTemplateRows: "150px",
+            gridTemplateRows: "150px 100px",
             // gridAutoRows: "150px",
             width: "100%",
             gridGap: "0.75em"            
@@ -132,15 +133,17 @@ class Dashboard extends Component{
                         <p>Fat: {curr_fat}</p>
                     </section>
                 </section>
-                {
-                    userData.has_coach
-                    ?
-                    <RaisedButton secondary={true} onClick={this.showAssigned}>Show me my coach's plan</RaisedButton>
-                    :
-                    null
-                }
                 <section style={{...menuSearchStyle, gridArea: "2/1/4/3"}} className="user-menus">
-                    <h2 style={{gridArea: "1/1/2/3"}} >Your Menus:</h2>
+                    <section style={{display: "flex", height: "5em", justifyContent: "space-between", alignItems: "center", gridArea: "1/1/2/3"}} >
+                        <h2 >Your Menus:</h2>
+                        {
+                            userData.has_coach
+                            ?
+                            <RaisedButton secondary={true} onClick={this.showAssigned}>Show me my coach's plan</RaisedButton>
+                            :
+                            <RaisedButton onClick={this.props.requestACoach} secondary={true}>Request a Coach</RaisedButton>
+                        }
+                    </section>
                     {
                         this.state.showingAssigned && assignedMenus
                         ?
@@ -151,7 +154,8 @@ class Dashboard extends Component{
                     }
                 </section>
                 <section style={{...workSearchStyle, gridArea: "2/3/4/5"}} className="user-workouts">
-                    <h2 style={{gridArea: "1/1/2/3"}} >Your Workouts:</h2>
+                        <h2 style={{display: "flex", alignItems: "center", height: "5em", gridArea: "1/1/2/3"}} >Your Workouts:</h2>
+                    
                     {
                         this.state.showingAssigned && assignedWorkouts
                         ?
@@ -180,7 +184,7 @@ function mapStateToProps(state){
     const { curr_mes, userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = state.users
     
     return {
-        userData: state.users.userData,
+        userData,
         userMenus,
         userWorkouts,
         assignedMenus,
@@ -189,4 +193,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu })(Dashboard)
+export default connect(mapStateToProps, { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu, requestACoach })(Dashboard)

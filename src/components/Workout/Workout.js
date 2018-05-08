@@ -65,17 +65,31 @@ class Workout extends Component{
                 ) }),
               workoutExsList = workoutExs.map(exercise => {
                     const { ex_id, name, workout_ex_id, type, main_muscle_group, notes, ex_order, reps, sets, rest_time } = exercise
-                    return <ExerciseCard key={workout_ex_id} numExs={numExs} workout_id={workout_id} main_muscle_group={main_muscle_group} notes={notes} reps={reps} sets={sets} ex_order={ex_order} type={type} rest_time={rest_time} ex_id={ex_id} workout_ex_id={workout_ex_id} name={name} img={exercise.img} />            
-                 })
+                    return <ExerciseCard style={{gridColumn: "1/6", alignSelf: "center"}} key={workout_ex_id} numExs={numExs} workout_id={workout_id} main_muscle_group={main_muscle_group} notes={notes} reps={reps} sets={sets} ex_order={ex_order} type={type} rest_time={rest_time} ex_id={ex_id} workout_ex_id={workout_ex_id} name={name} img={exercise.img} />            
+                 }),
+                 designerStyles = {
+                     display: "grid",
+                     width: "100%",
+                     gridTemplateColumns: "repeat(5, 1fr)",
+                     gridTemplateRows: "15em",
+                     gridAutoRows: "4.5em",
+                     
+                 }
         return(
-            <section className="workout">
-                <h2>{title}</h2>
-                {img ? <img src={img} alt={title} /> : null}                
-                <h3>Exercises in this Workout:</h3>
-                {workoutExsList}
+            <section style={{...designerStyles}} className="workout">
+                <section style={{gridArea: "1/1/2/6", justifySelf: "center", alignSelf: "center", textAlign: "center"}} className="heading">
+                    <h1 style={{fontSize: "2.5em"}} >{title}</h1>
+                    {img ? <img src={img} alt={title} /> : null}                
+                </section>
+                <h3 style={{gridArea: "2/1/3/6", justifySelf: "start", alignSelf: "center"}} >Exercises in this Workout:</h3>
+                <section style={{...designerStyles, gridArea: "3/1/4/6"}}>
+                    {workoutExsList}
+                </section>
                 <input value={searchIn} placeholder="Search Exercises by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
                 <RaisedButton secondary={true} onClick={() => this.props.searchExercises(searchIn)}>Search the exercise database!</RaisedButton>
-                {exerciseResults}
+                <section>
+                    {exerciseResults}
+                </section>
             </section>
         )
     }

@@ -172,6 +172,7 @@ app.post('/userMenus', uc.addMenuToUser)
 app.post('/userWorkouts', uc.addWorkoutToUser)
 app.post('/client/menus', cc.assignMenuToClient)
 app.post('/client/workouts', cc.assignWorkoutToClient)
+app.post('/client/coach/request', cc.requestACoach)
 
 app.post('/food/external/search', fc.searchExternalFoods)
 app.post('/food', fc.createFood)

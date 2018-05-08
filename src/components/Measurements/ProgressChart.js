@@ -83,7 +83,7 @@ class ProgressData extends Component {
     componentDidUpdate(){
         console.log("state: ",this.state, "this.props", this.props)
         const { dates } = this.props.mezHistory
-        const { user_id, curr_mes_id } = this.props.userData
+        const { curr_mes_id } = this.props.userData
         if(curr_mes_id > 0 && dates.length < 1){
             this.props.getPastMeasurements()
         }

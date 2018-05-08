@@ -91,6 +91,20 @@ module.exports = {
         })
     },
 
+    requestACoach: (req, res, next) => {
+        const db      = req.app.get('db')
+        , { user_id } = req.user
+        db.check_for_coach_request([user_id]).then(results => {
+            if(results.length > 0){
+                res.status(400).send({message: "You have already requested a coach, please allow time to match you with the proper coach."})
+            }else{
+                db.request_a_coach([user_id]).then(coachReqs => {
+                    res.status(200).send({message: "Your wish is my command."})
+                })
+            }
+        })
+    },
+
     assignWorkoutToClient: (req, res, next) => {
         const db = req.app.get('db')
         , { workout_id, coach_client_id, client_id } = req.body

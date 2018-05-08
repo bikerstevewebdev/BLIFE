@@ -111,7 +111,7 @@ class App extends Component {
               {/* <Route path='/mealFromRecipe' component={MealFromRecipe} /> */}
             </Switch>
           <SideNav />
-          <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onRequestClose={this.close} onActionClick={this.close} open={this.state.open} />
+          <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onActionClick={this.close} open={this.state.open} />
           </section>
       </div>
     );

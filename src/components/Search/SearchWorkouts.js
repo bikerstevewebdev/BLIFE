@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchWorkouts, endFitnessSearch } from '../../ducks/fitnessReducer'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import Search from 'material-ui/svg-icons/action/search'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -40,7 +40,7 @@ class SearchWorkouts extends Component{
     }
 
     render() {
-        const { arg2, arg3, handleBtnClick, btnMsg, doSomething, workoutSearchResults, btn2Fn } = this.props
+        const { workoutSearchResults, btn2Fn } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
                 <WorkoutCard workout_id={res.workout_id} btn2Fn={btn2Fn} btn2Label={"Add to my workouts"} title={res.title} img={res.img} type={res.type} />

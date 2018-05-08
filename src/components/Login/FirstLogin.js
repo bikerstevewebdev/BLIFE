@@ -5,6 +5,10 @@ import { requestCoachAccess, updateUsername, updateFullname } from '../../ducks/
 import RaisedButton from 'material-ui/RaisedButton'
 import './FirstLogin.css'
 import StripeDefault from '../Stripe/StripeDefault'
+import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
+import FlatButton from 'material-ui/FlatButton';
+import ExpandTransition from 'material-ui/internal/ExpandTransition';
+
 
 
 
@@ -20,7 +24,9 @@ class FirstLogin extends Component{
             sendingToMacroCalc: false,
             sendingToMes: false,
             isRequesting: false,
-            onFinalStep: false
+            onFinalStep: false,
+            loading: false,
+            stepIndex: 0
         }
         this.startUpdate = this.startUpdate.bind(this)
         this.sendToMacroCalc = this.sendToMacroCalc.bind(this)
@@ -30,6 +36,12 @@ class FirstLogin extends Component{
         this.updateUsernameIn = this.updateUsernameIn.bind(this)
         this.updateFullnameIn = this.updateFullnameIn.bind(this)
         this.requestAccess = this.requestAccess.bind(this)
+
+        this.dummyAsync = this.dummyAsync.bind(this)
+        this.handleNext = this.handleNext.bind(this)
+        this.handlePrev = this.handlePrev.bind(this)
+        this.getStepContent = this.getStepContent.bind(this)
+        this.renderContent = this.renderContent.bind(this)
 
     }
     
@@ -75,9 +87,12 @@ class FirstLogin extends Component{
                 addingFullname: true
                 })
         }
+        this.handleNext()
     }
 
-    endFullnameStep(){
+    endFullnameStep(fullname){
+        this.props.updateFullname(fullname)
+        this.handleNext()
         this.setState({
             addingFullname: false,
             isRequesting: true
@@ -93,6 +108,7 @@ class FirstLogin extends Component{
             isRequesting: false,
             onFinalStep: true
         })
+        this.handleNext()
     }
     
     sendToMacroCalc() {
@@ -106,73 +122,154 @@ class FirstLogin extends Component{
             sendingToMes: true
         })
     }
+
+    ////////////////////
+    dummyAsync = (cb) => {
+        this.setState({loading: true}, () => {
+          this.asyncTimer = setTimeout(cb, 500);
+        });
+      };
+    
+    handleNext = () => {
+    const {stepIndex} = this.state;
+    if (!this.state.loading) {
+        this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex + 1,
+        }));
+    }
+    };
+
+    handlePrev = () => {
+    const {stepIndex} = this.state;
+    if (!this.state.loading) {
+        this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex - 1,
+        }));
+    }
+    };
+
+    getStepContent(stepIndex) {
+        const { userData } = this.props,
+              { usernameIn, fullnameIn } = this.state
+    switch (stepIndex) {
+        case 0:
+        return (
+            <section>
+                <h1>Welcome to your Balanced Life!</h1>
+                <h2>Let's get you started with some simple user information...</h2>
+            </section>
+        );
+        case 1:
+        return (
+            <section>
+               <h2>What should we call you?</h2>
+                <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.endUsernameStep(usernameIn)}>Create Username</RaisedButton >
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={()=>this.endUsernameStep(false)}>Stick with {userData.username}</RaisedButton > 
+            </section>
+        );
+        case 2:
+        return (
+            <section>
+                <h2>What does your mother call you?</h2>
+                <input value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} placeholder="What do does your mother call you?"/>
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.endFullnameStep(fullnameIn)}>Add my Fullname</RaisedButton >
+            </section>
+        );
+        case 3:
+        return (
+            <section>
+                <StripeDefault total={39} />
+                <h2>Are you here to coach others?</h2>
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton >
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(false)}>No thanks, just here to find a healthy balance.</RaisedButton >
+            </section>
+        );
+        case 4:
+        return (
+            <section>
+                <h2>Would you like to start by adding your measurements or just calculating your macros?</h2>
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={this.sendToMes}>Add Measurements</RaisedButton >
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={this.sendToMacroCalc} >Calculate Macros</RaisedButton >
+                <Link to="/dashboard"><RaisedButton primary={true} style={{width: "200px"}}>No thanks, take me to the Dashboard</RaisedButton ></Link>
+            </section>
+        );
+        default:
+        return 'You\'re a long way from home sonny jim!';
+        }
+    }
+
+    renderContent() {
+        const { stepIndex } = this.state;
+        const contentStyle = {margin: '0 16px', overflow: 'hidden'};
+    
+        return (
+          <div style={contentStyle}>
+            <div>{this.getStepContent(stepIndex)}</div>
+            <div style={{marginTop: 24, marginBottom: 12}}>
+              <FlatButton
+                label="Back"
+                disabled={stepIndex === 0}
+                onClick={this.handlePrev}
+                style={{marginRight: 12}}
+              />
+              <RaisedButton
+                label={'Next'}
+                primary={true}
+                disabled={stepIndex > 0}
+                onClick={this.handleNext}
+              />
+            </div>
+          </div>
+        );
+      }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     render() {
-        const { userData, updateFullname } = this.props,
-              { usernameIn, editingUsername, addingFullname, fullnameIn, sendingToMacroCalc, sendingToMes, isRequesting, onFirstStep, onFinalStep } = this.state
+        const { sendingToMacroCalc, sendingToMes } = this.state
+        const { loading, stepIndex } = this.state
         return(
-            <section className="comp first-login">
-                {
-                    onFirstStep
-                    ?
-                    <section className="first-step">
-                        <h1>Welcome to your Balanced Life!</h1>
-                        {/* could use a delay for the second item to transition in */}
-                        <h2>Let's get you started with some simple user information...</h2>
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={this.startUpdate}>Ok</RaisedButton>
-                    </section>
-                    :
-                    null
-                }
-                {/* Use React Motion and conditional rendering here to make smooth transitions, maybe functional components for each step of the sign-up process */}
-                {
-                    editingUsername
-                    ?
-                    <section className="username-edit">
-                        <h2>What should we call you?</h2>
-                        <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.endUsernameStep(usernameIn)}>Create Username</RaisedButton >
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={()=>this.endUsernameStep(false)}>Stick with {userData.username}</RaisedButton >
-                    </section>
-                    :
-                    null
-                }
-                {
-                    addingFullname
-                    ?
-                    <section className="fullname-edit">
-                        <h2>What does your mother call you?</h2>
-                        <input value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} placeholder="What do does your mother call you?"/>
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={() => updateFullname(fullnameIn)}>Add my Fullname</RaisedButton >
-                    </section>
-                    :
-                    null
-                }
-                {
-                    isRequesting
-                    ?
-                    <section className="coach-request-edit">
-                        <StripeDefault total={39} />
-                        <h2>Are you here to coach others?</h2>
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton >
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(false)}>No thanks, just here to find a healthy balance.</RaisedButton >
-                    </section>
-                    :
-                    null
-                }
-                {
-                    onFinalStep
-                    ?
-                    <section className="final-step">
-                        <h2>Would you like to start by adding your measurements or just calculating your macros?</h2>
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={this.sendToMes}>Add Measurements</RaisedButton >
-                        <RaisedButton primary={true} style={{width: "200px"}} onClick={this.sendToMacroCalc} >Calculate Macros</RaisedButton >
-                        <Link to="/dashboard"><RaisedButton primary={true} style={{width: "200px"}}>No thanks, take me to the Dashboard</RaisedButton ></Link>
-                    </section>
-                    :
-                    null
-                }
-                {/* Redirecting to end the welcome process */}
+            <section style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
+                <Stepper activeStep={stepIndex}>
+                <Step>
+                    <StepLabel>
+                        Welcome!
+                    </StepLabel>
+                </Step>
+                <Step>
+                    <StepLabel>
+                        Username
+                    </StepLabel>
+                </Step>
+                <Step>
+                    <StepLabel>
+                        Fullname
+                    </StepLabel>
+                </Step>
+                <Step>
+                    <StepLabel>
+                        Coach Request
+                    </StepLabel>
+                </Step>
+                <Step>
+                    <StepLabel>
+                        What's Next?
+                    </StepLabel>
+                </Step>
+                </Stepper>
+                <ExpandTransition loading={loading} open={true}>
+                {this.renderContent()}
+                </ExpandTransition>
                 {
                     sendingToMacroCalc
                     ?
@@ -188,6 +285,9 @@ class FirstLogin extends Component{
                     null
                 }
             </section>
+            
+            
+            
         )
     }
 }

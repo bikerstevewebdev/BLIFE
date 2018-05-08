@@ -3,17 +3,17 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
-import MenuCard from '../Menu/MenuCard'
-import WorkoutCard from '../Workout/WorkoutCard'
-import SearchMenus from '../Search/SearchMenus'
-import SearchWorkouts from '../Search/SearchWorkouts'
+// import MenuCard from '../Menu/MenuCard'
+// import WorkoutCard from '../Workout/WorkoutCard'
+// import SearchMenus from '../Search/SearchMenus'
+// import SearchWorkouts from '../Search/SearchWorkouts'
 import PhotoUpload from '../Photos/PhotoUpload'
 import PhotoCard from '../Photos/PhotoCard'
 import RaisedButton from 'material-ui/RaisedButton'
 // import { Image } from 'semantic-ui-react'
 import {List, ListItem} from 'material-ui/List'
 import MobileTearSheet from '../MobileTearSheet/MobileTearSheet'
-import Divider from 'material-ui/Divider'
+// import Divider from 'material-ui/Divider'
 import Subheader from 'material-ui/Subheader'
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import {blue500, yellow600} from 'material-ui/styles/colors';
@@ -107,7 +107,7 @@ class Profile extends Component{
 //////////////////////Handles Macro Changes///////////////////
         
         render() {
-            const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, userWorkouts, userMenus, assignedWorkouts, assignedMenus, progress_pics } = this.props
+            const { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, userData, progress_pics } = this.props
             const progressPics = progress_pics.map(pic => <PhotoCard key={pic.photo_id} date_added={pic.date_added} src={pic.url} photo_id={pic.photo_id} alt={userData.username + ' ' + pic.type} />)
             const profileStyles = {
                 height: "100%",
@@ -208,7 +208,7 @@ class Profile extends Component{
 }
 
 function mapStateToProps(state){
-    const { user, curr_mes, userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = state.users,
+    const { user, curr_mes, userData } = state.users,
           { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, progress_pics } = user,
           { macros, weight, height, bodyfat, isUpdating } = state.macros
     return{

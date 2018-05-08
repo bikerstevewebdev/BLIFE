@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchMenus, endNutritionSearch } from '../../ducks/foodReducer'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
 import MenuCard from '../Menu/MenuCard'
@@ -40,7 +40,7 @@ class SearchMenu extends Component{
 
 
     render() {
-        const { arg2, arg3, handleBtnClick, btnMsg, doSomething, menuSearchResults, btn2Fn } = this.props
+        const { arg2, arg3, handleBtnClick, menuSearchResults, btn2Fn } = this.props
         const menuResults = menuSearchResults.map(res => {
                 return <MenuCard menu_id={res.menu_id} btn2Fn={btn2Fn} btn2Label="Add to my menus" title={res.title} total_p={res.total_p} total_c={res.total_c} total_f={res.total_f} total_fib={res.total_fib} img={res.img} parentFn={() => handleBtnClick(res.menu_id, arg2, arg3)} action2={this.endSearches} />
             // }

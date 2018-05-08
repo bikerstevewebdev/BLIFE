@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import FlatButton from 'material-ui/FlatButton'
 // import { Card, Image } from 'semantic-ui-react'
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
-import SvgIcon from 'material-ui/SvgIcon';
+// import SvgIcon from 'material-ui/SvgIcon';
 
 
 
