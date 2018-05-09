@@ -8,7 +8,7 @@ import SearchWorkout from '../Search/SearchWorkouts'
 import RaisedButton from 'material-ui/RaisedButton'
 import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
-import { requestACoach } from '../../ducks/coachReducer'
+import { requestACoach, getCCInfo } from '../../ducks/coachReducer'
 
 class Dashboard extends Component{
     constructor() {
@@ -43,6 +43,10 @@ class Dashboard extends Component{
     }
 
     componentDidUpdate() {
+        const { userData, coach_info, getCCInfo } = this.props
+        if(userData.has_coach && !coach_info.coach_id){
+            getCCInfo()
+        }
         console.log('DBoard updated props', this.props)
         // if(!(this.props.userData.username.length > 0)){
         //     this.setState({
@@ -168,6 +172,7 @@ class Dashboard extends Component{
                 <SearchMenu btn2Fn={this.props.addMenuToUser} style={{...menuSearchStyle}}/>
                 <SearchWorkout btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
                 <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
+                
             </section>
         )
     }
@@ -182,8 +187,9 @@ function mapStateToProps(state){
         userWorkouts,
         assignedMenus,
         assignedWorkouts,
-        curr_mes
+        curr_mes,
+        coach_info: state.coach.coach_info
     }
 }
 
-export default connect(mapStateToProps, { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu, requestACoach })(Dashboard)
+export default connect(mapStateToProps, { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu, requestACoach, getCCInfo })(Dashboard)

@@ -59,6 +59,7 @@ const UPDATE_USERNAME = 'UPDATE_USERNAME'
 const UPDATE_FULLNAME = 'UPDATE_FULLNAME'
 const UPDATE_PROFILE_PIC = 'UPDATE_PROFILE_PIC'
 const REQ_COACH_ACCESS = 'REQ_COACH_ACCESS'
+const RENOUNCE_COACH_ACCESS = 'RENOUNCE_COACH_ACCESS'
 const ADD_WORKOUT_TO_USER = 'ADD_WORKOUT_TO_USER'
 const ADD_MENU_TO_USER = 'ADD_MENU_TO_USER'
 const GET_ASSIGNED_WORKOUTS = 'GET_ASSIGNED_WORKOUTS'
@@ -76,6 +77,7 @@ const TOGGLE_UPDATE_PROFILE = 'TOGGLE_UPDATE_PROFILE'
 const ADD_TO_COMPARE = 'ADD_TO_COMPARE'
 const REMOVE_FROM_COMPARE = 'REMOVE_FROM_COMPARE'
 const TOGGLE_PHOTO_COMP_MODAL = 'TOGGLE_PHOTO_COMP_MODAL'
+const LOGOUT_USER = 'LOGOUT_USER'
 
 /////////////////END String Literals//////////////////////
 
@@ -112,6 +114,17 @@ export function clearUserMessage() {
     return {
         type: CLEAR_USER_MESSAGE,
         payload: ''
+    }
+}
+
+export function logoutUser() {
+    let data = axios.get('/auth/logout').then(res => {
+        console.log(`data from backend: ${res.data.message} ${res.data.dBUser},${res.data.currMes} is here`)
+        return res.data
+    })
+    return {
+        type: LOGOUT_USER,
+        payload: data
     }
 }
 
@@ -288,6 +301,16 @@ export function requestCoachAccess() {
     }
 }
 
+export function renounceCoachAccess() {
+    let user = axios.put('/coach/noRequest').then(res => {
+            return res.data
+    })    
+    return {
+        type: RENOUNCE_COACH_ACCESS,
+        payload: user
+    }
+}
+
 export function updateProfilePic(profile_pic) {
     let user = axios.put('/user/profilePic', { profile_pic }).then(res => {
         return res.data
@@ -344,6 +367,8 @@ export default function(state = initialState, action) {
                 let tempArr = state.comparisonPhotos.slice()
                 tempArr.splice(state.comparisonPhotos.findIndex(v => v.photo_id/1 === action.payload), 1)
                 return { ...state, comparisonPhotos: tempArr }
+        case LOGOUT_USER:
+                return { ...state, userData: action.payload, isLoggedIn: false }
         case ADD_TO_COMPARE:
                 return { ...state, comparisonPhotos: [...state.comparisonPhotos, action.payload] }
         case TOGGLE_PHOTO_COMP_MODAL:
@@ -394,6 +419,8 @@ export default function(state = initialState, action) {
         case REQ_COACH_ACCESS + '_REJECTED':
                      return { ...state, warningMsg: action.payload.response.data.message }
         case REQ_COACH_ACCESS + '_FULFILLED':
+                     return { ...state, userData: action.payload }
+        case RENOUNCE_COACH_ACCESS + '_FULFILLED':
                      return { ...state, userData: action.payload }
         case GET_USER + '_FULFILLED':
             console.log('begin getuser success', action.payload)

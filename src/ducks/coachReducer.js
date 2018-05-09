@@ -26,8 +26,11 @@ const initialState = {
     coaches: [],
     coachReqs: [],
     activeCoaches: [],
-    warningMsg: ''
-    
+    warningMsg: '',
+    messages: [],
+    coachChatModalOpen: false,
+    coach_info: {},
+    client_info: {}
 }
 /////////////////END initial state declaration////////////////////
 
@@ -43,9 +46,41 @@ const ASSIGN_MENU = 'ASSIGN_MENU'
 const ASSIGN_WORKOUT = 'ASSIGN_WORKOUT'
 const CLEAR_COACH_MESSAGE = 'CLEAR_COACH_MESSAGE'
 const REQUEST_A_COACH = 'REQUEST_A_COACH'
+const GET_MESSAGES = 'GET_MESSAGES'
+const TOGGLE_COACH_CHAT = 'TOGGLE_COACH_CHAT'
+const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
+const GET_CC_INFO = 'GET_CC_INFO'
+const GET_CURR_CLIENT_INFO = 'GET_CURR_CLIENT_INFO'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators//////////////////////
+export function toggleCoachChatModal(bool){
+    return{
+        type: TOGGLE_COACH_CHAT,
+        payload: bool
+    }
+}
+
+export function getCurrClientInfo(client_coach_id) {
+    let data = axios.get(`/currClientInfo/${client_coach_id}`).then(res => {
+        return res.data
+    })
+    return {
+        type: GET_CURR_CLIENT_INFO,
+        payload: data
+    }
+}
+
+export function getCCInfo() {
+    let data = axios.get(`/ccInfo`).then(res => {
+        return res.data
+    })
+    return {
+        type: GET_CC_INFO,
+        payload: data
+    }
+}
+
 export function getClientData(id) {
     let data = axios.get(`/clientInfo/${id}`).then(res => {
         return res.data
@@ -63,6 +98,27 @@ export function getClients() {
     return {
         type: GET_CLIENTS,
         payload: clients
+    }
+}
+
+export function getMessages(client_coach_id) {
+    if(client_coach_id){
+        let messages = axios.get(`/coach/messages/${client_coach_id}`).then(res => {
+            return res.data
+        })
+        return {
+            type: GET_MESSAGES,
+            payload: messages
+        }
+        
+    }else{
+        let messages = axios.get(`/client/messages`).then(res => {
+            return res.data
+        })
+        return {
+            type: GET_MESSAGES,
+            payload: messages
+        }
     }
 }
 
@@ -143,10 +199,29 @@ export function clearCoachMessage() {
     }
 }
 
+export function updateMessages(messages) {
+    return {
+        type: UPDATE_MESSAGES,
+        payload: messages
+    }
+}
+
 
 ////////////////BEGIN REDUCER//////////////////////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case GET_CURR_CLIENT_INFO + '_FULFILLED':
+            return { ...state, client_info: action.payload }
+        case GET_CC_INFO + '_FULFILLED':
+            return { ...state, coach_info: action.payload }
+        case GET_MESSAGES + '_FULFILLED':
+            return { ...state, messages: action.payload }
+        case UPDATE_MESSAGES:
+            return { ...state, messages: action.payload }
+        case UPDATE_MESSAGES:
+            return { ...state, messages: action.payload }
+        case TOGGLE_COACH_CHAT:
+            return { ...state, coachChatModalOpen: action.payload }
         case CLEAR_COACH_MESSAGE:
             return { ...state, warningMsg: action.payload }
         case GET_CLIENT_BY_ID + '_FULFILLED':

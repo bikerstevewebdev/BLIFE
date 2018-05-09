@@ -1,14 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import axios from 'axios'
 import AppBar from 'material-ui/AppBar'
-// import PersonOutline from 'material-ui/svg-icons/social/person-outline';
+import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import RaisedButton from 'material-ui/RaisedButton'
 import seaVid from '../../seaVid.mp4'
 import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
-import { toggleSideNav } from '../../ducks/userReducer'
+import Logout from 'material-ui/svg-icons/hardware/keyboard-return';
+import { toggleSideNav, logoutUser } from '../../ducks/userReducer'
 import Avatar from 'material-ui/Avatar'
 import FlatButton from 'material-ui/FlatButton';
 
@@ -54,14 +56,18 @@ const profileBtnStyles = {
 const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "80px", alignItems: "center"}
 
 function Nav(props) {
+    
     const rightIcons = (
         <section style={rightStyles} className="icons">
+            <IconButton onClick={props.logoutUser}>
+                <Logout />
+            </IconButton>
             <IconButton onClick={() => props.toggleSideNav(true)}>
                 <ChromeReader />
             </IconButton>
             <FlatButton  >
                 <Link style={{...profileBtnStyles, color: "inherit"}} to='/profile'>
-                    <Avatar size={35} src={props.userData.profile_pic} />
+                    <Avatar icon={<PersonOutline />} size={35} src={props.userData.profile_pic} />
                     {props.userData.username}
                 </Link>
             </FlatButton>
@@ -124,4 +130,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { toggleSideNav })(Nav)
+export default connect(mapStateToProps, { toggleSideNav, logoutUser })(Nav)

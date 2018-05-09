@@ -1,4 +1,22 @@
 module.exports = {
+    getCCInfo: (req, res, next) => {
+        const db = req.app.get('db')
+            , { user_id } = req.user
+        db.get_client_id([user_id]).then(cId => {
+            db.get_cc_info([cId[0]]).then(coach => {
+                    res.status(200).send(coach[0])
+            }) 
+        })
+    },
+
+    getCurrClientInfo: (req, res, next) => {
+        const db = req.app.get('db')
+            , { id } = req.params
+        db.get_curr_client_info([id]).then(client => {
+            res.status(200).send(client[0])
+        })
+    },
+
     getClientInfo: (req, res, next) => {
         const db = req.app.get('db')
             , { id } = req.params
@@ -55,6 +73,14 @@ module.exports = {
         }
     },
 
+    renounceCoachAccess: (req, res, next) => {
+        const { user_id } = req.user
+        const db = req.app.get('db')
+            db.renounce_coach_access([user_id]).then(user => {
+                res.status(200).send(user[0])
+            })
+    },
+
     approveCoachAccess: (req, res, next) => {
         const db      = req.app.get('db')
             , { auth_id } = req.user
@@ -107,7 +133,7 @@ module.exports = {
 
     assignWorkoutToClient: (req, res, next) => {
         const db = req.app.get('db')
-        , { workout_id, coach_client_id, client_id } = req.body
+        , { workout_id, client_coach_id, client_id } = req.body
         , { user } = req
         db.check_coach_auth([client_id, user.coach_id]).then(client => {
             if(client[0]){
@@ -122,9 +148,9 @@ module.exports = {
     
     assignMenuToClient: (req, res, next) => {
         const db = req.app.get('db')
-        , { menu_id, coach_client_id, client_id } = req.body
+        , { menu_id, client_coach_id, client_id } = req.body
         , { user } = req
-        db.check_coach_auth([coach_client_id, client_id, user.coach_id]).then(client => {
+        db.check_coach_auth([client_coach_id, client_id, user.coach_id]).then(client => {
             if(client[0]){
                 db.add_menu_to_client([client_id, menu_id]).then(menus => {
                     res.status(200).send(menus)
@@ -145,5 +171,33 @@ module.exports = {
                 res.status(500).send({message: "User Not Found"})
             }
         })
-    }
+    },
+
+    getClientMessages: (req, res, next) => {
+        const db = req.app.get('db')
+            db.get_client_id([req.user.user_id]).then(clientID => {
+                db.get_client_messages([clientID[0]]).then(clientMessages => {
+                    res.send(clientMessages)
+                })
+            })
+    },
+
+    getCoachMessages: (req, res, next) => {
+        const db = req.app.get('db')
+            db.get_coach_messages([req.query.id]).then(coachMessages => {
+                res.status(200).send(coachMessages)
+            })
+    },
+
+    // addNewMessage: (req, res, next) => {
+    //     const db = req.app.get('db')
+    //         , { email } = req.params
+    //     db.search_for_client([email]).then(client => {
+    //         if(client[0]){
+    //             res.status(200).send(client[0])
+    //         }else{
+    //             res.status(500).send({message: "User Not Found"})
+    //         }
+    //     })
+    // }
 }

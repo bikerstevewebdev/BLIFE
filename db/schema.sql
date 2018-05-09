@@ -6,14 +6,14 @@ CREATE TABLE users (
     email VARCHAR(125),
     fullname VARCHAR(100),
     profile_pic TEXT,
-    date_created INTEGER NOT NULL,
+    date_created BIGINT NOT NULL,
     curr_pro REAL DEFAULT 0,
     curr_carb REAL DEFAULT 0,
     curr_fat REAL DEFAULT 0,
     curr_mes_id INTEGER DEFAULT 0,
     auth_id TEXT NOT NULL,
     has_coach BOOLEAN DEFAULT false,
-    last_login INTEGER
+    last_login BIGINT
 );
 
 CREATE TABLE measurements (
@@ -165,6 +165,19 @@ CREATE TABLE photos (
     current BOOLEAN DEFAULT true,
     date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE messages (
+    message_id SERIAL PRIMARY KEY,
+    client_id INTEGER,
+    coach_id INTEGER,
+    admin_id INTEGER,
+    date_sent BIGINT NOT NULL,
+    content TEXT,
+    sender VARCHAR(45) NOT NULL,
+    sender_id INTEGER NOT NULL,
+    room_name VARCHAR(30) NOT NULL,
+    current BOOLEAN DEFAULT true
+)
 
 
 -- INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)

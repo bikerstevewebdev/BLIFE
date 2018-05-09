@@ -1,7 +1,7 @@
 import React, { Component }from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { requestCoachAccess, updateUsername, updateFullname } from '../../ducks/userReducer'
+import { requestCoachAccess, updateUsername, updateFullname, renounceCoachAccess } from '../../ducks/userReducer'
 import RaisedButton from 'material-ui/RaisedButton'
 import './FirstLogin.css'
 import StripeDefault from '../Stripe/StripeDefault'
@@ -100,10 +100,12 @@ class FirstLogin extends Component{
     }
 
     requestAccess(val) {
-        const { requestCoachAccess } = this.props
+        const { requestCoachAccess, renounceCoachAccess } = this.props
         if(val){
             requestCoachAccess()
-        } 
+        } else{
+            renounceCoachAccess()
+        }
         this.setState({
             isRequesting: false,
             onFinalStep: true
@@ -297,4 +299,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { requestCoachAccess, updateUsername, updateFullname })(FirstLogin)
+export default connect(mapStateToProps, { requestCoachAccess, updateUsername, updateFullname, renounceCoachAccess })(FirstLogin)

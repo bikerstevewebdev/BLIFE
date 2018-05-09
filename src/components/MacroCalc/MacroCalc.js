@@ -94,38 +94,31 @@ class MacroCalc extends Component{
             <form onSubmit={this.calculate} style={{alignItems: "center", height: "90vh", width: "100%", ...compStyles}} className="comp macro-calc">
                 {/* <section className="inputs"> */}
                     <section style={{display: "grid", gridTemplateRows: "repeat(75px)", justifyContent: "center"}}>
-                        <p>Age</p>
-                        <TextField floatingLabelText="Years" type="number" step="1" min="8" max="120" className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'age')} value={age} />
-                        <p>Height</p>
-                        <TextField type="number"  step="1" min="36" max="100" className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'height')} floatingLabelText="Total Inches" value={height} />
-                        <p>Weight</p>
-                        <TextField type="number"  step="0.1" min="50" max="600" className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'weight')} floatingLabelText="pounds" value={weight} />
-                        <p>Bodyfat</p>
-                        <TextField type="number"  step="0.1" min="2" max="90" className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'bodyfat')} floatingLabelText="% as Number" value={bodyfat} />
+                        <TextField floatingLabelText="Age" hintText="Years" type="number" step="1" min="8" max="120" className="macro-input" onChange={(e) => this.updateInputs("filler", "more", e.target.value, 'age')}  />
+                        <TextField type="number"  step="1" min="36" max="100" className="macro-input" onChange={(e) => this.updateInputs("filler", "more", e.target.value, 'height')} floatingLabelText="Height" hintText="Total Inches" />
+                        <TextField type="number"  step="0.1" min="50" max="600" className="macro-input" onChange={(e) => this.updateInputs("filler", "more", e.target.value, 'weight')} hintText="Pounds" floatingLabelText="Weight" />
+                        <TextField type="number" hintText="% as Number" step="0.1" min="2" max="90" className="macro-input" onChange={(e) => this.updateInputs("filler", "more", e.target.value, 'bodyfat')} floatingLabelText="Bodyfat" />
                     </section>
                     <section style={{display: "grid", gridTemplateRows: "repeat(75px)", justifyContent: "start"}}>
-                        <p>Activity Level</p>
-                        <SelectField style={{height: "72px", ...selectWidth}} value={activity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, "activity")}>
+                        {/* <p>Activity Level</p> */}
+                        <SelectField floatingLabelText="Activity Level" style={{height: "72px", ...selectWidth}} value={activity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, "activity")}>
                             <MenuItem value="low" primaryText="Low (sedentary, low activity job, exercise 1-2 times/week)"/>
                             <MenuItem value="moderate" primaryText="Moderate (lightly active, some movement at job, exercise 2-3 times/week)"/>
                             <MenuItem value="active" primaryText="Active (above average activity, frequent moving at job, exercise 3-5 times/week)"/>
                             <MenuItem value="hi-active" primaryText="Highly Active (athletic or highly active job, exercise 5-7 times/week)"/>
                             <MenuItem value="extreme" primaryText="Extremely Active (athletic and highly active job, exercise 6-7 times/week)"/>
                         </SelectField>
-                        <p>Goal</p>
-                        <SelectField style={{height: "72px", ...selectWidth}} value={goal} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'goal')}>
+                        <SelectField floatingLabelText="Goal" style={{height: "72px", ...selectWidth}} value={goal} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'goal')}>
                             <MenuItem primaryText="Gain Weight" value="gain"/>
                             <MenuItem primaryText="Lose Weight" value="lose"/>
                             <MenuItem primaryText="Maintain Current Weight" value="maintain"/>
                         </SelectField>
-                        <p>Goal Tenacity</p>
-                        <SelectField style={{height: "72px", ...selectWidth}} value={tenacity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'tenacity')}>
+                        <SelectField floatingLabelText="Goal Tenacity" style={{height: "72px", ...selectWidth}} value={tenacity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'tenacity')}>
                             <MenuItem primaryText="Intense (gain/lose 2+ pounds/week)" value="intense"/>
                             <MenuItem primaryText="Steady (gain/lose 1 pounds/week)" value="steady"/>
                             <MenuItem primaryText="Slow (gain/lose < 1 pound/week)" value="slow"/>
                         </SelectField>
-                        <p>Gender</p>
-                        <SelectField value={gender} style={{height: "72px", ...selectWidth}} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'gender')}>
+                        <SelectField floatingLabelText="Gender" value={gender} style={{height: "72px", ...selectWidth}} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'gender')}>
                             <MenuItem primaryText="Male" value="m"/>
                             <MenuItem primaryText="Female" value="f"/>
                         </SelectField>
