@@ -5,6 +5,13 @@ import { Redirect } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
 import DatePicker from 'material-ui/DatePicker'
+import Slider from 'material-ui/Slider'
+import SuperHappy from 'material-ui/svg-icons/social/mood'
+import Happy from 'material-ui/svg-icons/social/sentiment-satisfied'
+import Neutral from 'material-ui/svg-icons/social/sentiment-neutral'
+import Sad from 'material-ui/svg-icons/social/sentiment-dissatisfied'
+import SuperSad from 'material-ui/svg-icons/social/sentiment-very-dissatisfied'
+
 
 class Measurements extends Component{
     constructor(props) {
@@ -17,7 +24,8 @@ class Measurements extends Component{
             chestIn: props.curr_mes.chest || 0,
             bfIn: props.user.current_bf || 0,
             dateIn: '',
-            addingMes: true
+            addingMes: true,
+            happinessMeter: 5
         }
         this.updateWeightIn = this.updateWeightIn.bind(this)
         this.updateHeightIn = this.updateHeightIn.bind(this)
@@ -30,8 +38,8 @@ class Measurements extends Component{
     }
 
     sendUpdates() {
-        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn } = this.state  
-        this.props.addMeasurement(heightIn, weightIn, bfIn, waistIn, chestIn, neckIn, dateIn)
+        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn, happinessMeter } = this.state  
+        this.props.addMeasurement(heightIn, weightIn, bfIn, waistIn, chestIn, neckIn, dateIn, happinessMeter)
         this.setState({
             addingMes: false
         })
@@ -81,24 +89,39 @@ class Measurements extends Component{
         })
     }
 
+    handleSlider = (event, value) => {
+        this.setState({happinessMeter: value});
+      };
         
     render() {
-        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn } = this.state
+        const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn, happinessMeter } = this.state
+        const happinessIcon = happinessMeter < 3 ? <SuperSad /> : happinessMeter < 5 ? <Sad /> : happinessMeter < 7 ? <Neutral /> : happinessMeter < 9 ? <Happy /> : <SuperHappy />
         return(
             <section className="comp measurements-form" >
                 <p>Weight: (in pounds)</p>
-                <TextField type="number" min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
+                <TextField name="weight" type="number" min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
                 <p>Height: (in inches)</p>
-                <TextField type="number" min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
+                <TextField name="height" type="number" min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
                 <p>Waist: (in inches)</p>
-                <TextField type="number" min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
+                <TextField name="waist" type="number" min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
                 <p>Neck: (in inches)</p>
-                <TextField type="number" min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
+                <TextField name="neck" type="number" min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
                 <p>Chest: (in inches)</p>
-                <TextField type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
+                <TextField name="chest" type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
                 <p>Bodyfat: (enter in percent as a number, i.e. "11" for 11 percent, not "0.11")</p>
-                <TextField type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
+                <TextField name="bodyfat" type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
                 <DatePicker onChange={this.updateDateIn} hintText="Date these measurements were taken" mode="landscape" />
+                <section>
+                    <p>Select your state of happiness at the time of these measurements</p>
+                    <p>On a scale o 1-10, you have selected {happinessIcon}({happinessMeter}).</p>
+                    <Slider
+                        min={0}
+                        max={10}
+                        step={1}
+                        value={happinessMeter}
+                        onChange={this.handleSlider}
+                    />
+                </section>
                 <RaisedButton value={dateIn} primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
                 {
                     !this.state.addingMes && this.props.location.pathname === '/measurements'

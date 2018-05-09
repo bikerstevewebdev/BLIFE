@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import AppBar from 'material-ui/AppBar'
-import PersonOutline from 'material-ui/svg-icons/social/person-outline';
+// import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import RaisedButton from 'material-ui/RaisedButton'

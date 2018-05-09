@@ -29,9 +29,30 @@ module.exports = {
 
     updateWorkoutEx: (req, res, next) => {
         const db = req.app.get('db')
-        const { workout_ex_id, workout_id, reps, sets, restTime, weight, order, notes } = req.body
-        db.edit_workout_ex([workout_ex_id, workout_id, reps, sets, restTime, weight, order, notes]).then(exercises => {
-            res.status(200).send(exercises)
+        const { workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes, oldOrder } = req.body
+        db.edit_workout_ex([workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes]).then(exercises => {
+            if(ex_order != oldOrder){
+                exercises.forEach(v => {
+                    if(v.ex_order == ex_order && v.workout_ex_id != workout_ex_id){
+                        db.update_workout_ex_order([v.workout_ex_id, oldOrder]).then(newEx => {
+                            db.get_workout_exercises([workout_id]).then(newExercises => {
+                                let orderedEx = []
+                                for(let i = 1; i < newExercises.length + 1; i++){
+                                    orderedEx.push(newExercises.find(v => v.ex_order === i))
+                                }
+                                res.status(200).send(orderedEx)
+                            })
+                        })
+                    }
+                    // MIGHT NEED TO ADD NEXT/ASYNC CODE TO HANDLE THIS DATA
+                })
+            }else{
+                let orderedEx = []
+                for(let i = 1; i < exercises.length + 1; i++){
+                    orderedEx.push(exercises.find(v => v.ex_order === i))
+                }
+                res.status(200).send(orderedEx)
+            }
         })
     },
 
@@ -69,7 +90,7 @@ module.exports = {
         const { workout_id } = req.body
         db.remove_ex_from_workout([id, workout_id]).then(exs => {
             exs.forEach(v => {
-                let newOrder = v.order - 1 > 0 ? v.order - 1 : 1
+                let newOrder = v.ex_order - 1 > 0 ? v.ex_order - 1 : 1
                 db.update_workout_ex_order([v.workout_ex_id, newOrder])
                 // MIGHT NEED TO ADD NEXT/ASYNC CODE TO HANDLE THIS DATA
             })
@@ -90,9 +111,13 @@ module.exports = {
         const { id } = req.params,
               db     = req.app.get('db')
         db.get_workout_by_id([id]).then( workout => {
-            db.get_workout_exercises([id]).then(exercises => {
+            db.get_workout_exercises([id]).then(exs => {
+                let orderedEx = []
+                for(let i = 1; i < exs.length + 1; i++){
+                    orderedEx.push(exs.find(v => v.ex_order === i))
+                }
                 let retObj = {
-                    exercises,
+                    exercises: orderedEx,
                     workout: workout[0]
                 }
                 res.status(200).send(retObj)

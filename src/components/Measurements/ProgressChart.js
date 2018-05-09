@@ -11,10 +11,17 @@ class ProgressData extends Component {
             labels: [],
             datasets: [
                 {
+                    label: 'Happyness',
+                    data: [],
+                    backgroundColor: "gold",
+                    fill: false
+                },
+                {
                     label: 'Bodyfat',
                     data: [],
                     backgroundColor: "green",
-                    fill: false
+                    fill: false,
+                    hidden: true
                 },
                 {
                     label: 'Weight',
@@ -43,7 +50,7 @@ class ProgressData extends Component {
                     backgroundColor: "green",
                     fill: false,
                     hidden: true
-                }
+                },
             ],
         },
         chartOptions: {
@@ -129,6 +136,12 @@ class ProgressData extends Component {
                                     backgroundColor: "purple",
                                     fill: false
                                 },
+                                {
+                                    label: 'Happyness',
+                                    data: this.props.mezHistory.happyLevels,
+                                    backgroundColor: "gold",
+                                    fill: false
+                                }
                             ]
                          }
 

@@ -40,6 +40,14 @@ class ExerciseCard extends Component{
         })
     }
 
+    componentDidUpdate(prevProps)  {
+        if(prevProps.ex_order !== this.props.ex_order){
+            this.setState({
+                orderIn: this.props.ex_order
+            })
+        }
+    }
+
     updateRepsIn(e) {
         this.setState({
             repsIn: e.target.value
@@ -64,9 +72,10 @@ class ExerciseCard extends Component{
         })
     }
 
-    updateOrderIn(e) {
+    updateOrderIn(event, index, val) {
+        console.log(event, index, val)
         this.setState({
-            orderIn: e.target.value
+            orderIn: val
         })
     }
 
@@ -91,13 +100,14 @@ class ExerciseCard extends Component{
 
     sendUpdate(){
         const { repsIn, setsIn, restTimeIn, weightIn, orderIn, notesIn } = this.state,
-              { workout_ex_id, workout_id } = this.props
-        this.props.updateWorkoutEx(workout_ex_id, workout_id, repsIn, setsIn, restTimeIn, weightIn, orderIn, notesIn)
+              { workout_ex_id, workout_id, ex_order } = this.props
+              console.log(orderIn)
+        this.props.updateWorkoutEx(workout_ex_id, workout_id, repsIn, setsIn, restTimeIn, weightIn, orderIn/1, notesIn, ex_order)
     }
 
     render() {
         const { repsIn, setsIn, restTimeIn, weightIn, notesIn, addingNotes, orderIn } = this.state,
-              { type, name, img, numExs, workout_ex_id, ex_id, workout_id, ex_order } = this.props
+              { type, name, img, numExs, workout_ex_id, ex_id, workout_id } = this.props
         const brickStyles = {
             width: "100%",
             display: "grid",
@@ -113,7 +123,7 @@ class ExerciseCard extends Component{
             <div style={{...this.props.style, ...brickStyles}} className="workout-ex">
                 <DropDownMenu style={{gridColumn: "1/2"}} value={orderIn/1} onChange={this.updateOrderIn}>
                     {numExs.map((v, i) => {
-                        return <MenuItem key={ex_id + "-" + i} value={i+1}>{i+1}</MenuItem>
+                        return <MenuItem key={ex_id + "-" + i} value={i+1} label={i+1}>{i+1}</MenuItem>
                     })}
                 </DropDownMenu>
                 <section style={{gridColumn: "2/3", display: "flex", alignItems: "center", justifyContent: "flex-start"}}>

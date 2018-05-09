@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { updateNameIn, updatePIn, updateCIn, updateFIn, updateFibIn, updateImgIn, addFoodToDB, getFoodById, searchExternalFoods, endNutritionSearch, toggleFoodModal } from '../../ducks/foodReducer'
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
 import SearchExternalFood from '../Search/SearchExternalFood'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';

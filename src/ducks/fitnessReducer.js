@@ -96,8 +96,8 @@ export function addExToWorkout(workout_id, ex_id, ex_order) {
     }    
 }    
 
-export function updateWorkoutEx(workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes) {
-    let exs = axios.put('/workout/exercise', { workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes }).then(res => {
+export function updateWorkoutEx(workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes, oldOrder) {
+    let exs = axios.put('/workout/exercise', { workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes, oldOrder }).then(res => {
         return res.data
     })    
     return{

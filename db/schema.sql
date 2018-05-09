@@ -25,7 +25,8 @@ CREATE TABLE measurements (
     weight REAL,
     bf REAL,
     date_taken INTEGER,
-    member_id INTEGER
+    member_id INTEGER,
+    happy_level INTEGER
 );
 
 CREATE TABLE meals (

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal } from '../../ducks/userReducer';
+import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal, togglePhotoCompModal } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
 // import MenuCard from '../Menu/MenuCard'
 // import WorkoutCard from '../Workout/WorkoutCard'
@@ -20,6 +20,7 @@ import {blue500, yellow600} from 'material-ui/styles/colors';
 import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import Avatar from 'material-ui/Avatar';
 import ProgressChart from '../Measurements/ProgressChart'
+import PhotoComparison from '../Photos/PhotoComparison'
 
 class Profile extends Component{
     constructor() {
@@ -149,6 +150,13 @@ class Profile extends Component{
                                 <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(true)}>Show me all my progress pictures</RaisedButton>
                             </section>
                         }
+                        {
+                            this.props.comparisonPhotos.length > 0
+                            ?
+                            <RaisedButton onClick={() => this.props.togglePhotoCompModal(true)} label="Compare Selected Photos"/>
+                            :
+                            null
+                        }
                     </section>
                     {progressPics}
                     <PhotoUpload  />
@@ -202,13 +210,14 @@ class Profile extends Component{
                     :
                     null
                 }
+                <PhotoComparison />
             </section>
         )
     }
 }
 
 function mapStateToProps(state){
-    const { user, curr_mes, userData } = state.users,
+    const { user, curr_mes, userData, comparisonPhotos } = state.users,
           { profile_pic, current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, progress_pics } = user,
           { macros, weight, height, bodyfat, isUpdating } = state.macros
     return{
@@ -228,8 +237,9 @@ function mapStateToProps(state){
         height,
         bodyfat,
         isUpdating,
-        progress_pics
+        progress_pics,
+        comparisonPhotos
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal, togglePhotoCompModal })(Profile)

@@ -143,10 +143,10 @@ module.exports = {
     
     ///////////////////MES/STATS METHODS////////////////
     addMez: (req, res, next) => {
-        const { waist, neck, chest, ht, wt, bf, date } = req.body
+        const { waist, neck, chest, ht, wt, bf, date, happyLevel } = req.body
             , db                                       = req.app.get('db')
         let msDate = date.getTime()
-        db.add_measurements([ waist, neck, chest, ht, wt, bf, msDate, req.user.user_id ]).then( measurements => {
+        db.add_measurements([ waist, neck, chest, ht, wt, bf, msDate, req.user.user_id, happyLevel ]).then( measurements => {
             db.update_mes_id([req.user.user_id, measurements[0].mes_id]).then(user => {
                 let retObj = {
                     newMez: measurements[0],
@@ -171,7 +171,7 @@ module.exports = {
     getMezHistory: (req, res, next) => {
         const db = req.app.get('db')
         db.get_user_mes_history([req.user.user_id]).then( measurements => {
-            let weights = [], bfs = [], necks = [], waists = [], chests = [], dates = [] 
+            let weights = [], bfs = [], necks = [], waists = [], chests = [], dates = [], happyLevels = []
             measurements.forEach(v => {
                 weights.push(v.weight)
                 bfs.push(v.bf)
@@ -179,8 +179,9 @@ module.exports = {
                 waists.push(v.waist)
                 chests.push(v.chest)
                 dates.push(v.date_taken)
+                happyLevels.push(v.happy_level)
             })
-            let mesObj = {weights, bfs, necks, waists, chests, dates}
+            let mesObj = {weights, bfs, necks, waists, chests, dates, happyLevels}
             res.status(200).send(mesObj)
         })
     },

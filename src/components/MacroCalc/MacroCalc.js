@@ -105,7 +105,7 @@ class MacroCalc extends Component{
                     </section>
                     <section style={{display: "grid", gridTemplateRows: "repeat(75px)", justifyContent: "start"}}>
                         <p>Activity Level</p>
-                        <SelectField style={{height: "72px", ...selectWidth}} value={this.state.activity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, "activity")}>
+                        <SelectField style={{height: "72px", ...selectWidth}} value={activity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, "activity")}>
                             <MenuItem value="low" primaryText="Low (sedentary, low activity job, exercise 1-2 times/week)"/>
                             <MenuItem value="moderate" primaryText="Moderate (lightly active, some movement at job, exercise 2-3 times/week)"/>
                             <MenuItem value="active" primaryText="Active (above average activity, frequent moving at job, exercise 3-5 times/week)"/>

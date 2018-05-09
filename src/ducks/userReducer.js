@@ -38,9 +38,12 @@ const initialState = {
         necks: [],
         waists: [],
         chests: [],
-        dates: []
+        dates: [],
+        happyLevels: []
     },
-    updateProfileModalOpen: false
+    updateProfileModalOpen: false,
+    photoCompModalOpen: false,
+    comparisonPhotos: []
 }
 /////////////////END initial state declaration////////////////////
 
@@ -70,6 +73,9 @@ const GET_PAST_MEASUREMENTS = 'GET_PAST_MEASUREMENTS'
 const ARCHIVE_WORKOUT = 'ARCHIVE_WORKOUT'
 const ARCHIVE_MENU = 'ARCHIVE_MENU'
 const TOGGLE_UPDATE_PROFILE = 'TOGGLE_UPDATE_PROFILE'
+const ADD_TO_COMPARE = 'ADD_TO_COMPARE'
+const REMOVE_FROM_COMPARE = 'REMOVE_FROM_COMPARE'
+const TOGGLE_PHOTO_COMP_MODAL = 'TOGGLE_PHOTO_COMP_MODAL'
 
 /////////////////END String Literals//////////////////////
 
@@ -78,6 +84,27 @@ export function toggleSideNav(bool) {
     return {
         type: TOGGLE_SIDE_NAV,
         payload: bool
+    }
+}
+
+export function togglePhotoCompModal(bool) {
+    return {
+        type: TOGGLE_PHOTO_COMP_MODAL,
+        payload: bool
+    }
+}
+
+export function addToCompare(photo_id, src, alt, date_added) {
+    return {
+        type: ADD_TO_COMPARE,
+        payload: {photo_id, src, alt, date_added}
+    }
+}
+
+export function removeFromCompare(photo_id) {
+    return {
+        type: REMOVE_FROM_COMPARE,
+        payload: photo_id/1
     }
 }
 
@@ -271,8 +298,8 @@ export function updateProfilePic(profile_pic) {
     }
 }
 
-export function addMeasurement(wt, ht, bf, waist, chest, neck, date) {
-    let newStats = axios.post('/user/mez', { ht, wt, bf, waist, chest, neck, date }).then(res => {
+export function addMeasurement(wt, ht, bf, waist, chest, neck, date, happyLevel) {
+    let newStats = axios.post('/user/mez', { ht, wt, bf, waist, chest, neck, date, happyLevel }).then(res => {
         return res.data
     })    
     return {
@@ -313,6 +340,14 @@ export function toggleUpdateProfileModal(bool){
 ////////////////BEGIN REDUCER//////////////////////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case REMOVE_FROM_COMPARE:
+                let tempArr = state.comparisonPhotos.slice()
+                tempArr.splice(state.comparisonPhotos.findIndex(v => v.photo_id/1 === action.payload), 1)
+                return { ...state, comparisonPhotos: tempArr }
+        case ADD_TO_COMPARE:
+                return { ...state, comparisonPhotos: [...state.comparisonPhotos, action.payload] }
+        case TOGGLE_PHOTO_COMP_MODAL:
+                return { ...state, photoCompModalOpen: action.payload }
         case TOGGLE_UPDATE_PROFILE:
                 return { ...state, updateProfileModalOpen: action.payload }
         case CLEAR_USER_MESSAGE:

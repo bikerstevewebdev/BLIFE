@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { updateUsername, updateFullname, updateProfilePic, requestCoachAccess, toggleUpdateProfileModal } from '../../ducks/userReducer'
 import { connect } from 'react-redux';
-import Measurements from '../Measurements/Measurements'
+// import Measurements from '../Measurements/Measurements'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -54,6 +54,7 @@ class UpdateProfile extends Component{
             //   { current_weight, current_height, current_bf } = curr_mes
         return(
             <Dialog open={updateProfileModalOpen}className="update-profile">
+            <section style={updateStyles}>
                 {
                     userData.coach_id/1 !== 0
                     ?
@@ -74,6 +75,7 @@ class UpdateProfile extends Component{
                 <input value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
                 <RaisedButton secondary={true} onClick={() => updateProfilePic(profile_picIn)}>Update</RaisedButton>
                 <FlatButton onClick={() => this.props.toggleUpdateProfileModal(false)} label="close" />
+            </section>
             </Dialog>
         )
     }
