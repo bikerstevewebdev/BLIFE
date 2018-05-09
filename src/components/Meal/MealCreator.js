@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { createMeal } from '../../ducks/foodReducer'
+import { createMeal, toggleMealModal } from '../../ducks/foodReducer'
 import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 class MealCreator extends Component{
     constructor() {
@@ -55,7 +57,7 @@ class MealCreator extends Component{
     render() {
         const { mealTitle, imgInput } = this.state
         return(
-            <section className="comp meal-creator" >
+            <Dialog open={this.props.mealDialogOpen} className="comp meal-creator" >
                 <p>Title of the Meal:</p>
                 <input value={mealTitle} onChange={(e) => this.updateMealTitle(e.target.value)} />
                 <p>Meal Image Url:</p>
@@ -69,15 +71,16 @@ class MealCreator extends Component{
                     :
                     <Redirect to={`/meal/${mealTitle}`} />
                 }
-            </section>
+                <FlatButton onClick={() => this.props.toggleMealModal(false)} label="close" />
+            </Dialog>
         )
     }
 }
 
-// function mapStateToProps(state){
-//     return {
-//         mealTitle: 
-//     }
-// }
+function mapStateToProps(state){
+    return {
+        mealDialogOpen: state.foods.mealDialogOpen
+    }
+}
 
-export default connect(null, { createMeal })(MealCreator)
+export default connect(mapStateToProps, { createMeal, toggleMealModal })(MealCreator)

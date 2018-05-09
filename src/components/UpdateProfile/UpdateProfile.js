@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { updateUsername, updateFullname, updateProfilePic, requestCoachAccess } from '../../ducks/userReducer'
+import { updateUsername, updateFullname, updateProfilePic, requestCoachAccess, toggleUpdateProfileModal } from '../../ducks/userReducer'
 import { connect } from 'react-redux';
 import Measurements from '../Measurements/Measurements'
 import RaisedButton from 'material-ui/RaisedButton'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 class UpdateProfile extends Component{
     constructor(props){
@@ -45,10 +47,13 @@ class UpdateProfile extends Component{
     
     render() {
         const { usernameIn, fullnameIn, profile_picIn } = this.state,
-              { updateFullname, updateProfilePic, updateUsername, userData } = this.props
+              { updateFullname, updateProfilePic, updateUsername, userData, updateProfileModalOpen } = this.props
+        const updateStyles = {
+            display: "grid"
+        }
             //   { current_weight, current_height, current_bf } = curr_mes
         return(
-            <section className="update-profile">
+            <Dialog open={updateProfileModalOpen}className="update-profile">
                 {
                     userData.coach_id/1 !== 0
                     ?
@@ -68,8 +73,8 @@ class UpdateProfile extends Component{
                 <p>Change your profile picture:</p>
                 <input value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
                 <RaisedButton secondary={true} onClick={() => updateProfilePic(profile_picIn)}>Update</RaisedButton>
-                <Measurements location={this.props.location} />
-            </section>
+                <FlatButton onClick={() => this.props.toggleUpdateProfileModal(false)} label="close" />
+            </Dialog>
         )
     }
 }
@@ -77,7 +82,8 @@ class UpdateProfile extends Component{
 function mapStateToProps(state) {
     return {
         userData: state.users.userData,
+        updateProfileModalOpen: state.users.updateProfileModalOpen
     }
 }
 
-export default connect(mapStateToProps, { updateUsername, updateFullname, updateProfilePic, requestCoachAccess })(UpdateProfile)
+export default connect(mapStateToProps, { updateUsername, updateFullname, updateProfilePic, requestCoachAccess, toggleUpdateProfileModal })(UpdateProfile)

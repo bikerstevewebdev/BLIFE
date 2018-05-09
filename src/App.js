@@ -12,11 +12,12 @@ import Food from './components/Food/Food'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
-import MealCreator from './components/MealCreator/MealCreator';
-import MenuCreator from './components/MenuCreator/MenuCreator';
+import MealCreator from './components/Meal/MealCreator';
+import MenuCreator from './components/Menu/MenuCreator';
 import Menu from './components/Menu/Menu';
 import Exercise from './components/Exercise/Exercise';
-import Workout from './components/Workout/Workout';
+import WorkoutEditor from './components/Workout/WorkoutEditor';
+import ExerciseCreator from './components/Exercise/ExerciseCreator';
 import WorkoutCreator from './components/Workout/WorkoutCreator';
 import ClientManager from './components/Coach/ClientManager';
 import CoachManager from './components/Coach/CoachManager';
@@ -97,13 +98,13 @@ class App extends Component {
               <Route path='/updateProfile' component={UpdateProfile} />
               <Route path='/macroCalc' component={MacroCalc} />
               <Route path='/meal/:id' component={Meal} />
-              <Route path='/mealCreator' component={MealCreator} /> {/* modal */}
-              <Route path='/food/:from' component={Food} />
+              {/* <Route path='/mealCreator' component={MealCreator} /> modal */}
+              {/* <Route path='/food/:from' component={Food} /> */}
               <Route path='/menu/:from' component={Menu} />
-              <Route path='/menuCreator' component={MenuCreator} /> {/* modal */}
+              {/* <Route path='/menuCreator' component={MenuCreator} /> modal */}
               <Route path='/exercise/:id' component={Exercise} />
-              <Route path='/workout/:id' component={Workout} />
-              <Route path='/workoutCreator' component={WorkoutCreator} /> {/* modal */}
+              <Route path='/workout/:id' component={WorkoutEditor} />
+              {/* <Route path='/workoutCreator' component={WorkoutCreator} /> modal */}
               <Route path='/coachManager/:id' component={CoachManager} />
               <Route path='/clientManager/:id' component={ClientManager} />
               <Route path='/firstLogin' component={FirstLogin} />
@@ -111,6 +112,12 @@ class App extends Component {
               {/* <Route path='/mealFromRecipe' component={MealFromRecipe} /> */}
             </Switch>
           <SideNav />
+          <UpdateProfile />
+          <Food />
+          <MealCreator />
+          <MenuCreator />
+          <ExerciseCreator />
+          <WorkoutCreator />
           <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onActionClick={this.close} open={this.state.open} />
           </section>
       </div>

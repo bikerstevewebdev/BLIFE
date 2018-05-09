@@ -26,7 +26,7 @@ class MenuMeal extends Component{
     render() {
         const { menu_id, menu_meals_id, meal_id, title, total_p, total_c, total_f, total_fib, img_url } = this.props
         return(
-            <Card style={{width: "20%"}} >
+            <Card style={{width: "100%"}} >
                 <CardMedia  >
                     {img_url ? <img src={img_url} alt={title} /> : null}
                 </CardMedia>

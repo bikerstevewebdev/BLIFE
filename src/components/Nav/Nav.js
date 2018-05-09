@@ -9,6 +9,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 import seaVid from '../../seaVid.mp4'
 import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
 import { toggleSideNav } from '../../ducks/userReducer'
+import Avatar from 'material-ui/Avatar'
+import FlatButton from 'material-ui/FlatButton';
+
 // import PieChart from 'material-ui/svg-icons/editor/pie-chart-outlined';
 // import Dining from 'material-ui/svg-icons/maps/local-dining';
 // import Fitness from 'material-ui/svg-icons/places/fitness-center'
@@ -41,43 +44,27 @@ const titleStyles = {
 }
 const rightStyles = {
     display: "flex",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    alignItems: "center"
+}
+const profileBtnStyles = {
+    display: "flex",
+    alignItems: "center"
 }
 const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "80px", alignItems: "center"}
 
-// const rightIcons = (
-//     <section className="icons">
-//         <IconButton tooltip="Macro Calculator">
-//             <Link to="/macroCalc">
-//                 <PieChart />
-//             </Link>
-//         </IconButton>
-//         <IconButton tooltip="Macro Calculator">
-//             <Link to="/macroCalc">
-//                 <PieChart />
-//             </Link>
-//         </IconButton>
-//         <IconButton tooltip="Macro Calculator">
-//             <Link to="/macroCalc">
-//                 <PieChart />
-//             </Link>
-//         </IconButton>
-//         {nutrition}
-//         {fitness}
-//     </section>
-// )
-
 function Nav(props) {
     const rightIcons = (
-        <section className="icons">
-            <IconButton tooltip="Profile">
-                <Link to="/profile">
-                    <PersonOutline />
-                </Link>
-            </IconButton>
+        <section style={rightStyles} className="icons">
             <IconButton onClick={() => props.toggleSideNav(true)}>
                 <ChromeReader />
             </IconButton>
+            <FlatButton  >
+                <Link style={{...profileBtnStyles, color: "inherit"}} to='/profile'>
+                    <Avatar size={35} src={props.userData.profile_pic} />
+                    {props.userData.username}
+                </Link>
+            </FlatButton>
         </section>
     )
     return(
@@ -85,7 +72,7 @@ function Nav(props) {
             props.isLoggedIn
             ?
     (<header className="nav-comp">
-        <AppBar iconElementLeft={home} title={<h2>BalancedLIFE</h2>} titleStyle={titleStyles} style={styles} iconStyleRight={rightStyles} iconElementRight={rightIcons}>
+        <AppBar iconElementLeft={home} title={<h2>BalancedLIFE</h2>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}>
                 <section className="links">
                     {/* <Link to='/dashboard'><button>Dashboard</button></Link> */}
                     {/* <Link to='/profile'><button>Profile</button></Link> */}
@@ -126,9 +113,12 @@ function Nav(props) {
 }
 
 function mapStateToProps(state) {
+    const { userData } = state.users
+    const { coach_id } = userData
     return {
         isLoggedIn: state.users.isLoggedIn,
-        coach_id: state.users.userData.coach_id,
+        coach_id,
+        userData,
         authWarningMsg: state.users.warningMsg
         // coachWarningMsg: state.coach.warningMsg
     }

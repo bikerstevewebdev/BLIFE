@@ -11,5 +11,6 @@
 
 INSERT INTO workout_ex (workout_id, ex_id, ex_order, reps, sets, rest_time)
 VALUES ($1, $2, $3, 1, 1, 60);
-SELECT * FROM workout_ex
-WHERE workout_id = $1
+SELECT we.*, e.* FROM workout_ex we
+JOIN exercises e ON e.ex_id = we.ex_id
+WHERE we.workout_id = $1

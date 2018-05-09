@@ -6,7 +6,9 @@ const initialState = {
     exSearchResults: [],
     workout: {},
     workoutExs: [],
-    workoutSearchResults: []
+    workoutSearchResults: [],
+    exCreatorModalOpen: false,
+    workCreatorModalOpen: false
 }
 ///////////END initialState declaration/////////////
 
@@ -28,6 +30,8 @@ const END_FITNESS_SEARCH = 'END_FITNESS_SEARCH'
 const UPDATE_WORKOUT_EX = 'UPDATE_WORKOUT_EX'
 const REMOVE_EX_FROM_WORKOUT = 'REMOVE_EX_FROM_WORKOUT'
 const CLEAR_FITNESS_MESSAGE = 'CLEAR_FITNESS_MESSAGE'
+const TOGGLE_EX_CREATOR = 'TOGGLE_EX_CREATOR'
+const TOGGLE_WORK_CREATOR = 'TOGGLE_WORK_CREATOR'
 
 /////////////////END String Literals//////////////////////
 
@@ -187,6 +191,20 @@ export function clearFitnessMessage(){
     }
 }
 
+export function toggleExCreatorModal(bool){
+    return{
+        type: TOGGLE_EX_CREATOR,
+        payload: bool
+    }
+}
+
+export function toggleWorkCreatorModal(bool){
+    return{
+        type: TOGGLE_WORK_CREATOR,
+        payload: bool
+    }
+}
+
 
 /////////////////END exporting action creators//////////////////////
 
@@ -224,6 +242,10 @@ export default function(state = initialState, action) {
                 return {...state, workout: {}}
         case CLEAR_FITNESS_MESSAGE:
                 return {...state, warningMsg: action.payload}
+        case TOGGLE_EX_CREATOR:
+                return {...state, exCreatorModalOpen: action.payload}
+        case TOGGLE_WORK_CREATOR:
+                return {...state, workCreatorModalOpen: action.payload}
         case END_FITNESS_SEARCH:
                 return {...state, exSearchResults: [], workoutSearchResults: []}
         // case CLEAR_EX_SEARCH:

@@ -44,6 +44,7 @@ class Menu extends Component{
             searchIn: val
         })
     }
+    
     render() {
         const { menuMeals, menu, mealSearchResults } = this.props,
               { menu_id, title, img, total_p, total_c, total_f, total_fib } = menu,
@@ -63,7 +64,7 @@ class Menu extends Component{
                 ) }),
               menuMealsList = menuMeals.map(meal => {
             const { meal_id, title, total_p, total_c, total_f, total_fib, img_url, menu_meals_id } = meal
-            return <MenuMeal key={menu_meals_id} menu_id={menu_id} meal_id={meal_id} menu_meals_id={menu_meals_id} title={title} total_p={total_p} total_c={total_c} total_f={total_f} total_fib={total_fib} img_url={img_url} />            
+            return <MenuMeal prepareToEdit={this.prepareToEdit} key={menu_meals_id} menu_id={menu_id} meal_id={meal_id} menu_meals_id={menu_meals_id} title={title} total_p={total_p} total_c={total_c} total_f={total_f} total_fib={total_fib} img_url={img_url} />            
         })
         return(
             <section className="menu">

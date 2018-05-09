@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { addWorkoutToDB } from '../../ducks/fitnessReducer'
+import { addWorkoutToDB, toggleWorkCreatorModal } from '../../ducks/fitnessReducer'
 import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 class Workout extends Component{
     constructor() {
@@ -23,15 +25,15 @@ class Workout extends Component{
         this.leave = this.leave.bind(this)
     }
 
-    componentDidUpdate() {
-        const { workout_id } = this.props.workout
-        if(workout_id){
-            this.setState({
-                w_id: workout_id
-            })
-            this.leave()
-        }
-    }
+    // componentDidUpdate() {
+    //     const { workout_id } = this.props.workout
+    //     if(workout_id){
+    //         this.setState({
+    //             w_id: workout_id
+    //         })
+    //         this.leave()
+    //     }
+    // }
     
     sendWorkoutUp() {
         const { titleInput, imgInput, typeInput } = this.state,      
@@ -80,7 +82,7 @@ class Workout extends Component{
     
     render() {
         return(
-            <section className="workout-creator" >
+            <Dialog open={this.props.workCreatorModalOpen} className="workout-creator" >
                 <p>Title of the Workout:</p>
                 <input value={this.state.titleInput} onChange={(e) => this.updateWorkoutTitle(e.target.value)} />
                 <p>Workout Category:</p>
@@ -111,15 +113,17 @@ class Workout extends Component{
                     :
                     <Redirect to={`/workout/${this.state.w_id}`} />
                 }
-            </section>
+                <FlatButton onClick={() => this.props.toggleWorkCreatorModal(false)} label="close" />
+            </Dialog>
         )
     }
 }
 
 function mapStateToProps(state) {
     return {
-        workout: state.fitness.workout
+        workout: state.fitness.workout,
+        workCreatorModalOpen: state.fitness.workCreatorModalOpen
     }
 }
 
-export default connect(mapStateToProps, { addWorkoutToDB })(Workout)
+export default connect(mapStateToProps, { addWorkoutToDB, toggleWorkCreatorModal })(Workout)

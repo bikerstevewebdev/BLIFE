@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import MealFood from '../Food/MealFood'
 import { connect } from 'react-redux'
-import { searchFoods, addFoodToMeal, getMealById } from '../../ducks/foodReducer'
+import { searchFoods, addFoodToMeal, getMealById, getFoodById, toggleFoodEditorModal } from '../../ducks/foodReducer'
 import { Link } from 'react-router-dom'
+import FoodEditor from '../Food/FoodEditor'
 
 class Meal extends Component{
     constructor(){
@@ -16,6 +17,7 @@ class Meal extends Component{
         this.updateQuantity = this.updateQuantity.bind(this)
         this.addFoodToMeal = this.addFoodToMeal.bind(this)
         this.prepareToAdd = this.prepareToAdd.bind(this)
+        this.prepareToEdit = this.prepareToEdit.bind(this)
     }
     
     componentDidMount() {
@@ -52,6 +54,11 @@ class Meal extends Component{
             addingToMeal: id
         })
     }
+
+    prepareToEdit(id){
+        this.props.getFoodById(id)
+        this.props.toggleFoodEditorModal(true)
+    }
     
     render() {
         const { searchIn, quantityIn } = this.state
@@ -82,7 +89,7 @@ class Meal extends Component{
         })
         const mealFoodList = mealFoods.map(food => {
             const { food_id, name, pro, carb, fat, fiber, img, quantity, meal_food_id } = food
-            return <MealFood key={meal_food_id} food_id={food_id} meal_food_id={meal_food_id} name={name} pro={pro} carb={carb} fat={fat} meal_id={meal_id} fiber={fiber} img={img} quantity={quantity} />            
+            return <MealFood prepareToEdit={this.prepareToEdit} key={meal_food_id} food_id={food_id} meal_food_id={meal_food_id} name={name} pro={pro} carb={carb} fat={fat} meal_id={meal_id} fiber={fiber} img={img} quantity={quantity} />            
         })
         return(
             <section className="comp meal">
@@ -107,6 +114,7 @@ class Meal extends Component{
                     :
                     null
                 }
+                <FoodEditor />
             </section>
         )
     }
@@ -120,4 +128,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { searchFoods, addFoodToMeal, getMealById })(Meal)
+export default connect(mapStateToProps, { searchFoods, addFoodToMeal, getMealById, getFoodById, toggleFoodEditorModal })(Meal)

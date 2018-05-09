@@ -16,7 +16,11 @@ const initialState = {
     menu: {},
     menuMeals: [],
     menuSearchResults: [],
-    externalFoods: []
+    externalFoods: [],
+    foodDialogOpen: false,
+    menuDialogOpen: false,
+    mealDialogOpen: false,
+    foodEditorDialogOpen: false
 }
 ////////////////END initialState declaration/////////
 
@@ -48,6 +52,10 @@ const END_NUTRITION_SEARCH = 'END_NUTRITION_SEARCH'
 const SEARCH_EXTERNAL_FOODS = 'SEARCH_EXTERNAL_FOODS'
 const NEW_FOOD_MEAL_ADD = 'NEW_FOOD_MEAL_ADD'
 const CLEAR_FOOD_MESSAGE = 'CLEAR_FOOD_MESSAGE'
+const TOGGLE_FOOD_MODAL = 'TOGGLE_FOOD_MODAL'
+const TOGGLE_MENU_MODAL = 'TOGGLE_MENU_MODAL'
+const TOGGLE_MEAL_MODAL = 'TOGGLE_MEAL_MODAL'
+const TOGGLE_FOOD_EDITOR_MODAL = 'TOGGLE_FOOD_EDITOR_MODAL'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
@@ -299,12 +307,48 @@ export function clearMealSearch() {
         payload: 'nothing fancy'
     }
 }
+
+export function toggleMealModal(bool) {
+    return {
+        type: TOGGLE_MEAL_MODAL,
+        payload: bool
+    }
+}
+
+export function toggleMenuModal(bool) {
+    return {
+        type: TOGGLE_MENU_MODAL,
+        payload: bool
+    }
+}
+
+export function toggleFoodModal(bool) {
+    return {
+        type: TOGGLE_FOOD_MODAL,
+        payload: bool
+    }
+}
+
+export function toggleFoodEditorModal(bool) {
+    return {
+        type: TOGGLE_FOOD_EDITOR_MODAL,
+        payload: bool
+    }
+}
 ////////////////END ACTION CREATOR declaration/////////
 
 
 /////////////////BEGIN reducer declaration//////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case TOGGLE_FOOD_EDITOR_MODAL:
+                return { ...state, foodEditorDialogOpen: action.payload }
+        case TOGGLE_MEAL_MODAL:
+                return { ...state, mealDialogOpen: action.payload }
+        case TOGGLE_MENU_MODAL:
+                return { ...state, menuDialogOpen: action.payload }
+        case TOGGLE_FOOD_MODAL:
+                return { ...state, foodDialogOpen: action.payload }
         case CLEAR_FOOD_MESSAGE:
                 return { ...state, warningMsg: action.payload }
         case CLEAR_MEAL_SEARCH:

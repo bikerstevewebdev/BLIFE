@@ -6,8 +6,9 @@ import ExerciseCard from '../Exercise/ExerciseCard'
 // import Exercise from '../Exercise/Exercise';
 // import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
+import Sortable from 'sortablejs'
 
-class Workout extends Component{
+class WorkoutEditor extends Component{
     constructor(props) {
         super(props)
         this.state = {
@@ -46,7 +47,33 @@ class Workout extends Component{
             searchIn: val
         })
     }
-    
+
+    exercisesput = (exercises) => {
+            if (exercises) {
+              let options = {
+                group: {
+                  name: 'exercises',
+                }
+              };
+              Sortable.create(exercises, options);
+            }
+          }
+        
+          pull = exercises => {
+            // check if backing instance not null
+            if (exercises) {
+              let options = {
+                draggable: "div", // Specifies which items inside the element should be sortable
+                group: {
+                  name: "exercises",
+                //   pull: "clone",
+                //   revertClone: true,
+          }
+              }
+              Sortable.create(exercises, options)
+            }
+          }
+        
     render() {
         const { exSearchResults, workout, workoutExs } = this.props,
               { workout_id, title, img } = workout,
@@ -71,23 +98,27 @@ class Workout extends Component{
                      display: "grid",
                      width: "100%",
                      gridTemplateColumns: "repeat(5, 1fr)",
-                     gridTemplateRows: "15em",
-                     gridAutoRows: "4.5em",
+                     gridTemplateRows: "20em 4.5em auto 2.5em",
+                    //  gridAutoRows: "",
+                     alignItems: "center",
+                     gridGap: "0.5em"
                      
                  }
         return(
             <section style={{...designerStyles}} className="workout">
-                <section style={{gridArea: "1/1/2/6", justifySelf: "center", alignSelf: "center", textAlign: "center"}} className="heading">
+                <section style={{gridArea: "1/2/3/5", width: "100%", justifySelf: "center", alignSelf: "center", textAlign: "center"}} className="heading">
                     <h1 style={{fontSize: "2.5em"}} >{title}</h1>
-                    {img ? <img src={img} alt={title} /> : null}                
+                    {img ? <img style={{borderRadius: "2px", width: "65%", minWidth: "125px"}} src={img} alt={title} /> : null}                
                 </section>
                 <h3 style={{gridArea: "2/1/3/6", justifySelf: "start", alignSelf: "center"}} >Exercises in this Workout:</h3>
-                <section style={{...designerStyles, gridArea: "3/1/4/6"}}>
+                <section  id="exercises" ref={this.pull} style={{display: "grid", gridGap: "0.5em", width: "100%", gridArea: "3/1/4/6"}}>
                     {workoutExsList}
                 </section>
-                <input value={searchIn} placeholder="Search Exercises by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
-                <RaisedButton secondary={true} onClick={() => this.props.searchExercises(searchIn)}>Search the exercise database!</RaisedButton>
-                <section>
+                <section style={{gridArea: "4/1/5/6"}}>
+                    <input value={searchIn} placeholder="Search Exercises by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
+                    <RaisedButton secondary={true} onClick={() => this.props.searchExercises(searchIn)}>Search the exercise database!</RaisedButton>
+                </section>
+                <section style={{gridArea: "5/1/6/6", display: "grid", grid: "auto-flow / repeat(5, 1fr)"}}>
                     {exerciseResults}
                 </section>
             </section>
@@ -103,4 +134,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { searchExercises, addExToWorkout, getWorkoutById })(Workout)
+export default connect(mapStateToProps, { searchExercises, addExToWorkout, getWorkoutById })(WorkoutEditor)

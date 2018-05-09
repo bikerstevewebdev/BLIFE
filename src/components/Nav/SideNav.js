@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
@@ -17,7 +17,9 @@ import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 // import IconMenu from 'material-ui/IconMenu'
 // import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton';
-import { toggleSideNav } from '../../ducks/userReducer'
+import { toggleFoodModal, toggleMealModal, toggleMenuModal } from '../../ducks/foodReducer'
+import { toggleExCreatorModal, toggleWorkCreatorModal } from '../../ducks/fitnessReducer'
+import { toggleSideNav, toggleUpdateProfileModal } from '../../ducks/userReducer'
 import {List, ListItem} from 'material-ui/List';
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 
@@ -29,64 +31,59 @@ import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 class SideNav extends Component{    
   constructor(){
     super()
-    this.state = {
-      sendingToUpdateProfile: false,
-      sendingToMeasurements: false,
-      sendingToMacroCalc: false,
-      sendingToMenuCreator: false,
-      sendingToMealCreator: false,
-      sendingToFoodCreator: false,
-      sendingToWorkoutCreator: false,
-      sendingToExerciseCreator: false,
-      sendingToWorkoutDesigner: false
-    }
+    // this.state = {
+    //   sendingToUpdateProfile: false,
+    //   sendingToMeasurements: false,
+    //   sendingToMacroCalc: false,
+    //   sendingToWorkoutDesigner: false
+    // }
     this.sendToUpdateProfile = this.sendToUpdateProfile.bind(this)
-    this.sendToMeasurements = this.sendToMeasurements.bind(this)
-    this.sendToMacroCalc = this.sendToMacroCalc.bind(this)
+    // this.sendToMeasurements = this.sendToMeasurements.bind(this)
+    // this.sendToMacroCalc = this.sendToMacroCalc.bind(this)
     this.sendToMenuCreator = this.sendToMenuCreator.bind(this)
     this.sendToMealCreator = this.sendToMealCreator.bind(this)
     this.sendToFoodCreator = this.sendToFoodCreator.bind(this)
     this.sendToWorkoutCreator = this.sendToWorkoutCreator.bind(this)
     this.sendToExerciseCreator = this.sendToExerciseCreator.bind(this)
-    this.sendToWorkoutDesigner = this.sendToWorkoutDesigner.bind(this)
+    // this.sendToWorkoutDesigner = this.sendToWorkoutDesigner.bind(this)
   }
 
   sendToUpdateProfile(){
-    this.setState({sendingToUpdateProfile: true})
+    this.props.toggleUpdateProfileModal(true)
     this.props.toggleSideNav(false)
   }
-  sendToMeasurements(){
-    this.setState({sendingToMeasurements: true})
-    this.props.toggleSideNav(false)
-  }
-  sendToMacroCalc(){
-    this.setState({sendingToMacroCalc: true})
-    this.props.toggleSideNav(false)
-  }
+  // sendToMeasurements(){
+  //   this.setState({sendingToMeasurements: true})
+  //   this.props.toggleSideNav(false)
+  // }
+  // sendToMacroCalc(){
+  //   this.setState({sendingToMacroCalc: true})
+  //   this.props.toggleSideNav(false)
+  // }
   sendToMenuCreator(){
-    this.setState({sendingToMenuCreator: true})
+    this.props.toggleMenuModal(true)
     this.props.toggleSideNav(false)
   }
   sendToMealCreator(){
-    this.setState({sendingToMealCreator: true})
+    this.props.toggleMealModal(true)
     this.props.toggleSideNav(false)
   }
   sendToFoodCreator(){
-    this.setState({sendingToFoodCreator: true})
+    this.props.toggleFoodModal(true)
     this.props.toggleSideNav(false)
   }
   sendToWorkoutCreator(){
-    this.setState({sendingToWorkoutCreator: true})
+    this.props.toggleWorkCreatorModal(true)
     this.props.toggleSideNav(false)
   }
   sendToExerciseCreator(){
-    this.setState({sendingToExerciseCreator: true})
+    this.props.toggleExCreatorModal(true)
     this.props.toggleSideNav(false)
   }
-  sendToWorkoutDesigner(){
-    this.setState({sendingToWorkoutDesigner: true})
-    this.props.toggleSideNav(false)
-  }
+  // sendToWorkoutDesigner(){
+  //   this.setState({sendingToWorkoutDesigner: true})
+  //   this.props.toggleSideNav(false)
+  // }
     // handleOpen(targ){
     //     if(targ === 'fitness'){
     //         this.setState({
@@ -153,7 +150,7 @@ class SideNav extends Component{
         // )
         
 
-        const { sendingToExerciseCreator, sendingToFoodCreator, sendingToMacroCalc, sendingToMealCreator, sendingToMeasurements, sendingToMenuCreator, sendingToUpdateProfile, sendingToWorkoutCreator, sendingToWorkoutDesigner } = this.state
+        // const { sendingToMacroCalc, sendingToMeasurements, sendingToUpdateProfile, sendingToWorkoutDesigner } = this.state
         return(
             <Drawer onRequestChange={() => this.props.toggleSideNav(false)}
             docked={false} width={200} openSecondary={true} open={this.props.sideNavOpen} >
@@ -165,23 +162,26 @@ class SideNav extends Component{
                         leftIcon={<PersonOutline />}
                         nestedItems={[
                             <ListItem
+                              nestedLevel={1}
                               onClick={this.sendToUpdateProfile}
                               key={1}
                               primaryText="Update Profile"
                               leftIcon={<ModeEdit />}
                             />,
-                            <ListItem
-                              onClick={this.sendToMeasurements}
+                            <Link to="/measurements"><ListItem
+                              nestedLevel={1}
+                              onClick={() => this.props.toggleSideNav(false)}
                               key={2}
                               primaryText="Update Measurements"
                               leftIcon={<InsertChart />}
-                            />,
-                            <ListItem
-                              onClick={this.sendToMacroCalc}
+                            /></Link>,
+                            <Link to="/macroCalc"><ListItem
+                              nestedLevel={1}
+                              onClick={() => this.props.toggleSideNav(false)}
                               key={3}
                               primaryText="Macro Calculator"
                               leftIcon={<PieChart />}
-                            />
+                            /></Link>
                           ]}
                         />
                     <ListItem
@@ -226,78 +226,16 @@ class SideNav extends Component{
                               primaryText="Exercise Creator"
                               leftIcon={<NoteAdd />}
                             />,
-                            <ListItem
-                              onClick={this.sendToWorkoutDesigner}
+                            <Link to="/workout/nav"><ListItem
+                              nestedLevel={1}
+                              onClick={() => this.props.toggleSideNav(false)}
                               key={9}
                               primaryText="Workout Designer"
                               leftIcon={<Storage />}
-                            />
+                            /></Link>
                           ]}
                         />
                 </List>
-                {
-                  sendingToUpdateProfile
-                  ?
-                  <Redirect to='/updateProfile' />
-                  :
-                  null
-                }
-                {
-                  sendingToMeasurements
-                  ?
-                  <Redirect to='/measurements' />
-                  :
-                  null
-                }
-                {
-                  sendingToMacroCalc
-                  ?
-                  <Redirect to='/macroCalc' />
-                  :
-                  null
-                }
-                {
-                  sendingToMenuCreator
-                  ?
-                  <Redirect to='/menuCreator' />
-                  :
-                  null
-                }
-                {
-                  sendingToMealCreator
-                  ?
-                  <Redirect to='/mealCreator' />
-                  :
-                  null
-                }
-                {
-                  sendingToFoodCreator
-                  ?
-                  <Redirect to='/food' />
-                  :
-                  null
-                }
-                {
-                  sendingToWorkoutCreator
-                  ?
-                  <Redirect to='/workoutCreator' />
-                  :
-                  null
-                }
-                {
-                  sendingToExerciseCreator
-                  ?
-                  <Redirect to='/exercise' />
-                  :
-                  null
-                }
-                {
-                  sendingToWorkoutDesigner
-                  ?
-                  <Redirect to='/workout' />
-                  :
-                  null
-                }
             </Drawer>
         )
     }
@@ -309,4 +247,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { toggleSideNav })(SideNav)
+export default connect(mapStateToProps, { toggleSideNav, toggleFoodModal, toggleMealModal, toggleMenuModal, toggleExCreatorModal, toggleWorkCreatorModal, toggleUpdateProfileModal })(SideNav)

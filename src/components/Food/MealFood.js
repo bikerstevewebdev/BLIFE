@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { getFoodById, updateFoodQuantity, removeFromMeal } from '../../ducks/foodReducer'
-// import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 
 class MealFood extends Component{
@@ -12,18 +10,10 @@ class MealFood extends Component{
             needsEdit: false,
             quantityIn: props.quantity
         }
-        // this.editFood = this.editFood.bind(this)
         this.deleteFood = this.deleteFood.bind(this)
         this.sendUpdate = this.sendUpdate.bind(this)
         this.changeAmount = this.changeAmount.bind(this)
     }
-
-    // editFood() {
-    //     this.props.getFoodById(food_id)
-    //     this.setState({
-    //         needsEdit: true
-    //     })
-    // }
 
     deleteFood() {
         const { food_id, meal_id, pro, carb, fat, fiber, quantity, meal_food_id } = this.props
@@ -53,20 +43,10 @@ class MealFood extends Component{
                 <p>Fat: {fat}</p>
                 <p>Fiber: {fiber}</p>
                 <img src={img} alt={name} />
-                <Link to={{
-                    pathname: `/food/meal`,
-                    state: { food_id, name, pro, carb, fat, fiber, img }
-                }}><RaisedButton secondary={true} onClick={() => this.props.getFoodById(food_id)}>Edit Food</RaisedButton></Link>
+                <RaisedButton secondary={true} onClick={() => this.props.prepareToEdit(food_id)}>Edit Food</RaisedButton>
                 <RaisedButton secondary={true} onClick={this.deleteFood}>Remove From Meal</RaisedButton>
                 <input type="number" min="1" max="100" value={this.state.quantityIn} onChange={this.changeAmount} className="food-quantity" />
                 <RaisedButton secondary={true} onClick={this.sendUpdate}>Update the quantity</RaisedButton>
-                {/* {
-                    this.state.needsEdit
-                    ?
-                    <Redirect to={`/food/meal`} />
-                    :
-                    null
-                } */}
             </section>
         )
     }

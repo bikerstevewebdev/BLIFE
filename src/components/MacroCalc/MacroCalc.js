@@ -12,17 +12,17 @@ import MenuItem from 'material-ui/MenuItem';
 
 
 class MacroCalc extends Component{
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            height: 0,
+            height: props.user.current_height,
             age: 0,
-            weight: 0,
-            bodyfat: 0,
-            tenacity: '',
-            goal: '',
-            activity: '',
-            gender: '',
+            weight: props.user.current_weight,
+            bodyfat: props.user.current_bf,
+            tenacity: 'steady',
+            goal: 'maintain',
+            activity: 'moderate',
+            gender: 'm',
             isCalculating: true
         }
         this.calculate = this.calculate.bind(this)
@@ -34,7 +34,9 @@ class MacroCalc extends Component{
         }
         console.log('MacroCalc props', this.props)
     }
-    updateInputs(val, target){
+    
+    updateInputs(event, index, val, target){
+        console.log("event: ", event, "index: ", index, "val: ", val, "target: ", target)
         switch(target){
             case 'height':
             this.setState({ height: val })
@@ -63,6 +65,10 @@ class MacroCalc extends Component{
             default:
                 return null
         }
+    }
+
+    handleActivity(event, index, value){
+        console.log(event, index, value)
     }
     calculate(e) {
         e.preventDefault()
@@ -99,29 +105,29 @@ class MacroCalc extends Component{
                     </section>
                     <section style={{display: "grid", gridTemplateRows: "repeat(75px)", justifyContent: "start"}}>
                         <p>Activity Level</p>
-                        <SelectField style={{height: "72px", ...selectWidth}} value={activity} defaultValue="Low (sedentary, low activity job, exercise 1-2 times/week)"className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'activity')}>
-                            <MenuItem  value="low">Low (sedentary, low activity job, exercise 1-2 times/week)</MenuItem>
-                            <MenuItem value="moderate">Moderate (lightly active, some movement at job, exercise 2-3 times/week)</MenuItem>
-                            <MenuItem value="active">Active (above average activity, frequent moving at job, exercise 3-5 times/week)</MenuItem>
-                            <MenuItem value="hi-active">Highly Active (athletic or highly active job, exercise 5-7 times/week)</MenuItem>
-                            <MenuItem value="extreme">Extremely Active (athletic and highly active job, exercise 6-7 times/week)</MenuItem>
+                        <SelectField style={{height: "72px", ...selectWidth}} value={this.state.activity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, "activity")}>
+                            <MenuItem value="low" primaryText="Low (sedentary, low activity job, exercise 1-2 times/week)"/>
+                            <MenuItem value="moderate" primaryText="Moderate (lightly active, some movement at job, exercise 2-3 times/week)"/>
+                            <MenuItem value="active" primaryText="Active (above average activity, frequent moving at job, exercise 3-5 times/week)"/>
+                            <MenuItem value="hi-active" primaryText="Highly Active (athletic or highly active job, exercise 5-7 times/week)"/>
+                            <MenuItem value="extreme" primaryText="Extremely Active (athletic and highly active job, exercise 6-7 times/week)"/>
                         </SelectField>
                         <p>Goal</p>
-                        <SelectField style={{height: "72px", ...selectWidth}} defaultValue="maintain" value={goal} className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'goal')}>
-                            <MenuItem value="gain">Gain Weight</MenuItem>
-                            <MenuItem value="lose">Lose Weight</MenuItem>
-                            <MenuItem value="maintain">Maintain Current Weight</MenuItem>
+                        <SelectField style={{height: "72px", ...selectWidth}} value={goal} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'goal')}>
+                            <MenuItem primaryText="Gain Weight" value="gain"/>
+                            <MenuItem primaryText="Lose Weight" value="lose"/>
+                            <MenuItem primaryText="Maintain Current Weight" value="maintain"/>
                         </SelectField>
                         <p>Goal Tenacity</p>
-                        <SelectField style={{height: "72px", ...selectWidth}} defaultValue="steady" value={tenacity} className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'tenacity')}>
-                            <MenuItem value="intense">Intense (gain/lose 2+ pounds/week)</MenuItem>
-                            <MenuItem  value="steady">Steady (gain/lose 1 pounds/week)</MenuItem>
-                            <MenuItem value="slow">{"Slow (gain/lose < 1 pound/week)"}</MenuItem>
+                        <SelectField style={{height: "72px", ...selectWidth}} value={tenacity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'tenacity')}>
+                            <MenuItem primaryText="Intense (gain/lose 2+ pounds/week)" value="intense"/>
+                            <MenuItem primaryText="Steady (gain/lose 1 pounds/week)" value="steady"/>
+                            <MenuItem primaryText="Slow (gain/lose < 1 pound/week)" value="slow"/>
                         </SelectField>
                         <p>Gender</p>
-                        <SelectField value={gender} style={{height: "72px", ...selectWidth}} defaultValue="m" className="macro-input" onChange={(e) => this.updateInputs(e.target.value, 'gender')}>
-                            <MenuItem  value="m">Male</MenuItem>
-                            <MenuItem value="f">Female</MenuItem>
+                        <SelectField value={gender} style={{height: "72px", ...selectWidth}} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'gender')}>
+                            <MenuItem primaryText="Male" value="m"/>
+                            <MenuItem primaryText="Female" value="f"/>
                         </SelectField>
                     </section>
                 {/* </section> */}

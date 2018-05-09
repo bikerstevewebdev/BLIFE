@@ -39,7 +39,8 @@ const initialState = {
         waists: [],
         chests: [],
         dates: []
-    }
+    },
+    updateProfileModalOpen: false
 }
 /////////////////END initial state declaration////////////////////
 
@@ -68,6 +69,7 @@ const TOGGLE_SIDE_NAV = 'TOGGLE_SIDE_NAV'
 const GET_PAST_MEASUREMENTS = 'GET_PAST_MEASUREMENTS'
 const ARCHIVE_WORKOUT = 'ARCHIVE_WORKOUT'
 const ARCHIVE_MENU = 'ARCHIVE_MENU'
+const TOGGLE_UPDATE_PROFILE = 'TOGGLE_UPDATE_PROFILE'
 
 /////////////////END String Literals//////////////////////
 
@@ -296,6 +298,13 @@ export function getPastMeasurements(){
     }
 }
 
+export function toggleUpdateProfileModal(bool){
+    return{
+        type: TOGGLE_UPDATE_PROFILE,
+        payload: bool
+    }
+}
+
 /////////////////END exporting action creators//////////////////////
 
 
@@ -304,6 +313,8 @@ export function getPastMeasurements(){
 ////////////////BEGIN REDUCER//////////////////////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case TOGGLE_UPDATE_PROFILE:
+                return { ...state, updateProfileModalOpen: action.payload }
         case CLEAR_USER_MESSAGE:
                 return { ...state, warningMsg: action.payload }
         case GET_PAST_MEASUREMENTS + '_FULFILLED':

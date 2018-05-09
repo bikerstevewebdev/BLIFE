@@ -23,9 +23,7 @@ function MenuCard(props) {
             </CardMedia>
             <CardTitle title={title} />
             <CardText>
-                <Link to={`/menu/${menu_id}`}>
                     {`P: ${total_p}g C: ${total_c} F: ${total_f}g Fib: ${total_fib}g`}
-                </Link>
             </CardText>
             <CardActions>
                 <Link to={`/menu/${menu_id}`}><FlatButton label="Details" /></Link>

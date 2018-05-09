@@ -76,67 +76,83 @@ class ExerciseCard extends Component{
         })
     }
 
-    prepareToAddNotes() {
-        this.setState({
-            addingNotes: true
-        })
+    prepareToAddNotes(bool) {
+        if(bool === false){
+            this.setState({
+                notesIn: '',
+                addingNotes: false
+            })
+        }else{
+            this.setState({
+                addingNotes: true
+            })
+        }
     }
 
     sendUpdate(){
-        const { repsIn, SetsIn, restTimeIn, weightIn, orderIn, notesIn } = this.state,
+        const { repsIn, setsIn, restTimeIn, weightIn, orderIn, notesIn } = this.state,
               { workout_ex_id, workout_id } = this.props
-        this.props.updateWorkoutEx(workout_ex_id, workout_id, repsIn, SetsIn, restTimeIn, weightIn, orderIn, notesIn)
+        this.props.updateWorkoutEx(workout_ex_id, workout_id, repsIn, setsIn, restTimeIn, weightIn, orderIn, notesIn)
     }
 
     render() {
-        const { repsIn, setsIn, restTimeIn, weightIn, notesIn, addingNotes } = this.state,
+        const { repsIn, setsIn, restTimeIn, weightIn, notesIn, addingNotes, orderIn } = this.state,
               { type, name, img, numExs, workout_ex_id, ex_id, workout_id, ex_order } = this.props
+        const brickStyles = {
+            width: "100%",
+            display: "grid",
+            gridGap: "0.25em",
+            alignItems: "center",
+            gridTemplateColumns: type === "Bodyweight" ? "8% 1fr 8% 8% 8% 1fr 15%" : "8% 2fr 8% 8% 8% 8% 3fr 15%",
+            border: "1px solid rgba(10, 10, 10, 0.5)",
+            borderRadius: "3px",
+            boxShadow: "rgba(11, 145, 232, 0.5) 2px 2px",
+            gridAutoFlow: "column"
+        }
         return (
-            <section style={{...this.props.style, width: "100%", display: "grid", gridTemplateColumns: "repeat(6, 1fr)"}} className="workout-ex">
-                <section style={{gridColumn: "1/2", display: "flex", justifyContent: "space-around"}}>
-                    <DropDownMenu defaultValue={ex_order} onChange={this.updateOrderIn}>
-                        {numExs.map((v, i) => {
-                            return <MenuItem key={ex_id + "-" + i} value={i+1}>{i+1}</MenuItem>
-                        })}
-                    </DropDownMenu>
+            <div style={{...this.props.style, ...brickStyles}} className="workout-ex">
+                <DropDownMenu style={{gridColumn: "1/2"}} value={orderIn/1} onChange={this.updateOrderIn}>
+                    {numExs.map((v, i) => {
+                        return <MenuItem key={ex_id + "-" + i} value={i+1}>{i+1}</MenuItem>
+                    })}
+                </DropDownMenu>
+                <section style={{gridColumn: "2/3", display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
+                    <img style={{width: "45%"}} src={img} alt={name} />
                     <h3>{name}</h3>
                 </section>
-                <img style={{gridColumn: "2/3", width: "100%"}} src={img} alt={name} />
                 <section style={{gridColumn: "3/4"}}>
-                    <p>Reps:</p>
-                    <TextField type="number" value={repsIn} onChange={this.updateRepsIn} />
+                    <TextField floatingLabelText="Reps:" fullWidth={true} type="number" value={repsIn} onChange={this.updateRepsIn} />
                 </section>
                 <section style={{gridColumn: "4/5"}}>
-                    <p>Sets:</p>
-                    <TextField type="number" value={setsIn} onChange={this.updateSetsIn} />
+                    <TextField floatingLabelText="Sets" fullWidth={true} type="number" value={setsIn} onChange={this.updateSetsIn} />
                 </section>
                 {
                     type !== "Bodyweight"
                     ?
-                    <section style={{gridColumn: "5/6"}} className="weight-input">
-                        <p>Weight:</p>
-                        <TextField type="number" value={weightIn} onChange={this.updateWeightIn} />
+                    <section className="weight-input">
+                        <TextField style={{width: "100%"}} fullWidth={true} floatingLabelText="Weight" type="number" value={weightIn} onChange={this.updateWeightIn} />
                     </section>
                     :
                     null
                 }
-                <section style={{gridColumn: "6/7"}}>
-                    <p>Rest Time:</p>
-                    <TextField type="number" value={restTimeIn} onChange={this.updateRestTimeIn} />
+                <TextField style={{width: "100%"}} fullWidth={true} floatingLabelText="Rest Time" type="number" value={restTimeIn} onChange={this.updateRestTimeIn} />
+                <section style={{textAlign: "center"}} >
                     {
                         addingNotes
                         ?
-                        <section className="notes-input">
-                            <p>Notes:</p>
-                            <TextField maxLength="500" value={notesIn} placeholder="Limit 500 characters" onChange={this.updateNotesIn} />
+                        <section style={{display: "flex", justifyContent: "space-between"}} className="notes-input">
+                            <TextField multiLine={true} fullWidth={true} floatingLabelText="Notes" maxLength="500" value={notesIn} hintText="Limit 500 characters" onChange={this.updateNotesIn} />
+                            <RaisedButton style={{alignSelf: "center"}} secondary={true} onClick={() => this.prepareToAddNotes(false)}>Clear Notes</RaisedButton>
                         </section>
                         :
-                        <RaisedButton secondary={true} onClick={this.prepareToAddNotes}>Add Notes?</RaisedButton>
+                        <RaisedButton secondary={true} onClick={() => this.prepareToAddNotes(true)}>Add Notes?</RaisedButton>
                     }
                 </section>
-                <RaisedButton secondary={true} style={{backgroundColor: "yellow"}} onClick={this.sendUpdate}>Save Changes</RaisedButton>
-                <RaisedButton secondary={true} className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove From Workout</RaisedButton>
-            </section>
+                <section style={{height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-around"}} >
+                    <RaisedButton secondary={true} style={{backgroundColor: "yellow"}} onClick={this.sendUpdate}>Save Changes</RaisedButton>
+                    <RaisedButton secondary={true} className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove From Workout</RaisedButton>
+                </section>
+            </div>
         )
     }
 }

@@ -121,7 +121,8 @@ class Dashboard extends Component{
             assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard user_workout_id={workout.user_workout_id} key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
         }else{
             assignedWorkoutList = null
-        }
+        } 
+        
         return(
             <section style={{...dbStyles}} className="comp dashboard">
                 <h1 style={{gridColumn: "2/4", fontSize: "2em", alignSelf: "center"}}>Welcome back {this.props.userData.username}</h1>
@@ -168,13 +169,6 @@ class Dashboard extends Component{
                 <SearchMenu btn2Fn={this.props.addMenuToUser} style={{...menuSearchStyle}}/>
                 <SearchWorkout btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
                 <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
-                {
-                    this.state.firstVisit
-                    ?
-                    <Redirect to={`/firstLogin`} />
-                    :
-                    null
-                }
             </section>
         )
     }

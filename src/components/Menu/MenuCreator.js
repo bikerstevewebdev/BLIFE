@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { createMenu } from '../../ducks/foodReducer'
+import { createMenu, toggleMenuModal } from '../../ducks/foodReducer'
 import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 class Menu extends Component{
     constructor() {
@@ -39,7 +41,7 @@ class Menu extends Component{
     
     render() {
         return(
-            <section className="menu-creator" >
+            <Dialog open={this.props.menuDialogOpen} className="menu-creator" >
                 <p>Title of the Menu:</p>
                 <input value={this.state.titleInput} onChange={(e) => this.updateMenuTitle(e.target.value)} />
                 <p>Menu Image Url:</p>
@@ -52,8 +54,16 @@ class Menu extends Component{
                     :
                     <Redirect to={`/menu/${this.state.titleInput}`} />
                 }
-            </section>
+                <FlatButton onClick={() => this.props.toggleMenuModal(false)} label="close" />
+            </Dialog>
         )
     }
 }
-export default connect(null, { createMenu })(Menu)
+
+function mapStateToProps(state) {
+    return {
+        menuDialogOpen: state.foods.menuDialogOpen
+    }
+}
+
+export default connect(mapStateToProps, { createMenu, toggleMenuModal })(Menu)

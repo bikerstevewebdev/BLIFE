@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos } from '../../ducks/userReducer';
+import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
 // import MenuCard from '../Menu/MenuCard'
 // import WorkoutCard from '../Workout/WorkoutCard'
@@ -132,7 +132,7 @@ class Profile extends Component{
                 <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "2em"}}>Welcome Home</h1>
                 <section style={{gridArea: "1/3/2/4", display: "flex", flexDirection: "column", width: "100%", height: "100%", justifyContent: "space-around"}}>
                     <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link>
-                    <Link to='/updateProfile'><RaisedButton secondary={true} style={{backgroundColor: "orange"}}>Update Profile</RaisedButton></Link>
+                    <RaisedButton onClick={() => this.props.toggleUpdateProfileModal(true)} secondary={true} style={{backgroundColor: "orange"}}>Update Profile</RaisedButton>
                 </section>
                 <section style={{...profileStyles, gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em"}} className="progress-pics">
                     <section style={{gridArea: "1/1/2/2"}} className="progress-pic-btn">
@@ -232,4 +232,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getAllProgressPics, getCurrentPhotos })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal })(Profile)
