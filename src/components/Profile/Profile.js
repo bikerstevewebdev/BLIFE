@@ -24,7 +24,7 @@ import ProgressChart from '../Measurements/ProgressChart'
 import PhotoComparison from '../Photos/PhotoComparison'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-
+import './Profile.css'
 
 class Profile extends Component{
     constructor() {

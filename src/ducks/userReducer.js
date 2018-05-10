@@ -44,7 +44,8 @@ const initialState = {
     },
     updateProfileModalOpen: false,
     photoCompModalOpen: false,
-    comparisonPhotos: []
+    comparisonPhotos: [],
+    motivationalModalOpen: false
 }
 /////////////////END initial state declaration////////////////////
 
@@ -78,6 +79,7 @@ const TOGGLE_UPDATE_PROFILE = 'TOGGLE_UPDATE_PROFILE'
 const ADD_TO_COMPARE = 'ADD_TO_COMPARE'
 const REMOVE_FROM_COMPARE = 'REMOVE_FROM_COMPARE'
 const TOGGLE_PHOTO_COMP_MODAL = 'TOGGLE_PHOTO_COMP_MODAL'
+const TOGGLE_MOTIVATIONAL_MODAL = 'TOGGLE_MOTIVATIONAL_MODAL'
 const LOGOUT_USER = 'LOGOUT_USER'
 
 /////////////////END String Literals//////////////////////
@@ -93,6 +95,13 @@ export function toggleSideNav(bool) {
 export function togglePhotoCompModal(bool) {
     return {
         type: TOGGLE_PHOTO_COMP_MODAL,
+        payload: bool
+    }
+}
+
+export function toggleMotivationalModal(bool) {
+    return {
+        type: TOGGLE_MOTIVATIONAL_MODAL,
         payload: bool
     }
 }
@@ -372,6 +381,8 @@ export default function(state = initialState, action) {
                 return { ...state, userData: {}, isLoggedIn: false }
         case ADD_TO_COMPARE:
                 return { ...state, comparisonPhotos: [...state.comparisonPhotos, action.payload] }
+        case TOGGLE_MOTIVATIONAL_MODAL:
+                return { ...state, motivationalModalOpen: action.payload }
         case TOGGLE_PHOTO_COMP_MODAL:
                 return { ...state, photoCompModalOpen: action.payload }
         case TOGGLE_UPDATE_PROFILE:

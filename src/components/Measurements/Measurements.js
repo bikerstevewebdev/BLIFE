@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { addMeasurement } from '../../ducks/userReducer'
+import { addMeasurement, toggleMotivationalModal } from '../../ducks/userReducer'
 import { Redirect } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
@@ -40,6 +40,9 @@ class Measurements extends Component{
     sendUpdates() {
         const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn, happinessMeter } = this.state  
         this.props.addMeasurement(heightIn, weightIn, bfIn, waistIn, chestIn, neckIn, dateIn, happinessMeter)
+        if(happinessMeter < 7){
+            this.props.toggleMotivationalModal(true)
+        }
         this.setState({
             addingMes: false
         })
@@ -144,4 +147,4 @@ function mapStateToProps(state){
         }
 }
 
-export default connect(mapStateToProps, { addMeasurement })(Measurements)
+export default connect(mapStateToProps, { addMeasurement, toggleMotivationalModal })(Measurements)

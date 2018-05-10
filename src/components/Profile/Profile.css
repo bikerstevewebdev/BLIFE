@@ -1,0 +1,8 @@
+::-webkit-scrollbar-thumb {
+    color: blue;
+    background-color: purple;
+}
+::-webkit-scrollbar {
+    background-color: red;
+    color: blue;
+}

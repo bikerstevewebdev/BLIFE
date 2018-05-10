@@ -38,12 +38,12 @@ class CoachChat extends Component {
         console.log(data)
       this.setState({
           roomPath: data.room,
-          messages: data.messages,
+          messages: data.messages.reverse(),
           roomJoined: data.success
         })
     })
     this.socket.on('message received', data => {
-      this.setState({messages: data.messages})
+      this.setState({messages: data.messages.reverse()})
     })
     this.handleMessageEvent = this.handleMessageEvent.bind(this);
   }
@@ -101,7 +101,7 @@ class CoachChat extends Component {
         })
     }
     return (
-      <Dialog autoScrollBodyContent={true} open={this.props.coachChatModalOpen} className="App">
+      <Dialog  contentStyle={{borderRadius: "10%", position: "fixed", left: "25%", top: "1%"}} autoScrollBodyContent={true} open={this.props.coachChatModalOpen} className="App">
             <Table>
                 <TableBody>
                     {messageList ? messageList : null}

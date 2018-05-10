@@ -71,7 +71,7 @@ module.exports = {
 
     getClients: (req, res, next) => {
         const db = req.app.get('db')
-            , { coach_id } = req.params
+            , { coach_id } = req.user
         db.get_current_clients([coach_id]).then(clients => {
             res.status(200).send(clients)
         })

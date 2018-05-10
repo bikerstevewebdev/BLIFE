@@ -34,7 +34,7 @@ import { clearFoodMessage } from './ducks/foodReducer'
 import CoachChat from './components/Coach/CoachChat';
 import { FloatingActionButton } from 'material-ui';
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
-
+import MotivationalQuote from './components/Measurements/MotivationalQuote'
 
 
 class App extends Component {
@@ -126,6 +126,7 @@ class App extends Component {
           <MealCreator />
           <MenuCreator />
           <ExerciseCreator />
+          <MotivationalQuote />
           <WorkoutCreator />
           {
             userData.has_coach
@@ -134,7 +135,7 @@ class App extends Component {
               ?
               <CoachChat />
               :
-              <FloatingActionButton onClick={() => toggleCoachChatModal(true)}>
+              <FloatingActionButton style={{position: "fixed", bottom: "30px", right: "30px"}} onClick={() => toggleCoachChatModal(true)}>
                 <CommunicationChat />
               </FloatingActionButton>)
             :

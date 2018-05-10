@@ -183,7 +183,7 @@ class FirstLogin extends Component{
         case 3:
         return (
             <section>
-                <StripeDefault total={39} />
+                <StripeDefault amount={3900} />
                 <h2>Are you here to coach others?</h2>
                 <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton >
                 <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(false)}>No thanks, just here to find a healthy balance.</RaisedButton >

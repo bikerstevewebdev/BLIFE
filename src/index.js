@@ -17,7 +17,6 @@ import {
 import {fade} from 'material-ui/utils/colorManipulator'
 import './index.css';
 import App from './App';
-// import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux'
 import store from './ducks/store'
 import { HashRouter as Router } from 'react-router-dom'
@@ -57,4 +56,3 @@ ReactDOM.render(
         </Router>
     </Provider>,
  document.getElementById('root'));
-// registerServiceWorker();

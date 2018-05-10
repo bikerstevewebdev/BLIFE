@@ -23,7 +23,7 @@ class StripeDefault extends Component{
                 stripeKey = {process.env.REACT_APP_STRIPE_PK}
                 amount = {this.props.amount}>
                 <RaisedButton primary={true} >
-                    {this.props.total}
+                    ${(this.props.amount/100).toFixed(2)}
                 </RaisedButton>
             </StripeCheckout>
         </div>

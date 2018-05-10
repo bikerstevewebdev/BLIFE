@@ -22,9 +22,9 @@ const express          = require('express'),
 
 const app = express()
 
+// app.use(express.static(__dirname + '/../build'))
 app.use(express.json())
 app.use(cors())
-
 // Setting up express-session
 app.use(session({
     secret: SESSION_SECRET,
@@ -137,6 +137,8 @@ app.get('/auth/logout', (req, res)=>{
 })
 
 app.get('/auth/callback', passport.authenticate('auth0', {
+    // successRedirect: process.env.SUCCESS_REDIRECT,
+    // failureRedirect: process.env.FAILURE_REDIRECT
     successRedirect: 'http://localhost:3000/#/dashboard',
     failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
