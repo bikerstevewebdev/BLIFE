@@ -21,6 +21,7 @@ import ExerciseCreator from './components/Exercise/ExerciseCreator';
 import WorkoutCreator from './components/Workout/WorkoutCreator';
 import ClientManager from './components/Coach/ClientManager';
 import CoachManager from './components/Coach/CoachManager';
+import AdminManager from './components/Admin/AdminManager';
 import FirstLogin from './components/Login/FirstLogin';
 import Measurements from './components/Measurements/Measurements';
 // import MealFromRecipe from './components/Meal/MealFromRecipe';
@@ -52,7 +53,10 @@ class App extends Component {
   }
 
   componentDidUpdate(){
-    const { userMessage, foodMessage, coachMessage, fitnessMessage, userData } = this.props    
+    const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, isLoggedIn, location } = this.props    
+    if(location.pathname !== '/' && (userData.user_id < 0 || !isLoggedIn)){
+      this.props.history.push('/')
+    }
     if(this.props.location.pathname !== '/firstLogin' && userData.coach_id === 0){
       this.props.history.push('/firstLogin')
     }
@@ -92,7 +96,7 @@ class App extends Component {
           ?
           null
           :
-          <Nav />
+          <Nav history={this.props.history}/>
         }
           <section id="main-content">
             <Switch className="main-div">
@@ -109,6 +113,7 @@ class App extends Component {
               <Route path='/clientManager/:id' component={ClientManager} />
               <Route path='/firstLogin' component={FirstLogin} />
               <Route path='/measurements' component={Measurements} />
+              <Route path='/adminManager' component={AdminManager} />
               {/* <Route path='/food/:from' component={Food} /> */}
               {/* <Route path='/mealCreator' component={MealCreator} /> modal */}
               {/* <Route path='/menuCreator' component={MenuCreator} /> modal */}
@@ -160,4 +165,4 @@ function mapStateToProps(state){
   }
 }
 
-export default withRouter(connect(mapStateToProps, { clearCoachMessage, clearFitnessMessage, clearFoodMessage, clearUserMessage })(App))
+export default withRouter(connect(mapStateToProps, { clearCoachMessage, clearFitnessMessage, clearFoodMessage, clearUserMessage, toggleCoachChatModal })(App))

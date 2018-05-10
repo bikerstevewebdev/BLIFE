@@ -10,6 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import seaVid from '../../seaVid.mp4'
 import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
 import Logout from 'material-ui/svg-icons/hardware/keyboard-return';
+import Admin from 'material-ui/svg-icons/social/people';
 import { toggleSideNav, logoutUser } from '../../ducks/userReducer'
 import Avatar from 'material-ui/Avatar'
 import FlatButton from 'material-ui/FlatButton';
@@ -59,6 +60,15 @@ function Nav(props) {
     
     const rightIcons = (
         <section style={rightStyles} className="icons">
+            {
+                props.userData.is_admin
+                ?
+                <IconButton onClick={() => props.history.push('/adminManager')}>
+                    <Admin />
+                </IconButton>
+                :
+                null
+            }
             <IconButton onClick={props.logoutUser}>
                 <Logout />
             </IconButton>
@@ -78,28 +88,7 @@ function Nav(props) {
             props.isLoggedIn
             ?
     (<header className="nav-comp">
-        <AppBar iconElementLeft={home} title={<h2>BalancedLIFE</h2>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}>
-                <section className="links">
-                    {/* <Link to='/dashboard'><button>Dashboard</button></Link> */}
-                    {/* <Link to='/profile'><button>Profile</button></Link> */}
-                    {/* <Link to='/macroCalc'><button>Macro Calc</button></Link> */}
-                    {/* <Link to='/mealCreator'><button>Meal Creator</button></Link> */}
-                    {/* <Link to='/meal/-1'><button>Meal Viewer</button></Link> */}
-                    {/* <Link to='/menu/nav'><button>Menu Viewer</button></Link> */}
-                    {/* <Link to='/menuCreator'><button>Menu Creator</button></Link> */}
-                    {/* <Link to='/food/nav'><button>Food Creator</button></Link> */}
-                    {/* <Link to='/exercise/0'><button>Exercise Creator</button></Link>
-                    <Link to='/workoutCreator'><button>Workout Creator</button></Link> */}
-                    {/* <Link to='/mealFromRecipe'><button>Meal From Recipe</button></Link> */}
-                    {
-                        props.coach_id > 0
-                        ?
-                        <Link to={`/coachManager/${props.coach_id}`}>Coach Manager</Link>
-                        :
-                        null
-                    }
-                </section>
-        </AppBar>
+        <AppBar iconElementLeft={home} title={<h2>BalancedLIFE</h2>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
     </header>)
             :
             (<section className="unauthorized">

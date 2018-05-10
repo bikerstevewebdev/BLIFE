@@ -75,7 +75,13 @@ class PhotoUpload extends Component {
                 this.state.file &&
                 <img src={this.state.file} alt="preview" className="file-preview"/>  
                 }
-                <RaisedButton style={{width: "200px"}} secondary={true} onClick={this.sendPhoto}>Upload this Photo<AddPhoto /></RaisedButton>
+                {
+                    this.state.filename.length > 0
+                    ?
+                    <RaisedButton style={{width: "200px"}} secondary={true} onClick={this.sendPhoto}>Upload this Photo<AddPhoto /></RaisedButton>
+                    :
+                    null
+                }
             </div>
         )
     }

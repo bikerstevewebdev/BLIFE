@@ -31,27 +31,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }));
-// app.use((req, res, next)=>{
-//     if(process.env.DEV_MODE){
-//         req.user = {
-//             auth_id:"google-oauth2|111122040963068924095",
-//             coach_id:-1,
-//             curr_carb:209,
-//             curr_fat:77,
-//             curr_mes_id:3,
-//             curr_pro:199,
-//             date_created:"2018-03-30T06:00:00.000Z",
-//             email:"bikerstevefitness@gmail.com",
-//             fullname:"",
-//             has_coach:false,
-//             is_admin:false,
-//             last_login:null,
-//             profile_pic:"https://images.unsplash.com/photo-1500068865647-1e1ce6b80f13?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=18c9049136182c9aba2fcd208054d3b3&auto=format&fit=crop&w=500&q=60",
-//             user_id:1,
-//             username:"BikerSteve Fitness"
-//         }
-//     }next()
-// })
+
   // Initializing Passport
   app.use(passport.initialize());
   // Handing express-session over to passport
@@ -115,21 +95,30 @@ io.on('connect', function (client) {
     // all client sockets have a unique id
     client.emit('contact', { id: client.id })
     console.log('user connected. Client ID: ', client.id)
-
+    const db = app.get('db')
 
     client.on('join room', data => {
-        client.join(data.roomname)
-        client.emit('room joined', {room: data.roomname, success: true})    
+        const { id, isClient, roomname } = data
+        client.join(roomname)
+        if(isClient){
+            db.get_client_messages([id]).then(clientMessages => {
+                io.to(roomname).emit('room joined', {messages: clientMessages, room: roomname, success: true})    
+            })
+        }else{
+            db.get_coach_messages([id]).then(coachMessages => {
+                io.to(roomname).emit('room joined', {messages: coachMessages, room: roomname, success: true})    
+            })
+        }
     })
     client.on('send message', function (data) {
         const db = app.get('db')
-        const { client_id, isClient, message, time, coach_id, room } = data
+        const { client_id, isClient, message, time, coach_id, room, id, sender } = data
         if(isClient){
-            db.add_client_message([client_id, coach_id, time, message, sender, room]).then(messages => {
+            db.add_client_message([client_id, coach_id, time, message, sender, room, id]).then(messages => {
                 io.to(room).emit('message received', { messages })
             })
         }else{
-            db.add_coach_message([client_id, coach_id, time, message, sender, room]).then(messages => {
+            db.add_coach_message([client_id, coach_id, time, message, sender, room, id]).then(messages => {
                 io.to(room).emit('message received', { messages })
             })
         }
@@ -158,17 +147,19 @@ app.get('/currClientInfo/:id', cc.getCurrClientInfo)
 app.get('/ccInfo', cc.getCCInfo)
 app.get('/clientInfo', cc.getClientInfo)
 app.get('/adminInfo', cc.getAdminInfo)
+app.get('/adminInfo', cc.getAdminInfo)
 app.get('/userMenus', uc.getUserMenus)
 app.get('/userWorkouts', uc.getUserWorkouts)
 app.get('/user/currentPics', uc.getCurrentPhotos)
 app.get('/user/progressPics', uc.getAllProgressPhotos)
 app.get('/history/user/measurements', uc.getMezHistory)
 
+app.get(`/client/coach/requestInfo`, cc.getCoachReqInfo)
 app.get('/client/assigned/menus', uc.getAssignedMenus)
 app.get('/client/assigned/workouts', uc.getAssignedWorkouts)
 app.get('/coach/clients', cc.getClients)
-app.get('/coach/messages/:id', cc.getCoachMessages)
-app.get('/client/messages', cc.getClientMessages)
+// app.get('/coach/messages/:id', cc.getCoachMessages)
+// app.get('/client/messages', cc.getClientMessages)
 
 
 app.get('/recipes', fc.getRecipes)
@@ -186,10 +177,12 @@ app.put('/user/fullname', uc.updateFullname)
 app.put('/user/profilePic', uc.updateProfilePic)
 app.put('/user/progressPic/decurrentize', uc.makePicNotCurrent)
 
+app.put('/client/coach/approveRequest', cc.acceptCoachRequest)
 app.put('/coach/noRequest', cc.renounceCoachAccess)
 app.put('/coach/request', cc.requestCoachAccess)
-app.put('/coach/approve', cc.approveCoachAccess)
-app.put('/coach/deny', cc.denyCoachAccess)
+app.put('/admin/coach/approve', cc.approveCoachAccess)
+app.put('/admin/coach/deny', cc.denyCoachAccess)
+app.put('/admin/coach/revoke', cc.revokeCoachAccess)
 app.put('/food/edit', fc.editFood)
 app.put('/meal/foods/quantity', fc.updateFoodQuantity)
 app.put('/menu', fc.editMenu)

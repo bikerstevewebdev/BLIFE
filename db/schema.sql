@@ -64,7 +64,7 @@ CREATE TABLE macro_calcs (
     p REAL,
     c REAL,
     f REAL,
-    date_calced INTEGER,
+    date_calced BIGINT,
     member_id TEXT
 );
 
@@ -132,7 +132,7 @@ CREATE TABLE user_workout (
 
 CREATE TABLE coach_requests (
     req_id SERIAL PRIMARY KEY,
-    user_id INTEGER,
+    user_id INTEGER NOT NULL,
     accepted BOOLEAN DEFAULT false,
     active BOOLEAN DEFAULT false,
     processing BOOLEAN DEFAULT true
@@ -177,7 +177,7 @@ CREATE TABLE messages (
     sender_id INTEGER NOT NULL,
     room_name VARCHAR(30) NOT NULL,
     current BOOLEAN DEFAULT true
-)
+);
 
 
 -- INSERT INTO measurements (waist, neck, chest, height, weight, bf, date_taken, member_id)

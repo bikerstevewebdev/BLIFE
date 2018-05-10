@@ -18,6 +18,7 @@ class UpdateProfile extends Component{
         this.updateFullnameIn = this.updateFullnameIn.bind(this)
         this.updateProfilePicIn = this.updateProfilePicIn.bind(this)
         this.requestAccess = this.requestAccess.bind(this)
+        this.sendUpdate = this.sendUpdate.bind(this)
     }
 
     updateUsernameIn(val) {
@@ -38,6 +39,21 @@ class UpdateProfile extends Component{
         })
     }
 
+    sendUpdate(val){
+        const { updateFullname, updateProfilePic, updateUsername } = this.props
+        const { fullnameIn, profile_picIn, usernameIn } = this.state
+        if(val === 'pic'){
+            updateProfilePic(profile_picIn)
+            this.setState({ profile_picIn: '' })
+        }else if(val === 'full'){
+            updateFullname(fullnameIn)
+            this.setState({ fullnameIn: '' })
+        }else if(val === 'user'){
+            updateUsername(usernameIn)
+            this.setState({ usernameIn: '' })
+        }
+    }
+
     requestAccess(val) {
         if(val){
             this.props.requestCoachAccess()
@@ -47,7 +63,7 @@ class UpdateProfile extends Component{
     
     render() {
         const { usernameIn, fullnameIn, profile_picIn } = this.state,
-              { updateFullname, updateProfilePic, updateUsername, userData, updateProfileModalOpen } = this.props
+              { updateFullname, updateUsername, userData, updateProfileModalOpen } = this.props
         const updateStyles = {
             display: "grid"
         }
@@ -67,13 +83,13 @@ class UpdateProfile extends Component{
                 }
                 <p>Change your username:</p>
                 <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
-                <RaisedButton secondary={true} onClick={() => updateUsername(usernameIn)}>Update</RaisedButton>
+                <RaisedButton secondary={true} onClick={() => this.sendUpdate('user')}>Update</RaisedButton>
                 <p>Change your full name:</p>
                 <input value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} />
-                <RaisedButton secondary={true} onClick={() => updateFullname(fullnameIn)}>Update</RaisedButton>
+                <RaisedButton secondary={true} onClick={() => this.sendUpdate('full')}>Update</RaisedButton>
                 <p>Change your profile picture:</p>
                 <input value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
-                <RaisedButton secondary={true} onClick={() => updateProfilePic(profile_picIn)}>Update</RaisedButton>
+                <RaisedButton secondary={true} onClick={() => this.sendUpdate('pic')}>Update</RaisedButton>
                 <FlatButton onClick={() => this.props.toggleUpdateProfileModal(false)} label="close" />
             </section>
             </Dialog>

@@ -27,10 +27,11 @@ const initialState = {
     coachReqs: [],
     activeCoaches: [],
     warningMsg: '',
-    messages: [],
+    // messages: [],
     coachChatModalOpen: false,
     coach_info: {},
-    client_info: {}
+    client_info: {},
+    coach_req_info: {}
 }
 /////////////////END initial state declaration////////////////////
 
@@ -46,10 +47,12 @@ const ASSIGN_MENU = 'ASSIGN_MENU'
 const ASSIGN_WORKOUT = 'ASSIGN_WORKOUT'
 const CLEAR_COACH_MESSAGE = 'CLEAR_COACH_MESSAGE'
 const REQUEST_A_COACH = 'REQUEST_A_COACH'
-const GET_MESSAGES = 'GET_MESSAGES'
+const ACCEPT_COACH_REQUEST = 'ACCEPT_COACH_REQUEST'
+// const GET_MESSAGES = 'GET_MESSAGES'
 const TOGGLE_COACH_CHAT = 'TOGGLE_COACH_CHAT'
-const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
+// const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
 const GET_CC_INFO = 'GET_CC_INFO'
+const GET_COACH_REQ_INFO = 'GET_COACH_REQ_INFO'
 const GET_CURR_CLIENT_INFO = 'GET_CURR_CLIENT_INFO'
 /////////////////END String Literals//////////////////////
 
@@ -68,6 +71,16 @@ export function getCurrClientInfo(client_coach_id) {
     return {
         type: GET_CURR_CLIENT_INFO,
         payload: data
+    }
+}
+
+export function getCoachRequestInfo() {
+    let info = axios.get(`/client/coach/requestInfo`).then(res => {
+        return res.data
+    })
+    return {
+        type: GET_COACH_REQ_INFO,
+        payload: info
     }
 }
 
@@ -101,26 +114,26 @@ export function getClients() {
     }
 }
 
-export function getMessages(client_coach_id) {
-    if(client_coach_id){
-        let messages = axios.get(`/coach/messages/${client_coach_id}`).then(res => {
-            return res.data
-        })
-        return {
-            type: GET_MESSAGES,
-            payload: messages
-        }
+// export function getMessages(client_coach_id) {
+//     if(client_coach_id){
+//         let messages = axios.get(`/coach/messages/${client_coach_id}`).then(res => {
+//             return res.data
+//         })
+//         return {
+//             type: GET_MESSAGES,
+//             payload: messages
+//         }
         
-    }else{
-        let messages = axios.get(`/client/messages`).then(res => {
-            return res.data
-        })
-        return {
-            type: GET_MESSAGES,
-            payload: messages
-        }
-    }
-}
+//     }else{
+//         let messages = axios.get(`/client/messages`).then(res => {
+//             return res.data
+//         })
+//         return {
+//             type: GET_MESSAGES,
+//             payload: messages
+//         }
+//     }
+// }
 
 export function searchForClient(email) {
     let client = axios.get(`/search/clients/${email}`).then(res => {
@@ -162,8 +175,18 @@ export function getAdminInfo() {
     }
 }
 
-export function approveCoach() {
-    let adminData = axios.put('/coach/approve').then(res => {
+export function acceptCoachRequest(id) {
+    let msg = axios.put('/client/coach/approveRequest', { id }).then(res => {
+        return res.data
+    })
+    return {
+        type: ACCEPT_COACH_REQUEST,
+        payload: msg
+    }
+}
+
+export function approveCoach(req_id, user_id) {
+    let adminData = axios.put('/admin/coach/approve', { req_id, user_id }).then(res => {
         return res.data
     })
     return {
@@ -172,8 +195,18 @@ export function approveCoach() {
     }
 }
 
-export function denyCoach() {
-    let requests = axios.put('/coach/deny').then(res => {
+export function denyCoach(req_id, user_id) {
+    let requests = axios.put('/admin/coach/deny', { req_id, user_id }).then(res => {
+        return res.data
+    })
+    return {
+        type: DENY_COACH_ACCESS,
+        payload: requests
+    }
+}
+
+export function revokeCoach() {
+    let requests = axios.put('/admin/coach/revoke').then(res => {
         return res.data
     })
     return {
@@ -199,12 +232,12 @@ export function clearCoachMessage() {
     }
 }
 
-export function updateMessages(messages) {
-    return {
-        type: UPDATE_MESSAGES,
-        payload: messages
-    }
-}
+// export function updateMessages(messages) {
+//     return {
+//         type: UPDATE_MESSAGES,
+//         payload: messages
+//     }
+// }
 
 
 ////////////////BEGIN REDUCER//////////////////////////////
@@ -212,14 +245,16 @@ export default function(state = initialState, action) {
     switch(action.type){
         case GET_CURR_CLIENT_INFO + '_FULFILLED':
             return { ...state, client_info: action.payload }
+        case GET_COACH_REQ_INFO + '_FULFILLED':
+            return { ...state, coach_req_info: action.payload }
+        case ACCEPT_COACH_REQUEST + '_FULFILLED':
+            return { ...state, warningMsg: action.payload.message, coach_req_info: {} }
         case GET_CC_INFO + '_FULFILLED':
             return { ...state, coach_info: action.payload }
-        case GET_MESSAGES + '_FULFILLED':
-            return { ...state, messages: action.payload }
-        case UPDATE_MESSAGES:
-            return { ...state, messages: action.payload }
-        case UPDATE_MESSAGES:
-            return { ...state, messages: action.payload }
+        // case GET_MESSAGES + '_FULFILLED':
+        //     return { ...state, messages: action.payload }
+        // case UPDATE_MESSAGES:
+        //     return { ...state, messages: action.payload }
         case TOGGLE_COACH_CHAT:
             return { ...state, coachChatModalOpen: action.payload }
         case CLEAR_COACH_MESSAGE:
@@ -246,11 +281,11 @@ export default function(state = initialState, action) {
         case GET_CLIENTS + '_FULFILLED': 
                 return { ...state, clients: action.payload }
         case SEARCH_FOR_CLIENT + '_FULFILLED': 
-                if(action.payload.message){
+                // if(action.payload.message){
                     return { ...state, warningMsg: action.payload.message }
-                } else{
-                    return { ...state, potentialClient: action.payload }
-                }
+                // } else{
+                //     return { ...state, potentialClient: action.payload }
+                // }
         case REQUEST_A_COACH + '_FULFILLED': 
                     return { ...state, warningMsg: action.payload.message }
         case REQUEST_A_COACH + '_REJECTED':

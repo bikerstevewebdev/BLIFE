@@ -145,7 +145,11 @@ class Dashboard extends Component{
                             ?
                             <RaisedButton secondary={true} onClick={this.showAssigned}>Show me my coach's plan</RaisedButton>
                             :
-                            <RaisedButton onClick={this.props.requestACoach} secondary={true}>Request a Coach</RaisedButton>
+                                ((userData.coach_id !== -1 && userData.coach_id !== -6 && userData.coach_id !== -9)
+                                ?
+                                <RaisedButton onClick={this.props.requestACoach} secondary={true}>Request a Coach</RaisedButton>
+                                :
+                                null)
                         }
                     </section>
                     {

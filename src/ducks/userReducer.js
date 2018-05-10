@@ -13,6 +13,7 @@ const initialState = {
         current_weight: 0,
         current_height: 0,
         current_bf: 0,
+        current_happyness: 5,
         progress_pics: []
     },
     curr_mes: { 
@@ -260,8 +261,8 @@ export function getAssignedMenus() {
     }
 }
 
-export function updateUserStats(p, c, f, wt, ht, bf, waist, chest, neck) {
-    let data = axios.put('/user/stats', { p, c, f, ht, wt, bf, waist, chest, neck }).then(res => {
+export function updateUserStats(p, c, f, wt, ht, bf, waist, chest, neck, happy_level) {
+    let data = axios.put('/user/stats', { p, c, f, ht, wt, bf, waist, chest, neck, happy_level }).then(res => {
         return res.data
     })    
     return {
@@ -321,7 +322,7 @@ export function updateProfilePic(profile_pic) {
     }
 }
 
-export function addMeasurement(wt, ht, bf, waist, chest, neck, date, happyLevel) {
+export function addMeasurement(ht, wt, bf, waist, chest, neck, date, happyLevel) {
     let newStats = axios.post('/user/mez', { ht, wt, bf, waist, chest, neck, date, happyLevel }).then(res => {
         return res.data
     })    
@@ -367,8 +368,8 @@ export default function(state = initialState, action) {
                 let tempArr = state.comparisonPhotos.slice()
                 tempArr.splice(state.comparisonPhotos.findIndex(v => v.photo_id/1 === action.payload), 1)
                 return { ...state, comparisonPhotos: tempArr }
-        case LOGOUT_USER:
-                return { ...state, userData: action.payload, isLoggedIn: false }
+        case LOGOUT_USER + '_FULFILLED':
+                return { ...state, userData: {}, isLoggedIn: false }
         case ADD_TO_COMPARE:
                 return { ...state, comparisonPhotos: [...state.comparisonPhotos, action.payload] }
         case TOGGLE_PHOTO_COMP_MODAL:
@@ -451,7 +452,8 @@ export default function(state = initialState, action) {
                         current_weight: action.payload.currMes.weight,
                         current_height: action.payload.currMes.height,
                         current_bf: action.payload.currMes.bf,
-                        progress_pics: action.payload.pics
+                        progress_pics: action.payload.pics,
+                        current_happyness: action.payload.currMes.happy_level
                         }
                     }
                 } else{

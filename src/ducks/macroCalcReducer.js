@@ -104,7 +104,7 @@ export function calculate( height, age, weight, bodyfat, activity, gender, tenac
     } else{
         intake = tdee
     }
-    protein = lbm
+    protein = Math.ceil(lbm)
     fat     = ~~((intake * 0.30)/9)
     carbs   = ~~( (intake - (intake * 0.30) - (lbm * 4) ) /4)
     
@@ -122,7 +122,7 @@ export function calculate( height, age, weight, bodyfat, activity, gender, tenac
         meta:  {
             bf: ((bf/1)*100),
             weight: weight/1,
-            height: height/1,
+            height: ht,
             age,
             goal,
             gender,
@@ -189,14 +189,14 @@ export default function(state = initialState, action) {
         case CALCULATE + '_FULFILLED':
         return {
             ...state,
-            height: action.payload.meta.height,
-            age: action.payload.meta.age,
-            weight: action.payload.meta.wight,
-            bodyfat: action.payload.meta.bodyfat,
-            goal: action.payload.meta.goal,
-            gender: action.payload.meta.gender,
-            activity: action.payload.meta.activity,
-            tenacity: action.payload.meta.tenacity,
+            height: action.meta.height,
+            age: action.meta.age,
+            weight: action.meta.weight,
+            bodyfat: action.meta.bf,
+            goal: action.meta.goal,
+            gender: action.meta.gender,
+            activity: action.meta.activity,
+            tenacity: action.meta.tenacity,
             macros: {
                 protein: action.payload.p,
                 carbs: action.payload.c,

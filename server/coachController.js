@@ -3,7 +3,7 @@ module.exports = {
         const db = req.app.get('db')
             , { user_id } = req.user
         db.get_client_id([user_id]).then(cId => {
-            db.get_cc_info([cId[0]]).then(coach => {
+            db.get_cc_info([cId[0].client_coach_id]).then(coach => {
                     res.status(200).send(coach[0])
             }) 
         })
@@ -14,6 +14,23 @@ module.exports = {
             , { id } = req.params
         db.get_curr_client_info([id]).then(client => {
             res.status(200).send(client[0])
+        })
+    },
+
+    getCoachReqInfo: (req, res, next) => {
+        const db = req.app.get('db')
+            , { user_id } = req.user
+        db.get_coach_req_info([user_id]).then(info => {
+            res.status(200).send(info[0])
+        })
+    },
+
+    acceptCoachRequest: (req, res, next) => {
+        const db = req.app.get('db')
+            , { user_id } = req.user
+            , { id } = req.body
+        db.accept_request_to_coach([id, user_id]).then(name => {
+            res.status(200).send({message: `Congratulations! Coach ${name[0].fullname} will be in touch shortly.`})
         })
     },
 
@@ -38,7 +55,7 @@ module.exports = {
         db.check_admin_status([auth_id]).then(adminTruth => {
             if(adminTruth[0]){
                 db.get_pending_coach_requests().then(coachReqs => {
-                    db.get_acive_coaches().then(activeCoaches => {
+                    db.get_active_coaches().then(activeCoaches => {
                         let retObj = {
                             activeCoaches,
                             coachReqs
@@ -117,6 +134,21 @@ module.exports = {
         })
     },
 
+    revokeCoachAccess: (req, res, next) => {
+        const db      = req.app.get('db')
+            , { auth_id } = req.user
+            , { coach_id, user_id } = req.body
+        db.check_admin_status([auth_id]).then(adminTruth => {
+            if(adminTruth[0]){
+                db.revoke_coach_access([coach_id, user_id]).then(activeCoaches => {
+                    res.status(200).send(activeCoaches)
+                })
+            } else {
+                res.status(401).send({message: "You are not authorized to perform that operation."})
+            }            
+        })
+    },
+
     requestACoach: (req, res, next) => {
         const db      = req.app.get('db')
         , { user_id } = req.user
@@ -164,40 +196,30 @@ module.exports = {
     searchForClient: (req, res, next) => {
         const db = req.app.get('db')
             , { email } = req.params
-        db.search_for_client([email]).then(client => {
+        db.search_for_client_by_email([email]).then(client => {
             if(client[0]){
-                res.status(200).send(client[0])
+                db.request_client([client[0].user_id, req.user.coach_id]).then(nothing => {
+                    res.status(200).send({message: `${client[0].fullname} has been sent a request.`})
+                })
             }else{
                 res.status(500).send({message: "User Not Found"})
             }
         })
     },
 
-    getClientMessages: (req, res, next) => {
-        const db = req.app.get('db')
-            db.get_client_id([req.user.user_id]).then(clientID => {
-                db.get_client_messages([clientID[0]]).then(clientMessages => {
-                    res.send(clientMessages)
-                })
-            })
-    },
-
-    getCoachMessages: (req, res, next) => {
-        const db = req.app.get('db')
-            db.get_coach_messages([req.query.id]).then(coachMessages => {
-                res.status(200).send(coachMessages)
-            })
-    },
-
-    // addNewMessage: (req, res, next) => {
+    // getClientMessages: (req, res, next) => {
     //     const db = req.app.get('db')
-    //         , { email } = req.params
-    //     db.search_for_client([email]).then(client => {
-    //         if(client[0]){
-    //             res.status(200).send(client[0])
-    //         }else{
-    //             res.status(500).send({message: "User Not Found"})
-    //         }
-    //     })
+    //         db.get_client_id([req.user.user_id]).then(clientID => {
+    //             db.get_client_messages([clientID[0]]).then(clientMessages => {
+    //                 res.send(clientMessages)
+    //             })
+    //         })
+    // },
+
+    // getCoachMessages: (req, res, next) => {
+    //     const db = req.app.get('db')
+    //         db.get_coach_messages([req.query.id]).then(coachMessages => {
+    //             res.status(200).send(coachMessages)
+    //         })
     // }
 }
