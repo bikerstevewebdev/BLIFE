@@ -22,7 +22,12 @@ const express          = require('express'),
 
 const app = express()
 
-app.use(express.static(__dirname + '/../build'))
+app.use((req, res, next) => {
+    console.log(req.url);
+    next();
+})
+
+// app.use(express.static(__dirname + '/../build'))
 app.use(express.json())
 app.use(cors())
 // Setting up express-session
@@ -46,35 +51,40 @@ passport.use( new Auth0Strategy({
     callbackURL: CALLBACK_URL,
     scope: 'openid email profile'
 }, (accessToken, refreshToken, extraParams, profile, done) => {
-    const { id, displayName, picture, emails } = profile
+    const { id, nickname, picture, emails } = profile
+
+    console.log('profile', profile);
     const db = app.get('db') 
     db.get_user([id]).then( users => {        
         if ( users[0] ){
-            return done(null, users[0])
+            let loginDate = new Date().getTime()
+            db.add_new_login_date([id, loginDate]).then(result => {
+                return done(null, users[0])
+            })
         } 
         else { //when someone is logginG in for the first time.             
             let x      = new Date()
               , msDate = x.getTime()
-            db.create_user([displayName, emails[0].value, picture, id, msDate]).then( createdUser => {
+            db.create_user([nickname, emails[0].value, picture, id, msDate]).then( createdUser => {
                 return done(null, createdUser)
         } ) }
     } ).catch(err => {
-        console.log(err)
+        console.log('error with auth login:', err)
     })
     console.log('listening?')
-    done(null, profile)
+    // done(null, profile)
 }) )
 
 // When done, adds user to req.session.user
 passport.serializeUser((user, done) => {
-    console.log(`serial user maybe profile ${user}`)
+    console.log(`serial user maybe profile `, user)
     done(null, user)
 })
 
 
 // When done, adds second parameter to req.user
 passport.deserializeUser((user, done) => {
-    app.get('db').find_session_user([user.id]).then( dbUser => {
+    app.get('db').find_session_user([user.auth_id]).then( dbUser => {
         console.log(`Deserial User should be DB User: ${dbUser.id}, in case its an array: ${dbUser[0]}`)
         return done(null, dbUser[0]);
     })
@@ -137,10 +147,10 @@ app.get('/auth/logout', (req, res)=>{
 })
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-    successRedirect: process.env.SUCCESS_REDIRECT,
-    failureRedirect: process.env.FAILURE_REDIRECT
-    // successRedirect: 'http://localhost:3000/#/dashboard',
-    // failureRedirect: 'http://localhost:3000/AUTHFAIL'
+    // successRedirect: process.env.SUCCESS_REDIRECT,
+    // failureRedirect: process.env.FAILURE_REDIRECT
+    successRedirect: 'http://localhost:3000/#/dashboard',
+    failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
 app.get('/auth/me', uc.sendUserObjs)
 

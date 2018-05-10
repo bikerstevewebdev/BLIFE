@@ -20,7 +20,8 @@ class MotivationalQuote extends Component{
         this.getNewQuote()
     }
     getNewQuote() {
-        axios.get('https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en').then(res => {
+        axios.get('https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json').then(res => {
+            console.log('res', res, 'and res.data',  res.data)
             this.setState({ qText: res.data.quoteText, qAuthor: res.data.quoteAuthor })
         })
     }

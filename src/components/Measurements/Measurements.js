@@ -40,7 +40,7 @@ class Measurements extends Component{
     sendUpdates() {
         const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn, happinessMeter } = this.state  
         this.props.addMeasurement(heightIn, weightIn, bfIn, waistIn, chestIn, neckIn, dateIn, happinessMeter)
-        if(happinessMeter < 7){
+        if(happinessMeter/1 < 7){
             this.props.toggleMotivationalModal(true)
         }
         this.setState({

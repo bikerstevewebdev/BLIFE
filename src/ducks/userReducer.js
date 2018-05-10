@@ -377,7 +377,7 @@ export default function(state = initialState, action) {
                 let tempArr = state.comparisonPhotos.slice()
                 tempArr.splice(state.comparisonPhotos.findIndex(v => v.photo_id/1 === action.payload), 1)
                 return { ...state, comparisonPhotos: tempArr }
-        case LOGOUT_USER + '_FULFILLED':
+        case LOGOUT_USER + '_PENDING':
                 return { ...state, userData: {}, isLoggedIn: false }
         case ADD_TO_COMPARE:
                 return { ...state, comparisonPhotos: [...state.comparisonPhotos, action.payload] }
