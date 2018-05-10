@@ -137,10 +137,10 @@ app.get('/auth/logout', (req, res)=>{
 })
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-    // successRedirect: process.env.SUCCESS_REDIRECT,
-    // failureRedirect: process.env.FAILURE_REDIRECT
-    successRedirect: 'http://localhost:3000/#/dashboard',
-    failureRedirect: 'http://localhost:3000/AUTHFAIL'
+    successRedirect: process.env.SUCCESS_REDIRECT,
+    failureRedirect: process.env.FAILURE_REDIRECT
+    // successRedirect: 'http://localhost:3000/#/dashboard',
+    // failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
 app.get('/auth/me', uc.sendUserObjs)
 
