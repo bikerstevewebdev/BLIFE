@@ -1,39 +1,58 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { denyCoach, approveCoach, getAdminInfo } from '../../ducks/coachReducer'
+import { denyCoach, approveCoach, getAdminInfo, revokeCoach } from '../../ducks/coachReducer'
 import CoachCard from '../Coach/CoachCard'
 import RaisedButton from 'material-ui/RaisedButton'
+import { red500 } from 'material-ui/styles/colors';
+import FlatButton from 'material-ui/FlatButton'
+import Dialog from 'material-ui/Dialog'
 
 class AdminManager extends Component{
     constructor(){
         super()
         this.state = {
-            dblChk: 0
+            revokeModalOpen: false,
+            coachInQuestion: '',
+            coachInQuestionId: 0
         }
-        this.areYouSure = this.areYouSure.bind(this)
     }
 
     componentDidMount(){
         this.props.getAdminInfo()
     }
 
-    areYouSure(val){
+    areYouSure(coachName, coachId){
         this.setState({
-            dblChk: val/1
+            revokeModalOpen: true,
+            coachInQuestion: coachName,
+            coachInQuestionId: coachId
         })
     }
 
     clearRevokationRequest() {
-        this.setState({dblChk: 0})
+        this.setState({
+            revokeModalOpen: false,
+            coachInQuestion: '',
+            coachInQuestionId: 0
+        })
+    }
+
+    finalizeRevokation() {
+        this.props.revokeCoach(this.state.coachInQuestionId, this.state.coachInQuestion)
+        this.setState({
+            revokeModalOpen: false,
+            coachInQuestion: '',
+            coachInQuestionId: 0
+        })
     }
 
 
     render() {
-        const { clientEmailInput, dblChk } = this.state,
-              { username, searchForClient, coachReqs, activeCoaches, approveCoach, denyCoach } = this.props,
+        const { coachInQuestion } = this.state,
+              { username, coachReqs, activeCoaches, approveCoach, denyCoach } = this.props,
               coachRequests = coachReqs.map(req => {
                   return (
-                      <section className="coach-request">
+                      <section key={req.req_id} className="coach-request">
                         <p>Request Number: {req.req_id}</p>
                         <p>Username: {req.username}</p>
                         <RaisedButton secondary={true} onClick={() => denyCoach(req.req_id, req.user_id)} label="Deny Request"/>
@@ -41,12 +60,17 @@ class AdminManager extends Component{
                       </section>
                   )
               }),
-              coachList = activeCoaches.map(coach => <CoachCard nullifyRevokationRequest={this.clearRevokationRequest.bind(this)} profile_pic={coach.profile_pic} fullname={coach.fullname} areYouSure={this.areYouSure} dblChk={dblChk} last_login={coach.last_login} coach_id={coach.coach_id}/>)
+              coachList = activeCoaches.map(coach => <CoachCard profile_pic={coach.profile_pic} key={coach.coach_id} fullname={coach.fullname} areYouSure={this.areYouSure.bind(this)} last_login={coach.last_login/1} coach_id={coach.coach_id}/>)
         return (
             <section className="comp coach-manager">
                 <h1>Welcome Manager {username}!</h1>
                 {coachRequests}                
                 {coachList}
+                <Dialog open={this.state.revokeModalOpen} className="coach-req-modal">
+                    <p>Are you sure you want to revoke coach {coachInQuestion}'s coach acces? This cannot be undone.</p>
+                    <RaisedButton style={{backgroundColor: red500}} label={`Yes, revoke ${coachInQuestion}'s coach access.`} onClick={this.finalizeRevokation.bind(this)} />
+                    <FlatButton onClick={this.clearRevokationRequest.bind(this)} label={`No, my mistake, ${coachInQuestion} is a good coach.`} />
+                </Dialog>
             </section>
         )
     }
@@ -62,4 +86,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { denyCoach, approveCoach, getAdminInfo })(AdminManager)
+export default connect(mapStateToProps, { denyCoach, approveCoach, getAdminInfo, revokeCoach })(AdminManager)

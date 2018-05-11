@@ -63,7 +63,7 @@ class UpdateProfile extends Component{
     
     render() {
         const { usernameIn, fullnameIn, profile_picIn } = this.state,
-              { updateFullname, updateUsername, userData, updateProfileModalOpen } = this.props
+              { userData, updateProfileModalOpen } = this.props
         const updateStyles = {
             display: "grid"
         }

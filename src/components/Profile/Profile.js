@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal, togglePhotoCompModal } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
-import { getCoachRequestInfo, acceptCoachRequest } from '../../ducks/coachReducer'
 // import MenuCard from '../Menu/MenuCard'
 // import WorkoutCard from '../Workout/WorkoutCard'
 // import SearchMenus from '../Search/SearchMenus'
@@ -22,35 +21,30 @@ import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import Avatar from 'material-ui/Avatar';
 import ProgressChart from '../Measurements/ProgressChart'
 import PhotoComparison from '../Photos/PhotoComparison'
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import './Profile.css'
+import Dialog from 'material-ui/Dialog/Dialog';
 
 class Profile extends Component{
     constructor() {
         super()
         this.state = {
-            // showingAssigned: false,
             showingAllProgressPics: false,
             picturesRetrieved: false,
             updatedHtWtBf: false,
-            showingCoachRequest: false
+            showingCoachRequest: false,
+            isUpdating: false
         }
         this.updateNewMes = this.updateNewMes.bind(this)
         this.discardNewMes = this.discardNewMes.bind(this)
-        // this.showAssigned = this.showAssigned.bind(this)
     }
 
     
     componentDidMount() {
-        console.log(this.props)
-        const { userData, getCoachRequestInfo } = this.props
-        const { coach_id } = userData
-        if(!this.props.userData.user_id){
+        console.log("profile props on mount: ", this.props)
+        const { userData } = this.props
+        const { user_id } = userData
+        if(!user_id){
             this.props.getUserData()
-        }
-        if(coach_id === -411){
-            getCoachRequestInfo()
         }
         // const { pro, carbs, fat, curr_mes, userData, bodyfat, weight, height } = this.props
         // if(curr_mes.mes_id !== userData.curr_mes && pro > 0){
@@ -101,10 +95,16 @@ class Profile extends Component{
             this.props.updateUserStats(current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, waist, chest, neck, current_happyness)
             this.props.changeUpdating()
             console.log('updating measurements')
+            this.setState({
+                updatedHtWtBf: false
+            })
         }
-
+        
         discardNewMes() {
             this.props.clearMacroEntry()
+            this.setState({
+                updatedHtWtBf: false
+            })
             console.log('discarding new measurements')
         }
 //////////////////////Handles Macro Changes///////////////////
@@ -143,7 +143,7 @@ class Profile extends Component{
             }
         return(
             <section style={{...profileStyles}} className="comp profile">
-                <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a picture! Why don't you go ahead and update your profile and fix that real quick!"/>
+                <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a profile pic! Why don't you go ahead and update your profile and fix that real quick!"/>
                 <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "2em"}}>Welcome Home</h1>
                 <section style={{gridArea: "1/3/2/4", display: "flex", flexDirection: "column", width: "100%", height: "100%", justifyContent: "space-around"}}>
                     <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link>
@@ -176,11 +176,17 @@ class Profile extends Component{
                     {progressPics}
                     <PhotoUpload  />
                 </section>
-                <ProgressChart styles={{gridArea: "3/1/4/3"}}/>
+                {
+                    this.props.userData.curr_mes_id > 0
+                    ?
+                    <ProgressChart styles={{gridArea: "3/1/4/3"}}/>
+                    :
+                    null
+                }
                 {
                     userData.coach_id > 0
                     ?
-                    <Link to={`/coachManager/${userData.coach_id}`}><RaisedButton secondary={true} label="Coach Manager"/></Link>
+                    <Link to={`/coachManager/${userData.coach_id}`}><RaisedButton secondary={true} label="Client Manager"/></Link>
                     :
                     null
                 }
@@ -205,21 +211,16 @@ class Profile extends Component{
                 {
                     this.props.isUpdating
                     ?
-                    <section className="new-mes-logic">
+                    <Dialog open={this.state.updatedHtWtBf} className="new-mes-logic">
                         <p>Looks like you've got some new measurements.</p>
                         <p>Would you like to update them?</p>
                         <RaisedButton secondary={true} onClick={this.updateNewMes}>Yes</RaisedButton>
                         <RaisedButton secondary={true} onClick={this.discardNewMes}>No, get rid of them.</RaisedButton>
-                    </section>
+                    </Dialog>
                     :
                     null
                 }
                 <PhotoComparison />
-                <Dialog open={this.state.showingCoachRequest}>
-                    <p>{this.props.coach_req_info.fullname} is requesting your approval to coach you.</p>
-                    <RaisedButton primary={true} label="Accept" onClick={this.sendAccept.bind(this)} />
-                    <FlatButton onClick={() => this.setState({showingCoachRequest: false})} label="close" />
-                </Dialog>
             </section>
         )
     }
@@ -253,4 +254,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal, togglePhotoCompModal, getCoachRequestInfo, acceptCoachRequest })(Profile)
+export default connect(mapStateToProps, { getUserData, updateUserStats, addMacrosToState, changeUpdating, clearMacroEntry, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal, togglePhotoCompModal })(Profile)

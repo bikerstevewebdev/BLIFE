@@ -79,7 +79,7 @@ class MacroCalc extends Component{
         })
     }
     render() {
-        const { height, age, weight, bodyfat, tenacity, goal, activity, gender } = this.state        
+        const { tenacity, goal, activity, gender } = this.state        
         // const { current_height, current_weight, current_bf } = user        
         const selectWidth = {width: "450px"}
         const compStyles = {
@@ -113,7 +113,7 @@ class MacroCalc extends Component{
                             <MenuItem primaryText="Lose Weight" value="lose"/>
                             <MenuItem primaryText="Maintain Current Weight" value="maintain"/>
                         </SelectField>
-                        <SelectField floatingLabelText="Goal Tenacity" style={{height: "72px", ...selectWidth}} value={tenacity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'tenacity')}>
+                        <SelectField disabled={this.state.goal === 'maintain'} floatingLabelText="Goal Tenacity" style={{height: "72px", ...selectWidth}} value={tenacity} className="macro-input" onChange={(e, i, v) => this.updateInputs(e, i, v, 'tenacity')}>
                             <MenuItem primaryText="Intense (gain/lose 2+ pounds/week)" value="intense"/>
                             <MenuItem primaryText="Steady (gain/lose 1 pounds/week)" value="steady"/>
                             <MenuItem primaryText="Slow (gain/lose < 1 pound/week)" value="slow"/>

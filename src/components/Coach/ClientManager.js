@@ -5,8 +5,10 @@ import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
-import { getClientData, assignWorkoutToClient, assignMenuToClient } from '../../ducks/coachReducer'
+import { getClientData, assignWorkoutToClient, assignMenuToClient, toggleCoachChatModal } from '../../ducks/coachReducer'
 import RaisedButton from 'material-ui/RaisedButton'
+import CommunicationChat from 'material-ui/svg-icons/communication/chat'
+import { FloatingActionButton } from 'material-ui';
 
 class ClientManager extends Component{
     constructor(){
@@ -14,22 +16,20 @@ class ClientManager extends Component{
         this.state = {
             addingWorkout: false,
             addingMenu: false
-            // messageInput: ''
         }
         this.prepareToAddWorkout = this.prepareToAddWorkout.bind(this)
         this.prepareToAddMenu = this.prepareToAddMenu.bind(this)
-        // this.updateMessageInput = this.updateMessageInput.bind(this)
     }
 
-    componentDidMount(){
-        this.props.getClientData(this.props.match.params.id)
+    componentDidUpdate(){
+        const { currentClient } = this.props
+        const { client_coach_id } = currentClient
+        // this.props.getClientData(this.props.match.params.id)
+        if(!client_coach_id){
+            getClientData(this.props.match.params.id)
+        }
     }
-
-    // updateMessageInput(e){
-    //     this.setState({
-    //         messageInput: e.target.value
-    //     })
-    // }
+    
     prepareToAddWorkout(){
         this.setState({
             addingWorkout: true
@@ -44,62 +44,69 @@ class ClientManager extends Component{
 
 
     render() {
-        // const { messageInput } = this.state,
-            const { currentClient } = this.props,
-                  { username, curr_macros, last_login, current_stats, fullname, menus, client_id, client_coach_id, workouts } = currentClient,
-                  { waist, neck, chest, height, weight, bf, date_taken } = current_stats,
-                  { pro, carb, fat } = curr_macros,
-                  clientMenus = menus.map(v => {
+            const { currentClient, coachChatModalOpen, clientWorkouts, clientMenus, toggleCoachChatModal } = this.props,
+                  { username, last_login, fullname, client_coach_id, waist, neck, chest, height, weight, bf, date_taken, happy_level, curr_pro, curr_carb, curr_fat, profile_pic, email } = currentClient
+                   
+            const menusList = clientMenus.map(v => {
                       return <MenuCard key={v.menu_id} menu_id={v.menu_id} total_p={v.total_p} total_c={v.total_c} total_f={v.total_f} total_fib={v.total_fib} img={v.img} />
-                  }),
-                  clientWorkouts = workouts.map(v => {
+                  })
+            const workoutsList = clientWorkouts.map(v => {
                       return <WorkoutCard key={v.workout_id} workout_id={v.workout_id} title={v.title} img={v.img} type={v.type} />
                   })
         return (
             <section className="comp client-manager">
                 <Link to={`/coachManager/${this.props.coach_id}`}><RaisedButton secondary={true}>Back to Coach Manager</RaisedButton></Link>
                 <h1>{fullname}/{username}</h1>
-                <h3>Last Login: {last_login}</h3>
+                <p>Email: {email}</p>
+                <h3>Last Login: {new Date(last_login/1).toDateString().slice(0, 15)}</h3>
                 <section className="client-stats">
+                <img src={profile_pic} alt={username} />
                     <h2>Current Stats</h2>
                     <h3>Macros:</h3>
-                    <p>Protein: {pro}</p>
-                    <p>Carbs: {carb}</p>
-                    <p>Protein: {fat}</p>
+                    <p>Protein: {curr_pro}</p>
+                    <p>Carbs: {curr_carb}</p>
+                    <p>Protein: {curr_fat}</p>
                     <h3>Measurements:</h3>
+                    <p>Happyness at time of measurement: {happy_level}</p>
                     <p>Height: {height} inches</p>
                     <p>Weight: {weight} pounds</p>
                     <p>Bodyfat: {bf} %</p>
                     <p>Waist: {waist} inches</p>
                     <p>Neck: {neck} inches</p>
                     <p>Chest: {chest} inches</p>
-                    <p>Last Taken: {date_taken}</p>
+                    <p>Last Taken: {new Date(date_taken/1).toDateString().slice(0, 15)}</p>
                 </section>
                 <section className="client-workouts">
                     <h2>Current Fitness Plan</h2>
-                    {clientWorkouts}
+                    {workoutsList}
                     {
                         this.state.addingWorkout
                         ?
-                        <SearchWorkout doSomething={true} arg2={client_coach_id} arg3={client_id} btnMsg={`Add this workout to ${username}'s plan`} handleBtnClick={this.props.assignWorkoutToClient.bind(this)} />
+                        <SearchWorkout arg1={client_coach_id} btn2msg={`Add this workout to ${username}'s plan`} btn2Fn={this.props.assignWorkoutToClient.bind(this)} />
                         :
                         <RaisedButton secondary={true} onClick={this.prepareToAddWorkout}>Add a workout to {username}'s plan?</RaisedButton>
                     }
                 </section>
                 <section className="client-menus">
                     <h2>Current Meal Plan</h2>
-                    {clientMenus}
+                    {menusList}
                     {
                         this.state.addingMenu
                         ?
-                        <SearchMenu doSomething={true} arg2={client_coach_id} arg3={client_id} btnMsg={`Add this menu to ${username}'s plan`} handleBtnClick={this.props.assignMenuToClient.bind(this)} />
+                        <SearchMenu doSomething={true} arg1={client_coach_id}  btn2msg={`Add this menu to ${username}'s plan`} btn2Fn={this.props.assignMenuToClient.bind(this)} />
                         :
                         <RaisedButton secondary={true} onClick={this.prepareToAddMenu}>Add a menu to {username}'s plan?</RaisedButton>
                     }
                 </section>
-                {/* <p>Send {fullname} a message.</p>
-                <input value={messageInput} onChange={this.updateMessageInput} />
-                <button onClick={() => this.sendClientMsg(messageInput)}>Send request to your new client</button> */}
+                {
+                    coachChatModalOpen
+                    ?
+                    null
+                    :
+                    <FloatingActionButton style={{position: "fixed", bottom: "30px", right: "30px"}} onClick={() => toggleCoachChatModal(true)}>
+                        <CommunicationChat />
+                    </FloatingActionButton>
+                }
             </section>
         )
     }
@@ -108,8 +115,10 @@ class ClientManager extends Component{
 function mapStateToProps(state) {
     return {
         coach_id: state.users.userData.coach_id,
-        currentClient: state.coach.currentClient
+        currentClient: state.coach.currentClient,
+        clientWorkouts: state.coach.clientWorkouts,
+        clientMenus: state.coach.clientMenus
     }
 }
 
-export default connect(mapStateToProps, { getClientData, assignWorkoutToClient, assignMenuToClient })(ClientManager)
+export default connect(mapStateToProps, { getClientData, assignWorkoutToClient, assignMenuToClient, toggleCoachChatModal })(ClientManager)

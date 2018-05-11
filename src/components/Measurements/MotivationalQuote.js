@@ -33,7 +33,7 @@ class MotivationalQuote extends Component{
         const textStyles = {color: grey400}
         return(
             <Dialog open={motivationalModalOpen} className="motivational-modal" >
-                <p style={textStyles}>{qText ? `"${qText}"` : 'Try Another One'}</p>
+                <p style={{ fontWeight: "bold"}}>{qText ? `"${qText}"` : 'Try Another One'}</p>
                 <br/>
                 <p style={{...textStyles, fontStyle: "italic"}}>{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
                 <FlatButton  onClick={() => this.getNewQuote()} label="Another One"/>

@@ -36,12 +36,14 @@ module.exports = {
 
     getClientInfo: (req, res, next) => {
         const db = req.app.get('db')
-            , { id } = req.params
+            , { client_coach_id } = req.body
             , { coach_id } = req.user
-        db.check_coach_auth([client_id, coach_id]).then(client => {
+            // console.log("client_coach_id, ", client_coach_id, "coach_id, ", coach_id)
+        db.check_coach_auth([client_coach_id, coach_id]).then(client => {
+            // console.log("inside getclientinfo db call client: ", client)
             if(client[0]){
-                db.get_client_info([coach_id, id]).then(client => {
-                    res.status(200).send(client)
+                db.get_client_info([client_coach_id]).then(info => {
+                    res.status(200).send(info[0])
                 }) 
             } else{
                 res.status(401).send({message: "You are not authorized to coach this client."})
@@ -137,11 +139,11 @@ module.exports = {
     revokeCoachAccess: (req, res, next) => {
         const db      = req.app.get('db')
             , { auth_id } = req.user
-            , { coach_id, user_id } = req.body
+            , { coach_id, coach_name } = req.body
         db.check_admin_status([auth_id]).then(adminTruth => {
             if(adminTruth[0]){
-                db.revoke_coach_access([coach_id, user_id]).then(activeCoaches => {
-                    res.status(200).send(activeCoaches)
+                db.revoke_coach_access([coach_id]).then(activeCoaches => {
+                    res.status(200).send({activeCoaches, message: `Coach ${coach_name} no longer has coach access.`})
                 })
             } else {
                 res.status(401).send({message: "You are not authorized to perform that operation."})

@@ -27,7 +27,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(express.static(__dirname + '/../build'))
+// app.use(express.static(__dirname + '/../build'))
 app.use(express.json())
 app.use(cors())
 // Setting up express-session
@@ -42,7 +42,7 @@ app.use(session({
   // Handing express-session over to passport
   app.use(passport.session());
   // Setting up the ability to run the static-build files
-//   app.use(express.static(__dirname + '/../build'));
+  app.use(express.static(__dirname + '/../build'));
 
 passport.use( new Auth0Strategy({
     domain: DOMAIN,
@@ -53,7 +53,7 @@ passport.use( new Auth0Strategy({
 }, (accessToken, refreshToken, extraParams, profile, done) => {
     const { id, nickname, picture, emails } = profile
 
-    console.log('profile', profile);
+    // console.log('profile', profile);
     const db = app.get('db') 
     db.get_user([id]).then( users => {        
         if ( users[0] ){
@@ -77,7 +77,7 @@ passport.use( new Auth0Strategy({
 
 // When done, adds user to req.session.user
 passport.serializeUser((user, done) => {
-    console.log(`serial user maybe profile `, user)
+    // console.log(`serial user maybe profile `, user)
     done(null, user)
 })
 
@@ -85,7 +85,7 @@ passport.serializeUser((user, done) => {
 // When done, adds second parameter to req.user
 passport.deserializeUser((user, done) => {
     app.get('db').find_session_user([user.auth_id]).then( dbUser => {
-        console.log(`Deserial User should be DB User: ${dbUser.id}, in case its an array: ${dbUser[0]}`)
+        // console.log(`Deserial User should be DB User: ${dbUser.id}, in case its an array: ${dbUser[0]}`)
         return done(null, dbUser[0]);
     })
 })
@@ -104,17 +104,20 @@ massive(process.env.CONNECTION_STRING).then( db => {
 io.on('connect', function (client) {
     // all client sockets have a unique id
     client.emit('contact', { id: client.id })
-    console.log('user connected. Client ID: ', client.id)
+    // console.log('user connected. Client ID: ', client.id)
     const db = app.get('db')
 
     client.on('join room', data => {
+        console.log('join room hit', data)
         const { id, isClient, roomname } = data
         client.join(roomname)
         if(isClient){
+            // console.log('isclient is true', data)
             db.get_client_messages([id]).then(clientMessages => {
                 io.to(roomname).emit('room joined', {messages: clientMessages, room: roomname, success: true})    
             })
         }else{
+            // console.log('isclient is false', data)
             db.get_coach_messages([id]).then(coachMessages => {
                 io.to(roomname).emit('room joined', {messages: coachMessages, room: roomname, success: true})    
             })
@@ -157,7 +160,7 @@ app.get('/auth/me', uc.sendUserObjs)
 app.get('/userInfo', uc.getUserInfo)
 app.get('/currClientInfo/:id', cc.getCurrClientInfo)
 app.get('/ccInfo', cc.getCCInfo)
-app.get('/clientInfo', cc.getClientInfo)
+app.post('/clientInfo', cc.getClientInfo)
 app.get('/adminInfo', cc.getAdminInfo)
 app.get('/adminInfo', cc.getAdminInfo)
 app.get('/userMenus', uc.getUserMenus)
@@ -170,9 +173,6 @@ app.get(`/client/coach/requestInfo`, cc.getCoachReqInfo)
 app.get('/client/assigned/menus', uc.getAssignedMenus)
 app.get('/client/assigned/workouts', uc.getAssignedWorkouts)
 app.get('/coach/clients', cc.getClients)
-// app.get('/coach/messages/:id', cc.getCoachMessages)
-// app.get('/client/messages', cc.getClientMessages)
-
 
 app.get('/recipes', fc.getRecipes)
 app.get('/food/search', fc.searchFoods)

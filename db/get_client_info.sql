@@ -16,10 +16,7 @@
 -- );
 
 
-SELECT u.fullname, u.username, u.email, u.curr_pro, u.curr_carb, u.curr_fat, u.profile_pic, c.client_id, c.client_coach_id, u.last_login, m.* FROM users u
-JOIN client_coach c ON c.client_id = u.user_id
+SELECT u.fullname, u.username, u.email, u.curr_pro, u.curr_carb, u.curr_fat, u.profile_pic, cc.client_coach_id, u.last_login, m.* FROM users u
+JOIN client_coach cc ON cc.user_id = u.user_id
 JOIN measurements m ON m.mes_id = u.curr_mes_id
-WHERE c.client_id IN (SELECT client_id FROM client_coach
-WHERE coach_id = $1 AND current = true)
-AND m.mes_id IN (SELECT mes_id FROM measurements
-                WHERE member_id = $2);
+WHERE cc.client_coach_id = $1;

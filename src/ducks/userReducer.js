@@ -396,6 +396,7 @@ export default function(state = initialState, action) {
                 return { ...state,
                     userData: action.payload.user,
                     curr_mes: { waist, neck, chest, weight, height, bf, mes_id }
+                    
                      }
         case UPDATE_MES + '_FULFILLED':
         /////////// Prior declaration might cause a problem with this destructuring

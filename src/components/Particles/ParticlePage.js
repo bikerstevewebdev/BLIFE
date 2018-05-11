@@ -65,7 +65,7 @@ class ParticlePage extends Component{
                     position: "fixed",
                     // width: '100%',
                     zIndex: '-40',
-                    background: this.props.backgroundColor 
+                    background: `url(${this.props.bgimg})` 
                 }}
                 >
                 {this.props.children}

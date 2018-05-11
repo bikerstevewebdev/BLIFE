@@ -61,6 +61,14 @@ class PhotoUpload extends Component {
             borderRadius: "3px",
             backgroundColor: "#99d066"
         }
+
+        const inputStyles = {
+            opacity: "0",
+            position: "absolute",
+            top: "0",
+            left: "0",
+            zIndex: "5"
+        }
         
         return (
             <div style={{...uploadStyles}} className="photo-upload">
@@ -68,7 +76,7 @@ class PhotoUpload extends Component {
                 <RaisedButton style={{display: "flex", alignItems: "center", width: "200px"}} secondary={true} >
                     <FileUpload/>Choose a File
                     <label htmlFor="file-input">
-                        <input style={{width: "100%", height: "36px", display: "none"}} type="file" id="file-input" onChange={this.handlePhoto}/>
+                        <input style={{...inputStyles, width: "100%", height: "100%"}} type="file" id="file-input" onChange={this.handlePhoto}/>
                     </label>
                 </RaisedButton>
                 {

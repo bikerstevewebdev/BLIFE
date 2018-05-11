@@ -38,12 +38,12 @@ class SearchWorkouts extends Component{
     componentWillUnmount(){
         this.props.endFitnessSearch()
     }
-
+    
     render() {
-        const { workoutSearchResults, btn2Fn } = this.props
+        const { workoutSearchResults, btn2Fn, btn2msg, arg1 } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
-                <WorkoutCard workout_id={res.workout_id} btn2Fn={btn2Fn} btn2Label={"Add to my workouts"} title={res.title} img={res.img} type={res.type} />
+                <WorkoutCard workout_id={res.workout_id} arg1={arg1} btn2Fn={btn2Fn} btn2Label={btn2msg} title={res.title} img={res.img} type={res.type} />
                 // <section className="workout-search-result" key={res.workout_id}>
                 //     <p>{res.title}</p>
                 //     <img src={res.img} alt={res.title} />

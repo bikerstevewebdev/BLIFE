@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import AppBar from 'material-ui/AppBar'
 import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 import IconButton from 'material-ui/IconButton';
@@ -12,6 +11,7 @@ import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
 import Logout from 'material-ui/svg-icons/hardware/keyboard-return';
 import Admin from 'material-ui/svg-icons/social/people';
 import { toggleSideNav, logoutUser, toggleMotivationalModal } from '../../ducks/userReducer'
+import { toggleCoachReqModal } from '../../ducks/coachReducer'
 import Avatar from 'material-ui/Avatar'
 import FlatButton from 'material-ui/FlatButton';
 import Happy from 'material-ui/svg-icons/social/sentiment-satisfied'
@@ -19,10 +19,6 @@ import Chat from 'material-ui/svg-icons/communication/chat';
 
 
 function Nav(props) {
-    const sendAccept = () => {
-        props.acceptCoachRequest(this.props.coach_req_info.client_coach_id)
-        // this.setState({showingCoachRequest: false})
-    }
     const home = (
         <section>
             <IconButton tooltip="Dashboard">
@@ -65,6 +61,15 @@ function Nav(props) {
                 props.userData.is_admin
                 ?
                 <IconButton onClick={() => props.history.push('/adminManager')}>
+                    <Admin />
+                </IconButton>
+                :
+                null
+            }
+            {
+                props.userData.coach_id > 0
+                ?
+                <IconButton onClick={() => props.history.push('/coachManager')}>
                     <Admin />
                 </IconButton>
                 :
@@ -119,12 +124,12 @@ function mapStateToProps(state) {
         coach_id,
         userData,
         coach_req_info: state.coach.coach_req_info,
-        authWarningMsg: state.users.warningMsg
+        authWarningMsg: state.users.warningMsg,
         // coachWarningMsg: state.coach.warningMsg
     }
 }
 
-export default connect(mapStateToProps, { toggleSideNav, logoutUser, toggleMotivationalModal })(Nav)
+export default connect(mapStateToProps, { toggleSideNav, logoutUser, toggleMotivationalModal, toggleCoachReqModal })(Nav)
 
 
 // https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en

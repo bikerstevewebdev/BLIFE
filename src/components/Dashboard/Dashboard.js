@@ -8,7 +8,8 @@ import SearchWorkout from '../Search/SearchWorkouts'
 import RaisedButton from 'material-ui/RaisedButton'
 import MenuCard from '../Menu/MenuCard'
 import WorkoutCard from '../Workout/WorkoutCard'
-import { requestACoach, getCCInfo } from '../../ducks/coachReducer'
+import { requestACoach, getCCInfo, getCoachRequestInfo } from '../../ducks/coachReducer'
+
 
 class Dashboard extends Component{
     constructor() {
@@ -46,6 +47,9 @@ class Dashboard extends Component{
         const { userData, coach_info, getCCInfo } = this.props
         if(userData.has_coach && !coach_info.coach_id){
             getCCInfo()
+        }
+        if(userData.coach_id === -411 && !this.props.coach_req_info.client_coach_id){
+            getCoachRequestInfo()
         }
         console.log('DBoard updated props', this.props)
         // if(!(this.props.userData.username.length > 0)){
@@ -174,7 +178,7 @@ class Dashboard extends Component{
                     }
                 </section>
                 <SearchMenu btn2Fn={this.props.addMenuToUser} style={{...menuSearchStyle}}/>
-                <SearchWorkout btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
+                <SearchWorkout btn2msg={"Add to my workouts"} btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
                 <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
                 
             </section>

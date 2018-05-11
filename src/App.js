@@ -9,7 +9,7 @@ import UpdateProfile from './components/UpdateProfile/UpdateProfile'
 import MacroCalc from './components/MacroCalc/MacroCalc'
 import Meal from './components/Meal/Meal'
 import Food from './components/Food/Food'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import MealCreator from './components/Meal/MealCreator';
@@ -35,6 +35,7 @@ import CoachChat from './components/Coach/CoachChat';
 import { FloatingActionButton } from 'material-ui';
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import MotivationalQuote from './components/Measurements/MotivationalQuote'
+import CoachReqModal from './components/Coach/CoachReqModal';
 
 
 class App extends Component {
@@ -86,7 +87,7 @@ class App extends Component {
   }
   
   render() {
-    const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, toggleCoachChatModal, coachChatModalOpen } = this.props
+    const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, toggleCoachChatModal, coachChatModalOpen, coach_req_info } = this.props
     return (
       <div className="App">
         {
@@ -107,7 +108,7 @@ class App extends Component {
               <Route path='/menu/:from' component={Menu} />
               <Route path='/exercise/:id' component={Exercise} />
               <Route path='/workout/:id' component={WorkoutEditor} />
-              <Route path='/coachManager/:id' component={CoachManager} />
+              <Route path='/coachManager' component={CoachManager} />
               <Route path='/clientManager/:id' component={ClientManager} />
               <Route path='/firstLogin' component={FirstLogin} />
               <Route path='/measurements' component={Measurements} />
@@ -122,16 +123,27 @@ class App extends Component {
           <MotivationalQuote />
           <WorkoutCreator />
           {
-            userData.has_coach
+            coach_req_info.client_coach_id
+          ?
+            <CoachReqModal />
+          :
+            null
+          }
+          {
+            userData.has_coach || userData.coach_id > 0
+          ?
+              coachChatModalOpen
             ?
-              (coachChatModalOpen
-              ?
               <CoachChat />
-              :
-              <FloatingActionButton style={{position: "fixed", bottom: "30px", right: "30px"}} onClick={() => toggleCoachChatModal(true)}>
-                <CommunicationChat />
-              </FloatingActionButton>)
             :
+                userData.coach_id > 0
+              ?
+                null
+              :
+                <FloatingActionButton style={{position: "fixed", bottom: "30px", right: "30px"}} onClick={() => toggleCoachChatModal(true)}>
+                  <CommunicationChat />
+                </FloatingActionButton>
+          :
             null
           }
           <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onActionClick={this.close} open={this.state.open} />
@@ -149,7 +161,8 @@ function mapStateToProps(state){
     coachMessage: state.coach.warningMsg,
     fitnessMessage: state.fitness.warningMsg,
     isLoggedIn: state.users.isLoggedIn,
-    coachChatModalOpen: state.coach.coachChatModalOpen
+    coachChatModalOpen: state.coach.coachChatModalOpen,
+    coach_req_info: state.coach.coach_req_info
   }
 }
 

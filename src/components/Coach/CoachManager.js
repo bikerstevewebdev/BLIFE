@@ -14,7 +14,7 @@ class CoachManager extends Component{
     }
 
     componentDidMount(){
-        this.props.getClients(this.props.match.params.id)
+        this.props.getClients()
     }
 
     updateClientEmailInput(e){
@@ -26,7 +26,7 @@ class CoachManager extends Component{
     render() {
         const { clientEmailInput } = this.state,
               { username, searchForClient, clients } = this.props,
-              clientList = clients.map(client => <ClientCard fullname={client.fullname} last_login={client.last_login} client_id={client.client_id}/>)
+              clientList = clients.map(client => <ClientCard key={client.client_coach_id} history={this.props.history} username={client.username} client_coach_id={client.client_coach_id} fullname={client.fullname} last_login={client.last_login/1} img={client.profile_pic} client_id={client.client_coach_id}/>)
         return (
             <section className="comp coach-manager">
                 <h1>Welcome Coach {username}!</h1>

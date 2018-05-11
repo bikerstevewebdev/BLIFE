@@ -38,27 +38,28 @@ class CoachChat extends Component {
         console.log(data)
       this.setState({
           roomPath: data.room,
-          messages: data.messages.reverse(),
+          messages: data.messages,
           roomJoined: data.success
         })
     })
     this.socket.on('message received', data => {
-      this.setState({messages: data.messages.reverse()})
+      this.setState({messages: data.messages})
     })
     this.handleMessageEvent = this.handleMessageEvent.bind(this);
   }
 
     componentDidMount() {
-        if(this.props.userData.has_coach){
+        console.log("coachChat props: ", this.props)
+        const { userData, coach_info, currentClient } = this.props
+        if(userData.has_coach || userData.coach_id > 0){
             const { roomPath } = this.state
-            const { coach_info, userData } = this.props
-            const { coach_id, has_coach } = userData
+            const { has_coach, username } = userData
             const { client_coach_id } = coach_info
             // this.socket = io('http://localhost:7373')
             if(has_coach){
-                this.socket.emit('join room', { isClient: true, id: client_coach_id, roomname: roomPath + client_coach_id })
+                this.socket.emit('join room', { isClient: true, id: client_coach_id, roomname: roomPath + username })
             }else{
-                this.socket.emit('join room', { id: coach_id, roomname: roomPath + client_coach_id })
+                this.socket.emit('join room', { id: currentClient.client_coach_id, roomname: roomPath + currentClient.username })
             }
         }
     }
@@ -68,13 +69,13 @@ class CoachChat extends Component {
     
     handleMessageEvent() {
         if (!this.state.userInput.length) return // prevent empty message from being sent.
-        const { coach_info, userData, client_info } = this.props
+        const { coach_info, userData, currentClient } = this.props
         let tNow = new Date().getTime()
         if(userData.has_coach){
             this.socket.emit('send message', { id: coach_info.client_coach_id, client_id: coach_info.client_coach_id, coach_id: coach_info.coach_id,message: this.state.userInput, time: tNow, room: this.state.roomPath, isClient: true, sender: userData.username })
             this.setState({ userInput: '' })
         }else{
-            this.socket.emit('send message', { id: userData.coach_id, client_id: client_info.client_coach_id, coach_id: userData.coach_id, message: this.state.userInput, time: tNow, room: this.state.roomPath, isClient: false, sender: userData.username })
+            this.socket.emit('send message', { id: userData.coach_id, client_id: currentClient.client_coach_id, coach_id: userData.coach_id, message: this.state.userInput, time: tNow, room: this.state.roomPath, isClient: false, sender: userData.username })
             this.setState({ userInput: '' })
         }
     }
@@ -88,7 +89,7 @@ class CoachChat extends Component {
             return (
                 <TableRow key={msg.message_id}>
                     <TableRowColumn>
-                        <Avatar src={msg.sender === userData.username ? userData.profile_pic : msg.profile_pic}/>
+                        <Avatar src={(msg.sender === userData.username) ? userData.profile_pic : msg.profile_pic}/>
                     </TableRowColumn>
                     <TableRowColumn>
                         {msg.content}
@@ -120,10 +121,9 @@ class CoachChat extends Component {
 function mapStateToProps(state) {
     return {
         coachChatModalOpen: state.coach.coachChatModalOpen,
-        messages: state.coach.messages,
         coach_info: state.coach.coach_info,
         userData: state.users.userData,
-        client_info: state.coach.client_info
+        currentClient: state.coach.currentClient
     }
 }
 

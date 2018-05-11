@@ -2,35 +2,17 @@ const axios = require('axios')
 
 /////////////////START initial state declaration////////////////////
 const initialState = {
-    currentClient: {
-        current_macros: {
-            pro: 0,
-            carb: 0,
-            fat: 0
-        },
-        current_stats: {
-            waist: 0,
-            neck: 0,
-            chest: 0,
-            height: 0,
-            weight: 0,
-            bf: 0,
-            date_taken: 0
-        },
-        last_login: '',
-        workouts: [],
-        menus: []
-    },
-    potentialClient: {},
+    currentClient: {},
     clients: [],
+    clientWorkouts: [],
+    clientMenus: [],
     coaches: [],
     coachReqs: [],
     activeCoaches: [],
     warningMsg: '',
-    // messages: [],
     coachChatModalOpen: false,
+    coachReqModalOpen: false,
     coach_info: {},
-    client_info: {},
     coach_req_info: {}
 }
 /////////////////END initial state declaration////////////////////
@@ -48,29 +30,26 @@ const ASSIGN_WORKOUT = 'ASSIGN_WORKOUT'
 const CLEAR_COACH_MESSAGE = 'CLEAR_COACH_MESSAGE'
 const REQUEST_A_COACH = 'REQUEST_A_COACH'
 const ACCEPT_COACH_REQUEST = 'ACCEPT_COACH_REQUEST'
-// const GET_MESSAGES = 'GET_MESSAGES'
 const TOGGLE_COACH_CHAT = 'TOGGLE_COACH_CHAT'
-// const UPDATE_MESSAGES = 'UPDATE_MESSAGES'
+const TOGGLE_COACH_REQ_MODAL = 'TOGGLE_COACH_REQ_MODAL'
 const GET_CC_INFO = 'GET_CC_INFO'
 const GET_COACH_REQ_INFO = 'GET_COACH_REQ_INFO'
-const GET_CURR_CLIENT_INFO = 'GET_CURR_CLIENT_INFO'
+const REVOKE_COACH_ACCESS = 'REVOKE_COACH_ACCESS'
 /////////////////END String Literals//////////////////////
 
-/////////////////Exporting action creators//////////////////////
-export function toggleCoachChatModal(bool){
+/////////////////Exporting action creators/////////////////////
+
+export function toggleCoachReqModal(bool){
     return{
-        type: TOGGLE_COACH_CHAT,
+        type: TOGGLE_COACH_REQ_MODAL,
         payload: bool
     }
 }
 
-export function getCurrClientInfo(client_coach_id) {
-    let data = axios.get(`/currClientInfo/${client_coach_id}`).then(res => {
-        return res.data
-    })
-    return {
-        type: GET_CURR_CLIENT_INFO,
-        payload: data
+export function toggleCoachChatModal(bool){
+    return{
+        type: TOGGLE_COACH_CHAT,
+        payload: bool
     }
 }
 
@@ -95,7 +74,8 @@ export function getCCInfo() {
 }
 
 export function getClientData(id) {
-    let data = axios.get(`/clientInfo/${id}`).then(res => {
+    // console.log('coachreducer getclientdata client_coach_id: ', id)
+    let data = axios.post(`/clientInfo/`, { client_coach_id: id/1}).then(res => {
         return res.data
     })
     return {
@@ -103,6 +83,25 @@ export function getClientData(id) {
         payload: data
     }
 }
+
+// export function getClientWorkouts(client_coach_id) {
+//     let data = axios.get(`/clientInfo/`, { client_coach_id }).then(res => {
+//         return res.data
+//     })
+//     return {
+//         type: GET_CLIENT_BY_ID,
+//         payload: data
+//     }
+// }
+// export function getClientMenus(client_coach_id) {
+//     let data = axios.get(`/clientInfo/`, { client_coach_id }).then(res => {
+//         return res.data
+//     })
+//     return {
+//         type: GET_CLIENT_BY_ID,
+//         payload: data
+//     }
+// }
 
 export function getClients() {
     let clients = axios.get(`/coach/clients`).then(res => {
@@ -113,27 +112,6 @@ export function getClients() {
         payload: clients
     }
 }
-
-// export function getMessages(client_coach_id) {
-//     if(client_coach_id){
-//         let messages = axios.get(`/coach/messages/${client_coach_id}`).then(res => {
-//             return res.data
-//         })
-//         return {
-//             type: GET_MESSAGES,
-//             payload: messages
-//         }
-        
-//     }else{
-//         let messages = axios.get(`/client/messages`).then(res => {
-//             return res.data
-//         })
-//         return {
-//             type: GET_MESSAGES,
-//             payload: messages
-//         }
-//     }
-// }
 
 export function searchForClient(email) {
     let client = axios.get(`/search/clients/${email}`).then(res => {
@@ -205,13 +183,13 @@ export function denyCoach(req_id, user_id) {
     }
 }
 
-export function revokeCoach() {
-    let requests = axios.put('/admin/coach/revoke').then(res => {
+export function revokeCoach(coach_id, coach_name) {
+    let activeAndMsg = axios.put('/admin/coach/revoke', { coach_id, coach_name }).then(res => {
         return res.data
     })
     return {
-        type: DENY_COACH_ACCESS,
-        payload: requests
+        type: REVOKE_COACH_ACCESS,
+        payload: activeAndMsg
     }
 }
 
@@ -232,60 +210,27 @@ export function clearCoachMessage() {
     }
 }
 
-// export function updateMessages(messages) {
-//     return {
-//         type: UPDATE_MESSAGES,
-//         payload: messages
-//     }
-// }
-
-
 ////////////////BEGIN REDUCER//////////////////////////////
 export default function(state = initialState, action) {
     switch(action.type){
-        case GET_CURR_CLIENT_INFO + '_FULFILLED':
-            return { ...state, client_info: action.payload }
         case GET_COACH_REQ_INFO + '_FULFILLED':
             return { ...state, coach_req_info: action.payload }
         case ACCEPT_COACH_REQUEST + '_FULFILLED':
             return { ...state, warningMsg: action.payload.message, coach_req_info: {} }
         case GET_CC_INFO + '_FULFILLED':
             return { ...state, coach_info: action.payload }
-        // case GET_MESSAGES + '_FULFILLED':
-        //     return { ...state, messages: action.payload }
-        // case UPDATE_MESSAGES:
-        //     return { ...state, messages: action.payload }
+        case TOGGLE_COACH_REQ_MODAL:
+            return { ...state, coachReqModalOpen: action.payload }
         case TOGGLE_COACH_CHAT:
             return { ...state, coachChatModalOpen: action.payload }
         case CLEAR_COACH_MESSAGE:
             return { ...state, warningMsg: action.payload }
         case GET_CLIENT_BY_ID + '_FULFILLED':
-            return { ...state,
-                    client: {
-                        current_macros: {
-                            pro: action.payload.client.curr_pro,
-                            carb: action.payload.client.curr_carb,
-                            fat: action.payload.client.curr_fat
-                        },
-                        current_stats: {
-                            waist: action.payload.mes.waist,
-                            neck: action.payload.mes.neck,
-                            chest: action.payload.mes.chest,
-                            height: action.payload.mes.height,
-                            weight: action.payload.mes.weight,
-                            bf: action.payload.mes.bf,
-                            date_taken: action.payload.mes.date_taken
-                        },
-                        last_login: action.payload.last_login
-                    }}
+            return { ...state, currentClient: action.payload }
         case GET_CLIENTS + '_FULFILLED': 
                 return { ...state, clients: action.payload }
         case SEARCH_FOR_CLIENT + '_FULFILLED': 
-                // if(action.payload.message){
                     return { ...state, warningMsg: action.payload.message }
-                // } else{
-                //     return { ...state, potentialClient: action.payload }
-                // }
         case REQUEST_A_COACH + '_FULFILLED': 
                     return { ...state, warningMsg: action.payload.message }
         case REQUEST_A_COACH + '_REJECTED':
@@ -320,6 +265,8 @@ export default function(state = initialState, action) {
                 } else{
                     return { ...state, coachReqs: action.payload }
                 }
+        case REVOKE_COACH_ACCESS + '_FULFILLED':
+                    return { ...state, warningMsg: action.payload.message, activeCoaches: action.payload.activeCoaches }
         default:
             return state
     }
