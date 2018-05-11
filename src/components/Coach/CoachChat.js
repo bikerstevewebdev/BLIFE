@@ -22,7 +22,7 @@ class CoachChat extends Component {
       roomJoined: false,
       messages: []
     }
-    this.socket = io('http://localhost:7373')
+    this.socket = io()
     // socket.on('response', data => { // username set or taken
     //   if (data.status === 'username set') {
     //     this.setState({ username: data.username })

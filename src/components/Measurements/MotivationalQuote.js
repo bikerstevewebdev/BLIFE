@@ -28,13 +28,16 @@ class MotivationalQuote extends Component{
 
     
     render() {
-        const textStyles = {textEmphasis: "italicized", color: grey400}
+        const { qText, qAuthor } = this.state
+        const { motivationalModalOpen, toggleMotivationalModal } = this.props
+        const textStyles = {color: grey400}
         return(
-            <Dialog open={this.props.motivationalModalOpen} className="menu-creator" >
-                <p style={textStyles}>"{this.state.qText}"</p>
-                <p style={textStyles}>"{this.state.qAuthor}"</p>
+            <Dialog open={motivationalModalOpen} className="motivational-modal" >
+                <p style={textStyles}>{qText ? `"${qText}"` : 'Try Another One'}</p>
+                <br/>
+                <p style={{...textStyles, fontStyle: "italic"}}>{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
                 <FlatButton  onClick={() => this.getNewQuote()} label="Another One"/>
-                <RaisedButton secondary={true} onClick={() => this.props.toggleMotivationalModal(false)} label="I've Got This" />
+                <RaisedButton secondary={true} onClick={() => toggleMotivationalModal(false)} label="I've Got This" />
             </Dialog>
         )
     }

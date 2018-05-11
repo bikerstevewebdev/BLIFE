@@ -28,7 +28,7 @@ import Measurements from './components/Measurements/Measurements';
 import Snackbar from 'material-ui/Snackbar';
 import { connect } from 'react-redux';
 import { clearUserMessage } from './ducks/userReducer'
-import { clearCoachMessage, toggleCoachChatModal } from './ducks/coachReducer'
+import { clearCoachMessage, toggleCoachChatModal, getCoachRequestInfo } from './ducks/coachReducer'
 import { clearFitnessMessage } from './ducks/fitnessReducer'
 import { clearFoodMessage } from './ducks/foodReducer'
 import CoachChat from './components/Coach/CoachChat';
@@ -44,7 +44,6 @@ class App extends Component {
       open: false
     }
     this.close = this.close.bind(this)
-    // this.clearMessages = this.clearMessages.bind(this)
   }
   static propTypes = {
     match: PropTypes.object.isRequired,
@@ -53,7 +52,7 @@ class App extends Component {
   }
 
   componentDidUpdate(){
-    const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, isLoggedIn, location } = this.props    
+    const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, isLoggedIn, location, getCoachRequestInfo } = this.props    
     if(location.pathname !== '/' && (userData.user_id < 0 || !isLoggedIn)){
       this.props.history.push('/')
     }
@@ -65,11 +64,11 @@ class App extends Component {
         open: true
       })
     }
+    if(userData.coach_id === -411){
+      getCoachRequestInfo()
+    }
   }
-  
-  // clearMessages(){
-  // }
-  
+
   close(){
     const { userMessage, foodMessage, coachMessage, fitnessMessage } = this.props    
     if(userMessage){
@@ -84,7 +83,6 @@ class App extends Component {
     this.setState({
       open: false
     })
-    // this.clearMessages()
   }
   
   render() {
@@ -114,11 +112,6 @@ class App extends Component {
               <Route path='/firstLogin' component={FirstLogin} />
               <Route path='/measurements' component={Measurements} />
               <Route path='/adminManager' component={AdminManager} />
-              {/* <Route path='/food/:from' component={Food} /> */}
-              {/* <Route path='/mealCreator' component={MealCreator} /> modal */}
-              {/* <Route path='/menuCreator' component={MenuCreator} /> modal */}
-              {/* <Route path='/workoutCreator' component={WorkoutCreator} /> modal */}
-              {/* <Route path='/mealFromRecipe' component={MealFromRecipe} /> */}
             </Switch>
           <SideNav />
           <UpdateProfile />
@@ -142,12 +135,6 @@ class App extends Component {
             null
           }
           <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onActionClick={this.close} open={this.state.open} />
-          {/* {
-            ?
-            <Redirect to='/firstLogin' />
-            :
-            null
-          } */}
           </section>
       </div>
     );
@@ -166,4 +153,4 @@ function mapStateToProps(state){
   }
 }
 
-export default withRouter(connect(mapStateToProps, { clearCoachMessage, clearFitnessMessage, clearFoodMessage, clearUserMessage, toggleCoachChatModal })(App))
+export default withRouter(connect(mapStateToProps, { clearCoachMessage, clearFitnessMessage, clearFoodMessage, clearUserMessage, toggleCoachChatModal, getCoachRequestInfo })(App))

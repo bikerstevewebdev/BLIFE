@@ -27,7 +27,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(express.static(__dirname + '/../build'))
+// app.use(express.static(__dirname + '/../build'))
 app.use(express.json())
 app.use(cors())
 // Setting up express-session
@@ -147,10 +147,10 @@ app.get('/auth/logout', (req, res)=>{
 })
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-    successRedirect: process.env.SUCCESS_REDIRECT,
-    failureRedirect: process.env.FAILURE_REDIRECT
-    // successRedirect: 'http://localhost:3000/#/dashboard',
-    // failureRedirect: 'http://localhost:3000/AUTHFAIL'
+    // successRedirect: process.env.SUCCESS_REDIRECT,
+    // failureRedirect: process.env.FAILURE_REDIRECT
+    successRedirect: 'http://localhost:3000/#/dashboard',
+    failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
 app.get('/auth/me', uc.sendUserObjs)
 
@@ -251,8 +251,3 @@ app.get('/measurements/:id', uc.getMeasurements)
 app.get('/food/search/:id', fc.getFood)
 app.get('/meal/search/:id', fc.getMealById)
 app.get('/menu/search/:id', fc.getMenuById)
-
-
-
-// Connecting to the DB prior to staring up the server so the DB is working for sure
-

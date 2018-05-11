@@ -11,53 +11,54 @@ import seaVid from '../../seaVid.mp4'
 import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
 import Logout from 'material-ui/svg-icons/hardware/keyboard-return';
 import Admin from 'material-ui/svg-icons/social/people';
-import { toggleSideNav, logoutUser } from '../../ducks/userReducer'
+import { toggleSideNav, logoutUser, toggleMotivationalModal } from '../../ducks/userReducer'
 import Avatar from 'material-ui/Avatar'
 import FlatButton from 'material-ui/FlatButton';
+import Happy from 'material-ui/svg-icons/social/sentiment-satisfied'
+import Chat from 'material-ui/svg-icons/communication/chat';
 
-// import PieChart from 'material-ui/svg-icons/editor/pie-chart-outlined';
-// import Dining from 'material-ui/svg-icons/maps/local-dining';
-// import Fitness from 'material-ui/svg-icons/places/fitness-center'
-// import EventNote from 'material-ui/svg-icons/notification/event-note';
-// import IconMenu from 'material-ui/IconMenu'
-// import MenuItem from 'material-ui/MenuItem'
-
-const home = (
-    <IconButton tooltip="Dashboard">
-        <Link to="/dashboard">
-            <ActionHome />
-        </Link>
-    </IconButton>
-)
-// const macroCalc = (
-// )
-// const mealCreator = (
-// )
-// const menuCreator = (
-// )
-// const rightIcons = [profile, macroCalc, mealCreator, menuCreator]
-// const title = <h1>BalancedLIFE</h1>
-const titleStyles = {
-    display: "flex",
-    justifyContent: "center",
-    margin: "0",
-    letterSpacing: "3px",
-    WebkitMarginBefore: "0",
-    WebkitMarginAfter: 0
-}
-const rightStyles = {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center"
-}
-const profileBtnStyles = {
-    display: "flex",
-    alignItems: "center"
-}
-const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "80px", alignItems: "center"}
 
 function Nav(props) {
-    
+    const sendAccept = () => {
+        props.acceptCoachRequest(this.props.coach_req_info.client_coach_id)
+        // this.setState({showingCoachRequest: false})
+    }
+    const home = (
+        <section>
+            <IconButton tooltip="Dashboard">
+                <Link to="/dashboard">
+                    <ActionHome />
+                </Link>
+            </IconButton>
+            {
+                props.coach_req_info.client_coach_id
+                ?
+                <IconButton onClick={() => props.toggleCoachReqModal(true)} >
+                    <Chat />
+                </IconButton>
+                :
+                null
+            }
+        </section>
+    )
+    const titleStyles = {
+        display: "flex",
+        justifyContent: "center",
+        margin: "0",
+        letterSpacing: "3px",
+        WebkitMarginBefore: "0",
+        WebkitMarginAfter: 0
+    }
+    const rightStyles = {
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center"
+    }
+    const profileBtnStyles = {
+        display: "flex",
+        alignItems: "center"
+    }
+    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "80px", alignItems: "center"}
     const rightIcons = (
         <section style={rightStyles} className="icons">
             {
@@ -69,6 +70,9 @@ function Nav(props) {
                 :
                 null
             }
+            <IconButton onClick={() => props.toggleMotivationalModal(true)}>
+                <Happy />
+            </IconButton>
             <IconButton onClick={props.logoutUser}>
                 <Logout />
             </IconButton>
@@ -114,12 +118,13 @@ function mapStateToProps(state) {
         isLoggedIn: state.users.isLoggedIn,
         coach_id,
         userData,
+        coach_req_info: state.coach.coach_req_info,
         authWarningMsg: state.users.warningMsg
         // coachWarningMsg: state.coach.warningMsg
     }
 }
 
-export default connect(mapStateToProps, { toggleSideNav, logoutUser })(Nav)
+export default connect(mapStateToProps, { toggleSideNav, logoutUser, toggleMotivationalModal })(Nav)
 
 
 // https://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en
