@@ -89,7 +89,7 @@ class CoachChat extends Component {
             return (
                 <TableRow key={msg.message_id}>
                     <TableRowColumn>
-                        <Avatar src={(msg.sender === userData.username) ? userData.profile_pic : msg.profile_pic}/>
+                        <Avatar src={msg.profile_pic}/>
                     </TableRowColumn>
                     <TableRowColumn>
                         {msg.content}

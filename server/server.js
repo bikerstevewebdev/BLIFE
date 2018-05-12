@@ -28,7 +28,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(express.static(__dirname + '/../build'))
+// app.use(express.static(__dirname + '/../build'))
 app.use(express.json({limit: '10mb'}))
 app.use(cors())
 // Setting up express-session

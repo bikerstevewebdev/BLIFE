@@ -1,6 +1,5 @@
 INSERT INTO messages (client_id, coach_id, date_sent, content, sender, room_name, sender_id)
 VALUES ($1, $2, $3, $4, $5, $6, $7);
-SELECT m.*, u.username, u.profile_pic FROM messages m
-JOIN client_coach cc ON cc.client_coach_id = m.client_id
-JOIN users u ON u.user_id = cc.user_id
+SELECT m.*, u.profile_pic FROM messages m
+JOIN users u ON u.username = m.sender
 WHERE m.client_id = $1;
