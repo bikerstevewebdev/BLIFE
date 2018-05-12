@@ -98,8 +98,14 @@ module.exports = {
     updateUsername: (req, res, next) => {
         const db = req.app.get('db')
         , { username } = req.body
-        db.update_username([req.user.user_id, username]).then( user => {
-            res.status(200).send(user[0])
+        db.check_existing_username([username]).then(users => {
+            if(users[0]){
+                res.status(400).send({message: "Username already exists. Please try another."})
+            }else{
+                db.update_username([req.user.user_id, username]).then( user => {
+                    res.status(200).send(user[0])
+                })
+            }
         })
     },
     

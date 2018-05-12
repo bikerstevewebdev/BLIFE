@@ -11,9 +11,10 @@ const express          = require('express'),
       fc               = require('./foodController'),
       cc               = require('./coachController'),
       fitc             = require('./fitnessController'),
-      stripe           = require('stripe')(process.env.S_STRIPE_KEY),
+      stripeRoute      = require('./stripe'),
       port             = SERVER_PORT, // || 3000
-      S3 = require('./awsS3.js'),
+      S3               = require('./awsS3'),
+      msgAPI           = require('./messaging'),
       socket           = require('socket.io')
 
 
@@ -27,7 +28,7 @@ app.use((req, res, next) => {
     next();
 })
 
-// app.use(express.static(__dirname + '/../build'))
+app.use(express.static(__dirname + '/../build'))
 app.use(express.json())
 app.use(cors())
 // Setting up express-session
@@ -42,7 +43,7 @@ app.use(session({
   // Handing express-session over to passport
   app.use(passport.session());
   // Setting up the ability to run the static-build files
-  app.use(express.static(__dirname + '/../build'));
+//   app.use(express.static(__dirname + '/../build'));
 
 passport.use( new Auth0Strategy({
     domain: DOMAIN,
@@ -152,8 +153,6 @@ app.get('/auth/logout', (req, res)=>{
 app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: process.env.SUCCESS_REDIRECT,
     failureRedirect: process.env.FAILURE_REDIRECT
-    // successRedirect: 'http://localhost:3000/#/dashboard',
-    // failureRedirect: 'http://localhost:3000/AUTHFAIL'
 }))
 app.get('/auth/me', uc.sendUserObjs)
 
@@ -202,20 +201,12 @@ app.put('/exercise', fitc.editExercise)
 app.put('/workout/exercise', fitc.updateWorkoutEx)
 app.put('/user/menus/archive', uc.archiveMenu)
 app.put('/user/workouts/archive', uc.archiveWorkout)
+
 S3(app)
 
-app.post('/api/charge', function(req, res){
-    const db = app.get('db')
-    console.log(req.body.amount)
-    const charge = stripe.charges.create({
-        amount: req.body.amount,
-        currency: 'usd',
-        source: req.body.token.id,
-        description: 'Example charge'
-      })
-      res.sendStatus(200) // clear out cart here
-})
+stripeRoute(app)
 
+msgAPI(app)
 
 app.post('/user/mez', uc.addMez)
 app.post('/macroCalc', uc.newMacroCalc)

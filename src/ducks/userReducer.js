@@ -81,6 +81,7 @@ const REMOVE_FROM_COMPARE = 'REMOVE_FROM_COMPARE'
 const TOGGLE_PHOTO_COMP_MODAL = 'TOGGLE_PHOTO_COMP_MODAL'
 const TOGGLE_MOTIVATIONAL_MODAL = 'TOGGLE_MOTIVATIONAL_MODAL'
 const LOGOUT_USER = 'LOGOUT_USER'
+const UPDATE_USER_MSG = 'UPDATE_USER_MSG'
 
 /////////////////END String Literals//////////////////////
 
@@ -124,6 +125,13 @@ export function clearUserMessage() {
     return {
         type: CLEAR_USER_MESSAGE,
         payload: ''
+    }
+}
+
+export function updateUserMsg(msg) {
+    return {
+        type: UPDATE_USER_MSG,
+        payload: msg
     }
 }
 
@@ -387,6 +395,8 @@ export default function(state = initialState, action) {
                 return { ...state, photoCompModalOpen: action.payload }
         case TOGGLE_UPDATE_PROFILE:
                 return { ...state, updateProfileModalOpen: action.payload }
+        case UPDATE_USER_MSG:
+                return { ...state, warningMsg: action.payload }
         case CLEAR_USER_MESSAGE:
                 return { ...state, warningMsg: action.payload }
         case GET_PAST_MEASUREMENTS + '_FULFILLED':
@@ -497,6 +507,8 @@ export default function(state = initialState, action) {
                 return { ...state, user: {...state.user, progress_pics: action.payload}}
             case DEPRECATE_PHOTO +'_FULFILLED':
                 return { ...state, user: {...state.user, progress_pics: action.payload}}
+            case UPDATE_USERNAME +'_REJECTED':
+                return { ...state, warningMsg: action.payload.response.data.message}
             case UPDATE_USERNAME +'_FULFILLED':
                 return { ...state, user: {...state.user, username: action.payload.username}, userData: action.payload}
             case UPDATE_FULLNAME +'_FULFILLED':

@@ -1,5 +1,5 @@
 import React, { Component }from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { requestCoachAccess, updateUsername, updateFullname, renounceCoachAccess } from '../../ducks/userReducer'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -8,6 +8,7 @@ import StripeDefault from '../Stripe/StripeDefault'
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
+import ReceiptModal from '../Stripe/ReceiptModal';
 
 
 
@@ -18,17 +19,11 @@ class FirstLogin extends Component{
         this.state = {
             usernameIn: '',
             fullnameIn: '',
-            onFirstStep: true,
-            editingUsername: false,
-            addingFullname: false,
-            sendingToMacroCalc: false,
-            sendingToMes: false,
-            isRequesting: false,
-            onFinalStep: false,
             loading: false,
-            stepIndex: 0
+            stepIndex: 0,
+            stripeMsg: '',
+            stripeSuccess: false
         }
-        this.startUpdate = this.startUpdate.bind(this)
         this.sendToMacroCalc = this.sendToMacroCalc.bind(this)
         this.sendToMes = this.sendToMes.bind(this)
         this.endFullnameStep = this.endFullnameStep.bind(this)
@@ -47,56 +42,32 @@ class FirstLogin extends Component{
     
     componentDidUpdate(prevProps){
         console.log(prevProps, this.props)
-        if(prevProps.userData.fullname !== this.props.userData.fullname){
-            this.setState({
-                addingFullname: false,
-                isRequesting: true
-            })
-        }
     }
     
     updateUsernameIn(val) {
-        this.setState({
-            usernameIn: val
-        })
+        this.setState({ usernameIn: val })
     }
     
     updateFullnameIn(val) {
-        this.setState({
-            fullnameIn: val
-        })
-    }
-    
-    startUpdate() {
-        this.setState({
-            editingUsername: true,
-            onFirstStep: false
-        })
+        this.setState({ fullnameIn: val })
     }
     
     endUsernameStep(username) {
         if(username){
             this.props.updateUsername(username)
-            this.setState({
-                editingUsername: false,
-                addingFullname: true
-            })
+            this.handleNext()
         }else{
-            this.setState({
-                editingUsername: false,
-                addingFullname: true
-                })
+            alert('Please enter a username.')
         }
-        this.handleNext()
     }
 
     endFullnameStep(fullname){
-        this.props.updateFullname(fullname)
-        this.handleNext()
-        this.setState({
-            addingFullname: false,
-            isRequesting: true
-        })
+        if(fullname){
+            this.props.updateFullname(fullname)
+            this.handleNext()
+        }else{
+            alert('Please enter a name.')
+        }
     }
 
     requestAccess(val) {
@@ -106,23 +77,15 @@ class FirstLogin extends Component{
         } else{
             renounceCoachAccess()
         }
-        this.setState({
-            isRequesting: false,
-            onFinalStep: true
-        })
         this.handleNext()
     }
     
     sendToMacroCalc() {
-        this.setState({
-            sendingToMacroCalc: true
-        })
+        this.props.history.push('/macroCalc')
     }
     
     sendToMes() {
-        this.setState({
-            sendingToMes: true
-        })
+        this.props.history.push('/measurements')
     }
 
     ////////////////////
@@ -149,8 +112,10 @@ class FirstLogin extends Component{
         loading: false,
         stepIndex: stepIndex - 1,
         }));
+        }
     }
-    };
+
+
 
     getStepContent(stepIndex) {
         const { userData } = this.props,
@@ -169,7 +134,7 @@ class FirstLogin extends Component{
                <h2>What should we call you?</h2>
                 <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
                 <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.endUsernameStep(usernameIn)}>Create Username</RaisedButton >
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={()=>this.endUsernameStep(false)}>Stick with {userData.username}</RaisedButton > 
+                <RaisedButton primary={true} style={{width: "200px"}} onClick={()=>this.handleNext()}>Stick with {userData.username}</RaisedButton > 
             </section>
         );
         case 2:
@@ -183,13 +148,18 @@ class FirstLogin extends Component{
         case 3:
         return (
             <section>
-                <StripeDefault amount={3900} />
+                <StripeDefault updateChargeMsg={this.updateStripeMsg.bind(this)} amount={3900} />
+            </section>
+        );
+        case 4:
+        return (
+            <section>
                 <h2>Are you here to coach others?</h2>
                 <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton >
                 <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(false)}>No thanks, just here to find a healthy balance.</RaisedButton >
             </section>
         );
-        case 4:
+        case 5:
         return (
             <section>
                 <h2>Would you like to start by adding your measurements or just calculating your macros?</h2>
@@ -203,6 +173,18 @@ class FirstLogin extends Component{
         }
     }
 
+    updateStripeMsg(msg, id) {
+        this.setState({
+            stripeMsg: msg,
+            stripeSuccess: true
+        })
+    }
+
+    closeReceiptModal(){
+        this.setState({ stripeSuccess: false })
+        this.handleNext()
+    }
+
     renderContent() {
         const { stepIndex } = this.state;
         const contentStyle = {margin: '0 16px', overflow: 'hidden'};
@@ -213,7 +195,7 @@ class FirstLogin extends Component{
             <div style={{marginTop: 24, marginBottom: 12}}>
               <FlatButton
                 label="Back"
-                disabled={stepIndex === 0}
+                disabled={stepIndex === 0 || stepIndex > 2}
                 onClick={this.handlePrev}
                 style={{marginRight: 12}}
               />
@@ -229,16 +211,7 @@ class FirstLogin extends Component{
       }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
     render() {
-        const { sendingToMacroCalc, sendingToMes } = this.state
         const { loading, stepIndex } = this.state
         return(
             <section style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
@@ -260,6 +233,11 @@ class FirstLogin extends Component{
                 </Step>
                 <Step>
                     <StepLabel>
+                        Life Investment
+                    </StepLabel>
+                </Step>
+                <Step>
+                    <StepLabel>
                         Coach Request
                     </StepLabel>
                 </Step>
@@ -272,24 +250,8 @@ class FirstLogin extends Component{
                 <ExpandTransition loading={loading} open={true}>
                 {this.renderContent()}
                 </ExpandTransition>
-                {
-                    sendingToMacroCalc
-                    ?
-                    <Redirect to={`/macroCalc`} />
-                    :
-                    null
-                }
-                {
-                    sendingToMes
-                    ?
-                    <Redirect to={`/measurements`} />
-                    :
-                    null
-                }
+                <ReceiptModal rmOpen={this.state.stripeSuccess}  closeModal={this.closeReceiptModal.bind(this)} />
             </section>
-            
-            
-            
         )
     }
 }

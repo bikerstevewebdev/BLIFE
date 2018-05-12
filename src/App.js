@@ -36,7 +36,7 @@ import { FloatingActionButton } from 'material-ui';
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import MotivationalQuote from './components/Measurements/MotivationalQuote'
 import CoachReqModal from './components/Coach/CoachReqModal';
-
+import MakeInvestment from './components/Stripe/MakeInvestment'
 
 class App extends Component {
   constructor(){
@@ -54,11 +54,14 @@ class App extends Component {
 
   componentDidUpdate(){
     const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, isLoggedIn, location, getCoachRequestInfo } = this.props    
-    if(location.pathname !== '/' && (userData.user_id < 0 || !isLoggedIn)){
+    if(location.pathname !== '/' && (userData.user_id <= 0 || !isLoggedIn)){
       this.props.history.push('/')
     }
-    if(this.props.location.pathname !== '/firstLogin' && userData.coach_id === 0){
+    if(location.pathname !== '/firstLogin' && userData.coach_id === 0){
       this.props.history.push('/firstLogin')
+    }
+    if(userData.user_id && (!userData.has_paid && location.pathname !== '/investmentCheckout')){
+      this.props.history.push('/investmentCheckout')
     }
     if(!this.state.open && (userMessage || foodMessage || coachMessage || fitnessMessage)){
       this.setState({
@@ -113,6 +116,7 @@ class App extends Component {
               <Route path='/firstLogin' component={FirstLogin} />
               <Route path='/measurements' component={Measurements} />
               <Route path='/adminManager' component={AdminManager} />
+              <Route path='/investmentCheckout' component={MakeInvestment} />
             </Switch>
           <SideNav />
           <UpdateProfile />
