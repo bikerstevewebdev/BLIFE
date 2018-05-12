@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu } from '../../ducks/userReducer'
+import { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser } from '../../ducks/userReducer'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 // import SearchMeal from '../Search/SearchMeals'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
 import RaisedButton from 'material-ui/RaisedButton'
-import MenuCard from '../Menu/MenuCard'
-import WorkoutCard from '../Workout/WorkoutCard'
+import UserMenuCard from '../Menu/UserMenuCard'
+import UserWorkoutCard from '../Workout/UserWorkoutCard'
 import { requestACoach, getCCInfo, getCoachRequestInfo } from '../../ducks/coachReducer'
 
 
@@ -66,7 +66,7 @@ class Dashboard extends Component{
     }
 
     render() {
-        const { userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts, archiveWorkout, archiveMenu } =this.props
+        const { userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts } =this.props
         const { curr_pro, curr_carb, curr_fat } = userData
         let assignedMenuList, assignedWorkoutList, workoutsList, menusList
         const menuSearchStyle = {
@@ -109,23 +109,23 @@ class Dashboard extends Component{
         }
         /////////////////Users Menus/Workouts////////////////////
         if(userMenus){
-            menusList = userMenus.map(menu => <MenuCard btn2Fn={archiveMenu} user_menu_id={menu.user_menu_id} btn2Label="Archive" key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
+            menusList = userMenus.map(menu => <UserMenuCard user_menu_id={menu.user_menu_id}  key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
         }else{
             menusList = null
         }
         if(userWorkouts){
-            workoutsList = userWorkouts.map(workout => <WorkoutCard btn2Fn={archiveWorkout} user_workout_id={workout.user_workout_id} btn2Label="Archive" key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+            workoutsList = userWorkouts.map(workout => <UserWorkoutCard user_workout_id={workout.user_workout_id} key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
         }else{
             workoutsList = null
         }
         /////////////////assigned//////////////
         if(assignedMenus){
-            assignedMenuList = assignedMenus.map(menu => <MenuCard  user_menu_id={menu.user_menu_id} key={menu.user_menu_id} menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
+            assignedMenuList = assignedMenus.map(menu => <UserMenuCard  user_menu_id={menu.user_menu_id} key={menu.user_menu_id} assigned menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
         }else{
             assignedMenuList = null
         }
         if(assignedWorkouts){
-            assignedWorkoutList = assignedWorkouts.map(workout => <WorkoutCard user_workout_id={workout.user_workout_id} key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
+            assignedWorkoutList = assignedWorkouts.map(workout => <UserWorkoutCard assigned user_workout_id={workout.user_workout_id} key={workout.user_workout_id} workout_id={workout.workout_id} title={workout.title} img={workout.img} type={workout.type} />)
         }else{
             assignedWorkoutList = null
         } 
@@ -147,11 +147,11 @@ class Dashboard extends Component{
                         {
                             userData.has_coach
                             ?
-                            <RaisedButton secondary={true} onClick={this.showAssigned}>Show me my coach's plan</RaisedButton>
+                            <RaisedButton secondary={true} onClick={this.showAssigned} label="Show me my coach's plan" />
                             :
-                                ((userData.coach_id !== -1 && userData.coach_id !== -6 && userData.coach_id !== -9)
+                                (((userData.coach_id === -6 || userData.coach_id) === -9 && !userData.is_admin)
                                 ?
-                                <RaisedButton onClick={this.props.requestACoach} secondary={true}>Request a Coach</RaisedButton>
+                                <RaisedButton onClick={this.props.requestACoach} secondary={true} label="Request a Coach" />
                                 :
                                 null)
                         }
@@ -179,7 +179,7 @@ class Dashboard extends Component{
                 </section>
                 <SearchMenu btn2Fn={this.props.addMenuToUser} style={{...menuSearchStyle}}/>
                 <SearchWorkout btn2msg={"Add to my workouts"} btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
-                <RaisedButton secondary={true} style={{width: "200px"}}><Link to="/firstLogin">First Login</Link></RaisedButton>
+                <Link to="/firstLogin"><RaisedButton secondary={true} style={{width: "200px"}} label="First Login" /></Link>
                 
             </section>
         )
@@ -200,4 +200,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps, { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, archiveWorkout, archiveMenu, requestACoach, getCCInfo })(Dashboard)
+export default connect(mapStateToProps, { getUserData, getUserMenus, getUserWorkouts, getAssignedMenus, getAssignedWorkouts, addMenuToUser, addWorkoutToUser, requestACoach, getCCInfo })(Dashboard)

@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchMenus, endNutritionSearch } from '../../ducks/foodReducer'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
-import MenuCard from '../Menu/MenuCard'
+import FlatButton from 'material-ui/FlatButton'
+import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+
 
 class SearchMenu extends Component{
     constructor(){
@@ -40,32 +42,24 @@ class SearchMenu extends Component{
 
 
     render() {
-        const { arg2, arg3, handleBtnClick, menuSearchResults, btn2Fn } = this.props
+        const { arg1, menuSearchResults, btn2Fn, btn2msg } = this.props
         const menuResults = menuSearchResults.map(res => {
-                return <MenuCard menu_id={res.menu_id} btn2Fn={btn2Fn} btn2Label="Add to my menus" title={res.title} total_p={res.total_p} total_c={res.total_c} total_f={res.total_f} total_fib={res.total_fib} img={res.img} parentFn={() => handleBtnClick(res.menu_id, arg2, arg3)} action2={this.endSearches} />
-            // }
-            // return(
-            //     <section className="menu-search-result" key={res.menu_id}>
-            //         <p>{res.title}</p>
-            //         <img src={res.img} alt={res.title} />
-            //         {
-            //             doSomething
-            //             ?
-            //             <RaisedButton secondary={true} onClick={() => handleBtnClick(res.menu_id, arg2, arg3)}>{btnMsg}</RaisedButton>
-            //             :
-            //             <Link to={`/menu/${res.menu_id}`}><RaisedButton secondary={true} onClick={this.endSearches}>Take me to this menu!</RaisedButton></Link>
-            //         }
-            //     </section>
-            // )
-        })
-        // const ownStyle = {
-        //     width: "100%",
-        //     display: "grid",
-        //     gridTemplateRows: "auto",
-        //     gridTemplateColumns: "1fr 1fr",
-        //     justifyContent: "center",
-        //     gridGap: "0.75em"
-        // }
+                return (
+                        <Card style={{width: "100%"}} >
+                            <CardMedia  >
+                                <img src={res.img} style={{height: "12.5em"}} alt={res.title} />
+                            </CardMedia>
+                            <CardTitle title={res.title} />
+                            <CardText>
+                                    {`P: ${res.total_p}g C: ${res.total_c} F: ${res.total_f}g Fib: ${res.total_fib}g`}
+                            </CardText>
+                            <CardActions>
+                                <Link to={`/menu/${res.menu_id}`}><FlatButton label="Details" /></Link>
+                                <FlatButton onClick={() => btn2Fn(arg1, res.menu_id)} label={btn2msg} />
+                            </CardActions>
+                        </Card>
+                          )
+                        })
         return (
             <section style={{...this.props.style}} className="menu-search">
                 <h3 style={{gridColumn: "1/3", justifySelf: "center"}}>Search for a MENU:</h3>

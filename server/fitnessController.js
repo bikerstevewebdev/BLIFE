@@ -3,6 +3,8 @@ module.exports = {
         console.log('query name: ', req.query.name)
         req.app.get('db').search_exercises_by_name([req.query.name]).then(exercises => {
             res.status(200).send(exercises)
+        }).catch(err => {
+            console.log(err)
         }) 
     },
 
@@ -10,6 +12,8 @@ module.exports = {
         console.log('query: ',req.query.title)
         req.app.get('db').search_workouts_by_title([req.query.title]).then(workouts => {
             res.status(200).send(workouts)
+        }).catch(err => {
+            console.log(err)
         }) 
     },
 
@@ -24,6 +28,8 @@ module.exports = {
             } else {
                 res.status(403).send({message: 'You are not the creator of that exercise and therefore do not have permission to change it. Feel free to create another version of this exercise if you find the information to be incorrect.'})
             }
+        }).catch(err => {
+            console.log(err)
         })
     },
 
@@ -41,7 +47,11 @@ module.exports = {
                                     orderedEx.push(newExercises.find(v => v.ex_order === i))
                                 }
                                 res.status(200).send(orderedEx)
+                            }).catch(err => {
+                                console.log(err)
                             })
+                        }).catch(err => {
+                            console.log(err)
                         })
                     }
                     // MIGHT NEED TO ADD NEXT/ASYNC CODE TO HANDLE THIS DATA
@@ -53,6 +63,8 @@ module.exports = {
                 }
                 res.status(200).send(orderedEx)
             }
+        }).catch(err => {
+            console.log(err)
         })
     },
 
@@ -60,6 +72,8 @@ module.exports = {
         const { name, type, muscle, img, video } = req.body
         req.app.get('db').create_exercise([name, type, muscle, req.user.user_id, img, video]).then( exercise => {
             res.status(200).send(exercise)
+        }).catch(err => {
+            console.log(err)
         }) 
     },
 
@@ -71,8 +85,12 @@ module.exports = {
                 } else{
                     db.add_workout_to_user([req.user.user_id, workout[0].workout_id]).then(workouts => {
                         res.status(200).send(workout[0])
+                    }).catch(err => {
+                        console.log(err)
                     })
                 }
+        }).catch(err => {
+            console.log(err)
         }) 
     },
 
@@ -81,6 +99,8 @@ module.exports = {
         const { workout_id, ex_id, ex_order } = req.body
         db.add_ex_to_workout([workout_id, ex_id, ex_order]).then(exercises => {
             res.status(200).send(exercises)
+        }).catch(err => {
+            console.log(err)
         })
     },
 
@@ -96,7 +116,11 @@ module.exports = {
             })
             db.get_workout_exercises([workout_id]).then(exercises => {
                 res.status(200).send(exercises)
+            }).catch(err => {
+                console.log(err)
             })
+        }).catch(err => {
+            console.log(err)
         })
     },
 
@@ -104,12 +128,15 @@ module.exports = {
         const { id } = req.params
         req.app.get('db').get_exercise_by_id([id]).then( exercise => {
             res.status(200).send(exercise[0])
-        }) 
+        }).catch(err => {
+            console.log(err)
+        })
     },
 
     getWorkoutById: (req, res, next) => {
-        const { id } = req.params,
-              db     = req.app.get('db')
+        const { id } = req.params
+        console.log('fc.getWorkoutById id:', id)
+        const db = req.app.get('db')
         db.get_workout_by_id([id]).then( workout => {
             db.get_workout_exercises([id]).then(exs => {
                 let orderedEx = []
@@ -121,7 +148,11 @@ module.exports = {
                     workout: workout[0]
                 }
                 res.status(200).send(retObj)
+            }).catch(err => {
+                console.log(err)
             })
-        }) 
+        }).catch(err => {
+            console.log(err)
+        })
     },
 }

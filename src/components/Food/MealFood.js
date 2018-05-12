@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { getFoodById, updateFoodQuantity, removeFromMeal } from '../../ducks/foodReducer'
 import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton'
+import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import FlatButton from 'material-ui/FlatButton'
 
 class MealFood extends Component{
     constructor(props) {
@@ -36,18 +38,30 @@ class MealFood extends Component{
     render() {
         const { food_id, name, pro, carb, fat, fiber, img } = this.props
         return(
-            <section>
-                <p>Name: {name}</p>
-                <p>Protein: {pro}</p>
-                <p>Carbs: {carb}</p>
-                <p>Fat: {fat}</p>
-                <p>Fiber: {fiber}</p>
-                <img src={img} alt={name} />
-                <RaisedButton secondary={true} onClick={() => this.props.prepareToEdit(food_id)}>Edit Food</RaisedButton>
-                <RaisedButton secondary={true} onClick={this.deleteFood}>Remove From Meal</RaisedButton>
-                <input type="number" min="1" max="100" value={this.state.quantityIn} onChange={this.changeAmount} className="food-quantity" />
-                <RaisedButton secondary={true} onClick={this.sendUpdate}>Update the quantity</RaisedButton>
-            </section>
+            <Card style={{maxWidth: "350px", width: "100%"}} >
+                {
+                    img.length > 0
+                    ?
+                    <CardMedia  >
+                        <img src={img} alt={name} />
+                    </CardMedia>
+                    :
+                    null
+                }
+                <CardText>
+                    <p>Name: {name}</p>
+                    <p>Protein: {pro}</p>
+                    <p>Carbs: {carb}</p>
+                    <p>Fat: {fat}</p>
+                    <p>Fiber: {fiber}</p>
+                </CardText>
+                <CardActions>
+                    <RaisedButton secondary={true} onClick={() => this.props.prepareToEdit(food_id)} label="Edit Food" />
+                    <RaisedButton secondary={true} onClick={this.deleteFood} label="Remove From Meal" />
+                    <input type="number" min="1" max="100" value={this.state.quantityIn} onChange={this.changeAmount} className="food-quantity" />
+                    <RaisedButton secondary={true} onClick={this.sendUpdate} label="Update the quantity" />
+                </CardActions>
+            </Card>
         )
     }
 }

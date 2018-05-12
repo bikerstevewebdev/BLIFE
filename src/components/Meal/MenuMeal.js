@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { getMealById, removeMealFromMenu } from '../../ducks/foodReducer'
-// import { Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 // import RaisedButton from 'material-ui/RaisedButton'
@@ -26,7 +25,7 @@ class MenuMeal extends Component{
     render() {
         const { menu_id, menu_meals_id, meal_id, title, total_p, total_c, total_f, total_fib, img_url } = this.props
         return(
-            <Card style={{width: "100%"}} >
+            <Card style={{maxWidth: "350px", width: "100%"}} >
                 <CardMedia  >
                     {img_url ? <img src={img_url} alt={title} /> : null}
                 </CardMedia>
@@ -41,7 +40,7 @@ class MenuMeal extends Component{
                     <Link to={{
                         pathname: `/meal/menu`,
                         state: { menu_id, meal_id, menu_meals_id }
-                        }}><FlatButton onClick={() => this.props.getMealById(meal_id)}>Edit Meal</FlatButton></Link>
+                        }}><FlatButton onClick={() => this.props.getMealById(meal_id)} label="Edit Meal" /></Link>
                     <FlatButton onClick={this.deleteMeal} label="Remove From Menu" />
                 </CardActions>
             </Card>

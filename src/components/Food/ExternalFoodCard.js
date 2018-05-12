@@ -12,7 +12,7 @@ function ExternalFoodCard(props) {
         truImg = "https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f24c844d6944b8d3c47c372fbbfc0a11&auto=format&fit=crop&w=500&q=60"
     }
     return(
-        <Card style={{width: "20%"}} >
+        <Card style={{maxWidth: "350px", width: "20%"}} >
             <CardMedia  >
                 <img src={truImg} alt={name} />
             </CardMedia>

@@ -1,2 +1,3 @@
+-- WHERE title LIKE ('%'||$1||'%')
 SELECT * FROM meals
-WHERE title LIKE ('%'||$1||'%')
+WHERE title ~* $1

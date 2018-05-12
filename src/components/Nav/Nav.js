@@ -6,7 +6,7 @@ import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import RaisedButton from 'material-ui/RaisedButton'
-import seaVid from '../../seaVid.mp4'
+// import seaVid from '../../seaVid.mp4'
 import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
 import Logout from 'material-ui/svg-icons/hardware/keyboard-return';
 import Admin from 'material-ui/svg-icons/social/people';
@@ -29,7 +29,7 @@ function Nav(props) {
             {
                 props.coach_req_info.client_coach_id
                 ?
-                <IconButton onClick={() => props.toggleCoachReqModal(true)} >
+                <IconButton tooltip="Coach Request" onClick={() => props.toggleCoachReqModal(true)} >
                     <Chat />
                 </IconButton>
                 :
@@ -42,8 +42,9 @@ function Nav(props) {
         justifyContent: "center",
         margin: "0",
         letterSpacing: "3px",
-        WebkitMarginBefore: "0",
-        WebkitMarginAfter: 0
+        position: "fixed",
+        width: "13%",
+        left: "42%"
     }
     const rightStyles = {
         display: "flex",
@@ -60,7 +61,7 @@ function Nav(props) {
             {
                 props.userData.is_admin
                 ?
-                <IconButton onClick={() => props.history.push('/adminManager')}>
+                <IconButton tooltip="Coach Manager" onClick={() => props.history.push('/adminManager')}>
                     <Admin />
                 </IconButton>
                 :
@@ -69,22 +70,22 @@ function Nav(props) {
             {
                 props.userData.coach_id > 0
                 ?
-                <IconButton onClick={() => props.history.push('/coachManager')}>
+                <IconButton tooltip="Client Manager" onClick={() => props.history.push('/coachManager')}>
                     <Admin />
                 </IconButton>
                 :
                 null
             }
-            <IconButton onClick={() => props.toggleMotivationalModal(true)}>
+            <IconButton tooltip="Find Your Why" onClick={() => props.toggleMotivationalModal(true)}>
                 <Happy />
             </IconButton>
-            <IconButton onClick={props.logoutUser}>
+            <IconButton tooltip="Logout" onClick={props.logoutUser}>
                 <Logout />
             </IconButton>
-            <IconButton onClick={() => props.toggleSideNav(true)}>
+            <IconButton tooltip="Navigator" onClick={() => props.toggleSideNav(true)}>
                 <ChromeReader />
             </IconButton>
-            <FlatButton  >
+            <FlatButton tooltip="Profile" >
                 <Link style={{...profileBtnStyles, color: "inherit"}} to='/profile'>
                     <Avatar icon={<PersonOutline />} size={35} src={props.userData.profile_pic} />
                     {props.userData.username}
@@ -94,27 +95,27 @@ function Nav(props) {
     )
     return(
         
-            props.isLoggedIn && props.userData.user_id > 0
+                props.isLoggedIn && props.userData.user_id > 0
             ?
-    (<header className="nav-comp">
-        <AppBar iconElementLeft={home} title={<h2>BalancedLIFE</h2>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
-    </header>)
+                (<header className="nav-comp">
+                    <AppBar onTitleClick={() => props.history.push('/dashboard')} iconElementLeft={home} title={<h1 style={{cursor: "pointer"}}>BalancedLIFE</h1>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
+                </header>)
             :
-            (<section className="unauthorized">
-            <section className="message">
-                <h1>403 FORBIDDEN</h1>
-                <h1>RELISH IN THE WAVES OR TRY LOGGING IN</h1>
-                <a id="arg" href={process.env.REACT_APP_LOGIN}>
-                    <RaisedButton primary={true} >Login</RaisedButton>
-                </a>
-            </section>
-            {/* <video autoPlay muted loop id="video-background"> */}
-            <video autoPlay muted loop id="video-background">
-                <source src={seaVid} type="video/mp4" />
-            </video>
-            {/* </video> */}
-            {/* <iframe title="forbidden" loop id="video-background" src="https://www.youtube.com/embed/qREKP9oijWI?autoplay=1&controls=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" ></iframe> */}
-          </section>)
+                (<section className="unauthorized">
+                <section className="message">
+                    <h1>403 FORBIDDEN</h1>
+                    <h1>RELISH IN THE WAVES OR TRY LOGGING IN</h1>
+                    <a id="arg" href={process.env.REACT_APP_LOGIN}>
+                        <RaisedButton primary={true} >Login</RaisedButton>
+                    </a>
+                </section>
+                {/* <video autoPlay muted loop id="video-background"> */}
+                {/* <video autoPlay muted loop id="video-background">
+                    <source src={seaVid} type="video/mp4" />
+                </video> */}
+                {/* </video> */}
+                <iframe title="forbidden" loop id="video-background" src="https://www.youtube.com/embed/qREKP9oijWI?autoplay=1&controls=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" ></iframe>
+            </section>)
         
     )
 }

@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { searchWorkouts, endFitnessSearch } from '../../ducks/fitnessReducer'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import Search from 'material-ui/svg-icons/action/search'
 import RaisedButton from 'material-ui/RaisedButton'
-import WorkoutCard from '../Workout/WorkoutCard'
+import FlatButton from 'material-ui/FlatButton'
+import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 
 class SearchWorkouts extends Component{
     constructor(){
@@ -43,28 +44,22 @@ class SearchWorkouts extends Component{
         const { workoutSearchResults, btn2Fn, btn2msg, arg1 } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
-                <WorkoutCard workout_id={res.workout_id} arg1={arg1} btn2Fn={btn2Fn} btn2Label={btn2msg} title={res.title} img={res.img} type={res.type} />
-                // <section className="workout-search-result" key={res.workout_id}>
-                //     <p>{res.title}</p>
-                //     <img src={res.img} alt={res.title} />
-                //     {
-                //         doSomething
-                //         ?
-                //         <RaisedButton secondary={true} onClick={() => handleBtnClick(res.workout_id, arg2, arg3)}>{btnMsg}</RaisedButton>
-                //         :
-                //         <Link to={`/workout/${res.workout_id}`}><RaisedButton secondary={true} onClick={this.endSearches}>Take me to this workout!</RaisedButton></Link>
-                //     }
-                // </section>
+                <Card style={{maxWidth: "350px", width: "100%"}} >
+                    <CardMedia style={{height: "12.5em"}} >
+                        <img src={res.img} alt={res.title} />
+                    </CardMedia>
+                    <CardTitle title={res.title} />
+                    <CardText>
+                        <p>Type: {res.type}</p>
+                    </CardText>
+                    <CardActions>
+                        <Link to={`/workout/${res.workout_id}`}><FlatButton label="Details" /></Link>
+                            <FlatButton onClick={() => btn2Fn(arg1, res.workout_id)} label={btn2msg} />
+                    </CardActions>
+                </Card>
             )
         })
-        // const workSearchStyle = {
-        //     width: "100%",
-        //     display: "grid",
-        //     gridTemplateRows: "auto",
-        //     gridTemplateColumns: "1fr 1fr",
-        //     justifyContent: "center",
-        //     gridGap: "0.75em"
-        // }
+
         return (
             <section style={{...this.props.style}} className="workout-search">
                     <h2 style={{gridColumn: "1/3", justifySelf: "center"}}>Find your new Workout:</h2>

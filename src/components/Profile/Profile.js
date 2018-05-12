@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getUserData, updateUserStats, addMacrosToState, getAllProgressPics, getCurrentPhotos, toggleUpdateProfileModal, togglePhotoCompModal } from '../../ducks/userReducer';
 import { changeUpdating, clearMacroEntry } from '../../ducks/macroCalcReducer'
-// import MenuCard from '../Menu/MenuCard'
-// import WorkoutCard from '../Workout/WorkoutCard'
-// import SearchMenus from '../Search/SearchMenus'
-// import SearchWorkouts from '../Search/SearchWorkouts'
 import PhotoUpload from '../Photos/PhotoUpload'
 import PhotoCard from '../Photos/PhotoCard'
 import RaisedButton from 'material-ui/RaisedButton'
-// import { Image } from 'semantic-ui-react'
 import {List, ListItem} from 'material-ui/List'
 import MobileTearSheet from '../MobileTearSheet/MobileTearSheet'
-// import Divider from 'material-ui/Divider'
 import Subheader from 'material-ui/Subheader'
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import {blue500, yellow600} from 'material-ui/styles/colors';
@@ -146,7 +140,7 @@ class Profile extends Component{
                 <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a profile pic! Why don't you go ahead and update your profile and fix that real quick!"/>
                 <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "2em"}}>Welcome Home</h1>
                 <section style={{gridArea: "1/3/2/4", display: "flex", flexDirection: "column", width: "100%", height: "100%", justifyContent: "space-around"}}>
-                    <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link>
+                    {/* <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link> */}
                     {coachRequest}
                     <RaisedButton onClick={() => this.props.toggleUpdateProfileModal(true)} secondary={true} style={{backgroundColor: "orange"}}>Update Profile</RaisedButton>
                 </section>
@@ -183,13 +177,13 @@ class Profile extends Component{
                     :
                     null
                 }
-                {
+                {/* {
                     userData.coach_id > 0
                     ?
                     <Link to={`/coachManager/${userData.coach_id}`}><RaisedButton secondary={true} label="Client Manager"/></Link>
                     :
                     null
-                }
+                } */}
                 <section style={{...statsStyles}} className="current-stats">
                     <MobileTearSheet >
                         <Subheader>Current Measurements</Subheader>

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
-import MenuCard from '../Menu/MenuCard'
-import WorkoutCard from '../Workout/WorkoutCard'
+// import { Link } from 'react-router-dom'
+import ClientMenuCard from '../Menu/ClientMenuCard'
+import ClientWorkoutCard from '../Workout/ClientWorkoutCard'
 import SearchMenu from '../Search/SearchMenus'
 import SearchWorkout from '../Search/SearchWorkouts'
-import { getClientData, assignWorkoutToClient, assignMenuToClient, toggleCoachChatModal } from '../../ducks/coachReducer'
+import { getClientData, assignWorkoutToClient, assignMenuToClient, toggleCoachChatModal, removeClientMenu, removeClientWorkout } from '../../ducks/coachReducer'
 import RaisedButton from 'material-ui/RaisedButton'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import { FloatingActionButton } from 'material-ui';
@@ -21,13 +21,25 @@ class ClientManager extends Component{
         this.prepareToAddMenu = this.prepareToAddMenu.bind(this)
     }
 
+
+
+    componentDidMount(){
+        // const { currentClient } = this.props
+        // const { client_coach_id } = currentClient
+        // // this.props.getClientData(this.props.match.params.id)
+        // if(this.props.match.params.id !== client_coach_id){
+        //     getClientData(this.props.match.params.id)
+        // }
+        
+    }
+
     componentDidUpdate(){
-        const { currentClient } = this.props
-        const { client_coach_id } = currentClient
-        // this.props.getClientData(this.props.match.params.id)
-        if(!client_coach_id){
-            getClientData(this.props.match.params.id)
-        }
+        // const { currentClient } = this.props
+        // const { client_coach_id } = currentClient
+        // // this.props.getClientData(this.props.ma   `tch.params.id)
+        // if(this.props.match.params.id !== client_coach_id){
+        //     getClientData(this.props.match.params.id)
+        // }
     }
     
     prepareToAddWorkout(){
@@ -45,17 +57,17 @@ class ClientManager extends Component{
 
     render() {
             const { currentClient, coachChatModalOpen, clientWorkouts, clientMenus, toggleCoachChatModal } = this.props,
-                  { username, last_login, fullname, client_coach_id, waist, neck, chest, height, weight, bf, date_taken, happy_level, curr_pro, curr_carb, curr_fat, profile_pic, email } = currentClient
+                  { username, last_login, fullname, client_coach_id, curr_pro, curr_carb, curr_fat, profile_pic, email } = currentClient
                    
             const menusList = clientMenus.map(v => {
-                      return <MenuCard key={v.menu_id} menu_id={v.menu_id} total_p={v.total_p} total_c={v.total_c} total_f={v.total_f} total_fib={v.total_fib} img={v.img} />
+                      return <ClientMenuCard key={v.user_menu_id} cc_id={client_coach_id} um_id={v.user_menu_id} menu_id={v.menu_id} total_p={v.total_p} total_c={v.total_c} total_f={v.total_f} total_fib={v.total_fib} img={v.img} btn2Fn={this.props.removeClientMenu.bind(this)} />
                   })
             const workoutsList = clientWorkouts.map(v => {
-                      return <WorkoutCard key={v.workout_id} workout_id={v.workout_id} title={v.title} img={v.img} type={v.type} />
+                      return <ClientWorkoutCard key={v.user_workout_id} uw_id={v.user_workout_id} workout_id={v.workout_id} cc_id={client_coach_id} title={v.title} btn2Fn={this.props.removeClientWorkout.bind(this)} img={v.img} type={v.type} />
                   })
         return (
             <section className="comp client-manager">
-                <Link to={`/coachManager/${this.props.coach_id}`}><RaisedButton secondary={true}>Back to Coach Manager</RaisedButton></Link>
+                {/* <Link to={`/coachManager/${this.props.coach_id}`}><RaisedButton secondary={true}>Back to Coach Manager</RaisedButton></Link> */}
                 <h1>{fullname}/{username}</h1>
                 <p>Email: {email}</p>
                 <h3>Last Login: {new Date(last_login/1).toDateString().slice(0, 15)}</h3>
@@ -65,16 +77,24 @@ class ClientManager extends Component{
                     <h3>Macros:</h3>
                     <p>Protein: {curr_pro}</p>
                     <p>Carbs: {curr_carb}</p>
-                    <p>Protein: {curr_fat}</p>
+                    <p>Fat: {curr_fat}</p>
                     <h3>Measurements:</h3>
-                    <p>Happyness at time of measurement: {happy_level}</p>
-                    <p>Height: {height} inches</p>
-                    <p>Weight: {weight} pounds</p>
-                    <p>Bodyfat: {bf} %</p>
-                    <p>Waist: {waist} inches</p>
-                    <p>Neck: {neck} inches</p>
-                    <p>Chest: {chest} inches</p>
-                    <p>Last Taken: {new Date(date_taken/1).toDateString().slice(0, 15)}</p>
+                    {
+                        currentClient.mes_id > 0
+                        ?
+                        <section>
+                            <p>Happyness at time of measurement: {currentClient.happy_level}</p>
+                            <p>Height: {currentClient.height} inches</p>
+                            <p>Weight: {currentClient.weight} pounds</p>
+                            <p>Bodyfat: {currentClient.bf} %</p>
+                            <p>Waist: {currentClient.waist} inches</p>
+                            <p>Neck: {currentClient.neck} inches</p>
+                            <p>Chest: {currentClient.chest} inches</p>
+                            <p>Last Taken: {new Date(currentClient.date_taken/1).toDateString().slice(0, 15)}</p>
+                        </section>
+                        :
+                        <p>{username} does not have any measurements yet</p>
+                    }
                 </section>
                 <section className="client-workouts">
                     <h2>Current Fitness Plan</h2>
@@ -93,7 +113,7 @@ class ClientManager extends Component{
                     {
                         this.state.addingMenu
                         ?
-                        <SearchMenu doSomething={true} arg1={client_coach_id}  btn2msg={`Add this menu to ${username}'s plan`} btn2Fn={this.props.assignMenuToClient.bind(this)} />
+                        <SearchMenu arg1={client_coach_id}  btn2msg={`Add this menu to ${username}'s plan`} btn2Fn={this.props.assignMenuToClient.bind(this)} />
                         :
                         <RaisedButton secondary={true} onClick={this.prepareToAddMenu}>Add a menu to {username}'s plan?</RaisedButton>
                     }
@@ -121,4 +141,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { getClientData, assignWorkoutToClient, assignMenuToClient, toggleCoachChatModal })(ClientManager)
+export default connect(mapStateToProps, { getClientData, assignWorkoutToClient, assignMenuToClient, toggleCoachChatModal, removeClientMenu, removeClientWorkout })(ClientManager)

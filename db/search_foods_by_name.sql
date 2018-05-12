@@ -1,2 +1,3 @@
+-- WHERE name LIKE ('%'||$1||'%')
 SELECT * FROM foods
-WHERE name LIKE ('%'||$1||'%')
+WHERE name ~* $1

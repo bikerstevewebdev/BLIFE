@@ -73,9 +73,10 @@ export function getCCInfo() {
     }
 }
 
-export function getClientData(id) {
-    // console.log('coachreducer getclientdata client_coach_id: ', id)
-    let data = axios.post(`/clientInfo/`, { client_coach_id: id/1}).then(res => {
+export function getClientData(client_coach_id, curr_mes_id) {
+    let has_mes = curr_mes_id > 0
+    console.log('coachreducer getclientdata client_coach_id: ', client_coach_id)
+    let data = axios.post(`/clientInfo`, { client_coach_id, has_mes }).then(res => {
         return res.data
     })
     return {
@@ -123,8 +124,8 @@ export function searchForClient(email) {
     }
 }
 
-export function assignWorkoutToClient(workout_id, client_coach_id, client_id) {
-    let clients = axios.post(`/client/workouts`, { client_coach_id, client_id, workout_id }).then(res => {
+export function assignWorkoutToClient(client_coach_id, workout_id) {
+    let clients = axios.post(`/client/workouts`, { client_coach_id, workout_id }).then(res => {
         return res.data
     })
     return {
@@ -133,8 +134,28 @@ export function assignWorkoutToClient(workout_id, client_coach_id, client_id) {
     }
 }
 
-export function assignMenuToClient(menu_id, client_coach_id, client_id) {
-    let clients = axios.post(`/client/menus`, { client_coach_id, client_id, menu_id }).then(res => {
+export function removeClientWorkout(client_coach_id, user_workout_id) {
+    let clients = axios.post(`/client/workouts`, { client_coach_id, user_workout_id }).then(res => {
+        return res.data
+    })
+    return {
+        type: ASSIGN_WORKOUT,
+        payload: clients
+    }
+}
+
+export function assignMenuToClient(client_coach_id, menu_id) {
+    let clients = axios.post(`/client/menus`, { client_coach_id, menu_id }).then(res => {
+        return res.data
+    })
+    return {
+        type: ASSIGN_MENU,
+        payload: clients
+    }
+}
+
+export function removeClientMenu(client_coach_id, user_menu_id) {
+    let clients = axios.post(`/client/menus`, { client_coach_id, user_menu_id }).then(res => {
         return res.data
     })
     return {
@@ -226,7 +247,7 @@ export default function(state = initialState, action) {
         case CLEAR_COACH_MESSAGE:
             return { ...state, warningMsg: action.payload }
         case GET_CLIENT_BY_ID + '_FULFILLED':
-            return { ...state, currentClient: action.payload }
+            return { ...state, currentClient: action.payload.client, clientMenus: action.payload.menus, clientWorkouts: action.payload.workouts }
         case GET_CLIENTS + '_FULFILLED': 
                 return { ...state, clients: action.payload }
         case SEARCH_FOR_CLIENT + '_FULFILLED': 
@@ -236,17 +257,13 @@ export default function(state = initialState, action) {
         case REQUEST_A_COACH + '_REJECTED':
                     return { ...state, warningMsg: action.payload.response.data.message }
         case ASSIGN_MENU + '_FULFILLED': 
-                if(action.payload.message){
-                    return { ...state, warningMsg: action.payload.message }
-                } else{
                     return { ...state, clientMenus: action.payload }
-                }
+        case ASSIGN_MENU + '_REJECTED': 
+                    return { ...state, warningMsg: action.payload.response.data.message }
+        case ASSIGN_WORKOUT + '_REJECTED': 
+                    return { ...state, warningMsg: action.payload.response.data.message }
         case ASSIGN_WORKOUT + '_FULFILLED': 
-                if(action.payload.message){
-                    return { ...state, warningMsg: action.payload.message }
-                } else{
                     return { ...state, clientWorkouts: action.payload }
-                }
         case GET_ADMIN_INFO + '_FULFILLED':
                 if(action.payload.message){
                     return { ...state, warningMsg: action.payload.message }

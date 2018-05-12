@@ -4,17 +4,17 @@ import { getClientData } from '../../ducks/coachReducer'
 import { connect } from 'react-redux'
 
 function ClientCard(props) {
-    const sendToPage = (id) => {
-        props.getClientData(id)
+    const sendToPage = (id, mes_id) => {
+        props.getClientData(id, mes_id)
         props.history.push(`/clientManager/${id}`)
     }
-    const { username, fullname, last_login, client_coach_id, img } = props
+    const { username, fullname, last_login, client_coach_id, img, curr_mes_id } = props
     return(
         <section className="client-card">
             <h3>{fullname}</h3>
             <p>Last Login: {new Date(last_login).toDateString().slice(0, 15)}</p>
             <img src={img} alt={username} />
-            <RaisedButton onClick={() => sendToPage(client_coach_id)} secondary={true} label={`Go to ${username}'s page`} />
+            <RaisedButton onClick={() => sendToPage(client_coach_id, curr_mes_id)} secondary={true} label={`Go to ${username}'s page`} />
         </section>
     )
 }

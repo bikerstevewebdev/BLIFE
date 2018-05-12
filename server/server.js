@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 })
 
 app.use(express.static(__dirname + '/../build'))
-app.use(express.json())
+app.use(express.json({limit: '10mb'}))
 app.use(cors())
 // Setting up express-session
 app.use(session({
@@ -231,7 +231,8 @@ app.post('/workout/exercise', fitc.addExerciseToWorkout)
 
 app.put('/meal/removeFood', fc.removeFoodFromMeal)
 app.put('/menu/removeMeal', fc.removeMealFromMenu)
-app.put('/workout/removeExercise/:id', fitc.removeExFromWorkout)
+
+app.delete('/workout/removeExercise/:id', fitc.removeExFromWorkout)
 
 app.get('/exercise/:id', fitc.getExerciseById)
 app.get('/workout/:id', fitc.getWorkoutById)

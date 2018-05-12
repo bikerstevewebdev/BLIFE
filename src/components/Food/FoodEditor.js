@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import { TextField } from 'material-ui';
 
 
 class FoodEditor extends Component{
@@ -23,7 +24,7 @@ class FoodEditor extends Component{
         const { name, p, c, f, fib, img } = this.props
         return(
             <Dialog open={this.props.foodEditorDialogOpen} className="food-editor">
-                <p>Add a Food to the BLIFE Database</p>
+                <h1>Food Editor</h1>
                 <p>Name:</p>
                 <input className="food-name" value={name} onChange={(e) => this.props.updateNameIn(e.target.value)} placeholder="food name"/>
                 <p>Protein:</p>
@@ -34,8 +35,8 @@ class FoodEditor extends Component{
                 <input className="food-f" type="number" min="0" max="1000" value={f} onChange={(e) => this.props.updateFIn(e.target.value)}/>
                 <p>Fiber:</p>
                 <input className="food-fib" type="number" min="0" max="1000" value={fib} onChange={(e) => this.props.updateFibIn(e.target.value)}/>
-                <p>Image URL:</p>
-                <input className="food-img-url" value={img} onChange={(e) => this.props.updateImgIn(e.target.value)} placeholder="link to image"/>
+                <TextField name="img-url" className="food-img-url" value={img} onChange={(e) => this.props.updateImgIn(e.target.value)} floatingLabelText="Image URL" hintText="link to image"/>
+                <img src={img} alt={name}/>
                 <RaisedButton secondary={true} onClick={this.sendEdits}>UpdateFood</RaisedButton>
                 <FlatButton onClick={() => this.props.toggleFoodEditorModal(false)}>CLOSE</FlatButton>
             </Dialog>

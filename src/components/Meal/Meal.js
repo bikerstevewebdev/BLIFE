@@ -89,7 +89,7 @@ class Meal extends Component{
         })
         const mealFoodList = mealFoods.map(food => {
             const { food_id, name, pro, carb, fat, fiber, img, quantity, meal_food_id } = food
-            return <MealFood prepareToEdit={this.prepareToEdit} key={meal_food_id} food_id={food_id} meal_food_id={meal_food_id} name={name} pro={pro} carb={carb} fat={fat} meal_id={meal_id} fiber={fiber} img={img} quantity={quantity} />            
+            return <MealFood location={this.props.location} prepareToEdit={this.prepareToEdit} key={meal_food_id} food_id={food_id} meal_food_id={meal_food_id} name={name} pro={pro} carb={carb} fat={fat} meal_id={meal_id} fiber={fiber} img={img} quantity={quantity} />            
         })
         return(
             <section className="comp meal">

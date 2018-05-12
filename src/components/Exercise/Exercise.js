@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { addExToDB, acknowledge, updateExercise, clearExercise, getExById } from '../../ducks/fitnessReducer'
 // import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
+import { SelectField } from 'material-ui';
 
 class Exercise extends Component{
     constructor(props) {
@@ -162,14 +163,14 @@ class Exercise extends Component{
                 <p>What shall we call it?</p>
                 <input type="text" value={this.state.nameIn} onChange={this.updateNameIn} />
                 <p>Type:</p>
-                <select className="ex-type" onChange={this.updateTypeIn}>
+                <SelectField className="ex-type" onChange={this.updateTypeIn}>
                     <option value="Weights" >Weights</option>
                     <option value="Bodyweight">Bodyweight/Calisthenics</option>
                     <option value="LISS">Low Intensity Steady-State (LISS) Cardio</option>
                     <option value="HIIT">High Intensity Interval Training (HIIT) Cardio</option>
-                </select>
+                </SelectField>
                 <p>Major-Muscle-Group:</p>
-                <select className="major-muscle" onChange={this.updateMuscleIn}>
+                <SelectField className="major-muscle" onChange={this.updateMuscleIn}>
                     <option value="Full-Body" >Full-Body</option>
                     <option value="Biceps">Biceps</option>
                     <option value="Calves">Calves</option>
@@ -183,7 +184,7 @@ class Exercise extends Component{
                     <option value="Traps">Traps</option>
                     <option value="Triceps">Triceps</option>
                     <option value="Upper-back">Upper-Back</option>
-                </select>
+                </SelectField>
                 <p>Video URL:</p>
                 <input type="text" value={this.state.videoURLIn} onChange={this.updateVideoURLIn} />
 

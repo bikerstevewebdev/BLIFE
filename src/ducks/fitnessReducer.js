@@ -124,6 +124,7 @@ export function getExById(id){
 }
 
 export function getWorkoutById(id){
+    console.log('fitness reducer id: ', id)
     let workout = axios.get(`/workout/${id}`).then(res => {
         return res.data
     })
@@ -161,7 +162,7 @@ export function clearExercise(){
 }
 
 export function removeExFromWorkout(workout_ex_id, workout_id){
-    let exercises = axios.put(`/workout/removeExercise/${workout_ex_id}`, { workout_id }).then(res => {
+    let exercises = axios.delete(`/workout/removeExercise/${workout_ex_id}`, { workout_id }).then(res => {
         return res.data
     })
     return {
