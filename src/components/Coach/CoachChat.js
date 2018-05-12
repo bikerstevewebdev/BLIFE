@@ -80,7 +80,7 @@ class CoachChat extends Component {
         }
     }
   render() {
-      const { userData } = this.props
+      const { userData, coach_info, currentClient } = this.props
     let messageList
     if (this.state.connected === true) {
         messageList = this.state.messages.map(msg => {
@@ -110,7 +110,7 @@ class CoachChat extends Component {
             </Table>
            
 
-            <TextField name="message input" className='input-box' value={this.state.userInput} type="text" onChange={e => this.setState({ userInput: e.target.value })} />
+            <TextField name="message input" floatingLabelText={`Send a message to ${userData.has_coach ? coach_info.username : currentClient.username}`} className='input-box' value={this.state.userInput} type="text" onChange={e => this.setState({ userInput: e.target.value })} />
             <RaisedButton onClick={() => this.handleMessageEvent()} label="send"/>
             <FlatButton onClick={() => this.props.toggleCoachChatModal(false)} label="close"/>
       </Dialog>
