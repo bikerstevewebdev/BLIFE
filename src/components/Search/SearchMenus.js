@@ -6,6 +6,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
 
 
 class SearchMenu extends Component{
@@ -17,6 +18,7 @@ class SearchMenu extends Component{
         this.searchMenus = this.searchMenus.bind(this)
         this.updateMenuSearch = this.updateMenuSearch.bind(this)
         this.endSearches = this.endSearches.bind(this)
+        this.handleBtn2Click = this.handleBtn2Click.bind(this)
     }
 
     searchMenus() {
@@ -25,17 +27,23 @@ class SearchMenu extends Component{
             menuSearch: ''
         })
     }
-
+    
     updateMenuSearch(e) {
         this.setState({
             menuSearch: e.target.value
         })
     }
-
+    
+    handleBtn2Click(arg1, w_id){
+        this.props.btn2Fn(arg1, w_id)
+        this.endSearches()
+    }
+    
     endSearches(){
+        this.setState({ menuSearch: '' })
         this.props.endNutritionSearch()
     }
-
+    
     componentWillUnmount(){
         this.props.endNutritionSearch()
     }
@@ -55,7 +63,7 @@ class SearchMenu extends Component{
                             </CardText>
                             <CardActions>
                                 <Link to={`/menu/${res.menu_id}`}><FlatButton label="Details" /></Link>
-                                <FlatButton onClick={() => btn2Fn(arg1, res.menu_id)} label={btn2msg} />
+                                <FlatButton onClick={() => this.handleBtn2Click(arg1, res.menu_id)} label={btn2msg} />
                             </CardActions>
                         </Card>
                           )
@@ -65,6 +73,13 @@ class SearchMenu extends Component{
                 <h3 style={{gridColumn: "1/3", justifySelf: "center"}}>Search for a MENU:</h3>
                 <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the menu database" value={this.state.menuSearch}  onChange={this.updateMenuSearch} />
                 <RaisedButton style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchMenus} label="Search Menus!" primary={true} />
+                {
+                        this.props.menuSearchResults.length > 0
+                        ?
+                        <RaisedButton secondary={true} icon={<NavigationClose />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.endSearches} label="End Search" />
+                        :
+                        null
+                    }
                 {/* <button style={{width: "300px"}} >Search!</button> */}
                 {menuResults}
             </section>

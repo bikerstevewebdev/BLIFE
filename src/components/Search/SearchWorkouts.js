@@ -4,6 +4,7 @@ import { searchWorkouts, endFitnessSearch } from '../../ducks/fitnessReducer'
 import { Link } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import Search from 'material-ui/svg-icons/action/search'
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
@@ -17,6 +18,7 @@ class SearchWorkouts extends Component{
         this.searchWorkouts = this.searchWorkouts.bind(this)
         this.updateWorkoutSearch = this.updateWorkoutSearch.bind(this)
         this.endSearches = this.endSearches.bind(this)
+        this.handleBtn2Click = this.handleBtn2Click.bind(this)
     }
 
     searchWorkouts() {
@@ -32,7 +34,13 @@ class SearchWorkouts extends Component{
         })
     }
 
+    handleBtn2Click(arg1, w_id){
+        this.props.btn2Fn(arg1, w_id)
+        this.endSearches()
+    }
+
     endSearches(){
+        this.setState({workoutSearch: ''})
         this.props.endFitnessSearch()
     }
 
@@ -54,7 +62,7 @@ class SearchWorkouts extends Component{
                     </CardText>
                     <CardActions>
                         <Link to={`/workout/${res.workout_id}`}><FlatButton label="Details" /></Link>
-                            <FlatButton onClick={() => btn2Fn(arg1, res.workout_id)} label={btn2msg} />
+                            <FlatButton onClick={() => this.handleBtn2Click(arg1, res.workout_id)} label={btn2msg} />
                     </CardActions>
                 </Card>
             )
@@ -65,6 +73,13 @@ class SearchWorkouts extends Component{
                     <h2 style={{gridColumn: "1/3", justifySelf: "center"}}>Find your new Workout:</h2>
                     <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)", borderRadius: "3px"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
                     <RaisedButton secondary={true} icon={<Search />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchWorkouts}>Search for a new Workout</RaisedButton>
+                    {
+                        this.props.workoutSearchResults.length > 0
+                        ?
+                        <RaisedButton secondary={true} icon={<NavigationClose />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.endSearches} label="End Search" />
+                        :
+                        null
+                    }
                 {/* <button style={} >Search!</button> */}
                 {workoutResults}
             </section>

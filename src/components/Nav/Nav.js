@@ -19,17 +19,43 @@ import Chat from 'material-ui/svg-icons/communication/chat';
 
 
 function Nav(props) {
+    const titleStyles = {
+        display: "flex",
+        justifyContent: "center",
+        margin: "0",
+        letterSpacing: "3px",
+        position: "fixed",
+        width: "16%",
+        left: "42%",
+        overflow: "visible",
+        fontSize: "3.5rem"
+    }
+    const rightStyles = {
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        width: "100%"
+    }
+    const profileBtnStyles = {
+        display: "flex",
+        alignItems: "center"
+    }
+    const iconStyles = { 
+        width: "100%", height: "100%", color: "#eee"
+    }
+    const iconBtnStyles = { 
+        margin: "0.45rem", padding: "0", width: "1.8rem", height: "1.8rem"
+    }
+    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "#377D3D"}
     const home = (
         <section>
-            <IconButton tooltip="Dashboard">
-                <Link to="/dashboard">
+            <IconButton iconStyle={{...iconStyles}} onClick={() => props.history.push("/dashboard")} style={{iconBtnStyles}} tooltip="Dashboard">
                     <ActionHome />
-                </Link>
             </IconButton>
             {
                 props.coach_req_info.client_coach_id
                 ?
-                <IconButton tooltip="Coach Request" onClick={() => props.toggleCoachReqModal(true)} >
+                <IconButton tooltip="Coach Request" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleCoachReqModal(true)} >
                     <Chat />
                 </IconButton>
                 :
@@ -37,31 +63,12 @@ function Nav(props) {
             }
         </section>
     )
-    const titleStyles = {
-        display: "flex",
-        justifyContent: "center",
-        margin: "0",
-        letterSpacing: "3px",
-        position: "fixed",
-        width: "13%",
-        left: "42%"
-    }
-    const rightStyles = {
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center"
-    }
-    const profileBtnStyles = {
-        display: "flex",
-        alignItems: "center"
-    }
-    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "80px", alignItems: "center"}
     const rightIcons = (
         <section style={rightStyles} className="icons">
             {
                 props.userData.is_admin
                 ?
-                <IconButton tooltip="Coach Manager" onClick={() => props.history.push('/adminManager')}>
+                <IconButton tooltip="Coach Manager" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.history.push('/adminManager')}>
                     <Admin />
                 </IconButton>
                 :
@@ -70,22 +77,22 @@ function Nav(props) {
             {
                 props.userData.coach_id > 0
                 ?
-                <IconButton tooltip="Client Manager" onClick={() => props.history.push('/coachManager')}>
+                <IconButton iconStyle={{...iconStyles}} style={{iconBtnStyles}} tooltip="Client Manager" onClick={() => props.history.push('/coachManager')}>
                     <Admin />
                 </IconButton>
                 :
                 null
             }
-            <IconButton tooltip="Find Your Why" onClick={() => props.toggleMotivationalModal(true)}>
+            <IconButton iconStyle={{...iconStyles}} style={{iconBtnStyles}} tooltip="Find Your Why" onClick={() => props.toggleMotivationalModal(true)}>
                 <Happy />
             </IconButton>
-            <IconButton tooltip="Logout" onClick={props.logoutUser}>
+            <IconButton tooltip="Logout" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={props.logoutUser}>
                 <Logout />
             </IconButton>
-            <IconButton tooltip="Navigator" onClick={() => props.toggleSideNav(true)}>
+            <IconButton tooltip="Navigator" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleSideNav(true)}>
                 <ChromeReader />
             </IconButton>
-            <FlatButton tooltip="Profile" >
+            <FlatButton style={{margin: "0.45rem"}} tooltip="Profile" >
                 <Link style={{...profileBtnStyles, color: "inherit"}} to='/profile'>
                     <Avatar icon={<PersonOutline />} size={35} src={props.userData.profile_pic} />
                     {props.userData.username}
@@ -98,7 +105,7 @@ function Nav(props) {
                 props.isLoggedIn && props.userData.user_id > 0
             ?
                 (<header className="nav-comp">
-                    <AppBar onTitleClick={() => props.history.push('/dashboard')} iconElementLeft={home} title={<h1 style={{cursor: "pointer"}}>BalancedLIFE</h1>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
+                    <AppBar onTitleClick={() => props.history.push('/dashboard')} iconElementLeft={home} title={<h1 style={{webkitTextFillColor: "white", webkitTextStrokeWidth: "0.45px", webkitTextStrokeColor: "#000000", cursor: "pointer"}}>BalancedLIFE</h1>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
                 </header>)
             :
                 (<section className="unauthorized">

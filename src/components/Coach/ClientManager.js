@@ -60,10 +60,10 @@ class ClientManager extends Component{
                   { username, last_login, fullname, client_coach_id, curr_pro, curr_carb, curr_fat, profile_pic, email } = currentClient
                    
             const menusList = clientMenus.map(v => {
-                      return <ClientMenuCard key={v.user_menu_id} cc_id={client_coach_id} um_id={v.user_menu_id} menu_id={v.menu_id} total_p={v.total_p} total_c={v.total_c} total_f={v.total_f} total_fib={v.total_fib} img={v.img} btn2Fn={this.props.removeClientMenu.bind(this)} />
+                      return <ClientMenuCard key={v.user_menu_id} cc_id={client_coach_id} um_id={v.user_menu_id} menu_id={v.menu_id} total_p={v.total_p} total_c={v.total_c} total_f={v.total_f} removeFn={this.props.removeClientMenu.bind(this)} total_fib={v.total_fib} img={v.img} btn2Fn={this.props.removeClientMenu.bind(this)} />
                   })
             const workoutsList = clientWorkouts.map(v => {
-                      return <ClientWorkoutCard key={v.user_workout_id} uw_id={v.user_workout_id} workout_id={v.workout_id} cc_id={client_coach_id} title={v.title} btn2Fn={this.props.removeClientWorkout.bind(this)} img={v.img} type={v.type} />
+                      return <ClientWorkoutCard removeFn={this.props.removeClientWorkout.bind(this)} key={v.user_workout_id} uw_id={v.user_workout_id} workout_id={v.workout_id} cc_id={client_coach_id} title={v.title} img={v.img} type={v.type} />
                   })
         return (
             <section className="comp client-manager">

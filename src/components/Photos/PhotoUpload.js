@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { uploadPhoto } from '../../ducks/userReducer'
-import RaisedButton from 'material-ui/RaisedButton'
 import AddPhoto from 'material-ui/svg-icons/image/add-a-photo'
+import RaisedButton from 'material-ui/RaisedButton'
 import FileUpload from 'material-ui/svg-icons/file/file-upload'
 
 

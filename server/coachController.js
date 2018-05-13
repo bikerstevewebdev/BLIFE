@@ -1,5 +1,6 @@
 module.exports = {
     getCCInfo: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
             , { user_id } = req.user
         db.get_client_id([user_id]).then(cId => {
@@ -14,6 +15,7 @@ module.exports = {
     },
 
     getCurrClientInfo: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
             , { id } = req.params
         db.get_curr_client_info([id]).then(client => {
@@ -24,6 +26,7 @@ module.exports = {
     },
 
     getCoachReqInfo: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
             , { user_id } = req.user
         db.get_coach_req_info([user_id]).then(info => {
@@ -34,6 +37,7 @@ module.exports = {
     },
 
     acceptCoachRequest: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
             , { user_id } = req.user
             , { id } = req.body
@@ -45,6 +49,7 @@ module.exports = {
     },
 
     getClientInfo: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
             , { client_coach_id, has_mes } = req.body
             , { coach_id } = req.user
@@ -103,6 +108,7 @@ module.exports = {
     },
 
     getAdminInfo: (req, res, next) => {
+        console.log(req.body)
         const db      = req.app.get('db')
             , { auth_id } = req.user
         db.check_admin_status([auth_id]).then(adminTruth => {
@@ -129,6 +135,7 @@ module.exports = {
     },
 
     getClients: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
             , { coach_id } = req.user
         db.get_current_clients([coach_id]).then(clients => {
@@ -139,6 +146,7 @@ module.exports = {
     },
 
     requestCoachAccess: (req, res, next) => {
+        console.log(req.body)
         const { coach_id } = req.user
         if(coach_id != -1){
             const db = req.app.get('db')
@@ -154,6 +162,7 @@ module.exports = {
     },
 
     renounceCoachAccess: (req, res, next) => {
+        console.log(req.body)
         const { user_id } = req.user
         const db = req.app.get('db')
             db.renounce_coach_access([user_id]).then(user => {
@@ -164,6 +173,7 @@ module.exports = {
     },
 
     approveCoachAccess: (req, res, next) => {
+        console.log(req.body)
         const db      = req.app.get('db')
             , { auth_id } = req.user
             , { req_id, user_id } = req.body
@@ -189,6 +199,7 @@ module.exports = {
     },
 
     denyCoachAccess: (req, res, next) => {
+        console.log(req.body)
         const db      = req.app.get('db')
             , { auth_id } = req.user
             , { req_id, user_id } = req.body
@@ -208,6 +219,7 @@ module.exports = {
     },
 
     revokeCoachAccess: (req, res, next) => {
+        console.log(req.body)
         const db      = req.app.get('db')
             , { auth_id } = req.user
             , { coach_id, coach_name } = req.body
@@ -227,6 +239,7 @@ module.exports = {
     },
 
     requestACoach: (req, res, next) => {
+        console.log(req.body)
         const db      = req.app.get('db')
         , { user_id } = req.user
         db.check_for_coach_request([user_id]).then(results => {
@@ -245,6 +258,7 @@ module.exports = {
     },
 
     assignWorkoutToClient: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
         , { workout_id, client_coach_id } = req.body
         , { user } = req
@@ -262,8 +276,49 @@ module.exports = {
             console.log(err)
         })
     },
+    removeWorkoutFromClient: (req, res, next) => {
+        console.log(req.body)
+        const db = req.app.get('db')
+        , { user_workout_id, client_coach_id } = req.body
+        , { user } = req
+        db.check_coach_auth([client_coach_id, user.coach_id]).then(client => {
+            if(client[0]){
+                db.remove_client_workout([client[0].user_id, user_workout_id]).then(workouts => {
+                    res.status(200).send(workouts)
+                }).catch(err => {
+                    console.log(err)
+                })     
+            } else{
+                res.status(401).send({message: "You are not authorized to coach this client."})
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
     
+    removeMenuFromClient: (req, res, next) => {
+        console.log(req.body)
+        const db = req.app.get('db')
+        , { user_menu_id, client_coach_id } = req.body
+        , { user } = req
+        db.check_coach_auth([client_coach_id, user.coach_id]).then(client => {
+            if(client[0]){
+                db.remove_client_menu([client[0].user_id, user_menu_id]).then(menus => {
+                    res.status(200).send(menus)
+                }).catch(err => {
+                    console.log(err)
+                })     
+            } else{
+                res.status(401).send({message: "You are not authorized to coach this client."})
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+
+
     assignMenuToClient: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
         , { menu_id, client_coach_id } = req.body
         , { user } = req
@@ -283,6 +338,7 @@ module.exports = {
     },
 
     searchForClient: (req, res, next) => {
+        console.log(req.body)
         const db = req.app.get('db')
             , { email } = req.params
         db.search_for_client_by_email([email]).then(client => {

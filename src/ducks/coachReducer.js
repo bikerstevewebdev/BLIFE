@@ -35,6 +35,8 @@ const TOGGLE_COACH_REQ_MODAL = 'TOGGLE_COACH_REQ_MODAL'
 const GET_CC_INFO = 'GET_CC_INFO'
 const GET_COACH_REQ_INFO = 'GET_COACH_REQ_INFO'
 const REVOKE_COACH_ACCESS = 'REVOKE_COACH_ACCESS'
+const REMOVE_MENU = 'REMOVE_MENU'
+const REMOVE_WORKOUT = 'REMOVE_WORKOUT'
 /////////////////END String Literals//////////////////////
 
 /////////////////Exporting action creators/////////////////////
@@ -135,12 +137,12 @@ export function assignWorkoutToClient(client_coach_id, workout_id) {
 }
 
 export function removeClientWorkout(client_coach_id, user_workout_id) {
-    let clients = axios.post(`/client/workouts`, { client_coach_id, user_workout_id }).then(res => {
+    let clientWorkouts = axios.post(`/client/workouts/remove`, { client_coach_id, user_workout_id }).then(res => {
         return res.data
     })
     return {
-        type: ASSIGN_WORKOUT,
-        payload: clients
+        type: REMOVE_WORKOUT,
+        payload: clientWorkouts
     }
 }
 
@@ -155,11 +157,11 @@ export function assignMenuToClient(client_coach_id, menu_id) {
 }
 
 export function removeClientMenu(client_coach_id, user_menu_id) {
-    let clients = axios.post(`/client/menus`, { client_coach_id, user_menu_id }).then(res => {
+    let clients = axios.post(`/client/menus/remove`, { client_coach_id, user_menu_id }).then(res => {
         return res.data
     })
     return {
-        type: ASSIGN_MENU,
+        type: REMOVE_MENU,
         payload: clients
     }
 }
@@ -234,10 +236,16 @@ export function clearCoachMessage() {
 ////////////////BEGIN REDUCER//////////////////////////////
 export default function(state = initialState, action) {
     switch(action.type){
+        case GET_COACH_REQ_INFO + '_REJECTED':
+            return { ...state, warningMsg: action.payload.response.data.message }
         case GET_COACH_REQ_INFO + '_FULFILLED':
             return { ...state, coach_req_info: action.payload }
+        case ACCEPT_COACH_REQUEST + '_REJECTED':
+            return { ...state, warningMsg: action.payload.response.data.message }
         case ACCEPT_COACH_REQUEST + '_FULFILLED':
             return { ...state, warningMsg: action.payload.message, coach_req_info: {} }
+        case GET_CC_INFO + '_REJECTED':
+            return { ...state, warningMsg: action.payload.response.data.message }
         case GET_CC_INFO + '_FULFILLED':
             return { ...state, coach_info: action.payload }
         case TOGGLE_COACH_REQ_MODAL:
@@ -246,6 +254,8 @@ export default function(state = initialState, action) {
             return { ...state, coachChatModalOpen: action.payload }
         case CLEAR_COACH_MESSAGE:
             return { ...state, warningMsg: action.payload }
+        case GET_CLIENT_BY_ID + '_REJECTED':
+            return { ...state, warningMsg: action.payload.response.data.message }
         case GET_CLIENT_BY_ID + '_FULFILLED':
             return { ...state, currentClient: action.payload.client, clientMenus: action.payload.menus, clientWorkouts: action.payload.workouts }
         case GET_CLIENTS + '_FULFILLED': 
@@ -256,10 +266,18 @@ export default function(state = initialState, action) {
                     return { ...state, warningMsg: action.payload.message }
         case REQUEST_A_COACH + '_REJECTED':
                     return { ...state, warningMsg: action.payload.response.data.message }
+        case REMOVE_MENU + '_FULFILLED': 
+                    return { ...state, clientMenus: action.payload }
+        case REMOVE_MENU + '_REJECTED': 
+                    return { ...state, warningMsg: action.payload.response.data.message }
         case ASSIGN_MENU + '_FULFILLED': 
                     return { ...state, clientMenus: action.payload }
         case ASSIGN_MENU + '_REJECTED': 
                     return { ...state, warningMsg: action.payload.response.data.message }
+        case REMOVE_WORKOUT + '_REJECTED': 
+                    return { ...state, warningMsg: action.payload.response.data.message }
+        case REMOVE_WORKOUT + '_FULFILLED': 
+                    return { ...state, clientWorkouts: action.payload }
         case ASSIGN_WORKOUT + '_REJECTED': 
                     return { ...state, warningMsg: action.payload.response.data.message }
         case ASSIGN_WORKOUT + '_FULFILLED': 

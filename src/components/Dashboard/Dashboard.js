@@ -16,38 +16,42 @@ class Dashboard extends Component{
         super()
         this.state = {
             firstVisit: false,
-            showingAssigned: false
-            // searchingMeals: true,
+            // showingAssigned: false
+            itemsRetrieved: false,
+            // workoutsRetrieved: false
             // searchingMenus: true,
-            // searchingWorkouts: true
         }
-        this.showAssigned = this.showAssigned.bind(this)
+        // this.showAssigned = this.showAssigned.bind(this)
         
         // this.endWorkoutSearch = this.endWorkoutSearch.bind(this)
         // this.endMealSearch = this.endMealSearch.bind(this)
         // this.endMenuSearch = this.endMenuSearch.bind(this)
     }
     componentDidMount() {
-        const { userData, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts, assignedMenus, assignedWorkouts } = this.props
-        const { has_coach } = userData
-        // if(user_id === 0){
+        const { userData } = this.props
+        if(!userData.user_id || userData.user_id <= 0){
             this.props.getUserData()
-        // }
-        if(has_coach && assignedMenus.length < 1 && assignedWorkouts.length < 1){
-            getAssignedMenus()
-            getAssignedWorkouts()
-        } else if(userMenus.length < 1 && userWorkouts.length < 1){
-            getUserMenus()
-            getUserWorkouts()
+            }
+            console.log('DBoard props', this.props)
         }
-        console.log('DBoard props', this.props)
-    }
-
-    componentDidUpdate() {
-        const { userData, coach_info, getCCInfo } = this.props
-        if(userData.has_coach && !coach_info.coach_id){
-            getCCInfo()
-        }
+        
+        componentDidUpdate() {
+            const { userData, coach_info, getCCInfo, getUserMenus, getUserWorkouts, getAssignedWorkouts, getAssignedMenus, userMenus, userWorkouts } = this.props
+            if(userData.has_coach && !coach_info.coach_id){
+                getCCInfo()
+            }
+            const { has_coach } = userData
+            if(!this.state.itemsRetrieved){
+                if(has_coach){
+                    getAssignedMenus()
+                    getAssignedWorkouts()
+                    this.setState({itemsRetrieved: true})
+                } else if(userMenus.length < 1 && userWorkouts.length < 1){
+                    getUserMenus()
+                    getUserWorkouts()
+                    this.setState({itemsRetrieved: true})
+                }
+            }
         if(userData.coach_id === -411 && !this.props.coach_req_info.client_coach_id){
             getCoachRequestInfo()
         }
@@ -59,11 +63,11 @@ class Dashboard extends Component{
         // }
     }
 
-    showAssigned(){
-        this.setState({
-            showingAssigned: true
-        })
-    }
+    // showAssigned(){
+    //     this.setState({
+    //         showingAssigned: true
+    //     })
+    // }
 
     render() {
         const { userData, userMenus, userWorkouts, assignedMenus, assignedWorkouts } =this.props
@@ -75,34 +79,48 @@ class Dashboard extends Component{
             gridTemplateRows: "auto",
             gridTemplateColumns: "1fr 1fr",
             justifyContent: "center",
+            boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 3px",
+            backgroundColor: "#c2d8c4",
+            borderRadius: "3px",
             gridGap: "0.75em",
             gridColumn: "1/3",
-            alignContent: "baseline"
+            alignContent: "baseline",
+            padding: "0.5em"
         }
         const workSearchStyle = {
             width: "100%",
             display: "grid",
+            boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 3px",
+            backgroundColor: "#c2d8c4",
+            borderRadius: "3px",
             gridTemplateRows: "auto",
             gridTemplateColumns: "1fr 1fr",
             justifyContent: "center",
             gridGap: "0.75em",
             gridColumn: "3/5",
+            padding: "0.5em",
             alignContent: "baseline"
         }
         const dbStyles = {
             height: "100%",
             display: "grid",
+            boxShadow: "rgb(90, 123, 132) 0px 2px 1px 1px",
+            borderRadius: "3px",
             gridTemplateColumns: "repeat(4, 1fr)",
             gridTemplateRows: "150px 100px",
             // gridAutoRows: "150px",
             width: "100%",
-            gridGap: "0.75em"            
+            padding: "2em",
+            gridGap: "0.75em",
+            backgroundColor: "#eee",
+            backgroundImage: "linear-gradient(0deg,rgba(82,167,55,.63) 0,rgb(76, 175, 80) 100%)"
         }
         const macroStyles = {
             width: "100%",
             gridColumn: "4/5",
             justifyContent: "space-around",
             display: "flex",
+
             flexDirection: "column",
             height: "100%",
             padding: "10% 0"
@@ -120,7 +138,7 @@ class Dashboard extends Component{
         }
         /////////////////assigned//////////////
         if(assignedMenus){
-            assignedMenuList = assignedMenus.map(menu => <UserMenuCard  user_menu_id={menu.user_menu_id} key={menu.user_menu_id} assigned menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img/>)
+            assignedMenuList = assignedMenus.map(menu => <UserMenuCard  user_menu_id={menu.user_menu_id} key={menu.user_menu_id} assigned menu_id={menu.menu_id} title={menu.title} total_p={menu.total_p} total_c={menu.total_c} total_f={menu.total_f} total_fib={menu.total_fib} img={menu.img}/>)
         }else{
             assignedMenuList = null
         }
@@ -132,7 +150,7 @@ class Dashboard extends Component{
         
         return(
             <section style={{...dbStyles}} className="comp dashboard">
-                <h1 style={{gridColumn: "2/4", fontSize: "2em", alignSelf: "center"}}>Welcome back {this.props.userData.username}</h1>
+                <h1 style={{gridColumn: "2/4", fontSize: "3rem", alignSelf: "center"}}>Welcome back {this.props.userData.username}</h1>
                 <section style={macroStyles}>
                     <h3>Your Current Macros:</h3>
                     <section style={{display: "flex", justifyContent: "space-around"}}>
@@ -141,14 +159,14 @@ class Dashboard extends Component{
                         <p>Fat: {curr_fat}</p>
                     </section>
                 </section>
-                <section style={{...menuSearchStyle, gridArea: "2/1/4/3"}} className="user-menus">
+                <section style={{...menuSearchStyle, gridArea: "2/1/4/3", }} className="user-menus">
                     <section style={{display: "flex", height: "5em", justifyContent: "space-between", alignItems: "center", gridArea: "1/1/2/3"}} >
-                        <h2 >Your Menus:</h2>
+                    <h2 style={{fontSize: "1.75em"}}>Your Menus:</h2>
                         {
-                            userData.has_coach
-                            ?
-                            <RaisedButton secondary={true} onClick={this.showAssigned} label="Show me my coach's plan" />
-                            :
+                            // userData.has_coach
+                            // ?
+                            // <RaisedButton secondary={true} onClick={this.showAssigned} label="Show me my coach's plan" />
+                            // :
                                 (((userData.coach_id === -6 || userData.coach_id) === -9 && !userData.is_admin)
                                 ?
                                 <RaisedButton onClick={this.props.requestACoach} secondary={true} label="Request a Coach" />
@@ -157,7 +175,8 @@ class Dashboard extends Component{
                         }
                     </section>
                     {
-                        this.state.showingAssigned && assignedMenus
+                        // this.state.showingAssigned && assignedMenus
+                        userData.has_coach
                         ?
                         assignedMenuList
                         :
@@ -166,10 +185,11 @@ class Dashboard extends Component{
                     }
                 </section>
                 <section style={{...workSearchStyle, gridArea: "2/3/4/5"}} className="user-workouts">
-                        <h2 style={{display: "flex", alignItems: "center", height: "5em", gridArea: "1/1/2/3"}} >Your Workouts:</h2>
+                        <h2 style={{fontSize: "1.75em", display: "flex", alignItems: "center", height: "5em", gridArea: "1/1/2/3"}} >Your Workouts:</h2>
                     
                     {
-                        this.state.showingAssigned && assignedWorkouts
+                        // this.state.showingAssigned && assignedWorkouts
+                        userData.has_coach
                         ?
                         assignedWorkoutList
                         :

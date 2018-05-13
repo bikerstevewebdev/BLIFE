@@ -172,6 +172,8 @@ class Exercise extends Component{
                 <p>Major-Muscle-Group:</p>
                 <SelectField className="major-muscle" onChange={this.updateMuscleIn}>
                     <option value="Full-Body" >Full-Body</option>
+                    <option value="Core">Core</option>
+                    <option value="Abdominals">Abdominals</option>
                     <option value="Biceps">Biceps</option>
                     <option value="Calves">Calves</option>
                     <option value="Chest">Chest</option>

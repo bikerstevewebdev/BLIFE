@@ -67,7 +67,8 @@ class CoachChat extends Component {
 
     // room
     
-    handleMessageEvent() {
+    handleMessageEvent(e) {
+        e.preventDefault()
         if (!this.state.userInput.length) return // prevent empty message from being sent.
         const { coach_info, userData, currentClient } = this.props
         let tNow = new Date().getTime()
@@ -84,17 +85,18 @@ class CoachChat extends Component {
     let messageList
     if (this.state.connected === true) {
         messageList = this.state.messages.map(msg => {
-            let temp = new Date(msg.date_sent/1).toDateString()
-            let timeDate = `${temp.slice(0, 15)} at ${temp.slice(15, 8)}`
+            let temp = new Date(msg.date_sent/1)
+            let timeDate = `${temp.toDateString().slice(0, 15)} at ${temp.getHours()}:${temp.getMinutes()}`
             return (
-                <TableRow key={msg.message_id}>
+                <TableRow style={{display: "flex", justifyContent: "space-between", alignItems: "center", height: "auto"}} key={msg.message_id}>
                     <TableRowColumn>
+                        {msg.sender}
                         <Avatar src={msg.profile_pic}/>
                     </TableRowColumn>
-                    <TableRowColumn>
+                    <TableRowColumn style={{whiteSpace: "pre-wrap", height: "auto", maxWidth: "50%"}}>
                         {msg.content}
                     </TableRowColumn>
-                    <TableRowColumn>
+                    <TableRowColumn style={{whiteSpace: "pre-wrap"}}>
                         {timeDate}
                     </TableRowColumn>
                 </TableRow>
@@ -104,14 +106,15 @@ class CoachChat extends Component {
     return (
       <Dialog  contentStyle={{borderRadius: "10%", position: "fixed", left: "25%", top: "1%"}} autoScrollBodyContent={true} open={this.props.coachChatModalOpen} className="App">
             <Table>
-                <TableBody>
+                <TableBody displayRowCheckbox={false}>
                     {messageList ? messageList : null}
                 </TableBody>
             </Table>
            
-
-            <TextField name="message input" floatingLabelText={`Send a message to ${userData.has_coach ? coach_info.username : currentClient.username}`} className='input-box' value={this.state.userInput} type="text" onChange={e => this.setState({ userInput: e.target.value })} />
-            <RaisedButton onClick={() => this.handleMessageEvent()} label="send"/>
+            <form onSubmit={this.handleMessageEvent}>
+                <TextField name="message input" floatingLabelText={`Send a message to ${userData.has_coach ? coach_info.username : currentClient.username}`} className='input-box' value={this.state.userInput} type="text" onChange={e => this.setState({ userInput: e.target.value })} />
+                <RaisedButton type="submit" label="send"/>
+            </form>
             <FlatButton onClick={() => this.props.toggleCoachChatModal(false)} label="close"/>
       </Dialog>
     );
