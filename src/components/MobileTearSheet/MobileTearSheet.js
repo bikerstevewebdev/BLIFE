@@ -21,9 +21,8 @@ class MobileTearSheet extends Component {
     const styles = {
       root: {
         marginBottom: 24,
-        marginRight: 24,
         maxWidth: 200,
-        width: '100%',
+        width: '45%',
       },
       container: {
         border: 'solid 1px #d9d9d9',
@@ -39,7 +38,7 @@ class MobileTearSheet extends Component {
     };
 
     return (
-      <div style={prepareStyles(styles.root)}>
+      <div style={{...prepareStyles(styles.root), margin: "0", textAlign: "center"}}>
         <div style={prepareStyles(styles.container)}>
           {this.props.children}
         </div>

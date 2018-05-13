@@ -70,7 +70,7 @@ class SearchWorkouts extends Component{
 
         return (
             <section style={{...this.props.style}} className="workout-search">
-                    <h2 style={{gridColumn: "1/3", justifySelf: "center"}}>Find your new Workout:</h2>
+                    <h2 style={{gridColumn: "1/3", justifySelf: "center", fontSize: "1.5em"}}>Find your new Workout:</h2>
                     <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)", borderRadius: "3px"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
                     <RaisedButton secondary={true} icon={<Search />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchWorkouts}>Search for a new Workout</RaisedButton>
                     {

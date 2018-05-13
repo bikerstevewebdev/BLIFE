@@ -70,9 +70,9 @@ class SearchMenu extends Component{
                         })
         return (
             <section style={{...this.props.style}} className="menu-search">
-                <h3 style={{gridColumn: "1/3", justifySelf: "center"}}>Search for a MENU:</h3>
+                <h3 style={{gridColumn: "1/3", justifySelf: "center", fontSize: "1.5em"}}>Search for a Menu:</h3>
                 <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the menu database" value={this.state.menuSearch}  onChange={this.updateMenuSearch} />
-                <RaisedButton style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchMenus} label="Search Menus!" primary={true} />
+                <RaisedButton style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchMenus} label="Search Menus!" secondary={true} />
                 {
                         this.props.menuSearchResults.length > 0
                         ?

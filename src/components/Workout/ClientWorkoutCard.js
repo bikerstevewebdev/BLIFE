@@ -6,8 +6,8 @@ import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Car
 function ClientWorkoutCard(props) {
     const { workout_id, title, img, type, cc_id, uw_id, removeFn } = props
     return(
-        <Card style={{maxWidth: "350px", width: "100%"}} >
-            <CardMedia style={{height: "12.5em"}} >
+        <Card style={{backgroundColor: "#eee", maxWidth: "350px", width: "100%"}}>
+            <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
                 <img src={img} alt={title} />
             </CardMedia>
             <CardTitle title={title} />

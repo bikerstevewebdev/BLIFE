@@ -112,18 +112,22 @@ class Dashboard extends Component{
             width: "100%",
             padding: "2em",
             gridGap: "0.75em",
-            backgroundColor: "#eee",
-            backgroundImage: "linear-gradient(0deg,rgba(82,167,55,.63) 0,rgb(76, 175, 80) 100%)"
+            backgroundColor: "#fff",
+            backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"
         }
         const macroStyles = {
+            borderRadius: "3px",
+            padding: "0.25em",
             width: "100%",
             gridColumn: "4/5",
             justifyContent: "space-around",
             display: "flex",
-
+            boxShadow: "rgb(27, 32, 33) 1px 1px 2px 1px",
             flexDirection: "column",
             height: "100%",
-            padding: "10% 0"
+            padding: "10% 0",
+            
+            backgroundImage: "linear-gradient(to top, #b3d8b7, #c0e2c3, #cdebcf, #dbf5db, #e8ffe8)"
         }
         /////////////////Users Menus/Workouts////////////////////
         if(userMenus){
@@ -150,7 +154,7 @@ class Dashboard extends Component{
         
         return(
             <section style={{...dbStyles}} className="comp dashboard">
-                <h1 style={{gridColumn: "2/4", fontSize: "3rem", alignSelf: "center"}}>Welcome back {this.props.userData.username}</h1>
+                <h1 style={{gridColumn: "2/4", fontSize: "3rem", alignSelf: "center", textAlign: "center", color: "white", textShadow: "black 1px 1px 7px"}}>Welcome back {this.props.userData.username}</h1>
                 <section style={macroStyles}>
                     <h3>Your Current Macros:</h3>
                     <section style={{display: "flex", justifyContent: "space-around"}}>
@@ -160,8 +164,24 @@ class Dashboard extends Component{
                     </section>
                 </section>
                 <section style={{...menuSearchStyle, gridArea: "2/1/4/3", }} className="user-menus">
-                    <section style={{display: "flex", height: "5em", justifyContent: "space-between", alignItems: "center", gridArea: "1/1/2/3"}} >
-                    <h2 style={{fontSize: "1.75em"}}>Your Menus:</h2>
+                    <section style={{display: "flex", height: "5rem", justifyContent: "space-between", alignItems: "center", gridArea: "1/1/2/3"}} >
+                    {
+                        menusList.length
+                        ?
+                        <h2 style={{fontSize: "1.75em"}}>Your Menus:</h2>
+                        :
+                        <section style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%", justifyContent: "space-around", height: "100%"}}>
+                            <h2 style={{fontSize: "1.5em"}} >Looks Like you don't have any menus yet.</h2>
+                            <h2 style={{fontSize: "1.25em"}}>{
+                                    userData.has_coach
+                                    ?
+                                    "Chat with your coach to get started."
+                                    :
+                                    "Go ahead and search for some below!"
+                                }
+                            </h2>
+                        </section>
+                        }
                         {
                             // userData.has_coach
                             // ?
@@ -185,8 +205,26 @@ class Dashboard extends Component{
                     }
                 </section>
                 <section style={{...workSearchStyle, gridArea: "2/3/4/5"}} className="user-workouts">
-                        <h2 style={{fontSize: "1.75em", display: "flex", alignItems: "center", height: "5em", gridArea: "1/1/2/3"}} >Your Workouts:</h2>
-                    
+                    <section style={{display: "flex", alignItems: "center", height: "5rem", gridArea: "1/1/2/3"}} >
+                        {
+                            workoutsList.length
+                            ?
+                            <h2 style={{fontSize: "1.75em"}}>Your Workouts:</h2>
+                            :
+                            <section style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%", justifyContent: "space-around", height: "100%"}}>
+                                <h2 style={{fontSize: "1.5em"}}>Looks Like you don't have any menus yet.</h2>
+                                <h2 style={{fontSize: "1.25em"}} >{
+                                    userData.has_coach
+                                    ?
+                                    "Chat with your coach to get started."
+                                    :
+                                    "Go ahead and search for some below!"
+                                }
+                                </h2>
+                            </section>
+
+                        }
+                    </section>
                     {
                         // this.state.showingAssigned && assignedWorkouts
                         userData.has_coach

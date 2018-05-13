@@ -63,33 +63,45 @@ class PhotoUpload extends Component {
         }
 
         const inputStyles = {
+            display: "flex",
             opacity: "0",
+            flexDirection: "column",
             position: "absolute",
             top: "0",
             left: "0",
             zIndex: "5"
         }
+        let noPics = this.props.empty ? { gridArea: "2/1/3/4", width: "33%" } : { width: "100%" }
         
         return (
-            <div style={{...uploadStyles}} className="photo-upload">
-                <h3>Upload a Progress Picture</h3>
-                <RaisedButton style={{display: "flex", alignItems: "center", width: "200px"}} secondary={true} >
-                    <FileUpload/>Choose a File
-                    <label htmlFor="file-input">
-                        <input style={{...inputStyles, width: "100%", height: "100%"}} type="file" id="file-input" onChange={this.handlePhoto}/>
-                    </label>
-                </RaisedButton>
+            <div style={{...uploadStyles, ...noPics}} className="photo-upload">
                 {
-                this.state.file &&
-                <img src={this.state.file} alt="preview" className="file-preview"/>  
+                            this.state.filename.length > 0
+                            ?
+                            null
+                            :
+                            <h3>Upload a Progress Picture</h3>
                 }
-                {
-                    this.state.filename.length > 0
-                    ?
-                    <RaisedButton style={{width: "200px"}} secondary={true} onClick={this.sendPhoto}>Upload this Photo<AddPhoto /></RaisedButton>
-                    :
-                    null
-                }
+                <section style={{display:"flex", justifyContent: "space-around", width: "100%", flexWrap: "column"}}>
+                    <section style={{display:"flex", justifyContent: "space-around", flexDirection: "column"}}>
+                        <RaisedButton style={{display: "flex", alignItems: "center", width: "100%"}} icon={<FileUpload/>} secondary={true} label="Select File" >
+                            <label htmlFor="file-input">
+                                <input style={{...inputStyles, cursor: "pointer", width: "100%", height: "100%"}} type="file" id="file-input" onChange={this.handlePhoto}/>
+                            </label>
+                        </RaisedButton>
+                        {
+                            this.state.filename.length > 0
+                            ?
+                            <RaisedButton style={{width: "100%"}} secondary={true} onClick={this.sendPhoto} icon={<AddPhoto/>} label="Upload" />
+                            :
+                            null
+                        }
+                    </section>
+                    {
+                        this.state.file &&
+                        <img src={this.state.file} alt="preview" className="file-preview"/>  
+                    }
+                </section>
             </div>
         )
     }

@@ -45,14 +45,14 @@ class PhotoCard extends Component {
         const { comparisonPhotos, deprecatePhoto, photo_id, date_added, alt, src } = this.props
         const { checked } = this.state
         return(
-            <section style={{...cardStyles}} className="photo-card">
-                <section style={{justifySelf: "stretch", height: "100%"}}>
+            <section style={{...cardStyles, textAlign: "center"}} className="photo-card">
+                <section style={{height: "100%"}}>
                     <img style={{height: "100%", borderRadius: "3px 0 0 3px"}} src={src} alt={alt} />
                 </section>
                 <section style={{...infoStyles}}>
                     <p>Date Added: {date_added.slice(0, 10)}</p>
-                    <Checkbox onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 4}/>
-                    <RaisedButton secondary={true} onClick={() => deprecatePhoto(photo_id)}>This photo is old, archive it</RaisedButton>
+                    <Checkbox labelStyle={{fontSize: "0.8em", lineHeight: "0.75rem"}} label="Add to compare" onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 4}/>
+                    <RaisedButton secondary={true} onClick={() => deprecatePhoto(photo_id)}>Archive</RaisedButton>
                 </section>
             </section>
         )

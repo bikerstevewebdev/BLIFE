@@ -119,56 +119,82 @@ class Profile extends Component{
             let reqBtn = <RaisedButton label="View Coach Request" onClick={this.showCoachRequest.bind(this)}/>
             let coachRequest = coach_req_info.client_coach_id ? reqBtn : null
             const profileStyles = {
+                boxShadow: "rgb(90, 123, 132) 0px 2px 1px 1px",
+                borderRadius: "3px",
+                width: "100%",
+                padding: "2em",
+                gridGap: "0.75em",
+                backgroundColor: "rgba(237, 255, 237, 0.7)",
+            // backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)",
                 height: "100%",
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)",
-                gridTemplateRows: "150px",
+                gridTemplateRows: "200px",
                 gridAutoFlow: "rows",
-                // gridAutoRows: "150px",
                 width: "100%",
                 gridGap: "0.75em"            
             }
-            const statsStyles = {
-                gridArea: "3/3/4/4",
+            const jcFlex = {
                 height: "100%",
                 display: "flex",
+                justifyContent: "space-around",
+                width: "100%",
+                alignItems: "center"
+            }
+            
+            const jcFlexCol = {
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
                 justifyContent: "center",
                 width: "100%",
+                alignItems: "center"
             }
+            const compareBtn = (this.props.comparisonPhotos.length > 0
+                                    ?
+                                    <RaisedButton style={{width: "100%"}} secondary={true} onClick={() => this.props.togglePhotoCompModal(true)} label="Compare Selected"/>
+                                    :
+                                    null
+                                )
         return(
             <section style={{...profileStyles}} className="comp profile">
-                <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a profile pic! Why don't you go ahead and update your profile and fix that real quick!"/>
-                <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "2em"}}>Welcome Home</h1>
-                <section style={{gridArea: "1/3/2/4", display: "flex", flexDirection: "column", width: "100%", height: "100%", justifyContent: "space-around"}}>
+                <section style={{...jcFlexCol, gridArea: "1/1/2/2", justifySelf: "center", fontSize: "2.75em"}}>
+                    <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a profile pic! Why don't you go ahead and update your profile and fix that real quick!"/>
+                    
+                </section>
+                <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "3em"}}>Welcome Home</h1>
+                <section style={{...jcFlexCol, gridArea: "1/3/2/4"}}>
                     {/* <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link> */}
                     {coachRequest}
-                    <RaisedButton onClick={() => this.props.toggleUpdateProfileModal(true)} secondary={true} style={{backgroundColor: "orange"}}>Update Profile</RaisedButton>
                 </section>
-                <section style={{...profileStyles, gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em"}} className="progress-pics">
-                    <section style={{gridArea: "1/1/2/2"}} className="progress-pic-btn">
+                <section style={{...profileStyles, gridTemplateRows: "125px", gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em", backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"}} className="progress-pics">
+                    <section style={{...jcFlex, gridArea: "1/1/2/4", }} className="progress-pic-btn">
                         {
-                            this.state.showingAllProgressPics
+                            progress_pics.length
                             ?
-                            <section>
-                                <h3>All of your Progress Pics:</h3>
-                                <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(false)}>Just Show Me My Current Progress Pictures</RaisedButton>
-                            </section>
+                                this.state.showingAllProgressPics
+                                ?
+                                <section style={{...jcFlex}}>
+                                    <h3 style={{fontSize: "1.75em"}}>All of your Progress Pics:</h3>
+                                    <section style={{...jcFlexCol, width: "auto"}}>
+                                        <RaisedButton style={{width: "100%"}} secondary={true} onClick={()=>this.showAllProgressPics(false)}label="Focus on the Present" />
+                                        { compareBtn }
+                                    </section>
+                                </section>
+                                :
+                                <section style={{...jcFlex}}>
+                                    <h3 style={{ fontSize: "1.75em"}}>Your Current Progress Pics:</h3>
+                                    <section style={{...jcFlexCol, width: "auto"}}>
+                                        <RaisedButton style={{width: "100%"}} secondary={true} onClick={()=>this.showAllProgressPics(true)} label="Reveal the Path" />
+                                        { compareBtn }
+                                    </section>
+                                </section>
                             :
-                            <section>
-                                <h3>Your Current Progress Pics:</h3>
-                                <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(true)}>Show me all my progress pictures</RaisedButton>
-                            </section>
-                        }
-                        {
-                            this.props.comparisonPhotos.length > 0
-                            ?
-                            <RaisedButton onClick={() => this.props.togglePhotoCompModal(true)} label="Compare Selected Photos"/>
-                            :
-                            null
+                            <h3 style={{...jcFlex, fontSize: "1.75em"}}>Upload some Progress Pictures</h3>
                         }
                     </section>
                     {progressPics}
-                    <PhotoUpload  />
+                    <PhotoUpload  empty={!progress_pics.length}/>
                 </section>
                 {
                     this.props.userData.curr_mes_id > 0
@@ -184,23 +210,27 @@ class Profile extends Component{
                     :
                     null
                 } */}
-                <section style={{...statsStyles}} className="current-stats">
-                    <MobileTearSheet >
-                        <Subheader>Current Measurements</Subheader>
-                        <List>
-                            <ListItem onClick={() => this.props.history.push('/measurements')} leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600}/>} primaryText="Weight" secondaryText={current_weight} />
-                            <ListItem onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Height" secondaryText={current_height} />
-                            <ListItem onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Bodyfat" secondaryText={current_bf} />
-                        </List>
-                    </MobileTearSheet>
-                    <MobileTearSheet >
-                        <Subheader>Current Macros</Subheader>
-                        <List>
-                            <ListItem onClick={() => this.props.history.push('/macroCalc')} leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />} primaryText={`Protein`} secondaryText={`${current_protein}g`} />
-                            <ListItem onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText={`Fat`} secondaryText={`${current_fat}g`} />
-                            <ListItem onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText={`Carbs`} secondaryText={`${current_carbs}g`} />
-                        </List>
-                    </MobileTearSheet >
+                <section style={{...jcFlexCol, gridArea: "1/3/2/4"}} className="current-stats">
+                    <section style={{...jcFlex, justifyContent: "space-around", width: "75%"}}>
+                        <MobileTearSheet >
+                            <Subheader style={{lineHeight: "1.25em", padding: "0"}}>Measurements</Subheader>
+                            <List >
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/measurements')} leftAvatar={<Avatar style={{fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<EditorInsertChart />} backgroundColor={"rgb(121, 107, 43)"}/>} primaryText="Weight" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_weight} lbs`}</span>} />
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Height" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_height} in`}</span>} />
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Bodyfat" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_bf} %`}</span>} />
+                            </List>
+                        </MobileTearSheet>
+                        <MobileTearSheet >
+                            <Subheader style={{lineHeight: "1.25em", padding: "0"}}>Current Macros</Subheader>
+                            <List>
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/macroCalc')} leftAvatar={<Avatar style={{fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<ActionAssignment />} backgroundColor={"rgba(0, 0, 0, 0.8)"} />} primaryText="Protein" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_protein}g`}</span>} />
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText="Fat" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_fat}g`}</span>} />
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText="Carbs" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_carbs}g`}</span>} />
+                            </List>
+                        </MobileTearSheet >
+                    </section>
+                    
+                    <RaisedButton onClick={() => this.props.toggleUpdateProfileModal(true)} style={{width: "70%"}} secondary={true} >Update Profile</RaisedButton>
                 </section>
                 {
                     this.props.isUpdating

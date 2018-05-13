@@ -46,7 +46,7 @@ function Nav(props) {
     const iconBtnStyles = { 
         margin: "0.45rem", padding: "0", width: "1.8rem", height: "1.8rem"
     }
-    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "#377D3D"}
+    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "#377D3D", backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"}
     const home = (
         <section>
             <IconButton iconStyle={{...iconStyles}} onClick={() => props.history.push("/dashboard")} style={{iconBtnStyles}} tooltip="Dashboard">
