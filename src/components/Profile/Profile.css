@@ -1,12 +1,10 @@
 ::-webkit-scrollbar-thumb {
-    color: blue;
-    background-color: purple;
+    background-color: #12741b;
 }
 ::-webkit-scrollbar {
-    background-color: red;
-    color: blue;
+    background-color: #423206;
 }
 
-img{
+/* img{
     max-width: 200px;
-}
+} */

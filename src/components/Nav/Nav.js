@@ -6,7 +6,7 @@ import PersonOutline from 'material-ui/svg-icons/social/person-outline';
 import IconButton from 'material-ui/IconButton';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import RaisedButton from 'material-ui/RaisedButton'
-// import seaVid from '../../seaVid.mp4'
+import seaVid from '../../seaVid.mp4'
 import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
 import Logout from 'material-ui/svg-icons/hardware/keyboard-return';
 import Admin from 'material-ui/svg-icons/social/people';
@@ -110,18 +110,16 @@ function Nav(props) {
             :
                 (<section className="unauthorized">
                 <section className="message">
-                    <h1>403 FORBIDDEN</h1>
-                    <h1>RELISH IN THE WAVES OR TRY LOGGING IN</h1>
+                    <h1 style={{color: "rgb(95, 0, 0)", fontSize: "3.5em"}}>403 FORBIDDEN</h1>
+                    <h1 style={{color: "#000", fontSize: "3.5em"}}>RELISH IN THE WAVES OR TRY LOGGING IN</h1>
                     <a id="arg" href={process.env.REACT_APP_LOGIN}>
-                        <RaisedButton primary={true} >Login</RaisedButton>
+                        <RaisedButton primary={true} label="Login" />
                     </a>
                 </section>
-                {/* <video autoPlay muted loop id="video-background"> */}
-                {/* <video autoPlay muted loop id="video-background">
+                <video autoPlay muted loop id="video-background">
                     <source src={seaVid} type="video/mp4" />
-                </video> */}
-                {/* </video> */}
-                <iframe title="forbidden" loop id="video-background" src="https://www.youtube.com/embed/qREKP9oijWI?autoplay=1&controls=0&showinfo=0" frameBorder="0" allow="autoplay; encrypted-media" ></iframe>
+                </video>
+                {/* <iframe title="forbidden" loop id="video-background" src="https://www.youtube.com/embed/qREKP9oijWI?autoplay=1&controls=0&showinfo=0" frameBorder="0" allow="autoplay; encrypted-media" ></iframe> */}
             </section>)
         
     )

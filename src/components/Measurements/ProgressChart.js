@@ -4,55 +4,56 @@ import { connect } from 'react-redux'
 import { getPastMeasurements } from '../../ducks/userReducer'
 
 class ProgressData extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
           chartData: {
-            labels: [],
-            datasets: [
-                {
-                    label: 'Happyness',
-                    data: [],
-                    backgroundColor: "gold",
-                    fill: false
-                },
-                {
-                    label: 'Bodyfat',
-                    data: [],
-                    backgroundColor: "green",
-                    fill: false,
-                    hidden: true
-                },
-                {
-                    label: 'Weight',
-                    data: [],
-                    backgroundColor: 'pink',
-                    fill: false,
-                    hidden: true
-                },
-                {
-                    label: 'Neck',
-                    data: [],
-                    backgroundColor: "green",
-                    fill: false,
-                    hidden: true
-                },
-                {
-                    label: 'Chest',
-                    data: [],
-                    backgroundColor: "green",
-                    fill: false,
-                    hidden: true
-                },
-                {
-                    label: 'Waist',
-                    data: [],
-                    backgroundColor: "green",
-                    fill: false,
-                    hidden: true
-                },
-            ],
-        },
+                labels: this.props.mezHistory.dates.map(v => {
+                    let date = new Date(v/1), str
+                    str = date.getDate()
+                    str += ("-" + (date.getMonth()+1))
+                    str += ("-" + date.getFullYear())
+                    return str
+                  }),
+                datasets: [
+                    {
+                        label: 'Weight',
+                        data: this.props.mezHistory.weights,
+                        backgroundColor: "red",
+                        fill: false
+                    },
+                    {
+                        label: 'Bodyfat',
+                        data: this.props.mezHistory.bfs,
+                        backgroundColor: "blue",
+                        fill: false
+                    },
+                    {
+                        label: 'Neck',
+                        data: this.props.mezHistory.necks,
+                        backgroundColor: "yellow",
+                        fill: false
+                    },
+                    {
+                        label: 'Chest',
+                        data: this.props.mezHistory.chests,
+                        backgroundColor: "brown",
+                        fill: false
+                    },
+                    {
+                        label: 'Waist',
+                        data: this.props.mezHistory.waists,
+                        backgroundColor: "purple",
+                        fill: false
+                    },
+                    {
+                        label: 'Happyness',
+                        data: this.props.mezHistory.happyLevels,
+                        backgroundColor: "gold",
+                        fill: false
+                    }
+                ]
+             },
         chartOptions: {
             title: {
                 display: true,

@@ -52,24 +52,44 @@ class AdminManager extends Component{
               { username, coachReqs, activeCoaches, approveCoach, denyCoach } = this.props,
               coachRequests = coachReqs.map(req => {
                   return (
-                      <section key={req.req_id} className="coach-request">
+                      <section style={{width: "100%", borderRadius: "5px", boxShadow: "rgb(29, 39, 41) 0px 2px 1px 1px", backgroundColor: "rgba(236, 234, 255, 0.76)"}} key={req.req_id} className="coach-request">
                         <p>Request Number: {req.req_id}</p>
                         <p>Username: {req.username}</p>
-                        <RaisedButton secondary={true} onClick={() => denyCoach(req.req_id, req.user_id)} label="Deny Request"/>
-                        <RaisedButton secondary={true} onClick={() => approveCoach(req.req_id, req.user_id)}label="Approve Request"/>
+                        <RaisedButton stye={{width: "70%"}} secondary={true} onClick={() => denyCoach(req.req_id, req.user_id)} label="Deny Request"/>
+                        <RaisedButton stye={{width: "70%"}} secondary={true} onClick={() => approveCoach(req.req_id, req.user_id)}label="Approve Request"/>
                       </section>
                   )
               }),
               coachList = activeCoaches.map(coach => <CoachCard profile_pic={coach.profile_pic} key={coach.coach_id} fullname={coach.fullname} areYouSure={this.areYouSure.bind(this)} last_login={coach.last_login/1} coach_id={coach.coach_id}/>)
+            const layoutStyles = {
+                display: "grid",
+                width: "100%",
+                textAlign: "center",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gridTemplateRows: "10em",
+                alignItems: "center",
+                gridGap: "0.5em",
+                padding: "5%",
+                boxShadow: "rgb(29, 39, 41) 0px 2px 1px 1px",
+                borderRadius: "3px",
+                width: "auto",
+                backgroundColor: "rgba(236, 234, 255, 0.76)"
+            }
+             const subStyles = {gridGap: "0.75em", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", justifyItems: "center", width: "100%"}
+
         return (
-            <section className="comp coach-manager">
-                <h1>Welcome Manager {username}!</h1>
-                {coachRequests}                
-                {coachList}
+            <section style={{...layoutStyles}} className="comp coach-manager">
+                <h1 style={{fontSize: "3em", gridColumn: "1/5"}} >Welcome Manager {username}!</h1>
+                <section style={{...subStyles, gridColumn: "1/3"}}>
+                    {coachRequests}                
+                </section>
+                <section style={{...subStyles, gridColumn: "3/5"}}>
+                    {coachList}
+                </section>
                 <Dialog open={this.state.revokeModalOpen} className="coach-req-modal">
                     <p>Are you sure you want to revoke coach {coachInQuestion}'s coach acces? This cannot be undone.</p>
-                    <RaisedButton style={{backgroundColor: red500}} label={`Yes, revoke ${coachInQuestion}'s coach access.`} onClick={this.finalizeRevokation.bind(this)} />
-                    <FlatButton onClick={this.clearRevokationRequest.bind(this)} label={`No, my mistake, ${coachInQuestion} is a good coach.`} />
+                    <RaisedButton stye={{width: "70%"}} label={`Yes, revoke ${coachInQuestion}'s coach access.`} onClick={this.finalizeRevokation.bind(this)} />
+                    <FlatButton stye={{width: "70%"}} onClick={this.clearRevokationRequest.bind(this)} label={`No, my mistake, ${coachInQuestion} is a good coach.`} />
                 </Dialog>
             </section>
         )

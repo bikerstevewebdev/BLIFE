@@ -14,6 +14,8 @@ class MotivationalQuote extends Component{
         this.state = {
             qAuthor: '',
             qText: '',
+            img: '',
+            imgUser: '',
             redirecting: false
         }
         this.getNewQuote = this.getNewQuote.bind(this)
@@ -25,7 +27,7 @@ class MotivationalQuote extends Component{
     getNewQuote() {
         axios.get('/motivational/quote').then(res => {
             console.log('res', res, 'and res.data',  res.data)
-            this.setState({ qText: res.data.qText, qAuthor: res.data.qAuthor })
+            this.setState({ qText: res.data.qText, qAuthor: res.data.qAuthor, img: res.data.imgURL, imgUser: res.data.imgUser })
         }).catch(err => {
             console.log(err)
         })
@@ -47,20 +49,26 @@ class MotivationalQuote extends Component{
         const { qText, qAuthor, redirecting } = this.state
         const { motivationalModalOpen } = this.props
         const textStyles = {color: grey400}
+        const jcFlex = {
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "center"
+        }
         return(
-            <Dialog open={motivationalModalOpen} className="motivational-modal" >
-                <p style={{ fontWeight: "bold"}}>{qText ? `"${qText}"` : 'Try Another One'}</p>
-                <br/>
-                <p style={{...textStyles, fontStyle: "italic"}}>{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
-                <FlatButton  onClick={() => this.getNewQuote()} label="Another One"/>
-                <RaisedButton secondary={true} onClick={this.handleClose.bind(this)} label="I've Got This" />
-                {/* {
-                    redirecting
-                    ?
-                    <Redirect to="/profile" />
-                    :
-                    null
-                } */}
+            <Dialog contentStyle={{...jcFlex, flexDirection: "column"}} open={motivationalModalOpen} className="motivational-modal" >
+                <section style={{...jcFlex}}>
+                    <section style={{...jcFlex, flexDirection: "column"}}>
+                        <p style={{ fontWeight: "bold"}}>{qText ? `"${qText}"` : 'Try Another One'}</p>
+                        <br/>
+                        <p style={{...textStyles, fontStyle: "italic"}}>{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
+                    </section>
+                    <figure style={{...jcFlex, flexDirection: "column"}}>
+                        <img style={{borderRadius: "5%"}} src={this.state.img} alt={this.state.imgUser}/>
+                        <figcaption  >{this.state.imgUser}</figcaption>
+                    </figure>
+                </section>
+                <FlatButton  style={{justifySelf: "center"}} onClick={() => this.getNewQuote()} label="Another One"/>
+                <RaisedButton style={{justifySelf: "center"}} secondary={true} onClick={this.handleClose.bind(this)} label="I've Got This" />
             </Dialog>
         )
     }

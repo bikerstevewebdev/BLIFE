@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import { TextField } from 'material-ui';
 
 class MealCreator extends Component{
     constructor() {
@@ -32,9 +33,9 @@ class MealCreator extends Component{
     sendMealUp() {
         const { mealTitle, imgInput } = this.state        
         this.props.createMeal(mealTitle, imgInput)
-        if(this.props.fromRecipe){
-            this.props.changeCreating(false)
-        }
+        // if(this.props.fromRecipe){
+        //     this.props.changeCreating(false)
+        // }
         this.setState({
             mealTitle: '',
             imgInput: '',
@@ -56,13 +57,19 @@ class MealCreator extends Component{
     
     render() {
         const { mealTitle, imgInput } = this.state
+        const mainStyles ={
+            display: "grid",
+            gridTemplateColumns: "1fr 3fr",
+            gridGap: "0.75em",
+            alignItems: "center"
+        }
         return(
-            <Dialog open={this.props.mealDialogOpen} className="comp meal-creator" >
-                <p>Title of the Meal:</p>
-                <input value={mealTitle} onChange={(e) => this.updateMealTitle(e.target.value)} />
-                <p>Meal Image Url:</p>
-                <input value={imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
-                <RaisedButton primary={true} onClick={() => this.sendMealUp()}>Create Meal!</RaisedButton>
+            <Dialog contentStyle={{maxWidth: "53%"}} bodyStyle={{...mainStyles}} open={this.props.mealDialogOpen} className="comp meal-creator" >
+                <h1 style={{gridArea: "1/1/2/2", fontSize: "2em", borderRadius: "5px"}}>Creat a Meal</h1>
+                <TextField style={{gridArea: "2/1/3/2"}} floatingLabelText="Title of the Meal:" value={mealTitle} onChange={(e) => this.updateMealTitle(e.target.value)} />
+                <TextField style={{gridArea: "3/1/4/2"}} floatingLabelText="Meal Image Url:" value={imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
+                <img style={{gridArea: "2/2/5/3", maxWidth: "500px"}} src={imgInput} alt={mealTitle}/>
+                <RaisedButton style={{gridArea: "4/1/5/2"}} primary={true} onClick={() => this.sendMealUp()} label="Create Meal!" />
                 {
                     this.state.creating
                     // this.props.fromRecipe && this.state.creating
@@ -71,7 +78,7 @@ class MealCreator extends Component{
                     :
                     <Redirect to={`/meal/${mealTitle}`} />
                 }
-                <FlatButton onClick={() => this.props.toggleMealModal(false)} label="close" />
+                <FlatButton style={{gridArea: "5/1/6/2"}} onClick={() => this.props.toggleMealModal(false)} label="close" />
             </Dialog>
         )
     }

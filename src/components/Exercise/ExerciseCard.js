@@ -121,7 +121,8 @@ class ExerciseCard extends Component{
             border: "1px solid rgba(10, 10, 10, 0.5)",
             borderRadius: "3px",
             boxShadow: "rgba(11, 145, 232, 0.5) 2px 2px",
-            gridAutoFlow: "column"
+            gridAutoFlow: "column",
+            minHeight: "6em"
         }
         const isDisabled = (reps === repsIn && sets === setsIn && rest_time === restTimeIn && weight === weightIn && notes === notesIn)
         return (
@@ -165,7 +166,7 @@ class ExerciseCard extends Component{
                 </section>
                 <section style={{height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-around"}} >
                     <RaisedButton secondary={true} disabled={isDisabled} onClick={this.sendUpdate}>Save Changes</RaisedButton>
-                    <RaisedButton secondary={true} className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove From Workout</RaisedButton>
+                    <RaisedButton secondary={true} className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove</RaisedButton>
                 </section>
             </div>
         )

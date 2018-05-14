@@ -86,7 +86,7 @@ class MacroCalc extends Component{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             // gridTemplateRows: "1fr 1fr",
-            width: "100%",
+            // width: "100%",
             padding: "5%",
             boxShadow: "rgb(29, 39, 41) 0px 2px 1px 1px",
             borderRadius: "3px",
@@ -97,6 +97,7 @@ class MacroCalc extends Component{
         }
         return(
             <form onSubmit={this.calculate} style={{alignItems: "center", height: "60vh", width: "100%", ...compStyles}} className="comp macro-calc">
+                 <h1 style={{gridColumn: "1/3", fontSize: "2.5em"}}>Macro Calculator</h1>
                 {/* <section className="inputs"> */}
                     <section style={{display: "grid", gridTemplateRows: "repeat(75px)", justifyContent: "center"}}>
                         <TextField floatingLabelText="Age" hintText="Years" type="number" step="1" min="8" max="120" className="macro-input" onChange={(e) => this.updateInputs("filler", "more", e.target.value, 'age')}  />

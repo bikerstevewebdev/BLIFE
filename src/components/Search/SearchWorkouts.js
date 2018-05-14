@@ -35,8 +35,14 @@ class SearchWorkouts extends Component{
     }
 
     handleBtn2Click(arg1, w_id){
-        this.props.btn2Fn(arg1, w_id)
-        this.endSearches()
+        if(arg1){
+            this.props.btn2Fn(arg1, w_id)
+            this.endSearches()
+        }else{
+            this.props.btn2Fn(w_id)
+            this.endSearches()
+        }
+        
     }
 
     endSearches(){
@@ -52,15 +58,15 @@ class SearchWorkouts extends Component{
         const { workoutSearchResults, btn2Fn, btn2msg, arg1, userData } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
-                <Card style={{maxWidth: "350px", width: "100%"}} >
-                    <CardMedia style={{height: "12.5em"}} >
+                <Card style={{backgroundColor: "#fff", maxWidth: "350px", maxHeight: "21em", width: "100%"}}>
+                    <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
                         <img src={res.img} alt={res.title} />
                     </CardMedia>
-                    <CardTitle title={res.title} />
-                    <CardText>
+                    <CardTitle style={{padding: "0.5em"}}  title={res.title} />
+                    <CardText style={{padding: "0.5em"}} >
                         <p>Type: {res.type}</p>
                     </CardText>
-                    <CardActions>
+                    <CardActions style={{padding: "0.5em"}} >
                         <Link to={`/workout/${res.workout_id}`}><FlatButton label="Details" /></Link>
                             {
                                 userData.coach_id !== -7

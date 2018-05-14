@@ -31,7 +31,14 @@ class Dashboard extends Component{
         const { userData } = this.props
         if(!userData.user_id || userData.user_id <= 0){
             this.props.getUserData()
-            }
+        }else{
+            if(userData.has_coach){
+                this.props.getAssignedMenus()
+                this.props.getAssignedWorkouts()
+            }   
+            this.props.getUserMenus()
+            this.props.getUserWorkouts()
+        }
             console.log('DBoard props', this.props)
         }
         
@@ -107,7 +114,7 @@ class Dashboard extends Component{
             gridTemplateColumns: "repeat(4, 1fr)",
             gridTemplateRows: "150px 100px",
             // gridAutoRows: "150px",
-            boxShadow: "rgb(90, 123, 132) 0px 2px 1px 1px",
+            boxShadow: "rgb(37, 48, 51) 0px 2px 1px 1px",
             borderRadius: "3px",
             width: "100%",
             backgroundColor: "#fff",
@@ -120,6 +127,8 @@ class Dashboard extends Component{
             padding: "0.25em",
             width: "100%",
             gridColumn: "4/5",
+            color: "#7b2118",
+            alignItems: "center",
             justifyContent: "space-around",
             display: "flex",
             boxShadow: "rgb(27, 32, 33) 1px 1px 2px 1px",
@@ -154,10 +163,10 @@ class Dashboard extends Component{
         
         return(
             <section style={{...dbStyles}} className="comp dashboard">
-                <h1 style={{gridColumn: "2/4", fontSize: "3rem", alignSelf: "center", textAlign: "center", color: "white", textShadow: "black 1px 1px 7px"}}>Welcome back {this.props.userData.username}</h1>
+                <h1 style={{gridColumn: "2/4", fontSize: "2.85rem", alignSelf: "center", textAlign: "center", color: "white", textShadow: "black 1px 1px 7px"}}>Welcome back {this.props.userData.username}</h1>
                 <section style={macroStyles}>
-                    <h3>Your Current Macros:</h3>
-                    <section style={{display: "flex", justifyContent: "space-around"}}>
+                    <h3 style={{fontSize: "1.25em"}}>Your Current Macros:</h3>
+                    <section style={{fontSize: "1.15em"}} style={{display: "flex", width: "100%", justifyContent: "space-around"}}>
                         <p>Protein: {curr_pro}</p>
                         <p>Carbs: {curr_carb}</p>
                         <p>Fat: {curr_fat}</p>

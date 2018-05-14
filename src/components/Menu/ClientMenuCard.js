@@ -7,15 +7,15 @@ import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Car
 function ClientMenuCard(props) {
     const { menu_id, title, total_p, total_c, total_f, cc_id, total_fib, img, um_id, removeFn } = props
     return(
-        <Card style={{backgroundColor: "#fff", maxWidth: "350px", width: "100%"}}>
+        <Card style={{backgroundColor: "#fff", maxWidth: "350px", maxHeight: "23em", width: "100%"}}>
             <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
                 <img src={img} style={{height: "100%"}} alt={title} />
             </CardMedia>
-            <CardTitle title={title} />
-            <CardText>
+            <CardTitle style={{padding: "0.5em"}}  title={title} />
+            <CardText style={{padding: "0.5em"}}>
                     {`P: ${total_p}g C: ${total_c} F: ${total_f}g Fib: ${total_fib}g`}
             </CardText>
-            <CardActions>
+            <CardActions style={{padding: "0.5em"}}>
                 <Link to={`/menu/${menu_id}`}><FlatButton label="Details" /></Link>
                 <FlatButton onClick={() => removeFn(cc_id, um_id)} label="Remove From Client" />
             </CardActions>

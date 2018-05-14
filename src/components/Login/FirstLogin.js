@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { requestCoachAccess, updateUsername, updateFullname, renounceCoachAccess } from '../../ducks/userReducer'
 import RaisedButton from 'material-ui/RaisedButton'
-import './FirstLogin.css'
 import StripeDefault from '../Stripe/StripeDefault'
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import FlatButton from 'material-ui/FlatButton';

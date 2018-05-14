@@ -34,9 +34,14 @@ class SearchMenu extends Component{
         })
     }
     
-    handleBtn2Click(arg1, w_id){
-        this.props.btn2Fn(arg1, w_id)
-        this.endSearches()
+    handleBtn2Click(arg1, m_id){
+        if(arg1){
+            this.props.btn2Fn(arg1, m_id)
+            this.endSearches()
+        }else{
+            this.props.btn2Fn(m_id)
+            this.endSearches()
+        }
     }
     
     endSearches(){
@@ -53,15 +58,15 @@ class SearchMenu extends Component{
         const { arg1, menuSearchResults, btn2Fn, btn2msg, userData } = this.props
         const menuResults = menuSearchResults.map(res => {
                 return (
-                        <Card style={{width: "100%"}} >
-                            <CardMedia  >
-                                <img src={res.img} style={{height: "12.5em"}} alt={res.title} />
+                        <Card style={{backgroundColor: "#fff", maxWidth: "350px", width: "100%"}} >
+                            <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
+                                <img src={res.img} style={{height: "100%"}} alt={res.title} />
                             </CardMedia>
-                            <CardTitle title={res.title} />
-                            <CardText>
+                            <CardTitle style={{padding: "0.5em"}} title={res.title} />
+                            <CardText style={{padding: "0.5em"}}>
                                     {`P: ${res.total_p}g C: ${res.total_c} F: ${res.total_f}g Fib: ${res.total_fib}g`}
                             </CardText>
-                            <CardActions>
+                            <CardActions style={{padding: "0.5em"}}>
                                 <Link to={`/menu/${res.menu_id}`}><FlatButton label="Details" /></Link>
                                 {
                                     userData.coach_id !== -7

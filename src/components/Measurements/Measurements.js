@@ -113,31 +113,32 @@ class Measurements extends Component{
             justifySelf: "end"
         }
         return(
-            <form style={{...mesCompStyles}} className="comp measurements-form" >
-                <TextField name="weight" style={{...leftInputs}} type="number" floatingLabelText={`Weight: (in pounds)`} min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
-                <TextField name="height" type="number" floatingLabelText={`Height: (in inches)`} min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
-                <TextField name="waist" style={{...leftInputs}} type="number" floatingLabelText={`Waist: (in inches)`} min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
-                <TextField name="neck" type="number" floatingLabelText={`Neck Circumference: (in inches)`} min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
-                <TextField name="chest" style={{...leftInputs}} floatingLabelText={`Chest: (in inches)`} type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
-                <TextField name="bodyfat" floatingLabelText={`Bodyfat: (% i.e. "11")`} type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
-                <DatePicker style={{...leftInputs, alignSelf: "center"}} autoOk onChange={this.updateDateIn} hintText="Date these measurements were taken" mode="landscape" />
-                <section style={{display: "flex", justifyContent: "space-around", flexDirection: "column"}}>
-                    <p>Happiness Level at time of measurements</p>
-                    <p>On a scale of 1-10 you selected {happinessIcon}({happinessMeter})</p>
-                    <Slider
-                        min={0}
-                        max={10}
-                        // sliderStyle={{marginBottom: "5rem"}}
-                        style={{maxWidth: "17vw", maxHeight: "4.9em"}}
-                        step={1}
-                        value={happinessMeter}
-                        onChange={this.handleSlider}
-                        />
-                </section>
-                <section style={{gridColumn: "1/3", width: "100%", display: "flex", justifyContent: "center"}}>
-                    <RaisedButton style={{width: "33%"}} value={dateIn} primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
-                </section>
-            </form>
+                <form style={{...mesCompStyles}} className="comp measurements-form" >
+                    <h1 style={{gridColumn: "1/3", fontSize: "2.5em"}}>Measurements</h1>
+                    <TextField name="weight" style={{...leftInputs}} type="number" floatingLabelText={`Weight: (in pounds)`} min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
+                    <TextField name="height" type="number" floatingLabelText={`Height: (in inches)`} min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
+                    <TextField name="waist" style={{...leftInputs}} type="number" floatingLabelText={`Waist: (in inches)`} min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
+                    <TextField name="neck" type="number" floatingLabelText={`Neck Circumference: (in inches)`} min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
+                    <TextField name="chest" style={{...leftInputs}} floatingLabelText={`Chest: (in inches)`} type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
+                    <TextField name="bodyfat" floatingLabelText={`Bodyfat: (% i.e. "11")`} type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
+                    <DatePicker style={{...leftInputs, alignSelf: "center"}} autoOk onChange={this.updateDateIn} hintText="Date these measurements were taken" mode="landscape" />
+                    <section style={{display: "flex", justifyContent: "space-around", flexDirection: "column"}}>
+                        <p>Happiness Level at time of measurements</p>
+                        <p>On a scale of 1-10 you selected {happinessIcon}({happinessMeter})</p>
+                        <Slider
+                            min={0}
+                            max={10}
+                            // sliderStyle={{marginBottom: "5rem"}}
+                            style={{maxWidth: "17vw", maxHeight: "4.9em"}}
+                            step={1}
+                            value={happinessMeter}
+                            onChange={this.handleSlider}
+                            />
+                    </section>
+                    <section style={{gridColumn: "1/3", width: "100%", display: "flex", justifyContent: "center"}}>
+                        <RaisedButton style={{width: "33%"}} value={dateIn} primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
+                    </section>
+                </form>
         )
     }
 }

@@ -47,7 +47,7 @@ class PhotoCard extends Component {
         return(
             <section style={{...cardStyles, textAlign: "center"}} className="photo-card">
                 <section style={{height: "100%"}}>
-                    <img style={{height: "100%", borderRadius: "3px 0 0 3px"}} src={src} alt={alt} />
+                    <img style={{height: "100%", maxWidth: "200px", borderRadius: "3px 0 0 3px"}} src={src} alt={alt} />
                 </section>
                 <section style={{...infoStyles}}>
                     <p style={{fontSize: "0.96em"}}>Date Added: {date_added.slice(0, 10)}</p>

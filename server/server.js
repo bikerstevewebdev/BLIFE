@@ -26,7 +26,7 @@ const app = express()
 
 
 
-app.use(express.static(__dirname + '/../build'))
+// app.use(express.static(__dirname + '/../build'))
 app.use(express.json({limit: '10mb'}))
 app.use(cors())
 // Setting up express-session
@@ -154,11 +154,15 @@ app.get('/auth/logout', (req, res)=>{
 })
 
 app.get('/motivational/quote', (req, res) => {
-    axios.get('https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json').then(response => {
+    axios.get(`https://api.unsplash.com/photos/random?query=adventure&client_id=${process.env.API_KEY3}&count=1&w=300&h=250`).then(pic => {
+        axios.get('https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json').then(response => {
             // console.log('res', response, 'and response.data',  response.data)
-            res.status(200).send({ qText: response.data.quoteText, qAuthor: response.data.quoteAuthor })
-        }).catch(err => {
-            console.log(err)
+                let imgOne    = pic.data[0].urls.custom,
+                    imgPro = pic.data[0].user.name
+                res.status(200).send({ imgURL: imgOne, imgUser: imgPro, qText: response.data.quoteText, qAuthor: response.data.quoteAuthor })
+            }).catch(err => {
+                console.log(err)
+            })
         })
 })
 
