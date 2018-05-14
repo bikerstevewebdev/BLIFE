@@ -61,10 +61,10 @@ class App extends Component {
 
   componentDidUpdate(){
     const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, isLoggedIn, location, getCoachRequestInfo } = this.props    
-    // if(location.pathname !== '/' && (!userData.user_id || !isLoggedIn)){
-    // // if(location.pathname !== '/' && (userData.user_id <= 0 || !isLoggedIn)){
-    //   this.props.history.push('/')
-    // }
+    if(location.pathname !== '/' && (!userData.user_id || !isLoggedIn)){
+    // if(location.pathname !== '/' && (userData.user_id <= 0 || !isLoggedIn)){
+      this.props.history.push('/')
+    }
     if(location.pathname !== '/firstLogin' && userData.coach_id === 0){
       this.props.history.push('/firstLogin')
     }
