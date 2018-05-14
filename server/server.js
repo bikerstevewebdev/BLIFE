@@ -41,7 +41,7 @@ app.use(session({
   // Handing express-session over to passport
   app.use(passport.session());
   // Setting up the ability to run the static-build files
-//   app.use(express.static(__dirname + '/../build'));
+  app.use(express.static(__dirname + '/../build'));
 
 passport.use( new Auth0Strategy({
     domain: DOMAIN,
