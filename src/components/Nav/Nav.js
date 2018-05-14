@@ -41,21 +41,21 @@ function Nav(props) {
         alignItems: "center"
     }
     const iconStyles = { 
-        width: "100%", height: "100%", color: "#eee"
+        width: "100%", height: "100%", color: "#eee", width: "1.5rem", height: "1.5rem", padding: "0"
     }
     const iconBtnStyles = { 
-        margin: "0.45rem", padding: "0", width: "1.8rem", height: "1.8rem"
+        margin: "0.45rem", padding: "0"
     }
     const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "#377D3D", backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"}
     const home = (
         <section>
-            <IconButton iconStyle={{...iconStyles}} onClick={() => props.history.push("/dashboard")} style={{iconBtnStyles}} tooltip="Dashboard">
+            <IconButton tooltipStyles={{marginLeft: "0.375em"}} iconStyle={{...iconStyles, width: "2rem", height: "2rem"}} onClick={() => props.history.push("/dashboard")} style={{iconBtnStyles}} tooltip="Dashboard">
                     <ActionHome />
             </IconButton>
             {
                 props.coach_req_info.client_coach_id
                 ?
-                <IconButton tooltip="Coach Request" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleCoachReqModal(true)} >
+                <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Coach Request" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleCoachReqModal(true)} >
                     <Chat />
                 </IconButton>
                 :
@@ -68,7 +68,7 @@ function Nav(props) {
             {
                 props.userData.is_admin
                 ?
-                <IconButton tooltip="Coach Manager" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.history.push('/adminManager')}>
+                <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Coach Manager" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.history.push('/adminManager')}>
                     <Admin />
                 </IconButton>
                 :
@@ -77,19 +77,19 @@ function Nav(props) {
             {
                 props.userData.coach_id > 0
                 ?
-                <IconButton iconStyle={{...iconStyles}} style={{iconBtnStyles}} tooltip="Client Manager" onClick={() => props.history.push('/coachManager')}>
+                <IconButton tooltipStyles={{marginLeft: "0.1em"}} iconStyle={{...iconStyles}} style={{iconBtnStyles}} tooltip="Client Manager" onClick={() => props.history.push('/coachManager')}>
                     <Admin />
                 </IconButton>
                 :
                 null
             }
-            <IconButton iconStyle={{...iconStyles}} style={{iconBtnStyles}} tooltip="Find Your Why" onClick={() => props.toggleMotivationalModal(true)}>
+            <IconButton tooltipStyles={{marginLeft: "0.1em"}} iconStyle={{...iconStyles}} style={{iconBtnStyles}} tooltip="Find Your Why" onClick={() => props.toggleMotivationalModal(true)}>
                 <Happy />
             </IconButton>
-            <IconButton tooltip="Logout" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={props.logoutUser}>
+            <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Logout" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={props.logoutUser}>
                 <Logout />
             </IconButton>
-            <IconButton tooltip="Navigator" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleSideNav(true)}>
+            <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Navigator" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleSideNav(true)}>
                 <ChromeReader />
             </IconButton>
             <FlatButton style={{margin: "0.45rem"}} tooltip="Profile" >
@@ -105,7 +105,7 @@ function Nav(props) {
                 props.isLoggedIn && props.userData.user_id > 0
             ?
                 (<header className="nav-comp">
-                    <AppBar onTitleClick={() => props.history.push('/dashboard')} iconElementLeft={home} title={<h1 style={{webkitTextFillColor: "white", webkitTextStrokeWidth: "0.45px", webkitTextStrokeColor: "#000000", cursor: "pointer"}}>BalancedLIFE</h1>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
+                    <AppBar onTitleClick={() => props.history.push('/dashboard')} iconElementLeft={home} title={<h1 style={{WebkitTextFillColor: "white", WebkitTextStrokeWidth: "0.45px", WebkitTextStrokeColor: "#000", cursor: "pointer"}}>BalancedLIFE</h1>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
                 </header>)
             :
                 (<section className="unauthorized">
@@ -121,7 +121,7 @@ function Nav(props) {
                     <source src={seaVid} type="video/mp4" />
                 </video> */}
                 {/* </video> */}
-                <iframe title="forbidden" loop id="video-background" src="https://www.youtube.com/embed/qREKP9oijWI?autoplay=1&controls=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" ></iframe>
+                <iframe title="forbidden" loop id="video-background" src="https://www.youtube.com/embed/qREKP9oijWI?autoplay=1&controls=0&showinfo=0" frameBorder="0" allow="autoplay; encrypted-media" ></iframe>
             </section>)
         
     )

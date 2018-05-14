@@ -9,6 +9,7 @@ import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import ReceiptModal from '../Stripe/ReceiptModal';
+import { TextField } from 'material-ui';
 
 
 
@@ -120,52 +121,67 @@ class FirstLogin extends Component{
     getStepContent(stepIndex) {
         const { userData } = this.props,
               { usernameIn, fullnameIn } = this.state
+        const mainHeadStyle = {
+            color: "#ff7800",
+            textTransform: "capitalize",
+            fontFamily: "Roboto",
+            fontSize: "3.25em",
+            textShadow: "rgb(0, 0, 0) 3px 4px 8px",
+            fontSize: "3.5em"
+        }
+        const headStyle = {
+            fontSize: "1.75em"
+        }
+        const jcFlexCol = {
+            display: "flex", flexDirection: "column", justifyContent: "space-around", height: "100%", alignItems: "center"
+        }
     switch (stepIndex) {
         case 0:
         return (
-            <section>
-                <h1>Welcome to your Balanced Life!</h1>
-                <h2>Let's get you started with some simple user information...</h2>
+            <section style={{...jcFlexCol, height: "25vh"}}>
+                <h1 style={{...mainHeadStyle}}>Welcome to your Balanced Life!</h1>
+                <h2 style={{...headStyle}}>Let's get you started with some simple user information...</h2>
             </section>
         );
         case 1:
         return (
-            <section>
-               <h2>What should we call you?</h2>
-                <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.endUsernameStep(usernameIn)}>Create Username</RaisedButton >
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={()=>this.handleNext()}>Stick with {userData.username}</RaisedButton > 
+            <section style={{...jcFlexCol}}>
+               <h2 style={{...headStyle}}>What should we call you?</h2>
+                <TextField fullWidth value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} floatingLabelText="Choose a unique username"/>
+                <RaisedButton primary={true} fullWidth onClick={() => this.endUsernameStep(usernameIn)}>Create Username</RaisedButton >
+                <RaisedButton primary={true} fullWidth onClick={()=>this.handleNext()}>Stick with {userData.username}</RaisedButton > 
             </section>
         );
         case 2:
         return (
             <section>
-                <h2>What does your mother call you?</h2>
-                <input value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} placeholder="What do does your mother call you?"/>
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.endFullnameStep(fullnameIn)}>Add my Fullname</RaisedButton >
+                <h2 style={{...headStyle}}>What does your mother call you?</h2>
+                <TextField fullWidth value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} floatingLabelText="What do does your mother call you?"/>
+                <RaisedButton primary={true} fullWidth onClick={() => this.endFullnameStep(fullnameIn)}>Add my Fullname</RaisedButton >
             </section>
         );
         case 3:
         return (
-            <section>
+            <section style={{...jcFlexCol, height: "15vh"}}>
+                <h2 style={{...headStyle}}>A one time investment that will change your life.</h2>
                 <StripeDefault updateChargeMsg={this.updateStripeMsg.bind(this)} amount={3900} />
             </section>
         );
         case 4:
         return (
-            <section>
-                <h2>Are you here to coach others?</h2>
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton >
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={() => this.requestAccess(false)}>No thanks, just here to find a healthy balance.</RaisedButton >
+            <section style={{...jcFlexCol, height: "20vh"}}>
+                <h2 style={{...headStyle}}>Are you here to coach others?</h2>
+                <RaisedButton primary={true} fullWidth onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton >
+                <RaisedButton primary={true} fullWidth onClick={() => this.requestAccess(false)}>No thanks, just here to find a healthy balance.</RaisedButton >
             </section>
         );
         case 5:
         return (
-            <section>
-                <h2>Would you like to start by adding your measurements or just calculating your macros?</h2>
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={this.sendToMes}>Add Measurements</RaisedButton >
-                <RaisedButton primary={true} style={{width: "200px"}} onClick={this.sendToMacroCalc} >Calculate Macros</RaisedButton >
-                <Link to="/dashboard"><RaisedButton primary={true} style={{width: "200px"}}>No thanks, take me to the Dashboard</RaisedButton ></Link>
+            <section style={{...jcFlexCol, padding: "1.25em", height: "30vh"}}>
+                <h2 style={{...headStyle}}>Would you like to start by adding your measurements or just calculating your macros?</h2>
+                <RaisedButton primary={true} style={{width: "40%"}} onClick={this.sendToMes}>Add Measurements</RaisedButton >
+                <RaisedButton primary={true} style={{width: "40%"}} onClick={this.sendToMacroCalc} >Calculate Macros</RaisedButton >
+                <Link style={{width: "40%"}} to="/dashboard"><RaisedButton primary={true} fullWidth>No thanks, take me to the Dashboard</RaisedButton ></Link>
             </section>
         );
         default:
@@ -187,11 +203,24 @@ class FirstLogin extends Component{
 
     renderContent() {
         const { stepIndex } = this.state;
-        const contentStyle = {margin: '0 16px', overflow: 'hidden'};
-    
+        const contentStyle = {
+            margin: '0 16px',
+            overflow: 'visible',
+            boxShadow: "rgb(29, 39, 41) 0px 2px 1px 1px",
+            borderRadius: "15px",
+            // width: "100%",
+            backgroundColor: "rgb(236, 234, 255)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center"
+        };
+        const jcFlexCol = {
+            display: "flex", flexDirection: "column", justifyContent: "space-around", height: "100%"
+        }
         return (
-          <div style={contentStyle}>
-            <div>{this.getStepContent(stepIndex)}</div>
+          <section style={contentStyle}>
+            <div style={{...jcFlexCol}}>{this.getStepContent(stepIndex)}</div>
             <div style={{marginTop: 24, marginBottom: 12}}>
               <FlatButton
                 label="Back"
@@ -206,50 +235,61 @@ class FirstLogin extends Component{
                 onClick={this.handleNext}
               />
             </div>
-          </div>
+          </section>
         );
       }
     
     
     render() {
         const { loading, stepIndex } = this.state
+        const backdropStyle = {
+            backgroundColor: "#0c0c0cf2",
+            width: "100%",
+            position: "fixed",
+            height: "100%",
+            top: "75px",
+            left: "0",
+            paddingTop: "10%"
+        }
         return(
-            <section style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
-                <Stepper activeStep={stepIndex}>
-                <Step>
-                    <StepLabel>
-                        Welcome!
-                    </StepLabel>
-                </Step>
-                <Step>
-                    <StepLabel>
-                        Username
-                    </StepLabel>
-                </Step>
-                <Step>
-                    <StepLabel>
-                        Fullname
-                    </StepLabel>
-                </Step>
-                <Step>
-                    <StepLabel>
-                        Life Investment
-                    </StepLabel>
-                </Step>
-                <Step>
-                    <StepLabel>
-                        Coach Request
-                    </StepLabel>
-                </Step>
-                <Step>
-                    <StepLabel>
-                        What's Next?
-                    </StepLabel>
-                </Step>
-                </Stepper>
-                <ExpandTransition loading={loading} open={true}>
-                {this.renderContent()}
-                </ExpandTransition>
+            <section style={{...backdropStyle}}>
+                <section style={{width: '50%', margin: 'auto'}}>
+                    <Stepper activeStep={stepIndex}>
+                        <Step>
+                            <StepLabel style={stepIndex > -1 ? {color: "#fff"} : {color: "rgba(97, 97, 97, 0.6)"}} >
+                                Welcome!
+                            </StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel style={stepIndex > 0 ? {color: "#fff"} : {color: "rgba(97, 97, 97, 0.6)"}} >
+                                Username
+                            </StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel style={stepIndex > 1 ? {color: "#fff"} : {color: "rgba(97, 97, 97, 0.6)"}} >
+                                Fullname
+                            </StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel style={stepIndex > 2 ? {color: "#fff"} : {color: "rgba(97, 97, 97, 0.6)"}} >
+                                Life Investment
+                            </StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel style={stepIndex > 3 ? {color: "#fff"} : {color: "rgba(97, 97, 97, 0.6)"}} >
+                                Coach Request
+                            </StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel style={stepIndex > 4 ? {color: "#fff"} : {color: "rgba(97, 97, 97, 0.6)"}} >
+                                What's Next?
+                            </StepLabel>
+                        </Step>
+                    </Stepper>
+                    <ExpandTransition loading={loading} open={true}>
+                    {this.renderContent()}
+                    </ExpandTransition>
+                </section>
                 <ReceiptModal rmOpen={this.state.stripeSuccess}  closeModal={this.closeReceiptModal.bind(this)} />
             </section>
         )

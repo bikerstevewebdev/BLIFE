@@ -27,7 +27,7 @@ import Measurements from './components/Measurements/Measurements';
 // import MealFromRecipe from './components/Meal/MealFromRecipe';
 import Snackbar from 'material-ui/Snackbar';
 import { connect } from 'react-redux';
-import { clearUserMessage } from './ducks/userReducer'
+import { clearUserMessage, getUserData } from './ducks/userReducer'
 import { clearCoachMessage, toggleCoachChatModal, getCoachRequestInfo } from './ducks/coachReducer'
 import { clearFitnessMessage } from './ducks/fitnessReducer'
 import { clearFoodMessage } from './ducks/foodReducer'
@@ -37,6 +37,7 @@ import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import MotivationalQuote from './components/Measurements/MotivationalQuote'
 import CoachReqModal from './components/Coach/CoachReqModal';
 import MakeInvestment from './components/Stripe/MakeInvestment'
+
 
 class App extends Component {
   constructor(){
@@ -52,11 +53,18 @@ class App extends Component {
     history: PropTypes.object.isRequired
   }
 
+  componentDidMount(){
+    if(!this.props.userData.user_id && this.props.location.pathname !== '/'){
+      this.props.getUserData()
+    }
+  }
+
   componentDidUpdate(){
     const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, isLoggedIn, location, getCoachRequestInfo } = this.props    
-    if(location.pathname !== '/' && (userData.user_id <= 0 || !isLoggedIn)){
-      this.props.history.push('/')
-    }
+    // if(location.pathname !== '/' && (!userData.user_id || !isLoggedIn)){
+    // // if(location.pathname !== '/' && (userData.user_id <= 0 || !isLoggedIn)){
+    //   this.props.history.push('/')
+    // }
     if(location.pathname !== '/firstLogin' && userData.coach_id === 0){
       this.props.history.push('/firstLogin')
     }
@@ -124,7 +132,7 @@ class App extends Component {
           <MealCreator />
           <MenuCreator />
           <ExerciseCreator />
-          <MotivationalQuote />
+          <MotivationalQuote history={this.props.history} location={this.props.location} />
           <WorkoutCreator />
           {
             coach_req_info.client_coach_id
@@ -170,4 +178,4 @@ function mapStateToProps(state){
   }
 }
 
-export default withRouter(connect(mapStateToProps, { clearCoachMessage, clearFitnessMessage, clearFoodMessage, clearUserMessage, toggleCoachChatModal, getCoachRequestInfo })(App))
+export default withRouter(connect(mapStateToProps, { clearCoachMessage, clearFitnessMessage, clearFoodMessage, clearUserMessage, toggleCoachChatModal, getCoachRequestInfo, getUserData })(App))

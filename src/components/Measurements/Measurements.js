@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addMeasurement, toggleMotivationalModal } from '../../ducks/userReducer'
-import { Redirect } from 'react-router-dom'
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton'
 import DatePicker from 'material-ui/DatePicker'
@@ -42,10 +41,9 @@ class Measurements extends Component{
         this.props.addMeasurement(heightIn, weightIn, bfIn, waistIn, chestIn, neckIn, dateIn, happinessMeter)
         if(happinessMeter/1 < 7){
             this.props.toggleMotivationalModal(true)
+        }else{
+            this.props.history.push('/profile')
         }
-        this.setState({
-            addingMes: false
-        })
     }
 // condense to one method when you have time: add a second param and check for === the desired state to update
     updateWeightIn(val) {
@@ -98,42 +96,48 @@ class Measurements extends Component{
         
     render() {
         const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn, happinessMeter } = this.state
-        const happinessIcon = happinessMeter < 3 ? <SuperSad /> : happinessMeter < 5 ? <Sad /> : happinessMeter < 7 ? <Neutral /> : happinessMeter < 9 ? <Happy /> : <SuperHappy />
+        const happinessIcon = happinessMeter < 3 ? <SuperSad style={{height: "1.5em", width: "1.5em", color: "red"}}/> : happinessMeter < 5 ? <Sad style={{height: "1.5em", width: "1.5em", color: "yellow"}}/> : happinessMeter < 7 ? <Neutral style={{height: "1.5em", width: "1.5em"}}/> : happinessMeter < 9 ? <Happy style={{height: "1.5em", width: "1.5em", color: "blue"}}/> : <SuperHappy style={{height: "1.5em", width: "1.5em", color: "green"}}/>
+        const mesCompStyles = {
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            padding: "5%",
+            boxShadow: "rgb(29, 39, 41) 0px 2px 1px 1px",
+            borderRadius: "3px",
+            width: "auto",
+            backgroundColor: "rgb(236, 234, 255)",
+            // backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)",
+
+            gridGap: "1.5em"
+        }
+        const leftInputs = {
+            justifySelf: "end"
+        }
         return(
-            <section className="comp measurements-form" >
-                <p>Weight: (in pounds)</p>
-                <TextField name="weight" type="number" min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
-                <p>Height: (in inches)</p>
-                <TextField name="height" type="number" min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
-                <p>Waist: (in inches)</p>
-                <TextField name="waist" type="number" min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
-                <p>Neck: (in inches)</p>
-                <TextField name="neck" type="number" min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
-                <p>Chest: (in inches)</p>
-                <TextField name="chest" type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
-                <p>Bodyfat: (enter in percent as a number, i.e. "11" for 11 percent, not "0.11")</p>
-                <TextField name="bodyfat" type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
-                <DatePicker onChange={this.updateDateIn} hintText="Date these measurements were taken" mode="landscape" />
-                <section>
-                    <p>Select your state of happiness at the time of these measurements</p>
-                    <p>On a scale o 1-10, you have selected {happinessIcon}({happinessMeter}).</p>
+            <form style={{...mesCompStyles}} className="comp measurements-form" >
+                <TextField name="weight" style={{...leftInputs}} type="number" floatingLabelText={`Weight: (in pounds)`} min="50" max="1000" value={weightIn} onChange={(e) => this.updateWeightIn(e.target.value)} />
+                <TextField name="height" type="number" floatingLabelText={`Height: (in inches)`} min="24" max="96" value={heightIn} onChange={(e) => this.updateHeightIn(e.target.value)} />
+                <TextField name="waist" style={{...leftInputs}} type="number" floatingLabelText={`Waist: (in inches)`} min="5" max="100" value={waistIn} onChange={(e) => this.updateWaistIn(e.target.value)} />
+                <TextField name="neck" type="number" floatingLabelText={`Neck Circumference: (in inches)`} min="5" max="40" value={neckIn} onChange={(e) => this.updateNeckIn(e.target.value)} />
+                <TextField name="chest" style={{...leftInputs}} floatingLabelText={`Chest: (in inches)`} type="number" min="5" max="100" value={chestIn} onChange={(e) => this.updateChestIn(e.target.value)} />
+                <TextField name="bodyfat" floatingLabelText={`Bodyfat: (% i.e. "11")`} type="number" min="2" max="90" value={bfIn} onChange={(e) => this.updateBfIn(e.target.value)} />
+                <DatePicker style={{...leftInputs, alignSelf: "center"}} autoOk onChange={this.updateDateIn} hintText="Date these measurements were taken" mode="landscape" />
+                <section style={{display: "flex", justifyContent: "space-around", flexDirection: "column"}}>
+                    <p>Happiness Level at time of measurements</p>
+                    <p>On a scale of 1-10 you selected {happinessIcon}({happinessMeter})</p>
                     <Slider
                         min={0}
                         max={10}
+                        // sliderStyle={{marginBottom: "5rem"}}
+                        style={{maxWidth: "17vw", maxHeight: "4.9em"}}
                         step={1}
                         value={happinessMeter}
                         onChange={this.handleSlider}
-                    />
+                        />
                 </section>
-                <RaisedButton value={dateIn} primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
-                {
-                    !this.state.addingMes && this.props.location.pathname === '/measurements'
-                    ?
-                    <Redirect to={`/profile`} />
-                    :
-                    null
-                }
-            </section>
+                <section style={{gridColumn: "1/3", width: "100%", display: "flex", justifyContent: "center"}}>
+                    <RaisedButton style={{width: "33%"}} value={dateIn} primary={true} onClick={this.sendUpdates}>Save your stats!</RaisedButton>
+                </section>
+            </form>
         )
     }
 }

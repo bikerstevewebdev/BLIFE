@@ -49,7 +49,7 @@ class SearchWorkouts extends Component{
     }
     
     render() {
-        const { workoutSearchResults, btn2Fn, btn2msg, arg1 } = this.props
+        const { workoutSearchResults, btn2Fn, btn2msg, arg1, userData } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
                 <Card style={{maxWidth: "350px", width: "100%"}} >
@@ -62,7 +62,13 @@ class SearchWorkouts extends Component{
                     </CardText>
                     <CardActions>
                         <Link to={`/workout/${res.workout_id}`}><FlatButton label="Details" /></Link>
-                            <FlatButton onClick={() => this.handleBtn2Click(arg1, res.workout_id)} label={btn2msg} />
+                            {
+                                userData.coach_id !== -7
+                                ?
+                                <FlatButton onClick={() => this.handleBtn2Click(arg1, res.workout_id)} label={btn2msg} />
+                                :
+                                null
+                            }
                     </CardActions>
                 </Card>
             )
@@ -89,7 +95,8 @@ class SearchWorkouts extends Component{
 
 function mapStateToProps(state) {
     return {
-        workoutSearchResults: state.fitness.workoutSearchResults
+        workoutSearchResults: state.fitness.workoutSearchResults,
+        userData: state.users.userData
     }
 }
 

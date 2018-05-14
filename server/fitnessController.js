@@ -20,6 +20,7 @@ module.exports = {
     editExercise: (req, res, next) => {
         const db = req.app.get('db')
         const { id, name, type, muscle, video, img } = req.body
+        console.log(req.body)
         db.get_exercise_by_id([id]).then(ex => {
             if(req.user.user_id == ex[0].author_id){
                 db.edit_exercise([id, name, type, muscle, video, img]).then(newEx => {
@@ -36,6 +37,7 @@ module.exports = {
     updateWorkoutEx: (req, res, next) => {
         const db = req.app.get('db')
         const { workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes, oldOrder } = req.body
+        console.log(req.body)
         db.edit_workout_ex([workout_ex_id, workout_id, reps, sets, restTime, weight, ex_order, notes]).then(exercises => {
             if(ex_order != oldOrder){
                 exercises.forEach(v => {

@@ -45,6 +45,7 @@ class ExerciseCard extends Component{
             this.setState({
                 orderIn: this.props.ex_order
             })
+            this.sendUpdate()
         }
     }
 
@@ -74,9 +75,10 @@ class ExerciseCard extends Component{
 
     updateOrderIn(event, index, val) {
         console.log(event, index, val)
-        this.setState({
-            orderIn: val
-        })
+        // this.setState({
+        //     orderIn: val
+        // })
+        this.sendUpdate(val)
     }
 
     updateNotesIn(e) {
@@ -98,16 +100,18 @@ class ExerciseCard extends Component{
         }
     }
 
-    sendUpdate(){
+    sendUpdate(newOrder){
         const { repsIn, setsIn, restTimeIn, weightIn, orderIn, notesIn } = this.state,
               { workout_ex_id, workout_id, ex_order } = this.props
-              console.log(orderIn)
-        this.props.updateWorkoutEx(workout_ex_id, workout_id, repsIn, setsIn, restTimeIn, weightIn, orderIn/1, notesIn, ex_order)
+            //   console.log(this.state, this.props)
+            //   console.log(orderIn)
+              let new_order = newOrder ? newOrder : ex_order
+        this.props.updateWorkoutEx(workout_ex_id, workout_id, repsIn, setsIn, restTimeIn, weightIn, new_order/1, notesIn, ex_order)
     }
 
     render() {
         const { repsIn, setsIn, restTimeIn, weightIn, notesIn, addingNotes, orderIn } = this.state,
-              { type, name, img, numExs, workout_ex_id, ex_id, workout_id } = this.props
+              { type, name, img, numExs, workout_ex_id, ex_id, workout_id, notes, rest_time, reps, sets, weight } = this.props
         const brickStyles = {
             width: "100%",
             display: "grid",
@@ -119,6 +123,7 @@ class ExerciseCard extends Component{
             boxShadow: "rgba(11, 145, 232, 0.5) 2px 2px",
             gridAutoFlow: "column"
         }
+        const isDisabled = (reps === repsIn && sets === setsIn && rest_time === restTimeIn && weight === weightIn && notes === notesIn)
         return (
             <div style={{...this.props.style, ...brickStyles}} className="workout-ex">
                 <DropDownMenu style={{gridColumn: "1/2"}} value={orderIn/1} onChange={this.updateOrderIn}>
@@ -159,7 +164,7 @@ class ExerciseCard extends Component{
                     }
                 </section>
                 <section style={{height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-around"}} >
-                    <RaisedButton secondary={true} style={{backgroundColor: "yellow"}} onClick={this.sendUpdate}>Save Changes</RaisedButton>
+                    <RaisedButton secondary={true} disabled={isDisabled} onClick={this.sendUpdate}>Save Changes</RaisedButton>
                     <RaisedButton secondary={true} className="delete-from-workout" style={{backgroundColor: "red"}}onClick={() => this.props.removeExFromWorkout(workout_ex_id, workout_id)}>Remove From Workout</RaisedButton>
                 </section>
             </div>

@@ -15,7 +15,8 @@ const express          = require('express'),
       port             = SERVER_PORT, // || 3000
       S3               = require('./awsS3'),
       msgAPI           = require('./messaging'),
-      socket           = require('socket.io')
+      socket           = require('socket.io'),
+      axios            = require('axios')
 
 
       
@@ -23,12 +24,9 @@ const express          = require('express'),
 
 const app = express()
 
-app.use((req, res, next) => {
-    console.log(req.url);
-    next();
-})
 
-app.use(express.static(__dirname + '/../build'))
+
+// app.use(express.static(__dirname + '/../build'))
 app.use(express.json({limit: '10mb'}))
 app.use(cors())
 // Setting up express-session
@@ -143,11 +141,25 @@ io.on('connect', function (client) {
 
 })
 
+app.use((req, res, next) => {
+    console.log(req.url)
+    console.log("req.body", req.body)
+    next()
+})
 
 app.get('/auth', passport.authenticate('auth0'))
 app.get('/auth/logout', (req, res)=>{
     req.logout()
     res.redirect('/')
+})
+
+app.get('/motivational/quote', (req, res) => {
+    axios.get('https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json').then(response => {
+            // console.log('res', response, 'and response.data',  response.data)
+            res.status(200).send({ qText: response.data.quoteText, qAuthor: response.data.quoteAuthor })
+        }).catch(err => {
+            console.log(err)
+        })
 })
 
 app.get('/auth/callback', passport.authenticate('auth0', {

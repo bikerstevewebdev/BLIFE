@@ -104,16 +104,16 @@ class Dashboard extends Component{
         const dbStyles = {
             height: "100%",
             display: "grid",
-            boxShadow: "rgb(90, 123, 132) 0px 2px 1px 1px",
-            borderRadius: "3px",
             gridTemplateColumns: "repeat(4, 1fr)",
             gridTemplateRows: "150px 100px",
             // gridAutoRows: "150px",
+            boxShadow: "rgb(90, 123, 132) 0px 2px 1px 1px",
+            borderRadius: "3px",
             width: "100%",
-            padding: "2em",
-            gridGap: "0.75em",
             backgroundColor: "#fff",
-            backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"
+            backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)",
+            padding: "2em",
+            gridGap: "0.75em"
         }
         const macroStyles = {
             borderRadius: "3px",
@@ -235,8 +235,8 @@ class Dashboard extends Component{
 
                     }
                 </section>
-                <SearchMenu btn2Fn={this.props.addMenuToUser} style={{...menuSearchStyle}}/>
-                <SearchWorkout btn2msg={"Add to my workouts"} btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
+                <SearchMenu btn2msg={"Add to my Plan"} btn2Fn={this.props.addMenuToUser} style={{...menuSearchStyle}}/>
+                <SearchWorkout btn2msg={"Add to my Plan"} btn2Fn={this.props.addWorkoutToUser} style={{...workSearchStyle}}/>
                 <Link to="/firstLogin"><RaisedButton secondary={true} style={{width: "200px"}} label="First Login" /></Link>
                 
             </section>

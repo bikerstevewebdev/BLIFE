@@ -81,17 +81,22 @@ class MacroCalc extends Component{
     render() {
         const { tenacity, goal, activity, gender } = this.state        
         // const { current_height, current_weight, current_bf } = user        
-        const selectWidth = {width: "450px"}
+        const selectWidth = {width: "350px"}
         const compStyles = {
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             // gridTemplateRows: "1fr 1fr",
             width: "100%",
-            padding: "5%"
+            padding: "5%",
+            boxShadow: "rgb(29, 39, 41) 0px 2px 1px 1px",
+            borderRadius: "3px",
+            width: "auto",
+            backgroundColor: "rgb(236, 234, 255)",
+
 
         }
         return(
-            <form onSubmit={this.calculate} style={{alignItems: "center", height: "90vh", width: "100%", ...compStyles}} className="comp macro-calc">
+            <form onSubmit={this.calculate} style={{alignItems: "center", height: "60vh", width: "100%", ...compStyles}} className="comp macro-calc">
                 {/* <section className="inputs"> */}
                     <section style={{display: "grid", gridTemplateRows: "repeat(75px)", justifyContent: "center"}}>
                         <TextField floatingLabelText="Age" hintText="Years" type="number" step="1" min="8" max="120" className="macro-input" onChange={(e) => this.updateInputs("filler", "more", e.target.value, 'age')}  />
@@ -124,9 +129,8 @@ class MacroCalc extends Component{
                         </SelectField>
                     </section>
                 {/* </section> */}
-                <div style={{gridColumn: "1/3", display: "flex", justifyContent: "center"}}>
-                
-                <RaisedButton primary={true}  className="calc-btn" onClick={this.calculate} >Calculate</RaisedButton>
+                <div style={{padding: "1.5em", gridColumn: "1/3", display: "flex", justifyContent: "center"}}>
+                    <RaisedButton primary={true} style={{width: "33%"}} className="calc-btn" onClick={this.calculate} >Calculate</RaisedButton>
                 </div>
                 {this.state.isCalculating
                 ?

@@ -50,7 +50,7 @@ class PhotoCard extends Component {
                     <img style={{height: "100%", borderRadius: "3px 0 0 3px"}} src={src} alt={alt} />
                 </section>
                 <section style={{...infoStyles}}>
-                    <p>Date Added: {date_added.slice(0, 10)}</p>
+                    <p style={{fontSize: "0.96em"}}>Date Added: {date_added.slice(0, 10)}</p>
                     <Checkbox labelStyle={{fontSize: "0.8em", lineHeight: "0.75rem"}} label="Add to compare" onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 4}/>
                     <RaisedButton secondary={true} onClick={() => deprecatePhoto(photo_id)}>Archive</RaisedButton>
                 </section>

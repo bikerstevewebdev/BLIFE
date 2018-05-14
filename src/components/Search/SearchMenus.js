@@ -50,7 +50,7 @@ class SearchMenu extends Component{
 
 
     render() {
-        const { arg1, menuSearchResults, btn2Fn, btn2msg } = this.props
+        const { arg1, menuSearchResults, btn2Fn, btn2msg, userData } = this.props
         const menuResults = menuSearchResults.map(res => {
                 return (
                         <Card style={{width: "100%"}} >
@@ -63,7 +63,13 @@ class SearchMenu extends Component{
                             </CardText>
                             <CardActions>
                                 <Link to={`/menu/${res.menu_id}`}><FlatButton label="Details" /></Link>
-                                <FlatButton onClick={() => this.handleBtn2Click(arg1, res.menu_id)} label={btn2msg} />
+                                {
+                                    userData.coach_id !== -7
+                                    ?
+                                    <FlatButton onClick={() => this.handleBtn2Click(arg1, res.menu_id)} label={btn2msg} />
+                                    :
+                                    null
+                                }
                             </CardActions>
                         </Card>
                           )
@@ -90,6 +96,7 @@ class SearchMenu extends Component{
 function mapStateToProps(state) {
     return {
         menuSearchResults: state.foods.menuSearchResults,
+        userData: state.users.userData
     }
 }
 

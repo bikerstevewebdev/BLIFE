@@ -170,8 +170,6 @@ class Profile extends Component{
                 <section style={{...profileStyles, gridTemplateRows: "125px", gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em", backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"}} className="progress-pics">
                     <section style={{...jcFlex, gridArea: "1/1/2/4", }} className="progress-pic-btn">
                         {
-                            progress_pics.length
-                            ?
                                 this.state.showingAllProgressPics
                                 ?
                                 <section style={{...jcFlex}}>
@@ -189,17 +187,16 @@ class Profile extends Component{
                                         { compareBtn }
                                     </section>
                                 </section>
-                            :
-                            <h3 style={{...jcFlex, fontSize: "1.75em"}}>Upload some Progress Pictures</h3>
                         }
                     </section>
+                        {/* <h3 style={{...jcFlex, fontSize: "1.75em"}}>Upload some Progress Pictures</h3> */}
                     {progressPics}
                     <PhotoUpload  empty={!progress_pics.length}/>
                 </section>
                 {
                     this.props.userData.curr_mes_id > 0
                     ?
-                    <ProgressChart styles={{gridArea: "3/1/4/3"}}/>
+                    <ProgressChart styles={{gridArea: "3/1/4/4"}}/>
                     :
                     null
                 }

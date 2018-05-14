@@ -77,7 +77,7 @@ class SideNav extends Component{
     render() {
         const { fitnessOpen, userOpen, nutritionOpen } = this.state
         return(
-            <Drawer onRequestChange={this.requestSideNavChange}
+            <Drawer onRequestChange={() => this.requestSideNavChange()}
             docked={false} width={200} openSecondary={true} open={this.props.sideNavOpen} >
                 <AppBar iconElementLeft={<IconButton onClick={this.requestSideNavChange}><Close /></IconButton>}title="AppBar" />
                 <List style={{fontSize: "0.5em"}}>
@@ -97,13 +97,13 @@ class SideNav extends Component{
                             />,
                             <Link key={2} to="/measurements"><ListItem
                               nestedLevel={1}
-                              onClick={() => this.props.toggleSideNav(false)}
+                              onClick={this.requestSideNavChange}
                               primaryText="Update Measurements"
                               leftIcon={<InsertChart />}
                             /></Link>,
                             <Link key={3} to="/macroCalc"><ListItem
                               nestedLevel={1}
-                              onClick={() => this.props.toggleSideNav(false)}
+                              onClick={this.requestSideNavChange}
                               primaryText="Macro Calculator"
                               leftIcon={<PieChart />}
                             /></Link>
@@ -157,7 +157,7 @@ class SideNav extends Component{
                             />,
                             <Link key={9} to="/workout/nav"><ListItem
                               nestedLevel={1}
-                              onClick={() => this.props.toggleSideNav(false)}
+                              onClick={this.requestSideNavChange}
                               primaryText="Workout Designer"
                               leftIcon={<Storage />}
                             /></Link>
