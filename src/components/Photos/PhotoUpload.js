@@ -99,7 +99,7 @@ class PhotoUpload extends Component {
                     </section>
                     {
                         this.state.file &&
-                        <img src={this.state.file} alt="preview" className="file-preview"/>  
+                        <img src={this.state.file} style={{maxWidth: "200px"}} alt="preview" className="file-preview"/>  
                     }
                 </section>
             </div>
