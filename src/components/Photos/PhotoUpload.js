@@ -83,7 +83,7 @@ class PhotoUpload extends Component {
                             <h3>Upload a Progress Picture</h3>
                 }
                 <section style={{display:"flex", justifyContent: "space-around", width: "100%", flexWrap: "column"}}>
-                    <section style={{display:"flex", maxWidth: "200px", width: "100%",  justifyContent: "space-around", flexDirection: "column"}}>
+                    <section style={{display:"flex", width: "100%",  justifyContent: "space-around", flexDirection: "column"}}>
                         <RaisedButton style={{display: "flex", alignItems: "center", width: "100%"}} icon={<FileUpload/>} secondary={true} label="Select File" >
                             <label htmlFor="file-input">
                                 <input style={{...inputStyles, cursor: "pointer", width: "100%", height: "100%"}} type="file" id="file-input" onChange={this.handlePhoto}/>
