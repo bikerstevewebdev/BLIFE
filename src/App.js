@@ -68,9 +68,9 @@ class App extends Component {
     if(location.pathname !== '/firstLogin' && userData.coach_id === 0){
       this.props.history.push('/firstLogin')
     }
-    if(userData.user_id && (!userData.has_paid && location.pathname !== '/investmentCheckout')){
-      this.props.history.push('/investmentCheckout')
-    }
+    // if(userData.user_id && (!userData.has_paid && location.pathname !== '/investmentCheckout')){
+    //   this.props.history.push('/investmentCheckout')
+    // }
     if(!this.state.open && (userMessage || foodMessage || coachMessage || fitnessMessage)){
       this.setState({
         open: true

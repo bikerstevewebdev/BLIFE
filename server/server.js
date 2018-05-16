@@ -52,7 +52,7 @@ passport.use( new Auth0Strategy({
 }, (accessToken, refreshToken, extraParams, profile, done) => {
     const { id, nickname, picture, emails } = profile
 
-    // console.log('profile', profile);
+    console.log('profile', profile);
     const db = app.get('db') 
     db.get_user([id]).then( users => {        
         if ( users[0] ){
@@ -65,7 +65,7 @@ passport.use( new Auth0Strategy({
             let x      = new Date()
               , msDate = x.getTime()
             db.create_user([nickname, emails[0].value, picture, id, msDate]).then( createdUser => {
-                return done(null, createdUser)
+                return done(null, createdUser[0])
         } ) }
     } ).catch(err => {
         console.log('error with auth login:', err)
@@ -76,7 +76,7 @@ passport.use( new Auth0Strategy({
 
 // When done, adds user to req.session.user
 passport.serializeUser((user, done) => {
-    // console.log(`serial user maybe profile `, user)
+    console.log(`serial user maybe profile `, user)
     done(null, user)
 })
 
@@ -84,7 +84,7 @@ passport.serializeUser((user, done) => {
 // When done, adds second parameter to req.user
 passport.deserializeUser((user, done) => {
     app.get('db').find_session_user([user.auth_id]).then( dbUser => {
-        // console.log(`Deserial User should be DB User: ${dbUser.id}, in case its an array: ${dbUser[0]}`)
+        console.log(`Deserial User should be DB User: ${dbUser.id}, in case its an array: ${dbUser[0]}`)
         return done(null, dbUser[0]);
     })
 })

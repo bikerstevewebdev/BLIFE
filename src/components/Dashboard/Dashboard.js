@@ -31,7 +31,10 @@ class Dashboard extends Component{
         const { userData } = this.props
         if(!userData.user_id || userData.user_id <= 0){
             this.props.getUserData()
-        }else{
+            
+        }else if(userData.user_id === 0){
+            this.props.history.push('/firstLogin')
+        }else {
             if(userData.has_coach){
                 this.props.getAssignedMenus()
                 this.props.getAssignedWorkouts()
