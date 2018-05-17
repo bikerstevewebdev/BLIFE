@@ -37,6 +37,7 @@ import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import MotivationalQuote from './components/Measurements/MotivationalQuote'
 import CoachReqModal from './components/Coach/CoachReqModal';
 import MakeInvestment from './components/Stripe/MakeInvestment'
+import ErrorPage from './components/Login/ErrorPage';
 
 
 class App extends Component {
@@ -61,10 +62,10 @@ class App extends Component {
 
   componentDidUpdate(){
     const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, isLoggedIn, location, getCoachRequestInfo } = this.props    
-    if(location.pathname !== '/' && (!userData.user_id || !isLoggedIn)){
+    // if(location.pathname !== '/' && (!userData.user_id || !isLoggedIn)){
     // if(location.pathname !== '/' && (userData.user_id <= 0 || !isLoggedIn)){
-      this.props.history.push('/')
-    }
+      // this.props.history.push('/')
+    // }
     if(location.pathname !== '/firstLogin' && userData.coach_id === 0){
       this.props.history.push('/firstLogin')
     }
@@ -106,11 +107,12 @@ class App extends Component {
           ?
           null
           :
-          <Nav history={this.props.history}/>
+          <Nav location={this.props.location} history={this.props.history}/>
         }
           <section id="main-content">
             <Switch className="main-div">
               <Route path='/' exact component={Login} />
+              <Route path='/unauthorized' component={ErrorPage} />
               <Route path='/dashboard' component={Dashboard} />
               <Route path='/profile' component={Profile} />
               <Route path='/updateProfile' component={UpdateProfile} />

@@ -19,6 +19,9 @@ import Chat from 'material-ui/svg-icons/communication/chat';
 
 
 function Nav(props) {
+    // if(!props.userData.isLoggedIn){
+    //     props.history.push('/unauthorized')
+    // }
     const titleStyles = {
         display: "flex",
         justifyContent: "center",
@@ -46,7 +49,7 @@ function Nav(props) {
     const iconBtnStyles = { 
         margin: "0.45rem", padding: "0"
     }
-    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "#377D3D", backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"}
+    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "#377D3D", backgroundColor: "rgb(66, 50, 6)"}
     const home = (
         <section>
             <IconButton tooltipStyles={{marginLeft: "0.375em"}} iconStyle={{...iconStyles, width: "2rem", height: "2rem"}} onClick={() => props.history.push("/dashboard")} style={{iconBtnStyles}} tooltip="Dashboard">
@@ -93,7 +96,7 @@ function Nav(props) {
                 <ChromeReader />
             </IconButton>
             <FlatButton style={{margin: "0.45rem"}} tooltip="Profile" >
-                <Link style={{...profileBtnStyles, color: "inherit"}} to='/profile'>
+                <Link style={{...profileBtnStyles, color: "#eee"}} to='/profile'>
                     <Avatar icon={<PersonOutline />} size={35} src={props.userData.profile_pic} />
                     {props.userData.username}
                 </Link>
@@ -126,12 +129,13 @@ function Nav(props) {
 }
 
 function mapStateToProps(state) {
-    const { userData } = state.users
+    const { userData, loginAttempted } = state.users
     const { coach_id } = userData
     return {
         isLoggedIn: state.users.isLoggedIn,
         coach_id,
         userData,
+        loginAttempted,
         coach_req_info: state.coach.coach_req_info,
         authWarningMsg: state.users.warningMsg,
         // coachWarningMsg: state.coach.warningMsg

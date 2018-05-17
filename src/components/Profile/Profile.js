@@ -37,9 +37,9 @@ class Profile extends Component{
         console.log("profile props on mount: ", this.props)
         const { userData } = this.props
         const { user_id } = userData
-        if(!user_id){
+        // if(!user_id){
             this.props.getUserData()
-        }
+        // }
         // const { pro, carbs, fat, curr_mes, userData, bodyfat, weight, height } = this.props
         // if(curr_mes.mes_id !== userData.curr_mes && pro > 0){
         //     this.props.addMacrosToState(pro, carbs, fat, bodyfat, weight, height)
@@ -119,7 +119,7 @@ class Profile extends Component{
             let reqBtn = <RaisedButton label="View Coach Request" onClick={this.showCoachRequest.bind(this)}/>
             let coachRequest = coach_req_info.client_coach_id ? reqBtn : null
             const profileStyles = {
-                boxShadow: "rgb(90, 123, 132) 0px 2px 1px 1px",
+                boxShadow: "rgb(90, 123, 132) 0px 1px 1px 1px",
                 borderRadius: "3px",
                 width: "100%",
                 padding: "2em",
@@ -167,7 +167,8 @@ class Profile extends Component{
                     {/* <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link> */}
                     {coachRequest}
                 </section>
-                <section style={{...profileStyles, gridTemplateRows: "125px", gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em", backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)"}} className="progress-pics">
+                <section style={{...profileStyles, boxShadow: "none", gridTemplateRows: "125px", gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em", backgroundColor: "none",
+}} className="progress-pics">
                     <section style={{...jcFlex, gridArea: "1/1/2/4", }} className="progress-pic-btn">
                         {
                                 this.state.showingAllProgressPics

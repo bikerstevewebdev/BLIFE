@@ -32,8 +32,6 @@ class Dashboard extends Component{
         if(!userData.user_id || userData.user_id <= 0){
             this.props.getUserData()
             
-        }else if(userData.user_id === 0){
-            this.props.history.push('/firstLogin')
         }else {
             if(userData.has_coach){
                 this.props.getAssignedMenus()
@@ -121,8 +119,9 @@ class Dashboard extends Component{
             borderRadius: "3px",
             width: "100%",
             backgroundColor: "#fff",
-            backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)",
+            // backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)",
             padding: "2em",
+            backgroundColor: "rgba(237, 255, 237, 0.7)",
             gridGap: "0.75em"
         }
         const macroStyles = {
@@ -166,7 +165,7 @@ class Dashboard extends Component{
         
         return(
             <section style={{...dbStyles}} className="comp dashboard">
-                <h1 style={{gridColumn: "2/4", fontSize: "2.85rem", alignSelf: "center", textAlign: "center", color: "white", textShadow: "black 1px 1px 7px"}}>Welcome back {this.props.userData.username}</h1>
+                <h1 style={{gridColumn: "2/4", fontSize: "2.85rem", alignSelf: "center", textAlign: "center", textShadow: "black 1px 1px 7px"}}>Welcome back {this.props.userData.username}</h1>
                 <section style={macroStyles}>
                     <h3 style={{fontSize: "1.25em"}}>Your Current Macros:</h3>
                     <section style={{fontSize: "1.15em"}} style={{display: "flex", width: "100%", justifyContent: "space-around"}}>

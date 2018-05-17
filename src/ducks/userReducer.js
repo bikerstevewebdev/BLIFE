@@ -45,7 +45,8 @@ const initialState = {
     updateProfileModalOpen: false,
     photoCompModalOpen: false,
     comparisonPhotos: [],
-    motivationalModalOpen: false
+    motivationalModalOpen: false,
+    loginAttempted: false
 }
 /////////////////END initial state declaration////////////////////
 
