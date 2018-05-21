@@ -21,7 +21,8 @@ class SearchExternalFood extends Component{
 
     }
 
-    searchExternalFoods() {
+    searchExternalFoods(e) {
+        e.preventDefault()
         this.props.searchExternalFoods(this.state.externalSearchIn, this.state.branded)
         this.setState({
             externalSearchIn: ''
@@ -53,19 +54,28 @@ class SearchExternalFood extends Component{
                 <ExternalFoodCard key={i} name={f.name} p={f.p} c={f.c} f={f.f} fib={f.fib} img={f.img} addFood={this.props.addFood} />
             )
         })
+        const layoutStyles = {
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            alignItems: "center",
+            overFlowY: "scroll",
+            maxHeight: "164px",
+            padding: "0.5em",
+            gridGap: "0.5em"
+        }
         return (
-            <section className="external-food-search">
-                <TextField value={externalSearchIn} placeholder="Type in a food name" onChange={this.updateExternalSearch} />
-                <RaisedButton secondary={true} onClick={()=>searchExternalFoods(externalSearchIn, branded)}>Search!</RaisedButton>
+            <form style={{...layoutStyles}} className="external-food-search" onSubmit={(e) => this.searchExternalFoods(e)}>
+                <TextField fullWidth style={{gridArea: "1/1/2/2"}} value={externalSearchIn} placeholder="Type in a food name" onChange={this.updateExternalSearch} />
+                <RaisedButton style={{gridArea: "1/2/2/3"}} secondary={true} onClick={this.searchExternalFoods} type="submit" label="Search!" />
                 {
                     branded
                     ?
-                    <RaisedButton secondary={true} onClick={()=>this.changeBranded(branded)}>Search Whole/Common Foods Only</RaisedButton>
+                    <RaisedButton style={{gridArea: "1/3/2/4"}} secondary={true} onClick={()=>this.changeBranded(branded)}label="Whole Foods Only" />
                     :
-                    <RaisedButton secondary={true} onClick={()=>this.changeBranded(branded)}>Search for Brand Foods</RaisedButton>
+                    <RaisedButton style={{gridArea: "1/3/2/4"}} secondary={true} onClick={()=>this.changeBranded(branded)} label="Search for Brand Foods" />
                 }
                 {externalList}
-            </section>
+            </form>
         )
     }
 }

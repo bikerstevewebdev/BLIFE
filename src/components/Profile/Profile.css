@@ -3,8 +3,14 @@
 }
 ::-webkit-scrollbar {
     background-color: #423206;
+    width: 0px;
 }
 
 /* img{
     max-width: 200px;
 } */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}

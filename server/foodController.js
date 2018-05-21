@@ -102,7 +102,7 @@ module.exports = {
             if(req.user.user_id == food[0].author_id){
                 db.edit_food([food_id, name, p, c, f, fib, img]).then(newFood => {
                     res.status(200).send(newFood[0])
-                })
+                }).catch(err=> res.status(400).send(err.message))
             } else {
                 res.status(403).send({message: 'You are not the creator of that food and therefore do not have permission to change it. Feel free to create another version of this food if you find the information to be incorrect.'})
             }
@@ -180,26 +180,26 @@ module.exports = {
                     })
                 } else if(results.data.common.length > 0){
                     retArr = results.data.common.map(v => {
-                        if(v.full_nutrients){
+                        // if(v.full_nutrients.find(val => val.attr_id/1 === 203) && v.full_nutrients.find(val => val.attr_id/1 === 205) && v.full_nutrients.find(val => val.attr_id/1 === 204) && v.full_nutrients.find(val => val.attr_id/1 === 291)){
                             let nut = v.full_nutrients
                             return {
                                 name: v.food_name,
-                                p: nut.find(val => val.attr_id/1 === 203).value.toFixed() || 0,
-                                f: nut.find(val => val.attr_id/1 === 204).value.toFixed() || 0,
-                                c: nut.find(val => val.attr_id/1 === 205).value.toFixed() || 0,
-                                fib: nut.find(val => val.attr_id/1 === 291).value.toFixed() || 0,
+                                p: nut.find(val => val.attr_id/1 === 203) ? nut.find(val => val.attr_id/1 === 203).value.toFixed() : 0,
+                                f: nut.find(val => val.attr_id/1 === 204) ? nut.find(val => val.attr_id/1 === 204).value.toFixed() : 0,
+                                c: nut.find(val => val.attr_id/1 === 205) ? nut.find(val => val.attr_id/1 === 205).value.toFixed() : 0,
+                                fib: nut.find(val => val.attr_id/1 === 291) ? nut.find(val => val.attr_id/1 === 291).value.toFixed() : 0,
                                 img: v.photo.thumb
                             }
-                        }else{
-                            return {
-                                name: v.food_name,
-                                p: 0,
-                                f: 0,
-                                c: 0,
-                                fib: 0,
-                                img: v.photo.thumb
-                            }
-                        }
+                        // }else{
+                            // return {
+                            //     name: v.food_name,
+                            //     p: 0,
+                            //     f: 0,
+                            //     c: 0,
+                            //     fib: 0,
+                            //     img: v.photo.thumb
+                            // }
+                        // }
                     })
                 }
                 res.status(200).send(retArr)

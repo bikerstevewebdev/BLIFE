@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import { TextField } from 'material-ui';
 
 class UpdateProfile extends Component{
     constructor(props){
@@ -60,6 +61,14 @@ class UpdateProfile extends Component{
         }
 
     }
+
+    componentWillUnmount(){
+        this.setState({
+            usernameIn: '',
+            fullnameIn: '',
+            profile_picIn: ''
+        })
+    }
     
     render() {
         const { usernameIn, fullnameIn, profile_picIn } = this.state,
@@ -69,29 +78,36 @@ class UpdateProfile extends Component{
         }
             //   { current_weight, current_height, current_bf } = curr_mes
         return(
-            <Dialog open={updateProfileModalOpen}className="update-profile">
-            <section style={updateStyles}>
-                {
-                    userData.coach_id/1 !== 0
-                    ?
-                    null
-                    :
-                    <section className="coach-request">
-                        <h2>Looking to become a coach?</h2>
-                        <RaisedButton secondary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton>
+            <Dialog contentStyle={{width: profile_picIn.length ? "36%" : "20%", minWidth: "300px", flexWrap: "wrap"}} open={updateProfileModalOpen}className="update-profile">
+                <section style={{display: "flex", alignItems: "center"}}>
+                    <section style={updateStyles}>
+                        {
+                            userData.coach_id/1 !== 0
+                            ?
+                            null
+                            :
+                            <section className="coach-request">
+                                <h2>Looking to become a coach?</h2>
+                                <RaisedButton secondary={true} style={{width: "200px"}} onClick={() => this.requestAccess(true)}>Yes please! Request coach access!</RaisedButton>
+                            </section>
+                        }
+                        <h1>Update Profile</h1>
+                        <TextField floatingLabelText="Change your username" value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} hintText="Choose a unique username"/>
+                        <RaisedButton secondary={true} onClick={() => this.sendUpdate('user')}>Update</RaisedButton>
+                        <TextField floatingLabelText="Change your full name" value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} />
+                        <RaisedButton secondary={true} onClick={() => this.sendUpdate('full')}>Update</RaisedButton>
+                        <TextField floatingLabelText="Change your profile picture" value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
+                        <RaisedButton secondary={true} onClick={() => this.sendUpdate('pic')}>Update</RaisedButton>
+                        <FlatButton onClick={() => this.props.toggleUpdateProfileModal(false)} label="close" />
                     </section>
-                }
-                <p>Change your username:</p>
-                <input value={usernameIn} onChange={(e) => this.updateUsernameIn(e.target.value)} placeholder="Choose a unique username"/>
-                <RaisedButton secondary={true} onClick={() => this.sendUpdate('user')}>Update</RaisedButton>
-                <p>Change your full name:</p>
-                <input value={fullnameIn} onChange={(e) => this.updateFullnameIn(e.target.value)} />
-                <RaisedButton secondary={true} onClick={() => this.sendUpdate('full')}>Update</RaisedButton>
-                <p>Change your profile picture:</p>
-                <input value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
-                <RaisedButton secondary={true} onClick={() => this.sendUpdate('pic')}>Update</RaisedButton>
-                <FlatButton onClick={() => this.props.toggleUpdateProfileModal(false)} label="close" />
-            </section>
+                        {
+                            profile_picIn.length
+                            ?
+                            <img style={{paddingLeft: "10px", maxWidth: "250px"}} src={profile_picIn} alt={userData.username}/>
+                            :
+                            null
+                        }
+                </section>
             </Dialog>
         )
     }

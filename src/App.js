@@ -38,6 +38,7 @@ import MotivationalQuote from './components/Measurements/MotivationalQuote'
 import CoachReqModal from './components/Coach/CoachReqModal';
 import MakeInvestment from './components/Stripe/MakeInvestment'
 import ErrorPage from './components/Login/ErrorPage';
+import LoadingPage from './components/Login/LoadingPage';
 
 
 class App extends Component {
@@ -102,6 +103,13 @@ class App extends Component {
     const { userMessage, foodMessage, coachMessage, fitnessMessage, userData, toggleCoachChatModal, coachChatModalOpen, coach_req_info } = this.props
     return (
       <div className="App">
+        {
+          this.props.loading
+          ?
+          <LoadingPage />
+          :
+          null
+        }
         {
           this.props.location.pathname === '/'
           ?

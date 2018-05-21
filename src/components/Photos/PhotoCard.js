@@ -28,9 +28,12 @@ class PhotoCard extends Component {
         width: "100%",
         height: "100%",
         display: "flex",
-        boxShadow: "1px 1px 2px 0px rgb(25, 39, 31)",
+        boxShadow: "1px 1px 1px 0px rgb(25, 39, 31)",
         borderRadius: "3px",
-        backgroundColor: "#99d066"
+        backgroundColor: "rgba(64, 146, 12, 0.79)",
+        // backgroundColor: "#99d066",
+        // backgroundColor: "#DAF7DC",
+        // backgroundColor: "#9EE493",
         // justifySelf: "stretch"
         // flexDirection: "column",
         // flexWrap: "wrap"
@@ -52,7 +55,7 @@ class PhotoCard extends Component {
                 <section style={{...infoStyles}}>
                     <p style={{fontSize: "0.96em"}}>Date Added: {date_added.slice(0, 10)}</p>
                     <Checkbox labelStyle={{fontSize: "0.8em", lineHeight: "0.75rem"}} label="Add to compare" onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 4}/>
-                    <RaisedButton secondary={true} onClick={() => deprecatePhoto(photo_id)}>Archive</RaisedButton>
+                    <RaisedButton secondary={true} style={{width: "70%", alignSelf: "center"}} label="Archive" onClick={() => deprecatePhoto(photo_id)}/>
                 </section>
             </section>
         )

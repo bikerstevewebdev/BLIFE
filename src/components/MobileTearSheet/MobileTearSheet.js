@@ -20,9 +20,9 @@ class MobileTearSheet extends Component {
 
     const styles = {
       root: {
-        marginBottom: 24,
-        maxWidth: 200,
-        width: '45%',
+        margin: "0 10px",
+        // maxWidth: 200,
+        width: '33%',
       },
       container: {
         border: 'solid 1px #d9d9d9',
@@ -38,8 +38,8 @@ class MobileTearSheet extends Component {
     };
 
     return (
-      <div style={{...prepareStyles(styles.root), margin: "0", textAlign: "center"}}>
-        <div style={prepareStyles(styles.container)}>
+      <div style={{...prepareStyles(styles.root), textAlign: "center"}}>
+        <div style={{...prepareStyles(styles.container), ...this.props.style}}>
           {this.props.children}
         </div>
       </div>

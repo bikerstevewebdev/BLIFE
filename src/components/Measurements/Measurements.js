@@ -95,8 +95,9 @@ class Measurements extends Component{
       };
         
     render() {
+        const smileStyles = { height: "1.5em", width: "1.5em", backgroundColor: "black", borderRadius: "50%" }
         const { waistIn, neckIn, chestIn, heightIn, weightIn, bfIn, dateIn, happinessMeter } = this.state
-        const happinessIcon = happinessMeter < 3 ? <SuperSad style={{height: "1.5em", width: "1.5em", color: "red"}}/> : happinessMeter < 5 ? <Sad style={{height: "1.5em", width: "1.5em", color: "yellow"}}/> : happinessMeter < 7 ? <Neutral style={{height: "1.5em", width: "1.5em"}}/> : happinessMeter < 9 ? <Happy style={{height: "1.5em", width: "1.5em", color: "blue"}}/> : <SuperHappy style={{height: "1.5em", width: "1.5em", color: "green"}}/>
+        const happinessIcon = happinessMeter < 3 ? <SuperSad style={{color: "red"}}/> : happinessMeter < 5 ? <Sad style={{...smileStyles, color: "#d2d21a"}}/> : happinessMeter < 7 ? <Neutral style={{...smileStyles, color: "white"}}/> : happinessMeter < 9 ? <Happy style={{...smileStyles, color: "blue", backgroundColor: "#00000045"}}/> : <SuperHappy style={{color: "green"}}/>
         const mesCompStyles = {
             display: "grid",
             gridTemplateColumns: "1fr 1fr",

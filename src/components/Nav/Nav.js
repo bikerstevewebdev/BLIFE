@@ -22,6 +22,10 @@ function Nav(props) {
     // if(!props.userData.isLoggedIn){
     //     props.history.push('/unauthorized')
     // }
+    const logoutUser = () => {
+        props.logoutUser()
+        props.history.push('/')
+    }
     const titleStyles = {
         display: "flex",
         justifyContent: "center",
@@ -49,7 +53,7 @@ function Nav(props) {
     const iconBtnStyles = { 
         margin: "0.45rem", padding: "0"
     }
-    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "#377D3D", backgroundColor: "rgb(66, 50, 6)"}
+    const styles = {display: "flex", padding: "2em", width: "100%", justifyContent: "space-between", height: "100%", alignItems: "center", backgroundColor: "rgba(19, 131, 162, 0.56)", backgroundColor: "rgba(14, 99, 123, 0.68)"}
     const home = (
         <section>
             <IconButton tooltipStyles={{marginLeft: "0.375em"}} iconStyle={{...iconStyles, width: "2rem", height: "2rem"}} onClick={() => props.history.push("/dashboard")} style={{iconBtnStyles}} tooltip="Dashboard">
@@ -89,7 +93,7 @@ function Nav(props) {
             <IconButton tooltipStyles={{marginLeft: "0.1em"}} iconStyle={{...iconStyles}} style={{iconBtnStyles}} tooltip="Find Your Why" onClick={() => props.toggleMotivationalModal(true)}>
                 <Happy />
             </IconButton>
-            <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Logout" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={props.logoutUser}>
+            <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Logout" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={logoutUser}>
                 <Logout />
             </IconButton>
             <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Navigator" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleSideNav(true)}>

@@ -86,28 +86,30 @@ class Dashboard extends Component{
             display: "grid",
             gridTemplateRows: "auto",
             gridTemplateColumns: "1fr 1fr",
-            justifyContent: "center",
-            boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 3px",
-            backgroundColor: "#c2d8c4",
+            boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 1px",
+            backgroundColor: "#9EE49364",
             borderRadius: "3px",
             gridGap: "0.75em",
             gridColumn: "1/3",
             alignContent: "baseline",
+            alignItems: "center",
+            justifyItems: "center",
             padding: "0.5em"
         }
         const workSearchStyle = {
             width: "100%",
             display: "grid",
-            boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 3px",
-            backgroundColor: "#c2d8c4",
+            boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 1px",
+            backgroundColor: "#9EE49364",
             borderRadius: "3px",
             gridTemplateRows: "auto",
             gridTemplateColumns: "1fr 1fr",
-            justifyContent: "center",
             gridGap: "0.75em",
             gridColumn: "3/5",
             padding: "0.5em",
-            alignContent: "baseline"
+            alignContent: "baseline",
+            justifyItems: "center",
+            alignItems: "center",
         }
         const dbStyles = {
             height: "100%",
@@ -122,23 +124,24 @@ class Dashboard extends Component{
             // backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)",
             padding: "2em",
             backgroundColor: "rgba(237, 255, 237, 0.7)",
-            gridGap: "0.75em"
+            gridGap: "1.75em"
         }
         const macroStyles = {
-            borderRadius: "3px",
+            borderRadius: "2.25em",
             padding: "0.25em",
-            width: "100%",
+            width: "90%",
             gridColumn: "4/5",
-            color: "#7b2118",
+            color: "rgb(255, 255, 255, 0.9)",
             alignItems: "center",
             justifyContent: "space-around",
             display: "flex",
             boxShadow: "rgb(27, 32, 33) 1px 1px 2px 1px",
             flexDirection: "column",
-            height: "100%",
-            padding: "10% 0",
-            
-            backgroundImage: "linear-gradient(to top, #b3d8b7, #c0e2c3, #cdebcf, #dbf5db, #e8ffe8)"
+            height: "55%",
+            padding: "3% 0",
+            backgroundColor: "rgba(76, 56, 11, 0.88)",
+            alignSelf: "center"
+            // backgroundImage: "linear-gradient(to top, #b3d8b7, #c0e2c3, #cdebcf, #dbf5db, #e8ffe8)"
         }
         /////////////////Users Menus/Workouts////////////////////
         if(userMenus){
@@ -165,7 +168,7 @@ class Dashboard extends Component{
         
         return(
             <section style={{...dbStyles}} className="comp dashboard">
-                <h1 style={{gridColumn: "2/4", fontSize: "2.85rem", alignSelf: "center", textAlign: "center", textShadow: "black 1px 1px 7px"}}>Welcome back {this.props.userData.username}</h1>
+                <h1 style={{gridColumn: "2/4", fontSize: "2.85rem", alignSelf: "center", textAlign: "center"}}>Welcome back {this.props.userData.username}</h1>
                 <section style={macroStyles}>
                     <h3 style={{fontSize: "1.25em"}}>Your Current Macros:</h3>
                     <section style={{fontSize: "1.15em"}} style={{display: "flex", width: "100%", justifyContent: "space-around"}}>
@@ -174,12 +177,12 @@ class Dashboard extends Component{
                         <p>Fat: {curr_fat}</p>
                     </section>
                 </section>
-                <section style={{...menuSearchStyle, gridArea: "2/1/4/3", }} className="user-menus">
-                    <section style={{display: "flex", height: "5rem", justifyContent: "space-between", alignItems: "center", gridArea: "1/1/2/3"}} >
+                <section style={{...menuSearchStyle, backgroundColor: "rgba(185, 245, 187, 0.2)", gridArea: "2/1/4/3", }} className="user-menus">
+                    <section style={{display: "flex", height: "5rem", justifyContent: "center", alignItems: "center", gridArea: "1/1/2/3"}} >
                     {
-                        menusList.length
+                        menusList.length || assignedMenuList.length
                         ?
-                        <h2 style={{fontSize: "1.75em"}}>Your Menus:</h2>
+                        <h2 style={{fontSize: "1.75em", justifySelf: "center"}}>Your Menus</h2>
                         :
                         <section style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%", justifyContent: "space-around", height: "100%"}}>
                             <h2 style={{fontSize: "1.5em"}} >Looks Like you don't have any menus yet.</h2>
@@ -198,7 +201,7 @@ class Dashboard extends Component{
                             // ?
                             // <RaisedButton secondary={true} onClick={this.showAssigned} label="Show me my coach's plan" />
                             // :
-                                (((userData.coach_id === -6 || userData.coach_id) === -9 && !userData.is_admin)
+                                (((userData.coach_id === -6 || userData.coach_id === -9) && !userData.is_admin)
                                 ?
                                 <RaisedButton onClick={this.props.requestACoach} secondary={true} label="Request a Coach" />
                                 :
@@ -215,12 +218,12 @@ class Dashboard extends Component{
                         
                     }
                 </section>
-                <section style={{...workSearchStyle, gridArea: "2/3/4/5"}} className="user-workouts">
-                    <section style={{display: "flex", alignItems: "center", height: "5rem", gridArea: "1/1/2/3"}} >
+                <section style={{...workSearchStyle, backgroundColor: "rgba(185, 245, 187, 0.2)", gridArea: "2/3/4/5"}} className="user-workouts">
+                    <section style={{display: "flex", justifyContent: "center", alignItems: "center", height: "5rem", gridArea: "1/1/2/3"}} >
                         {
-                            workoutsList.length
+                            workoutsList.length || assignedWorkoutList.length
                             ?
-                            <h2 style={{fontSize: "1.75em"}}>Your Workouts:</h2>
+                            <h2 style={{fontSize: "1.75em", justifyContent: "center"}}>Your Workouts</h2>
                             :
                             <section style={{display: "flex", flexDirection: "column", alignItems: "center", width: "100%", justifyContent: "space-around", height: "100%"}}>
                                 <h2 style={{fontSize: "1.5em"}}>Looks Like you don't have any menus yet.</h2>

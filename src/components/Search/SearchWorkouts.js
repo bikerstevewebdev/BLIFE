@@ -58,8 +58,8 @@ class SearchWorkouts extends Component{
         const { workoutSearchResults, btn2Fn, btn2msg, arg1, userData } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
-                <Card style={{backgroundColor: "#fff", maxWidth: "350px", maxHeight: "21em", width: "100%"}}>
-                    <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
+                <Card key={res.workout_id}  style={{backgroundColor: "#fff", maxWidth: "225px", maxHeight: "21em", width: "100%"}}>
+                    <CardMedia style={{overflow: "hidden", height: "9.5em"}} >
                         <img src={res.img} alt={res.title} />
                     </CardMedia>
                     <CardTitle style={{padding: "0.5em"}}  title={res.title} />
@@ -81,7 +81,7 @@ class SearchWorkouts extends Component{
         })
 
         return (
-            <section style={{...this.props.style}} className="workout-search">
+            <section style={{...this.props.style, alignItems: "center", justifyItems: "center",}} className="workout-search">
                     <h2 style={{gridColumn: "1/3", justifySelf: "center", fontSize: "1.5em"}}>Find your new Workout:</h2>
                     <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)", borderRadius: "3px"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
                     <RaisedButton secondary={true} icon={<Search />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchWorkouts}>Search for a new Workout</RaisedButton>

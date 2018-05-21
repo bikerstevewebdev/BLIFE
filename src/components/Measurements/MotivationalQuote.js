@@ -58,7 +58,7 @@ class MotivationalQuote extends Component{
             <Dialog contentStyle={{...jcFlex, flexDirection: "column"}} open={motivationalModalOpen} className="motivational-modal" >
                 <section style={{...jcFlex}}>
                     <section style={{...jcFlex, flexDirection: "column"}}>
-                        <p style={{ fontWeight: "bold"}}>{qText ? `"${qText}"` : 'Try Another One'}</p>
+                        <p style={{textShadow: "black 2px 4px 1px", color: "white"}}>{qText ? `"${qText}"` : 'Try Another One'}</p>
                         <br/>
                         <p style={{...textStyles, fontStyle: "italic"}}>{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
                     </section>

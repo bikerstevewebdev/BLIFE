@@ -4,7 +4,7 @@ import { uploadPhoto } from '../../ducks/userReducer'
 import AddPhoto from 'material-ui/svg-icons/image/add-a-photo'
 import RaisedButton from 'material-ui/RaisedButton'
 import FileUpload from 'material-ui/svg-icons/file/file-upload'
-
+import Dialog from 'material-ui/Dialog/Dialog';
 
 class PhotoUpload extends Component {
     constructor(){
@@ -74,35 +74,39 @@ class PhotoUpload extends Component {
         // let noPics = this.props.empty ? { gridArea: "2/1/3/4", width: "33%" } : { width: "100%" }
         
         return (
-            <div style={{...uploadStyles, gridColumn: "1/4", width: "33%"}} className="photo-upload">
-                {
-                            this.state.filename.length > 0
-                            ?
-                            null
-                            :
-                            <h3>Upload a Progress Picture</h3>
-                }
-                <section style={{display:"flex", justifyContent: "space-around", width: "100%", flexWrap: "column"}}>
-                    <section style={{display:"flex", width: "100%",  justifyContent: "space-around", flexDirection: "column"}}>
-                        <RaisedButton style={{display: "flex", alignItems: "center", width: "100%"}} icon={<FileUpload/>} secondary={true} label="Select File" >
-                            <label htmlFor="file-input">
-                                <input style={{...inputStyles, cursor: "pointer", width: "100%", height: "100%"}} type="file" id="file-input" onChange={this.handlePhoto}/>
-                            </label>
-                        </RaisedButton>
-                        {
-                            this.state.filename.length > 0
-                            ?
-                            <RaisedButton style={{width: "100%"}} secondary={true} onClick={this.sendPhoto} icon={<AddPhoto/>} label="Upload" />
-                            :
-                            null
-                        }
-                    </section>
+            <Dialog contentStyle={{display:"flex", justifyContent: "space-around", width: "100%", flexWrap: "column"}} open={this.props.uploadingPhoto} className="photo-upload">
+                <h1 style={{fontSize: "1.75em", textAlign: "center", padding: "0.5em"}}>Upload a Progress Picture</h1>    
+                <section style={{display:"flex", width: "100%", alignItems: "center",  justifyContent: "space-around", flexDirection: "column"}}>
                     {
                         this.state.file &&
-                        <img src={this.state.file} style={{maxWidth: "200px"}} alt="preview" className="file-preview"/>  
+                        <img src={this.state.file} style={{margin: "0.25em", maxWidth: "400px"}} alt="preview" className="file-preview"/>  
                     }
+                    <RaisedButton style={{margin: "0.25em", display: "flex", justifyContent: "center", alignItems: "center", width: "50%"}} icon={<FileUpload/>} secondary={true} label="Select File" >
+                        <label htmlFor="file-input">
+                        <input style={{...inputStyles, cursor: "pointer", width: "100%", height: "100%"}} type="file" id="file-input" onChange={this.handlePhoto}/>
+                        </label>
+                    </RaisedButton>
+                    {
+                    this.state.filename.length > 0
+                    ?
+                    <RaisedButton style={{margin: "0.25em", width: "50%"}} secondary={true} onClick={this.sendPhoto} icon={<AddPhoto/>} label="Upload" />
+                    :
+                    null
+                    }
+                    <RaisedButton secondary={true} style={{margin: "0.25em", width: "50%"}}  onClick={this.props.toggleOpen} label="Close" />
                 </section>
-            </div>
+            </Dialog>
+
+
+            // <div style={{...uploadStyles, gridColumn: "1/4", width: "33%"}} className="photo-upload">
+            //     {/* {
+            //                 this.state.filename.length > 0
+            //                 ?
+            //                 null
+            //                 :
+                            
+            //     } */}
+            // </div>
         )
     }
 }

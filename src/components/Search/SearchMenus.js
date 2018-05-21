@@ -58,8 +58,8 @@ class SearchMenu extends Component{
         const { arg1, menuSearchResults, btn2Fn, btn2msg, userData } = this.props
         const menuResults = menuSearchResults.map(res => {
                 return (
-                        <Card style={{backgroundColor: "#fff", maxWidth: "350px", width: "100%"}} >
-                            <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
+                        <Card key={res.menu_id} style={{backgroundColor: "#fff", maxWidth: "225px", width: "100%"}} >
+                            <CardMedia style={{overflow: "hidden", height: "9.5em"}} >
                                 <img src={res.img} style={{height: "100%"}} alt={res.title} />
                             </CardMedia>
                             <CardTitle style={{padding: "0.5em"}} title={res.title} />
@@ -90,7 +90,7 @@ class SearchMenu extends Component{
                         <RaisedButton secondary={true} icon={<NavigationClose />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.endSearches} label="End Search" />
                         :
                         null
-                    }
+                }
                 {/* <button style={{width: "300px"}} >Search!</button> */}
                 {menuResults}
             </section>

@@ -5,6 +5,8 @@ import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField/TextField';
+import { DropDownMenu, MenuItem } from 'material-ui';
 
 class Workout extends Component{
     constructor() {
@@ -47,9 +49,9 @@ class Workout extends Component{
         })
     }
 
-    updatetypeInput(val) {
+    updatetypeInput(event, index, value) {
         this.setState({
-            typeInput: val
+            typeInput: value
         })
     }
 
@@ -82,25 +84,22 @@ class Workout extends Component{
     
     render() {
         return(
-            <Dialog open={this.props.workCreatorModalOpen} className="workout-creator" >
-                <p>Title of the Workout:</p>
-                <input value={this.state.titleInput} onChange={(e) => this.updateWorkoutTitle(e.target.value)} />
-                <p>Workout Category:</p>
-                <select className="workout-type" onChange={(e) => this.updatetypeInput(e.target.value)}>
-                    <option value="Weights" >Weights</option>
-                    <option value="Cardio">Cardio</option>
-                    <option value="Crossfit">Crossfit</option>
-                    <option value="Calisthenics">Bodyweight/Calisthenics</option>
-                    <option value="Home">Home-Workout</option>
-                    <option value="Stretching">Stretching</option>
-                    <option value="Yoga">Yoga</option>
-                </select>
+            <Dialog contentStyle={{display: "flex"}} open={this.props.workCreatorModalOpen} className="workout-creator" >
+                <TextField floatingLabelText="Title of the Workout:" value={this.state.titleInput}  onChange={(e) => this.updateWorkoutTitle(e.target.value)} />
+                <DropDownMenu floatingLabelText="Workout Category:" className="workout-type" onChange={(e, i, v) => this.updatetypeInput(e, i, v)}>
+                    <MenuItem value="Weights" >Weights</MenuItem>
+                    <MenuItem value="Cardio">Cardio</MenuItem>
+                    <MenuItem value="Crossfit">Crossfit</MenuItem>
+                    <MenuItem value="Calisthenics">Bodyweight/Calisthenics</MenuItem>
+                    <MenuItem value="Home">Home-Workout</MenuItem>
+                    <MenuItem value="Stretching">Stretching</MenuItem>
+                    <MenuItem value="Yoga">Yoga</MenuItem>
+                </DropDownMenu>
                 {
                     this.state.addingImg
                     ?
                     <section className="workout-img-input">
-                        <p>Workout Image Url:</p>
-                        <input value={this.state.imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
+                        <TextField floatingLabelText="Workout Image Url:" value={this.state.imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
                     </section>
                     :
                     <RaisedButton secondary={true} onClick={this.prepareToAddImg}>Add an image?</RaisedButton>

@@ -48,6 +48,7 @@ const ADD_MEAL_TO_MENU = 'ADD_MEAL_TO_MENU'
 const EDIT_MENU = 'EDIT_MENU'
 const SEARCH_MENUS = 'SEARCH_MENUS'
 const CLEAR_MEAL_SEARCH = 'CLEAR_MEAL_SEARCH'
+const RESET_NUTRITION_DATA = 'RESET_NUTRITION_DATA'
 const END_NUTRITION_SEARCH = 'END_NUTRITION_SEARCH'
 const SEARCH_EXTERNAL_FOODS = 'SEARCH_EXTERNAL_FOODS'
 const NEW_FOOD_MEAL_ADD = 'NEW_FOOD_MEAL_ADD'
@@ -59,6 +60,13 @@ const TOGGLE_FOOD_EDITOR_MODAL = 'TOGGLE_FOOD_EDITOR_MODAL'
 ////////////////END STRING LITERAL declaration/////////
 
 ////////////////BEGIN ACTION CREATOR declaration/////////
+
+export function resetNutritionData() {
+    return {
+        type: RESET_NUTRITION_DATA,
+        payload: ''
+    }
+}
 
 export function clearFoodMessage() {
     return {
@@ -232,8 +240,8 @@ export function updateFoodQuantity(meal_id, food_id, quantity, dif, p, c, f, fib
     }
 }
 
-export function editFood(food_id, p, c, f, fib, img){
-    let food = axios.put('/food/edit', { food_id, p, c, f, fib, img }).then(res => {
+export function editFood(food_id, name, p, c, f, fib, img){
+    let food = axios.put('/food/edit', { food_id, name, p, c, f, fib, img }).then(res => {
         return res.data
     })
     return {
@@ -367,6 +375,8 @@ export default function(state = initialState, action) {
             return { ...state, img: action.payload}
         case END_NUTRITION_SEARCH:
             return {...state, menuSearchResults: [], mealSearchResults: [], externalFoods: []}
+        case RESET_NUTRITION_DATA:
+            return {...initialState}
         case CREATE_MEAL + '_PENDING':
             return {
                     ...state,
@@ -462,20 +472,22 @@ export default function(state = initialState, action) {
             }
         case UPDATE_FOOD_QUANTITY + '_FULFILLED':
                 return { ...state, mealFoods: action.payload.foods, meal: action.payload.newMeal}
+        case EDIT_FOOD + '_REJECTED':
+                return {
+                        ...state,
+                        warningMsg: action.payload.response.data    
+                    }
         case EDIT_FOOD + '_FULFILLED':
-                if(action.payload.foods) {
-                    return {
-                            ...state, 
-                            name: action.payload.name,
-                            p: action.payload.pro,
-                            c: action.payload.carb,
-                            f: action.payload.fat,
-                            fib: action.payload.fiber,
-                            img: action.payload.img 
-                        }
-                } else{
-                    return { ...state, warningMsg: action.payload.message}
-                }
+                return {
+                        ...state, 
+                        name: action.payload.name,
+                        p: action.payload.pro,
+                        c: action.payload.carb,
+                        f: action.payload.fat,
+                        fib: action.payload.fiber,
+                        img: action.payload.img,
+                        warningMsg: `${action.payload.name} successfully updated.`
+                    }
         case EDIT_MENU + '_FULFILLED':
                 if(action.payload.menu) {
                     return { ...state, menu: action.payload }

@@ -5,6 +5,7 @@ import SearchExternalFood from '../Search/SearchExternalFood'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import { TextField } from 'material-ui';
 
 
 class Food extends Component{
@@ -52,38 +53,44 @@ class Food extends Component{
         const { name, p, c, f, fib, img } = this.props
         const { searchingExternal } = this.state
         return(
-            <Dialog open={this.props.foodDialogOpen} className="comp food-creator">
-                <p>Add a Food to the BLIFE Database</p>
-                <p>Name:</p>
-                <input className="food-name" value={name} onChange={(e) => this.props.updateNameIn(e.target.value)} placeholder="food name"/>
-                <p>Protein:</p>
-                <input className="food-p" type="number" min="0" max="1000" value={p} onChange={(e) => this.props.updatePIn(e.target.value)}/>
-                <p>Carbs:</p>
-                <input className="food-c" type="number" min="0" max="1000" value={c} onChange={(e) => this.props.updateCIn(e.target.value)}/>
-                <p>Fat:</p>
-                <input className="food-f" type="number" min="0" max="1000" value={f} onChange={(e) => this.props.updateFIn(e.target.value)}/>
-                <p>Fiber:</p>
-                <input className="food-fib" type="number" min="0" max="1000" value={fib} onChange={(e) => this.props.updateFibIn(e.target.value)}/>
-                <p>Image URL:</p>
-                <input className="food-img-url" value={img} onChange={(e) => this.props.updateImgIn(e.target.value)} placeholder="link to image"/>
-                <img src={img} alt="Preview" />
+            <Dialog autoScrollBodyContent={true} bodyStyle={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", overFlowY: "scroll"}} open={this.props.foodDialogOpen} className="comp food-creator">
+                <h1 style={{fontSize: "1.75em"}}>Add a Food to the BLIFE Database</h1>
+                <section style={{display: "flex", justifyContent: "space-around"}}>
+                    <section style={{display: "flex", flexDirection: "column", justifyContent: "space-around", width: "100%"}}>
+                        <TextField floatingLabelText="Name" className="food-name" value={name} onChange={(e) => this.props.updateNameIn(e.target.value)} hintText="food name"/>
+                        <TextField floatingLabelText="Image URL" className="food-img-url" value={img} onChange={(e) => this.props.updateImgIn(e.target.value)} hintText="link to image"/>
+                    </section>
+                    {img.length ? <img style={{maxWidth: "300px", maxHeight: "300px"}} src={img} alt="Preview" /> : null}
+                </section>
+                <section style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
+                    <TextField floatingLabelText="Protein" className="food-p" type="number" min="0" max="1000" value={p} onChange={(e) => this.props.updatePIn(e.target.value)}/>
+                    <TextField floatingLabelText="Carbs" className="food-c" type="number" min="0" max="1000" value={c} onChange={(e) => this.props.updateCIn(e.target.value)}/>
+                </section>
+                <section style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
+                    <TextField floatingLabelText="Fat" className="food-f" type="number" min="0" max="1000" value={f} onChange={(e) => this.props.updateFIn(e.target.value)}/>
+                    <TextField floatingLabelText="Fiber" className="food-fib" type="number" min="0" max="1000" value={fib} onChange={(e) => this.props.updateFibIn(e.target.value)}/>
+                </section>
+                <section style={{display: "flex", justifyContent: "space-around", width: "100%"}}>
 
-                <RaisedButton secondary={true} onClick={() => this.addFood(name, p, c, f, fib, img)}>Add Food to the Database</RaisedButton>
-                {
-                    searchingExternal //|| this.props.fromRecipe
-                    ?
-                    <SearchExternalFood addFood={this.addFood} />
-                    :
-                    null
-                }
-                {
-                    searchingExternal
-                    ?
-                    <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)}>Just kidding, get the search out of here</RaisedButton>
-                    :
-                    <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)}>Need some inspiration?</RaisedButton>
-                }
-                <FlatButton onClick={() => this.props.toggleFoodModal(false)}>close</FlatButton>
+                    <RaisedButton disabled={!name.length || !p || !c || !f || !fib} secondary={true} onClick={() => this.addFood(name, p, c, f, fib, img)} label="Add to the Database" />
+                    {
+                        searchingExternal
+                        ?
+                        <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)} label="End External Search" />
+                        :
+                        <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)} label="Need some inspiration?" />
+                    }
+                    <FlatButton onClick={() => this.props.toggleFoodModal(false)} label="close" />
+                </section>
+                <section style={{display: "flex", justifyContent: "space-around", maxHeight: "225px", width: "100%", alignItems: "center"}}>
+                    {
+                        searchingExternal //|| this.props.fromRecipe
+                        ?
+                        <SearchExternalFood addFood={this.addFood} />
+                        :
+                        null
+                    }
+                </section>
             </Dialog>
         )
     }

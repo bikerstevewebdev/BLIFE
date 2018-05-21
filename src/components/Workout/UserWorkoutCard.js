@@ -8,8 +8,8 @@ import { archiveWorkout } from '../../ducks/userReducer'
 function UserWorkoutCard(props) {
     const { workout_id, title, img, type, user_workout_id, archiveWorkout, assigned } = props
     return(
-        <Card style={{backgroundColor: "#fff", maxWidth: "350px", maxHeight: "21em", width: "100%"}} >
-            <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
+        <Card style={{backgroundColor: "#fcfcfc", maxWidth: "225px", maxHeight: "20em", width: "100%"}} >
+            <CardMedia style={{overflow: "hidden", height: "10.5em"}} >
                 <img src={img} alt={title} />
             </CardMedia>
             <CardTitle style={{padding: "0.5em"}} title={title} />

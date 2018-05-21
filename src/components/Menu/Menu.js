@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import MenuMeal from '../Meal/MenuMeal'
 import { connect } from 'react-redux'
-import { searchMeals, addMealToMenu, getMenuById, clearMealSearch } from '../../ducks/foodReducer'
+import { searchMeals, addMealToMenu, getMenuById, clearMealSearch, resetNutritionData } from '../../ducks/foodReducer'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import { TextField } from 'material-ui';
+import NavigationClose from 'material-ui/svg-icons/navigation/close'
 
 class Menu extends Component{
     constructor() {
@@ -47,6 +48,10 @@ class Menu extends Component{
             searchIn: val
         })
     }
+
+    componentWillUnmount(){
+        this.props.resetNutritionData()
+    }
     
     render() {
         const { menuMeals, menu, mealSearchResults } = this.props,
@@ -55,11 +60,11 @@ class Menu extends Component{
               mealResults = mealSearchResults.map(_meal => {
                 const { meal_id, total_p, total_c, total_f, total_fib, title, img_url } = _meal
                 return (
-                    <Card key={meal_id} containerStyle={{height: "100%"}} style={{backgroundColor: "#fff", maxWidth: "350px", height: "23em", width: "100%", display: "flex", flexDirection: "column"}}>
-                        <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
+                    <Card key={meal_id} containerStyle={{height: "100%"}} style={{backgroundColor: "#fff", maxWidth: "225px", height: "20em", width: "100%", display: "flex", flexDirection: "column"}}>
+                        <CardMedia style={{overflow: "hidden", height: "9.5em"}} >
                         <img src={img_url} alt={title} />
                         </CardMedia>
-                        <CardTitle style={{height: "3.75em", padding: "0 0.5em"}}  title={title} />
+                        <CardTitle titleStyle={{lineHeight: "1.08em", fontSize: "1.25em"}} style={{height: "3.75em", padding: "0.5em"}}  title={title} />
                         <CardText style={{height: "3.75em", padding: "0 0.5em", display: "flex"}} >
                             <section style={{padding: "0 0.5em", display: "flex"}}>
                                 <p style={{padding: "5px"}}>Protein: {total_p}</p>
@@ -86,26 +91,28 @@ class Menu extends Component{
             // gridAutoRows: "150px",
             boxShadow: "rgb(37, 48, 51) 0px 2px 1px 1px",
             borderRadius: "3px",
-            backgroundColor: "#fff",
+            backgroundColor: "rgba(255, 255, 255, 0.67)",
             padding: "2em",
-            gridGap: "0.75em"
+            gridGap: "0.75em",
+            justifyItems: "center"
         }
         const macroStyles = {
             borderRadius: "3px",
             padding: "0.25em",
             gridColumn: "1/3",
-            color: "#7b2118",
-            maxHeight: "250px",
+            color: "#03020ad1",
+            maxHeight: "125px",
             alignSelf: "center",
             alignItems: "center",
             justifyContent: "space-around",
             display: "flex",
-            boxShadow: "rgb(27, 32, 33) 1px 1px 2px 1px",
+            boxShadow: "rgb(27, 32, 33) 1px 1px 1px 1px",
             flexDirection: "column",
             height: "100%",
             padding: "10% 0",
-            
-            backgroundImage: "linear-gradient(to top, #b3d8b7, #c0e2c3, #cdebcf, #dbf5db, #e8ffe8)"
+            backgroundColor: "#19a503b0",
+            justifySelf: "center",
+            width: "75%"
         }
         const menuSearchStyle = {
             width: "100%",
@@ -119,7 +126,8 @@ class Menu extends Component{
             gridGap: "0.75em",
             gridColumn: "3/5",
             padding: "0.5em",
-            alignItems: "center"
+            alignItems: "center",
+            justifyItems: "center", 
         }
         return(
             <section style={{...layoutStyles}} className="menu">
@@ -132,13 +140,20 @@ class Menu extends Component{
                     <p>Fiber: {total_fib}</p>
                 </section>
                 <section style={{display: "flex", flexDirection: "column", gridArea: "1/3/3/5"}}>
-                    {img ? <img style={{maxWidth: "500px", boxShadow: "rgb(37, 48, 51) 0px 1px 1px", borderRadius: "5px"}} src={img} alt={title} /> : null}
+                    {img ? <img style={{maxWidth: "350px", borderRadius: "5px"}} src={img} alt={title} /> : null}
                 </section>
-                <h3 style={{fontSize: "2.5em", alignSelf: "end", gridArea: "3/1/4/5"}}>Meals in this menu:</h3>
+                <h3 style={{padding: "0.5em", fontSize: "2em", alignSelf: "end", gridArea: "3/1/4/5"}}>Meals in this menu</h3>
                 {menuMealsList}
                 <section style={{...menuSearchStyle, gridColumn: "1/5"}}>
                     <TextField style={{gridColumn: "1/3"}} value={searchIn} floatingLabelText="Search Meals by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
-                    <RaisedButton style={{gridColumn: "3/5"}} secondary={true} onClick={() => this.props.searchMeals(searchIn)}>Search for your meal!</RaisedButton>
+                    <RaisedButton style={{gridColumn: "3/4"}} secondary={true} onClick={() => this.props.searchMeals(searchIn)} label="Search for your next meal!" />
+                    {
+                        this.props.mealSearchResults.length > 0
+                        ?
+                        <RaisedButton secondary={true} icon={<NavigationClose />} style={{width: "75%", gridColumn: "4/5"}} onClick={this.endSearch} label="Clear Search" />
+                        :
+                        null
+                }
                     {mealResults}
                 </section>
             </section>
@@ -154,4 +169,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { searchMeals, addMealToMenu, getMenuById, clearMealSearch })(Menu)
+export default connect(mapStateToProps, { searchMeals, addMealToMenu, getMenuById, clearMealSearch, resetNutritionData })(Menu)

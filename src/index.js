@@ -27,19 +27,19 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 const muiTheme = getMuiTheme({
     palette: {
-        primary1Color: green500,
-        primary2Color: green700,
+        primary1Color: 'rgb(26, 140, 30)',
+        primary2Color: "rgb(25, 119, 10)",
         primary3Color: grey400,
         accent1Color: blue800,
-        accent2Color: grey100,
-        accent3Color: grey500,
+        accent2Color: "#e6e6e6",
+        accent3Color: "#fff",
         textColor: darkBlack,
         alternateTextColor: white,
-        canvasColor: green50,
-        borderColor: lightGreenA200,
-        disabledColor: fade(darkBlack, 0.3),
-        pickerHeaderColor: green500,
-        clockCircleColor: fade(darkBlack, 0.07),
+        canvasColor: "rgb(52, 97, 0)",
+        borderColor: "#64DD17",
+        disabledColor: fade(darkBlack, 0.6),
+        pickerHeaderColor: "rgb(74, 138, 0)",
+        clockCircleColor: white,
         shadowColor: fullBlack
     },
     appBar: {

@@ -15,8 +15,11 @@ import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import Avatar from 'material-ui/Avatar';
 import ProgressChart from '../Measurements/ProgressChart'
 import PhotoComparison from '../Photos/PhotoComparison'
-import './Profile.css'
 import Dialog from 'material-ui/Dialog/Dialog';
+import './Profile.css'
+import IconButton from 'material-ui/IconButton'
+import AddPhoto from 'material-ui/svg-icons/image/add-a-photo'
+
 
 class Profile extends Component{
     constructor() {
@@ -26,7 +29,8 @@ class Profile extends Component{
             picturesRetrieved: false,
             updatedHtWtBf: false,
             showingCoachRequest: false,
-            isUpdating: false
+            isUpdating: false,
+            uploadingPhoto: false
         }
         this.updateNewMes = this.updateNewMes.bind(this)
         this.discardNewMes = this.discardNewMes.bind(this)
@@ -82,6 +86,12 @@ class Profile extends Component{
             })
         }
     
+        togglePhotoUpload(){
+            this.setState({
+                uploadingPhoto: !this.state.uploadingPhoto
+            })
+        }
+    
 //////////////////////Handles Macro Changes///////////////////
         updateNewMes() {
             const { current_protein, current_carbs, current_fat, current_weight, current_height, current_bf, current_happyness } = this.props
@@ -129,7 +139,7 @@ class Profile extends Component{
                 height: "100%",
                 display: "grid",
                 gridTemplateColumns: "repeat(3, 1fr)",
-                gridTemplateRows: "200px",
+                gridTemplateRows: "100px 100px",
                 gridAutoFlow: "rows",
                 width: "100%",
                 gridGap: "0.75em"            
@@ -152,52 +162,68 @@ class Profile extends Component{
             }
             const compareBtn = (this.props.comparisonPhotos.length > 0
                                     ?
-                                    <RaisedButton style={{width: "100%"}} secondary={true} onClick={() => this.props.togglePhotoCompModal(true)} label="Compare Selected"/>
+                                    <RaisedButton style={{width: "33%"}} secondary={true} onClick={() => this.props.togglePhotoCompModal(true)} label="Compare Selected"/>
                                     :
                                     null
                                 )
+                                {/* <section > */}
+                                    {/* <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a profile pic! Why don't you go ahead and update your profile and fix that real quick!"/> */}
         return(
-            <section style={{...profileStyles}} className="comp profile">
-                <section style={{...jcFlexCol, gridArea: "1/1/2/2", justifySelf: "center", fontSize: "2.75em"}}>
-                    <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a profile pic! Why don't you go ahead and update your profile and fix that real quick!"/>
-                    
-                </section>
-                <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "3em"}}>Welcome Home</h1>
-                <section style={{...jcFlexCol, gridArea: "1/3/2/4"}}>
+                <section style={{...profileStyles}} className="comp profile">
+                    <h1 style={{gridArea: "1/2/2/3", justifySelf: "start", fontSize: "3em"}}>Welcome Home</h1>
+                    <section style={{...jcFlex, justifyContent: "center", gridArea: "2/1/3/4"}}>
+                        <MobileTearSheet style={{...jcFlexCol, width: "100%", fontSize: "2.75em", backgroundColor: "#4e4b4b33"}}>
+                                <Subheader style={{display: "flex", alignItems: "center", lineHeight: "1.25em", padding: "0", justifyContent: "center"}}   >Measurements <Avatar style={{marginLeft: "4px", justifySelf: "flex-end", fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<EditorInsertChart />} backgroundColor={"rgb(218, 180, 4)"}/></Subheader>
+                                <List style={{display: "flex", justifyContent: "space-around"}}>
+                                    <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/measurements')} primaryText="Weight" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_weight} lbs`}</span>} />
+                                    <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Height" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_height} in`}</span>} />
+                                    <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Bodyfat" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_bf} %`}</span>} />
+                                </List>
+                        </MobileTearSheet>
+                        <MobileTearSheet style={{display: "flex", backgroundColor: "#4e4b4b33", justifyContent: "space-around", width: "100%", flexDirection: "column"}} >
+                            <Subheader style={{display: "flex", alignItems: "center", lineHeight: "1.25em", padding: "0", justifyContent: "center"}}>Current Macros<Avatar style={{marginLeft: "4px", fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<ActionAssignment />} backgroundColor={"#1bb78a"} /></Subheader>
+                            <List style={{display: "flex", justifyContent: "space-around"}}>
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/macroCalc')} primaryText="Protein" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_protein}g`}</span>} />
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText="Fat" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_fat}g`}</span>} />
+                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText="Carbs" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_carbs}g`}</span>} />
+                            </List>
+                        </MobileTearSheet >
+                {/* </section> */}
                     {/* <Link to='/'><RaisedButton secondary={true} style={{backgroundColor: "yellow"}}>Back to Login</RaisedButton></Link> */}
                     {coachRequest}
                 </section>
-                <section style={{...profileStyles, boxShadow: "none", gridTemplateRows: "125px", gridArea: "2/1/3/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em", backgroundColor: "none",
+                <section style={{...profileStyles, boxShadow: "none", gridTemplateRows: "125px", gridArea: "3/1/4/4", justifyItems: "center", alignItems: "center", gridAutoRows: "9.375em", backgroundColor: "none",
 }} className="progress-pics">
+                        
                     <section style={{...jcFlex, gridArea: "1/1/2/4", }} className="progress-pic-btn">
                         {
                                 this.state.showingAllProgressPics
                                 ?
-                                <section style={{...jcFlex}}>
-                                    <h3 style={{fontSize: "1.75em"}}>All of your Progress Pics:</h3>
-                                    <section style={{...jcFlexCol, width: "auto"}}>
-                                        <RaisedButton style={{width: "100%"}} secondary={true} onClick={()=>this.showAllProgressPics(false)}label="Focus on the Present" />
+                                <section style={{...jcFlexCol}}>
+                                    <h3 style={{fontSize: "1.75em"}}>All Progress Pictures</h3>
+                                    <section style={{...jcFlex, width: "55%"}}>
+                                        <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(false)}label="Focus on the Present" />
                                         { compareBtn }
                                     </section>
                                 </section>
                                 :
-                                <section style={{...jcFlex}}>
-                                    <h3 style={{ fontSize: "1.75em"}}>Your Current Progress Pics:</h3>
-                                    <section style={{...jcFlexCol, width: "auto"}}>
-                                        <RaisedButton style={{width: "100%"}} secondary={true} onClick={()=>this.showAllProgressPics(true)} label="Reveal the Path" />
+                                <section style={{...jcFlexCol}}>
+                                    <h3 style={{ fontSize: "1.75em"}}>Current Progress Pictures</h3>
+                                    <section style={{...jcFlex, width: "55%", justifyContent: "space-around"}}>
+                                        <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(true)} label="Reveal the Path" />
                                         { compareBtn }
                                     </section>
                                 </section>
                         }
                     </section>
-                        {/* <h3 style={{...jcFlex, fontSize: "1.75em"}}>Upload some Progress Pictures</h3> */}
+                    <RaisedButton labelPosition="before" label="Add a Photo" style={{gridArea: "1/3/2/4", alignSelf: "center"}} secondary={true} onClick={this.togglePhotoUpload.bind(this)} icon={<AddPhoto />}/>                        {/* <h3 style={{...jcFlex, fontSize: "1.75em"}}>Upload some Progress Pictures</h3> */}
                     {progressPics}
-                    <PhotoUpload  empty={!progress_pics.length}/>
+                    <PhotoUpload toggleOpen={this.togglePhotoUpload.bind(this)} uploadingPhoto={this.state.uploadingPhoto} empty={!progress_pics.length}/>
                 </section>
                 {
                     this.props.userData.curr_mes_id > 0
                     ?
-                    <ProgressChart styles={{gridArea: "3/1/4/4"}}/>
+                    <ProgressChart styles={{gridArea: "4/1/5/4"}}/>
                     :
                     null
                 }
@@ -208,28 +234,9 @@ class Profile extends Component{
                     :
                     null
                 } */}
-                <section style={{...jcFlexCol, gridArea: "1/3/2/4"}} className="current-stats">
-                    <section style={{...jcFlex, justifyContent: "space-around", width: "75%"}}>
-                        <MobileTearSheet >
-                            <Subheader style={{lineHeight: "1.25em", padding: "0"}}>Measurements</Subheader>
-                            <List >
-                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/measurements')} leftAvatar={<Avatar style={{fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<EditorInsertChart />} backgroundColor={"rgb(121, 107, 43)"}/>} primaryText="Weight" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_weight} lbs`}</span>} />
-                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Height" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_height} in`}</span>} />
-                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Bodyfat" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_bf} %`}</span>} />
-                            </List>
-                        </MobileTearSheet>
-                        <MobileTearSheet >
-                            <Subheader style={{lineHeight: "1.25em", padding: "0"}}>Current Macros</Subheader>
-                            <List>
-                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/macroCalc')} leftAvatar={<Avatar style={{fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<ActionAssignment />} backgroundColor={"rgba(0, 0, 0, 0.8)"} />} primaryText="Protein" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_protein}g`}</span>} />
-                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText="Fat" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_fat}g`}</span>} />
-                                <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 0.25em 0.25em  3.5em"}} onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText="Carbs" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_carbs}g`}</span>} />
-                            </List>
-                        </MobileTearSheet >
-                    </section>
-                    
-                    <RaisedButton onClick={() => this.props.toggleUpdateProfileModal(true)} style={{width: "70%"}} secondary={true} >Update Profile</RaisedButton>
-                </section>
+                {/* <section style={{...jcFlexCol, gridArea: "1/3/2/4"}} className="current-stats">
+                    <RaisedButton onClick={() => this.props.toggleUpdateProfileModal(true)} style={{width: "70%"}} secondary={true} label="Update Profile" />
+                </section> */}
                 {
                     this.props.isUpdating
                     ?

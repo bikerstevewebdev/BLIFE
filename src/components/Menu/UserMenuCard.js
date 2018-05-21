@@ -9,8 +9,8 @@ import { archiveMenu } from '../../ducks/userReducer'
 function UserMenuCard(props) {
     const { menu_id, title, total_p, total_c, total_f, total_fib, img, assigned, user_menu_id, archiveMenu } = props
     return(
-        <Card style={{backgroundColor: "#fff", maxWidth: "350px", maxHeight: "21em", width: "100%"}} >
-            <CardMedia style={{overflow: "hidden", height: "12.5em"}} >
+        <Card style={{backgroundColor: "#fcfcfc", maxWidth: "225px", maxHeight: "20em", width: "100%"}} >
+            <CardMedia style={{overflow: "hidden", height: "10.5em"}} >
                 <img src={img} style={{height: "100%"}} alt={title} />
             </CardMedia>
             <CardTitle style={{padding: "0.5em"}} title={title} />
