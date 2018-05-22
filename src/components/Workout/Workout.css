@@ -1,0 +1,26 @@
+.w-creator-content{
+    width: 100%;
+}
+.w-creator-body{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    /* align-items: center; */
+    flex-wrap: wrap;
+    max-height: 400px!important;
+}
+.w-creator-img-pre{
+    max-width: 350px;
+}
+.w-creator-img-pre img{
+    max-width: 350px;
+    border-radius: 0.75em;
+}
+.w-creator-main{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    justify-content: space-between;
+    min-height: 15em;
+}

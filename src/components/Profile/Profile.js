@@ -162,7 +162,7 @@ class Profile extends Component{
             }
             const compareBtn = (this.props.comparisonPhotos.length > 0
                                     ?
-                                    <RaisedButton style={{width: "33%"}} secondary={true} onClick={() => this.props.togglePhotoCompModal(true)} label="Compare Selected"/>
+                                    <RaisedButton secondary={true} onClick={() => this.props.togglePhotoCompModal(true)} label="Compare Selected"/>
                                     :
                                     null
                                 )
@@ -170,10 +170,10 @@ class Profile extends Component{
                                     {/* <img style={{justifySelf: "end", width: "150px", height: "150px", borderRadius: "50%", overFlow: "hidden", gridArea: "1/1/2/2"}} src={userData.profile_pic} alt="Looks like you don't have a profile pic! Why don't you go ahead and update your profile and fix that real quick!"/> */}
         return(
                 <section style={{...profileStyles}} className="comp profile">
-                    <h1 style={{gridArea: "1/2/2/3", justifySelf: "start", fontSize: "3em"}}>Welcome Home</h1>
+                    <h1 style={{gridArea: "1/2/2/3", justifySelf: "center", fontSize: "3em"}}>Welcome Home</h1>
                     <section style={{...jcFlex, justifyContent: "center", gridArea: "2/1/3/4"}}>
                         <MobileTearSheet style={{...jcFlexCol, width: "100%", fontSize: "2.75em", backgroundColor: "#4e4b4b33"}}>
-                                <Subheader style={{display: "flex", alignItems: "center", lineHeight: "1.25em", padding: "0", justifyContent: "center"}}   >Measurements <Avatar style={{marginLeft: "4px", justifySelf: "flex-end", fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<EditorInsertChart />} backgroundColor={"rgb(218, 180, 4)"}/></Subheader>
+                                <Subheader style={{display: "flex", alignItems: "center", lineHeight: "1.25em", padding: "0.5em", justifyContent: "center"}}   >Measurements {/*<Avatar style={{marginLeft: "4px", justifySelf: "flex-end", fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<EditorInsertChart />} backgroundColor={"rgb(218, 180, 4)"}/>*/}</Subheader>
                                 <List style={{display: "flex", justifyContent: "space-around"}}>
                                     <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/measurements')} primaryText="Weight" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_weight} lbs`}</span>} />
                                     <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/measurements')} insetChildren={true} primaryText="Height" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_height} in`}</span>} />
@@ -181,7 +181,7 @@ class Profile extends Component{
                                 </List>
                         </MobileTearSheet>
                         <MobileTearSheet style={{display: "flex", backgroundColor: "#4e4b4b33", justifyContent: "space-around", width: "100%", flexDirection: "column"}} >
-                            <Subheader style={{display: "flex", alignItems: "center", lineHeight: "1.25em", padding: "0", justifyContent: "center"}}>Current Macros<Avatar style={{marginLeft: "4px", fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<ActionAssignment />} backgroundColor={"#1bb78a"} /></Subheader>
+                            <Subheader style={{display: "flex", alignItems: "center", lineHeight: "1.25em", padding: "0.5em", justifyContent: "center"}}>Current Macros{/*<Avatar style={{marginLeft: "4px", fontSize: "1.75em", width: "1.25em", height: "1.25em", top: "0.15em"}} icon={<ActionAssignment />} backgroundColor={"#1bb78a"} />*/}</Subheader>
                             <List style={{display: "flex", justifyContent: "space-around"}}>
                                 <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/macroCalc')} primaryText="Protein" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_protein}g`}</span>} />
                                 <ListItem innerDivStyle={{fontSize: "0.95em" ,padding: "0.25em 2em"}} onClick={() => this.props.history.push('/macroCalc')} insetChildren={true} primaryText="Fat" secondaryText={<span style={{fontSize: "0.85em"}}>{`${current_fat}g`}</span>} />
@@ -201,16 +201,16 @@ class Profile extends Component{
                                 ?
                                 <section style={{...jcFlexCol}}>
                                     <h3 style={{fontSize: "1.75em"}}>All Progress Pictures</h3>
-                                    <section style={{...jcFlex, width: "55%"}}>
-                                        <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(false)}label="Focus on the Present" />
+                                    <section style={{...jcFlex, justifyContent: "center", alignItems: "flex-end", width: "50%"}}>
+                                        <RaisedButton style={{margin: "0 0.5em"}} secondary={true} onClick={()=>this.showAllProgressPics(false)}label="Focus on the Present" />
                                         { compareBtn }
                                     </section>
                                 </section>
                                 :
                                 <section style={{...jcFlexCol}}>
                                     <h3 style={{ fontSize: "1.75em"}}>Current Progress Pictures</h3>
-                                    <section style={{...jcFlex, width: "55%", justifyContent: "space-around"}}>
-                                        <RaisedButton secondary={true} onClick={()=>this.showAllProgressPics(true)} label="Reveal the Path" />
+                                    <section style={{...jcFlex, width: "50%", justifyContent: "center", alignItems: "flex-end"}}>
+                                        <RaisedButton secondary={true} style={{margin: "0 0.5em"}} onClick={()=>this.showAllProgressPics(true)} label="Reveal the Path" />
                                         { compareBtn }
                                     </section>
                                 </section>

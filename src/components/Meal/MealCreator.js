@@ -5,7 +5,8 @@ import { Redirect } from 'react-router-dom'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { TextField } from 'material-ui';
+import { TextField, IconButton } from 'material-ui';
+import CloseBtn from 'material-ui/svg-icons/navigation/close'
 
 class MealCreator extends Component{
     constructor() {
@@ -78,7 +79,7 @@ class MealCreator extends Component{
                     :
                     <Redirect to={`/meal/${mealTitle}`} />
                 }
-                <FlatButton style={{gridArea: "5/1/6/2"}} onClick={() => this.props.toggleMealModal(false)} label="close" />
+                <IconButton className="close-btn" style={{gridArea: "5/1/6/2"}} onClick={() => this.props.toggleMealModal(false)} label="close"><CloseBtn/></IconButton>
             </Dialog>
         )
     }

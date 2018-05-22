@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { togglePhotoCompModal } from '../../ducks/userReducer'
-import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog'
+import './PhotoComparison.css'
+import { FlatButton } from 'material-ui';
 // import FlatButton from 'material-ui/FlatButton'
 
 
@@ -39,12 +40,12 @@ class PhotoComparison extends Component {
             </section>)
         })
         return (
-            <Dialog titleStyle={{textAlign: "center"}} title={<h1>Photo Comparison</h1>} open={this.props.photoCompModalOpen} className="photo-comparison">
+            <Dialog titleStyle={{textAlign: "center"}} title={<h1>Photo Comparison</h1>} open={this.props.photoCompModalOpen} bodyClassName="photo-comparison">
                 <section style={photoCompStyles}>
                     <section style={{display: "grid", gridAutoColumns: "1fr", alignItems: "center", justifyItems: "center", gridAutoFlow: "column"}}>
                         {photos}
                     </section>
-                    <RaisedButton onClick={() => this.props.togglePhotoCompModal(false)} label="close" />
+                    <FlatButton onClick={() => this.props.togglePhotoCompModal(false)} label="close" />
                 </section>
             </Dialog>
         )

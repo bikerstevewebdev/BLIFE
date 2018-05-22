@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { TextField } from 'material-ui';
+import { TextField, IconButton } from 'material-ui';
+import CloseBtn from 'material-ui/svg-icons/navigation/close'
 
 class UpdateProfile extends Component{
     constructor(props){
@@ -98,7 +99,7 @@ class UpdateProfile extends Component{
                         <RaisedButton secondary={true} onClick={() => this.sendUpdate('full')}>Update</RaisedButton>
                         <TextField floatingLabelText="Change your profile picture" value={profile_picIn} onChange={(e) => this.updateProfilePicIn(e.target.value)} />
                         <RaisedButton secondary={true} onClick={() => this.sendUpdate('pic')}>Update</RaisedButton>
-                        <FlatButton onClick={() => this.props.toggleUpdateProfileModal(false)} label="close" />
+                        <IconButton className="close-btn" onClick={() => this.props.toggleUpdateProfileModal(false)} label="close"><CloseBtn /></IconButton>
                     </section>
                         {
                             profile_picIn.length

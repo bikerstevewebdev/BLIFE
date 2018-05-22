@@ -55,16 +55,19 @@ class ProgressData extends Component {
                 ]
              },
         chartOptions: {
+            responsive: true,
             title: {
                 display: true,
                 text: 'Measurements History',
                 fontSize: 25,
+                fontColor: "black",
             },
             legend: {
                 display: true,
                 position: 'right',
+                
                 labels: {
-                    fontColor: 'blue',
+                    fontColor: 'black',
                 },
             },
             //   layout: {

@@ -5,8 +5,9 @@ import SearchExternalFood from '../Search/SearchExternalFood'
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import { TextField } from 'material-ui';
-
+import { TextField, IconButton } from 'material-ui';
+import './Food.css'
+import CloseBtn from 'material-ui/svg-icons/navigation/close'
 
 class Food extends Component{
     constructor() {
@@ -80,7 +81,7 @@ class Food extends Component{
                         :
                         <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)} label="Need some inspiration?" />
                     }
-                    <FlatButton onClick={() => this.props.toggleFoodModal(false)} label="close" />
+                    <IconButton className="close-btn" onClick={() => this.props.toggleFoodModal(false)} label="close"><CloseBtn /></IconButton>
                 </section>
                 <section style={{display: "flex", justifyContent: "space-around", maxHeight: "225px", width: "100%", alignItems: "center"}}>
                     {

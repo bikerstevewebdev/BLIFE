@@ -21,11 +21,14 @@ class WorkoutEditor extends Component{
     }
         
     componentDidMount() {
-        console.log(this.props)
+        console.log("Workout Editor Props: ", this.props)
+        const { workout } = this.props
         const { id } = this.props.match.params
         if(!isNaN(id/1) && id/1 > 0 && id !== this.props.workout.workout_id){
             this.props.getWorkoutById(id)
-        } 
+        }else if(workout && workout.workout_id){
+            this.props.getWorkoutById(workout.workout_id)
+        }
     }
 
     componentDidUpdate(){

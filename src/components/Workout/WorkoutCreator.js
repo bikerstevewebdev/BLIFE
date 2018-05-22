@@ -6,7 +6,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField/TextField';
-import { DropDownMenu, MenuItem } from 'material-ui';
+import { DropDownMenu, MenuItem, IconButton } from 'material-ui';
+import CloseBtn from 'material-ui/svg-icons/navigation/close'
+import './Workout.css'
 
 class Workout extends Component{
     constructor() {
@@ -26,16 +28,6 @@ class Workout extends Component{
         this.prepareToAddImg = this.prepareToAddImg.bind(this)
         this.leave = this.leave.bind(this)
     }
-
-    // componentDidUpdate() {
-    //     const { workout_id } = this.props.workout
-    //     if(workout_id){
-    //         this.setState({
-    //             w_id: workout_id
-    //         })
-    //         this.leave()
-    //     }
-    // }
     
     sendWorkoutUp() {
         const { titleInput, imgInput, typeInput } = this.state,      
@@ -83,36 +75,48 @@ class Workout extends Component{
     // }
     
     render() {
+        const { addingImg, imgInput, titleInput, creating, w_id, typeInput } = this.state
+        let contentWidth = (addingImg && imgInput.length) ? "45%" : "20%"
         return(
-            <Dialog contentStyle={{display: "flex"}} open={this.props.workCreatorModalOpen} className="workout-creator" >
-                <TextField floatingLabelText="Title of the Workout:" value={this.state.titleInput}  onChange={(e) => this.updateWorkoutTitle(e.target.value)} />
-                <DropDownMenu floatingLabelText="Workout Category:" className="workout-type" onChange={(e, i, v) => this.updatetypeInput(e, i, v)}>
-                    <MenuItem value="Weights" >Weights</MenuItem>
-                    <MenuItem value="Cardio">Cardio</MenuItem>
-                    <MenuItem value="Crossfit">Crossfit</MenuItem>
-                    <MenuItem value="Calisthenics">Bodyweight/Calisthenics</MenuItem>
-                    <MenuItem value="Home">Home-Workout</MenuItem>
-                    <MenuItem value="Stretching">Stretching</MenuItem>
-                    <MenuItem value="Yoga">Yoga</MenuItem>
-                </DropDownMenu>
+            <Dialog title="Workout Creator" bodyClassName="w-creator-body" contentClassName="w-creator-content" contentStyle={{width: contentWidth}} open={this.props.workCreatorModalOpen} className="w-creator" >
+                <section className="w-creator-main">
+                    <TextField floatingLabelText="Title of the Workout:" value={titleInput}  onChange={(e) => this.updateWorkoutTitle(e.target.value)} />
+                    <DropDownMenu floatingLabelText="Workout Category:" value={typeInput} className="workout-type" onChange={(e, i, v) => this.updatetypeInput(e, i, v)}>
+                        <MenuItem primaryText="Weights" value="Weights"/>
+                        <MenuItem primaryText="Cardio" value="Cardio"/>
+                        <MenuItem primaryText="Crossfit" value="Crossfit"/>
+                        <MenuItem primaryText="Calisthenics" value="Calisthenics"/>
+                        <MenuItem primaryText="Home" value="Home"/>
+                        <MenuItem primaryText="Stretching" value="Stretching"/>
+                        <MenuItem primaryText="Yoga" value="Yoga"/>
+                    </DropDownMenu>
+                    {
+                        addingImg
+                        ?
+                        <section className="w-img-input">
+                            <TextField floatingLabelText="Workout Image Url:" value={imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
+                        </section>
+                        :
+                        <RaisedButton secondary={true} onClick={this.prepareToAddImg} label="Add an image?" />
+                    }
+                    <RaisedButton primary={true} onClick={() => this.sendWorkoutUp()} label="Create Workout" />
+                </section>
                 {
-                    this.state.addingImg
-                    ?
-                    <section className="workout-img-input">
-                        <TextField floatingLabelText="Workout Image Url:" value={this.state.imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />
+                    imgInput.length ? 
+                    <section className="w-creator-img-pre">
+                        <img src={imgInput} alt={titleInput} />
                     </section>
                     :
-                    <RaisedButton secondary={true} onClick={this.prepareToAddImg}>Add an image?</RaisedButton>
+                    null
                 }
-                <RaisedButton secondary={true} onClick={() => this.sendWorkoutUp()}>Create Workout!</RaisedButton>
                 {
-                    this.state.creating
+                    creating
                     ?
                     null
                     :
-                    <Redirect to={`/workout/${this.state.w_id}`} />
+                    <Redirect to={`/workout/${w_id}`} />
                 }
-                <FlatButton onClick={() => this.props.toggleWorkCreatorModal(false)} label="close" />
+                <IconButton className="close-btn" onClick={() => this.props.toggleWorkCreatorModal(false)} label="close"><CloseBtn/></IconButton>
             </Dialog>
         )
     }

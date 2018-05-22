@@ -54,7 +54,7 @@ class PhotoCard extends Component {
                 </section>
                 <section style={{...infoStyles}}>
                     <p style={{fontSize: "0.96em"}}>Date Added: {date_added.slice(0, 10)}</p>
-                    <Checkbox labelStyle={{fontSize: "0.8em", lineHeight: "0.75rem"}} label="Add to compare" onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 4}/>
+                    <Checkbox labelStyle={{fontSize: "0.8em", lineHeight: "0.75rem"}} label="Add to compare" onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 2}/>
                     <RaisedButton secondary={true} style={{width: "70%", alignSelf: "center"}} label="Archive" onClick={() => deprecatePhoto(photo_id)}/>
                 </section>
             </section>

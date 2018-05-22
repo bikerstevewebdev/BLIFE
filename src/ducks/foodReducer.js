@@ -122,7 +122,7 @@ export function addFoodToDB(name, p, c, f, fib, img) {
     })
     return {
         type: ADD_FOOD,
-        payload: data
+        payload: data.name
     }
 }
 
@@ -409,7 +409,8 @@ export default function(state = initialState, action) {
                     f: 0,
                     fib: 0,
                     img: '',
-                    externalFoods: []
+                    externalFoods: [],
+                    warningMsg: `${action.payload} successfully added.`
                     }
         case REMOVE_FOOD + '_FULFILLED':
             return {

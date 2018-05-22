@@ -5,6 +5,10 @@ import { addExToDB, clearExercise, getExById, toggleExCreatorModal } from '../..
 import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import CloseBtn from 'material-ui/svg-icons/navigation/close'
+import { IconButton, SelectField, TextField } from 'material-ui';
+import MenuItem from 'material-ui/MenuItem/MenuItem';
+import './Exercise.css'
 
 class Exercise extends Component{
     constructor(props) {
@@ -45,21 +49,21 @@ class Exercise extends Component{
         })
     }
     
-    updateTypeIn(e){
+    updateTypeIn(e, i, v){
         this.setState({
-            typeIn: e.target.value
+            typeIn: v
         })
     }
 
-    updateMuscleIn(e){
+    updateMuscleIn(e, i, v){
         this.setState({
-            muscleIn: e.target.value
+            muscleIn: v
         })
     }
 
     sendExToDB() {
-        const { nameIn, typeIn, muscleIn, videoURLIn, imgURLIn } = this.state,
-              img = this.state.addingImg ? imgURLIn : "https://images.unsplash.com/photo-1521804906057-1df8fdb718b7?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f831342881cb6ff58e50698c7f9432de&auto=format&fit=crop&w=500&q=60"
+        const { nameIn, typeIn, muscleIn, videoURLIn, imgURLIn, addingImg } = this.state,
+              img = addingImg ? imgURLIn : "https://images.unsplash.com/photo-1521804906057-1df8fdb718b7?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=f831342881cb6ff58e50698c7f9432de&auto=format&fit=crop&w=500&q=60"
         this.props.addExToDB(nameIn, typeIn, muscleIn, videoURLIn, img )
     }
 
@@ -75,76 +79,79 @@ class Exercise extends Component{
     }
 
     render() {
+        const { typeIn, muscleIn, nameIn, videoURLIn, addingImg, imgURLIn, isEditing } = this.state
+        let contentWidth = (addingImg && imgURLIn.length) ? "45%" : "20%"
         return(
-            <Dialog open={this.props.exCreatorModalOpen} className="comp exercise-comp">
-                {
-                    this.state.isEditing
-                    ?
-                    <section className="exercise-edit">
-                        <h2>Updating: {this.props.exercise.name}</h2>
-                        <h3>Previous data:</h3>
-                        <p>Type: {this.props.exercise.type}</p>
-                        <p>Major Muscle Group: {this.props.exercise.main_muscle_group}</p>
-                        <a href={this.props.exercise.video} target="_blank">
-                            Video URL
-                        </a>
-                        <p>Image: </p>
-                        <img src={this.props.exercise.img} alt={this.props.exercise.img}/>
-                    </section>
-                    :
-                    <h2>Create a New Exercise</h2>
-                }
-                <p>What shall we call it?</p>
-                <input type="text" value={this.state.nameIn} onChange={this.updateNameIn} />
-                <p>Type:</p>
-                <select className="ex-type" onChange={this.updateTypeIn}>
-                    <option value="Weights" >Weights</option>
-                    <option value="Bodyweight">Bodyweight/Calisthenics</option>
-                    <option value="LISS">Low Intensity Steady-State (LISS) Cardio</option>
-                    <option value="HIIT">High Intensity Interval Training (HIIT) Cardio</option>
-                </select>
-                <p>Major-Muscle-Group:</p>
-                <select className="major-muscle" onChange={this.updateMuscleIn}>
-                    <option value="Full-Body" >Full-Body</option>
-                    <option value="Biceps">Biceps</option>
-                    <option value="Calves">Calves</option>
-                    <option value="Chest">Chest</option>
-                    <option value="Forearms">Forearms</option>
-                    <option value="Lower-back">Lower-Back</option>
-                    <option value="Hamstrings">Hamstrings</option>
-                    <option value="Quads">Quads</option>
-                    <option value="Glutes">Glutes</option>
-                    <option value="Shoulders">Shoulders</option>
-                    <option value="Traps">Traps</option>
-                    <option value="Triceps">Triceps</option>
-                    <option value="Upper-back">Upper-Back</option>
-                </select>
-                <p>Video URL:</p>
-                <input type="text" value={this.state.videoURLIn} onChange={this.updateVideoURLIn} />
+            <Dialog bodyClassName="e-creator-body" contentStyle={{width: contentWidth}}  contentClassName="e-creator-content" className="e-creator" open={this.props.exCreatorModalOpen}>
+                <section className="e-creator-main">
+                    {
+                        isEditing
+                        ?
+                        <section className="exercise-edit">
+                            <h2>Updating: {this.props.exercise.name}</h2>
+                            <h3>Previous data:</h3>
+                            <p>Type: {this.props.exercise.type}</p>
+                            <p>Major Muscle Group: {this.props.exercise.main_muscle_group}</p>
+                            <a href={this.props.exercise.video} target="_blank">
+                                Video URL
+                            </a>
+                            <img src={this.props.exercise.img} alt={this.props.exercise.img}/>
+                        </section>
+                        :
+                        <h2>Create a New Exercise</h2>
+                    }
+                    <TextField type="text" floatingLabelText="What shall we call it?" value={nameIn} onChange={this.updateNameIn} />
+                    <SelectField floatingLabelText="Type" className="ex-type" value={typeIn} onChange={(e, i, v) => this.updateTypeIn(e, i, v)}>
+                        <MenuItem primaryText="Weights" value="Weights" />
+                        <MenuItem primaryText="Bodyweight/Calisthenics" value="Bodyweight"/>
+                        <MenuItem primaryText="Low Intensity Steady-State (LISS) Cardio" value="LISS"/>
+                        <MenuItem primaryText="High Intensity Interval Training (HIIT) Cardio" value="HIIT"/>
+                    </SelectField>
+                    <SelectField floatingLabelText="Major-Muscle-Group" className="major-muscle" value={muscleIn} onChange={(e, i, v) => this.updateMuscleIn(e, i, v)}>
+                        <MenuItem primaryText="Full-Body" value="Full-Body" />
+                        <MenuItem primaryText="Biceps" value="Biceps"/>
+                        <MenuItem primaryText="Calves" value="Calves"/>
+                        <MenuItem primaryText="Chest" value="Chest"/>
+                        <MenuItem primaryText="Forearms" value="Forearms"/>
+                        <MenuItem primaryText="Lower-Back" value="Lower-back"/>
+                        <MenuItem primaryText="Hamstrings" value="Hamstrings"/>
+                        <MenuItem primaryText="Quads" value="Quads"/>
+                        <MenuItem primaryText="Glutes" value="Glutes"/>
+                        <MenuItem primaryText="Shoulders" value="Shoulders"/>
+                        <MenuItem primaryText="Traps" value="Traps"/>
+                        <MenuItem primaryText="Triceps" value="Triceps"/>
+                        <MenuItem primaryText="Upper-Back" value="Upper-back"/>
+                    </SelectField>
+                    <TextField type="text" floatingLabelText="Video URL:" value={videoURLIn} onChange={this.updateVideoURLIn} />
 
+                    {
+                        addingImg
+                        ?
+                        <section className="exercise-img-input">
+                            <TextField type="text" value={imgURLIn} floatingLabelText="Exercise Image Url:" onChange={this.updateImgURLIn} />
+                            <RaisedButton className="e-creator-btn" fullWidth secondary={true} onClick={() => this.prepareToAddImg(false)} label="No Image" />
+                        </section>
+                        :
+                        <RaisedButton className="e-creator-btn" fullWidth secondary={true} onClick={() => this.prepareToAddImg(true)} label="Add an image?" />
+                    }                
+                    {
+                        isEditing
+                        ?
+                        <RaisedButton className="e-creator-btn" fullWidth primary={true} onClick={this.sendChanges} label="Update This Exercise" />
+                        :
+                        <RaisedButton className="e-creator-btn" fullWidth primary={true} onClick={this.sendExToDB} label="Create Exercise" />
+                    }
+                </section>
                 {
-                    this.state.addingImg
-                    ?
-                    <section className="exercise-img-input">
-                        <p>Exercise Image Url:</p>
-                        <input type="text" value={this.state.imgURLIn} onChange={this.updateImgURLIn} />
-                        <img src={this.state.imgURLIn} alt="Preview" />
-                        <RaisedButton primary={true} onClick={() => this.prepareToAddImg(false)}>No Image</RaisedButton>
+                    addingImg && imgURLIn.length
+                    ? 
+                    <section className="ex-creator-img-pre">
+                        <img src={imgURLIn} alt="Preview" />
                     </section>
                     :
-                    <RaisedButton primary={true} onClick={() => this.prepareToAddImg(true)}>Add an image?</RaisedButton>
+                    null
                 }
-                
-                
-                <p>Image URL:</p>
-                {
-                    this.state.isEditing
-                    ?
-                    <RaisedButton primary={true} onClick={this.sendChanges}>Update This Exercise</RaisedButton>
-                    :
-                    <RaisedButton primary={true} onClick={this.sendExToDB}>Create Exercise</RaisedButton>
-                }
-                <FlatButton onClick={() => this.props.toggleExCreatorModal(false)} label="close" />
+                <IconButton className="close-btn" onClick={() => this.props.toggleExCreatorModal(false)} label="close"><CloseBtn/></IconButton>
             </Dialog>
         )
     }

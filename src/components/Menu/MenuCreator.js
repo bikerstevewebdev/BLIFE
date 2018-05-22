@@ -6,6 +6,8 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField/TextField';
+import CloseBtn from 'material-ui/svg-icons/navigation/close'
+import { IconButton } from 'material-ui';
 
 class Menu extends Component{
     constructor() {
@@ -61,7 +63,7 @@ class Menu extends Component{
                     :
                     <Redirect to={`/menu/${this.state.titleInput}`} />
                 }
-                <FlatButton style={{gridArea: "5/1/6/2"}}  onClick={() => this.props.toggleMenuModal(false)} label="close" />
+                <IconButton className="close-btn" style={{gridArea: "5/1/6/2"}}  onClick={() => this.props.toggleMenuModal(false)} label="close"><CloseBtn/></IconButton>
             </Dialog>
         )
     }
