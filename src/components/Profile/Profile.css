@@ -79,7 +79,7 @@
     grid-area: 4/1/5/4;
     width: 100%;
 }
-canvas{
+.profile canvas{
     min-height: 500px;
     width: 100%;
 }
@@ -118,7 +118,7 @@ input[type=number]::-webkit-outer-spin-button {
     .progress-chart{
         grid-area: 4/1/5/3;
     }
-    canvas{
+    .profile canvas{
         max-height: 400px;
     }
 }
@@ -177,7 +177,7 @@ input[type=number]::-webkit-outer-spin-button {
     .progress-chart{
         grid-area: 4/1/5/2;
     }
-    canvas{
+    .profile canvas{
         height: 100%;
         width: 100%;
         max-width: 90vw;
