@@ -2,21 +2,23 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import AppBar from 'material-ui/AppBar'
-import PersonOutline from 'material-ui/svg-icons/social/person-outline';
-import IconButton from 'material-ui/IconButton';
-import ActionHome from 'material-ui/svg-icons/action/home';
+import PersonOutline from 'material-ui/svg-icons/social/person-outline'
+import IconButton from 'material-ui/IconButton'
+import ActionHome from 'material-ui/svg-icons/action/home'
 import RaisedButton from 'material-ui/RaisedButton'
 import seaVid from '../../seaVid.mp4'
-import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode';
-import Logout from 'material-ui/svg-icons/hardware/keyboard-return';
-import Admin from 'material-ui/svg-icons/social/people';
+import ChromeReader from 'material-ui/svg-icons/action/chrome-reader-mode'
+import Logout from 'material-ui/svg-icons/hardware/keyboard-return'
+import Admin from 'material-ui/svg-icons/social/people'
 import { toggleSideNav, logoutUser, toggleMotivationalModal } from '../../ducks/userReducer'
 import { toggleCoachReqModal } from '../../ducks/coachReducer'
 import Avatar from 'material-ui/Avatar'
-import FlatButton from 'material-ui/FlatButton';
+import FlatButton from 'material-ui/FlatButton'
 import Happy from 'material-ui/svg-icons/social/sentiment-satisfied'
-import Chat from 'material-ui/svg-icons/communication/chat';
-
+import Chat from 'material-ui/svg-icons/communication/chat'
+import Hamburg from 'material-ui/svg-icons/navigation/menu'
+import './Nav.css'
+import { Menu, IconMenu, MenuItem } from 'material-ui';
 
 function Nav(props) {
     // if(!props.userData.isLoggedIn){
@@ -37,12 +39,7 @@ function Nav(props) {
         overflow: "visible",
         fontSize: "3.5rem"
     }
-    const rightStyles = {
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        width: "100%"
-    }
+    
     const profileBtnStyles = {
         display: "flex",
         alignItems: "center"
@@ -70,8 +67,16 @@ function Nav(props) {
             }
         </section>
     )
+    const profileAv = (
+        <FlatButton className="profile-av-btn" style={{margin: "0.45rem"}} tooltip="Profile" >
+                <Link style={{...profileBtnStyles, color: "#eee"}} to='/profile'>
+                    <Avatar icon={<PersonOutline />} size={35} src={props.userData.profile_pic} />
+                    {props.userData.username}
+                </Link>
+        </FlatButton>
+    )
     const rightIcons = (
-        <section style={rightStyles} className="icons">
+        <section className="right-icons desktop">
             {
                 props.userData.is_admin
                 ?
@@ -99,12 +104,61 @@ function Nav(props) {
             <IconButton tooltipStyles={{marginLeft: "0.1em"}} tooltip="Navigator" iconStyle={{...iconStyles}} style={{iconBtnStyles}} onClick={() => props.toggleSideNav(true)}>
                 <ChromeReader />
             </IconButton>
-            <FlatButton style={{margin: "0.45rem"}} tooltip="Profile" >
-                <Link style={{...profileBtnStyles, color: "#eee"}} to='/profile'>
-                    <Avatar icon={<PersonOutline />} size={35} src={props.userData.profile_pic} />
-                    {props.userData.username}
-                </Link>
-            </FlatButton>
+        </section>
+    )
+    const hamMenu = (
+        <section className="hamburger-menu mobile">
+            <IconMenu
+            listStyle={{backgroundColor: "rgb(76, 55, 8)"}}
+            menuItemStyle={{color: "#eee"}}
+            className="ham-burg-i"
+            iconButtonElement={<IconButton><Hamburg /></IconButton>}
+            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+            targetOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            >
+                {
+                    props.userData.is_admin
+                    ?
+                    <MenuItem
+                        leftIcon={<Admin />}
+                        primaryText="Coach Manager"
+                        onClick={() => props.history.push('/adminManager')}
+                    />
+                    :
+                    null
+                }
+                {
+                    props.userData.coach_id > 0
+                    ?
+                    <MenuItem
+                       primaryText="Client Manager"
+                       onClick={() => props.history.push('/coachManager')}    leftIcon={<Admin />}
+                    />
+                    :
+                    null
+                }
+                <MenuItem
+                    primaryText="Find Your Why"
+                    onClick={() => props.toggleMotivationalModal(true)}
+                    leftIcon={<Happy />}
+                />
+                <MenuItem
+                    primaryText="Logout"
+                    onClick={logoutUser}
+                    leftIcon={<Logout />}
+                />
+                <MenuItem
+                    primaryText="Navigator"
+                    onClick={() => props.toggleSideNav(true)}
+                    leftIcon={<ChromeReader />}
+                />
+                <MenuItem
+                    innerDivStyle={{display: "flex", alignItems: "center", width: "100%"}}
+                    onClick={() => props.history.push('/profile')}>
+                    <Avatar  icon={<PersonOutline />} size={35} src={props.userData.profile_pic} />
+                        {props.userData.username}
+                </MenuItem>
+            </IconMenu>
         </section>
     )
     return(
@@ -112,7 +166,7 @@ function Nav(props) {
                 props.isLoggedIn && props.userData.user_id > 0
             ?
                 (<header className="nav-comp">
-                    <AppBar onTitleClick={() => props.history.push('/dashboard')} iconElementLeft={home} title={<h1 style={{WebkitTextFillColor: "white", WebkitTextStrokeWidth: "0.45px", WebkitTextStrokeColor: "#000", cursor: "pointer"}}>BalancedLIFE</h1>} titleStyle={titleStyles} style={styles} iconElementRight={rightIcons}/>
+                    <AppBar onTitleClick={() => props.history.push('/dashboard')} iconElementLeft={home} title={<h1 className="nav-title">BalancedLIFE</h1>} titleStyle={titleStyles} className="app-bar" iconElementRight={<section className="right-icons">{rightIcons}{profileAv}{hamMenu}</section>}/>
                 </header>)
             :
                 (<section className="unauthorized">

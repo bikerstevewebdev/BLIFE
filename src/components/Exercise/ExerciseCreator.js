@@ -80,7 +80,7 @@ class Exercise extends Component{
 
     render() {
         const { typeIn, muscleIn, nameIn, videoURLIn, addingImg, imgURLIn, isEditing } = this.state
-        let contentWidth = (addingImg && imgURLIn.length) ? "45%" : "20%"
+        let contentWidth = (addingImg && imgURLIn.length) ? "40%" : "18%"
         return(
             <Dialog bodyClassName="e-creator-body" contentStyle={{width: contentWidth}}  contentClassName="e-creator-content" className="e-creator" open={this.props.exCreatorModalOpen}>
                 <section className="e-creator-main">

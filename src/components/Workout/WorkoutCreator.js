@@ -76,7 +76,7 @@ class Workout extends Component{
     
     render() {
         const { addingImg, imgInput, titleInput, creating, w_id, typeInput } = this.state
-        let contentWidth = (addingImg && imgInput.length) ? "45%" : "20%"
+        let contentWidth = (addingImg && imgInput.length) ? "40%" : "18%"
         return(
             <Dialog title="Workout Creator" bodyClassName="w-creator-body" contentClassName="w-creator-content" contentStyle={{width: contentWidth}} open={this.props.workCreatorModalOpen} className="w-creator" >
                 <section className="w-creator-main">

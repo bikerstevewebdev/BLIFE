@@ -24,3 +24,14 @@
     justify-content: space-between;
     min-height: 15em;
 }
+
+.workout-editor-search{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(10, 6, 15, 0.59) 0px 1px 6px 3px;
+    background-color: #D7F9F1;
+    border-radius: 3px;
+    justify-content: center;
+    padding: 0.5em;
+}

@@ -1,0 +1,24 @@
+#workout-search .order-1-card,
+    #menu-search .order-1-card{
+        margin: 0.75em 0;
+        box-shadow: #2c4227b0 2px 2px 1px;
+    /* background-color: #9EE49364; */
+}
+#workout-search .search-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+#menu-search .search-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.user-workouts>h2, .user-menus>h2{
+    font-size: 1.5em;
+}

@@ -38,7 +38,7 @@ class MobileTearSheet extends Component {
     };
 
     return (
-      <div style={{...prepareStyles(styles.root), textAlign: "center"}}>
+      <div className="jcFlexCol curr-stats" style={{...prepareStyles(styles.root), textAlign: "center"}}>
         <div style={{...prepareStyles(styles.container), ...this.props.style}}>
           {this.props.children}
         </div>

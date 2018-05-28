@@ -7,7 +7,11 @@ import Search from 'material-ui/svg-icons/action/search'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
+import IconButton from 'material-ui/IconButton'
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
+import Add from 'material-ui/svg-icons/action/note-add'
+import Info from 'material-ui/svg-icons/action/info'
+import './Search.css'
 
 class SearchWorkouts extends Component{
     constructor(){
@@ -58,40 +62,47 @@ class SearchWorkouts extends Component{
         const { workoutSearchResults, btn2Fn, btn2msg, arg1, userData } = this.props
         const workoutResults = workoutSearchResults.map(res => {
             return(
-                <Card key={res.workout_id}  style={{backgroundColor: "#fff", maxWidth: "225px", maxHeight: "21em", width: "100%"}}>
-                    <CardMedia style={{overflow: "hidden", height: "9.5em"}} >
-                        <img src={res.img} alt={res.title} />
-                    </CardMedia>
-                    <CardTitle style={{padding: "0.5em"}}  title={res.title} />
-                    <CardText style={{padding: "0.5em"}} >
-                        <p>Type: {res.type}</p>
-                    </CardText>
-                    <CardActions style={{padding: "0.5em"}} >
-                        <Link to={`/workout/${res.workout_id}`}><FlatButton label="Details" /></Link>
-                            {
-                                userData.coach_id !== -7
-                                ?
-                                <FlatButton onClick={() => this.handleBtn2Click(arg1, res.workout_id)} label={btn2msg} />
-                                :
-                                null
-                            }
-                    </CardActions>
-                </Card>
+                <section key={res.workout_id} className="workout-card order-1-card">
+                    <div className="card-left-side">
+                        <img src={res.img} alt={res.title}/>
+                        <p>Author</p>
+                    </div>
+                    <div className="card-content">
+                        <div className="card-head">
+                            <h2>{res.title}</h2>
+                        </div>
+                        <div className="card-info">
+                            <p>Type: {res.type}</p>
+                        </div>
+                    </div>
+                    <div className="actions">
+                        <Link to={`/workout/${res.workout_id}`}><IconButton tooltip="Details"><Info/></IconButton></Link>
+                        {
+                            userData.coach_id !== -7
+                            ?
+                            <IconButton tooltip={btn2msg} onClick={() => this.handleBtn2Click(arg1, res.workout_id)} ><Add /></IconButton>
+                            :
+                            null
+                        }
+                    </div>
+                </section>
             )
         })
 
         return (
-            <section style={{...this.props.style, alignItems: "center", justifyItems: "center",}} className="workout-search">
-                    <h2 style={{gridColumn: "1/3", justifySelf: "center", fontSize: "1.5em"}}>Find your new Workout:</h2>
-                    <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)", borderRadius: "3px"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
-                    <RaisedButton secondary={true} icon={<Search />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchWorkouts}>Search for a new Workout</RaisedButton>
-                    {
-                        this.props.workoutSearchResults.length > 0
-                        ?
-                        <RaisedButton secondary={true} icon={<NavigationClose />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.endSearches} label="End Search" />
-                        :
-                        null
-                    }
+            <section id="workout-search" className={this.props.styleClass}>
+                    <h2>Find your new Workout:</h2>
+                    <div className="search-box">
+                        <TextField floatingLabelText="Search the workout database" value={this.state.workoutSearch} onChange={this.updateWorkoutSearch} />
+                        <RaisedButton secondary={true} icon={<Search />} onClick={this.searchWorkouts} label="Search" />
+                        {
+                            this.props.workoutSearchResults.length > 0
+                            ?
+                            <RaisedButton secondary={true} icon={<NavigationClose />} onClick={this.endSearches} label="End Search" />
+                            :
+                            null
+                        }
+                    </div>
                 {/* <button style={} >Search!</button> */}
                 {workoutResults}
             </section>
@@ -108,3 +119,27 @@ function mapStateToProps(state) {
 
 
 export default connect(mapStateToProps, { searchWorkouts, endFitnessSearch })(SearchWorkouts)
+
+
+
+
+
+        // <Card key={res.workout_id}  style={{backgroundColor: "#fff", maxWidth: "225px", maxHeight: "21em", width: "100%"}}>
+        //     <CardMedia style={{overflow: "hidden", height: "9.5em"}} >
+        //         <img src={res.img} alt={res.title} />
+        //     </CardMedia>
+        //     <CardTitle style={{padding: "0.5em"}}  title={res.title} />
+        //     <CardText style={{padding: "0.5em"}} >
+        //         <p>Type: {res.type}</p>
+        //     </CardText>
+        //     <CardActions style={{padding: "0.5em"}} >
+        //         <Link to={`/workout/${res.workout_id}`}><FlatButton label="Details" /></Link>
+        //             {
+        //                 userData.coach_id !== -7
+        //                 ?
+        //                 <FlatButton onClick={() => this.handleBtn2Click(arg1, res.workout_id)} label={btn2msg} />
+        //                 :
+        //                 null
+        //             }
+        //     </CardActions>
+        // </Card>

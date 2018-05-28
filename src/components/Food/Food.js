@@ -54,7 +54,7 @@ class Food extends Component{
         const { name, p, c, f, fib, img } = this.props
         const { searchingExternal } = this.state
         return(
-            <Dialog autoScrollBodyContent={true} bodyStyle={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", overFlowY: "scroll"}} open={this.props.foodDialogOpen} className="comp food-creator">
+            <Dialog className="food-creator-modal" autoScrollBodyContent={true} bodyStyle={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", overFlowY: "scroll"}} open={this.props.foodDialogOpen} >
                 <h1 style={{fontSize: "1.75em"}}>Add a Food to the BLIFE Database</h1>
                 <section style={{display: "flex", justifyContent: "space-around"}}>
                     <section style={{display: "flex", flexDirection: "column", justifyContent: "space-around", width: "100%"}}>
@@ -81,7 +81,7 @@ class Food extends Component{
                         :
                         <RaisedButton secondary={true} onClick={() => this.toggleExternalSearch(searchingExternal)} label="Need some inspiration?" />
                     }
-                    <IconButton className="close-btn" onClick={() => this.props.toggleFoodModal(false)} label="close"><CloseBtn /></IconButton>
+                    <IconButton className="close-btn" onClick={() => this.props.toggleFoodModal(false)} tooltip="close"><CloseBtn /></IconButton>
                 </section>
                 <section style={{display: "flex", justifyContent: "space-around", maxHeight: "225px", width: "100%", alignItems: "center"}}>
                     {

@@ -64,8 +64,9 @@ class MealCreator extends Component{
             gridGap: "0.75em",
             alignItems: "center"
         }
+        const contentWidth = imgInput.length ? "48%" : "18%"
         return(
-            <Dialog contentStyle={{maxWidth: "53%"}} bodyStyle={{...mainStyles}} open={this.props.mealDialogOpen} className="comp meal-creator" >
+            <Dialog contentStyle={{width: contentWidth}} bodyStyle={{...mainStyles}} open={this.props.mealDialogOpen} className="comp meal-creator" >
                 <h1 style={{gridArea: "1/1/2/2", fontSize: "2em", borderRadius: "5px"}}>Creat a Meal</h1>
                 <TextField style={{gridArea: "2/1/3/2"}} floatingLabelText="Title of the Meal:" value={mealTitle} onChange={(e) => this.updateMealTitle(e.target.value)} />
                 <TextField style={{gridArea: "3/1/4/2"}} floatingLabelText="Meal Image Url:" value={imgInput} onChange={(e) => this.updateimgInput(e.target.value)} />

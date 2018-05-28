@@ -14,7 +14,8 @@ html{
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('https://images.unsplash.com/photo-1478827217976-7214a0556393?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1980&h=1250&fit=crop&ixid=eyJhcHBfaWQiOjIzNjgzfQ&s=641755d515e03a5d68e2adc5a4c7815c');
+  /* background-image: url('https://images.unsplash.com/photo-1478827217976-7214a0556393?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1980&h=1250&fit=crop&ixid=eyJhcHBfaWQiOjIzNjgzfQ&s=641755d515e03a5d68e2adc5a4c7815c'); */
+  background-image: url('https://images.unsplash.com/photo-1414497370617-1d23dd92ab2d?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1980&h=1250&fit=crop&ixid=eyJhcHBfaWQiOjIzNjgzfQ&s=560d90a5f0ddf9bbf937945504613208');
   background-attachment: fixed;
   background-size: cover;
   background-color: rgba(0,0,0,0.5);
@@ -68,7 +69,7 @@ header.nav-comp{
   display: flex;
   width: 100%;
   margin: 0;
-  height: 10%;
+  height: 74px;
   position: fixed;
   top: 0;
   left: 0;
@@ -87,7 +88,7 @@ header.nav-comp{
 }
 
 #main-content{
-  padding: 6% 10%;
+  padding: 100px 10%;
   height: 100%;
   width: 100%;
   display: flex;
@@ -96,6 +97,17 @@ header.nav-comp{
 
 .links{
   display: flex;
+}
+
+@media (max-width: 1024px){
+  #main-content{
+    padding: 100px 5%;
+  }
+}
+@media (max-width: 750px){
+  #main-content{
+    padding: 100px 6px;
+  }
 }
  
 /* backgroundImage: "linear-gradient(to top, #074b19, #0b641c, #177e1b, #279815, #3bb300)",  */

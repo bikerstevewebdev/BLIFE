@@ -242,11 +242,11 @@ class FirstLogin extends Component{
     render() {
         const { loading, stepIndex } = this.state
         const backdropStyle = {
-            backgroundColor: "#0c0c0cf2",
+            backgroundColor: "#0c0c0c",
             width: "100%",
             position: "fixed",
             height: "100%",
-            top: "75px",
+            top: "0",
             left: "0",
             paddingTop: "10%"
         }

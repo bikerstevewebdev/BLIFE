@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Line } from 'react-chartjs-2'
+import { Line } from 'react-chartjs-2'
 import { connect } from 'react-redux'
 import { getPastMeasurements } from '../../ducks/userReducer'
 
@@ -56,6 +56,7 @@ class ProgressData extends Component {
              },
         chartOptions: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 text: 'Measurements History',
@@ -64,7 +65,7 @@ class ProgressData extends Component {
             },
             legend: {
                 display: true,
-                position: 'right',
+                position: 'top',
                 
                 labels: {
                     fontColor: 'black',
@@ -154,7 +155,7 @@ class ProgressData extends Component {
     }
     render() {
       return (
-        <div style={{...this.props.styles}}>
+        <div className="progress-chart" >
           <Line data={this.state.chartData} options={this.state.chartOptions} />
         </div>
       )

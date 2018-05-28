@@ -24,37 +24,16 @@ class PhotoCard extends Component {
         this.setState({ checked: value })
       }
     render() {
-        const cardStyles = {
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        boxShadow: "1px 1px 1px 0px rgb(25, 39, 31)",
-        borderRadius: "3px",
-        backgroundColor: "rgba(64, 146, 12, 0.79)",
-        // backgroundColor: "#99d066",
-        // backgroundColor: "#DAF7DC",
-        // backgroundColor: "#9EE493",
-        // justifySelf: "stretch"
-        // flexDirection: "column",
-        // flexWrap: "wrap"
-        }
-        const infoStyles = {
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-around",
-            height: "100%",
-            width: "100%"
-        }
         const { comparisonPhotos, deprecatePhoto, photo_id, date_added, alt, src } = this.props
         const { checked } = this.state
         return(
-            <section style={{...cardStyles, textAlign: "center"}} className="photo-card">
-                <section style={{height: "100%"}}>
-                    <img style={{height: "100%", maxWidth: "200px", borderRadius: "3px 0 0 3px"}} src={src} alt={alt} />
+            <section className="photo-card">
+                <section>
+                    <img src={src} alt={alt} />
                 </section>
-                <section style={{...infoStyles}}>
-                    <p style={{fontSize: "0.96em"}}>Date Added: {date_added.slice(0, 10)}</p>
-                    <Checkbox labelStyle={{fontSize: "0.8em", lineHeight: "0.75rem"}} label="Add to compare" onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 2}/>
+                <section className="infoStyles">
+                    <p>Date Added:<br /> {date_added.slice(0, 10)}</p>
+                    <Checkbox label="compare" onClick={() => this.handleChange(!checked)} disabled={!checked && comparisonPhotos.length >= 2}/>
                     <RaisedButton secondary={true} style={{width: "70%", alignSelf: "center"}} label="Archive" onClick={() => deprecatePhoto(photo_id)}/>
                 </section>
             </section>

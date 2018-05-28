@@ -7,7 +7,9 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import {Card, CardActions, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import NavigationClose from 'material-ui/svg-icons/navigation/close'
-
+import Info from 'material-ui/svg-icons/action/info'
+import Add from 'material-ui/svg-icons/action/note-add'
+import IconButton from 'material-ui/IconButton'
 
 class SearchMenu extends Component{
     constructor(){
@@ -58,39 +60,49 @@ class SearchMenu extends Component{
         const { arg1, menuSearchResults, btn2Fn, btn2msg, userData } = this.props
         const menuResults = menuSearchResults.map(res => {
                 return (
-                        <Card key={res.menu_id} style={{backgroundColor: "#fff", maxWidth: "225px", width: "100%"}} >
-                            <CardMedia style={{overflow: "hidden", height: "9.5em"}} >
-                                <img src={res.img} style={{height: "100%"}} alt={res.title} />
-                            </CardMedia>
-                            <CardTitle style={{padding: "0.5em"}} title={res.title} />
-                            <CardText style={{padding: "0.5em"}}>
-                                    {`P: ${res.total_p}g C: ${res.total_c} F: ${res.total_f}g Fib: ${res.total_fib}g`}
-                            </CardText>
-                            <CardActions style={{padding: "0.5em"}}>
-                                <Link to={`/menu/${res.menu_id}`}><FlatButton label="Details" /></Link>
-                                {
-                                    userData.coach_id !== -7
-                                    ?
-                                    <FlatButton onClick={() => this.handleBtn2Click(arg1, res.menu_id)} label={btn2msg} />
-                                    :
-                                    null
-                                }
-                            </CardActions>
-                        </Card>
-                          )
-                        })
-        return (
-            <section style={{...this.props.style}} className="menu-search">
-                <h3 style={{gridColumn: "1/3", justifySelf: "center", fontSize: "1.5em"}}>Search for a Menu:</h3>
-                <TextField underlineStyle={{zIndex: "-3", height: "65%", border: "1px solid rgb(178, 255, 89)"}} style={{gridColumn: "1/2"}} floatingLabelText="Search the menu database" value={this.state.menuSearch}  onChange={this.updateMenuSearch} />
-                <RaisedButton style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.searchMenus} label="Search Menus!" secondary={true} />
-                {
+                    <section key={res.menu_id}  className="menu-card order-1-card">
+                        <div className="card-left-side">
+                            <img src={res.img} alt={res.title}/>
+                            <p>Author</p>
+                        </div>
+                        <div className="card-content">
+                            <div className="card-head">
+                                <h2>{res.title}</h2>
+                            </div>
+                            <div className="card-info">
+                                <p>{`P: ${res.total_p}g`}</p>
+                                <p>{`C: ${res.total_c}`}</p>
+                                <p>{`F: ${res.total_f}g`}</p>
+                                <p>{`Fib: ${res.total_fib}g`}</p>
+                            </div>
+                        </div>
+                        <div className="actions">
+                            <Link to={`/workout/${res.menu_id}`}><IconButton tooltip="Details"><Info/></IconButton></Link>
+                            {
+                                userData.coach_id !== -7
+                                ?
+                                <IconButton tooltip={btn2msg} onClick={() => this.handleBtn2Click(arg1, res.menu_id)} ><Add /></IconButton>
+                                :
+                                null
+                            }
+                        </div>
+                    </section>
+                    )   
+                })
+                return (
+                    <section id="menu-search" className="user-menus">
+                <h2>Search for a Menu:</h2>
+                <div className="search-box">                
+                    <TextField floatingLabelText="Search the menu database" value={this.state.menuSearch}  onChange={this.updateMenuSearch} />
+                    <RaisedButton onClick={this.searchMenus} label="Search Menus!" secondary={true} />
+                    {
                         this.props.menuSearchResults.length > 0
-                        ?
-                        <RaisedButton secondary={true} icon={<NavigationClose />} style={{alignSelf: "center", width: "100%", gridColumn: "2/3"}} onClick={this.endSearches} label="End Search" />
-                        :
-                        null
-                }
+                            ?
+                            <RaisedButton secondary={true} icon={<NavigationClose />} onClick={this.endSearches} label="End Search" />
+                            :
+                            null
+                    }
+                </div>
                 {/* <button style={{width: "300px"}} >Search!</button> */}
                 {menuResults}
             </section>
@@ -107,3 +119,28 @@ function mapStateToProps(state) {
 
 
 export default connect(mapStateToProps, { searchMenus, endNutritionSearch })(SearchMenu)
+
+
+
+
+
+        // <Card key={res.menu_id} style={{backgroundColor: "#fff", maxWidth: "225px", width: "100%"}} >
+        //     <CardMedia style={{overflow: "hidden", height: "9.5em"}} >
+        //         <img src={res.img} style={{height: "100%"}} alt={res.title} />
+        //     </CardMedia>
+        //     <CardTitle style={{padding: "0.5em"}} title={res.title} />
+        //     <CardText style={{padding: "0.5em"}}>
+        //             {`P: ${res.total_p}g C: ${res.total_c} F: ${res.total_f}g Fib: ${res.total_fib}g`}
+        //     </CardText>
+        //     <CardActions style={{padding: "0.5em"}}>
+        //         <Link to={`/menu/${res.menu_id}`}><FlatButton label="Details" /></Link>
+        //         {
+        //             userData.coach_id !== -7
+        //             ?
+        //             <FlatButton onClick={() => this.handleBtn2Click(arg1, res.menu_id)} label={btn2msg} />
+        //             :
+        //             null
+        //         }
+        //     </CardActions>
+        // </Card>
+          

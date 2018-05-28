@@ -123,26 +123,26 @@ class WorkoutEditor extends Component{
                     width: "auto",
                     backgroundColor: "rgba(236, 234, 255, 0.76)"
                  }
-                 const workSearchStyle = {
-                    width: "100%",
-                    display: "grid",
-                    boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 3px",
-                    backgroundColor: "#c2d8c4",
-                    borderRadius: "3px",
-                    gridTemplateRows: "auto",
-                    gridTemplateColumns: "1fr 1fr",
-                    justifyContent: "center",
-                    gridGap: "0.75em",
-                    gridColumn: "3/5",
-                    padding: "0.5em",
-                    alignContent: "baseline"
-                }
+                const workSearchStyle = {
+                width: "100%",
+                display: "grid",
+                boxShadow: "rgba(10, 6, 15, 0.59) 0px 1px 6px 3px",
+                backgroundColor: "#c2d8c4",
+                borderRadius: "3px",
+                gridTemplateRows: "auto",
+                gridTemplateColumns: "1fr 1fr",
+                justifyContent: "center",
+                gridGap: "0.75em",
+                gridColumn: "3/5",
+                padding: "0.5em",
+                alignContent: "baseline"
+            }
         return(
             <section className="workout">
                 {
                     isNaN(this.props.match.params.id)
                     ? 
-                    <SearchWorkout style={{...workSearchStyle}}/>
+                    <SearchWorkout styleClass={"workout-editor-search"} style={{...workSearchStyle}}/>
                     :
                     <section style={{...designerStyles}} >
                         <section style={{gridArea: "1/2/3/5",height: "100%", width: "100%", textAlign: "center", overflow: "hidden"}} className="heading">

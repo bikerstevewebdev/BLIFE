@@ -12,34 +12,35 @@ import Food from './components/Food/Food'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
-import MealCreator from './components/Meal/MealCreator';
-import MenuCreator from './components/Menu/MenuCreator';
-import Menu from './components/Menu/Menu';
-import Exercise from './components/Exercise/Exercise';
-import WorkoutEditor from './components/Workout/WorkoutEditor';
-import ExerciseCreator from './components/Exercise/ExerciseCreator';
-import WorkoutCreator from './components/Workout/WorkoutCreator';
-import ClientManager from './components/Coach/ClientManager';
-import CoachManager from './components/Coach/CoachManager';
-import AdminManager from './components/Admin/AdminManager';
-import FirstLogin from './components/Login/FirstLogin';
-import Measurements from './components/Measurements/Measurements';
-// import MealFromRecipe from './components/Meal/MealFromRecipe';
-import Snackbar from 'material-ui/Snackbar';
-import { connect } from 'react-redux';
+import MealCreator from './components/Meal/MealCreator'
+import MenuCreator from './components/Menu/MenuCreator'
+import Menu from './components/Menu/Menu'
+import Exercise from './components/Exercise/Exercise'
+import WorkoutEditor from './components/Workout/WorkoutEditor'
+import ExerciseCreator from './components/Exercise/ExerciseCreator'
+import WorkoutCreator from './components/Workout/WorkoutCreator'
+import ClientManager from './components/Coach/ClientManager'
+import CoachManager from './components/Coach/CoachManager'
+import AdminManager from './components/Admin/AdminManager'
+import FirstLogin from './components/Login/FirstLogin'
+import Measurements from './components/Measurements/Measurements'
+// import MealFromRecipe from './components/Meal/MealFromRecipe'
+import Snackbar from 'material-ui/Snackbar'
+import { connect } from 'react-redux'
 import { clearUserMessage, getUserData } from './ducks/userReducer'
 import { clearCoachMessage, toggleCoachChatModal, getCoachRequestInfo } from './ducks/coachReducer'
 import { clearFitnessMessage } from './ducks/fitnessReducer'
 import { clearFoodMessage } from './ducks/foodReducer'
-import CoachChat from './components/Coach/CoachChat';
-import { FloatingActionButton } from 'material-ui';
+import CoachChat from './components/Coach/CoachChat'
+import { FloatingActionButton } from 'material-ui'
 import CommunicationChat from 'material-ui/svg-icons/communication/chat'
 import MotivationalQuote from './components/Measurements/MotivationalQuote'
-import CoachReqModal from './components/Coach/CoachReqModal';
+import CoachReqModal from './components/Coach/CoachReqModal'
 import MakeInvestment from './components/Stripe/MakeInvestment'
-import ErrorPage from './components/Login/ErrorPage';
-import LoadingPage from './components/Login/LoadingPage';
-
+import ErrorPage from './components/Login/ErrorPage'
+import LoadingPage from './components/Login/LoadingPage'
+import MenusHome from './components/Dashboard/MenusHome'
+import WorkoutsHome from './components/Dashboard/WorkoutsHome'
 
 class App extends Component {
   constructor(){
@@ -111,7 +112,7 @@ class App extends Component {
           null
         }
         {
-          this.props.location.pathname === '/'
+          this.props.location.pathname === '/' || this.props.location.pathname === '/firstLogin'
           ?
           null
           :
@@ -122,6 +123,8 @@ class App extends Component {
               <Route path='/' exact component={Login} />
               <Route path='/unauthorized' component={ErrorPage} />
               <Route path='/dashboard' component={Dashboard} />
+              <Route path='/menusHome' component={MenusHome} />
+              <Route path='/workoutsHome' component={WorkoutsHome} />
               <Route path='/profile' component={Profile} />
               <Route path='/updateProfile' component={UpdateProfile} />
               <Route path='/macroCalc' component={MacroCalc} />
@@ -171,7 +174,7 @@ class App extends Component {
           <Snackbar style={{height: "auto"}} contentStyle={{height: "auto"}} bodyStyle={{height: "auto"}} message={foodMessage || userMessage || coachMessage || fitnessMessage} action="ok" autoHideDuration={10000} onActionClick={this.close} open={this.state.open} />
           </section>
       </div>
-    );
+    )
   }
 }
 

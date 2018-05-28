@@ -82,87 +82,87 @@ class SideNav extends Component{
                 <AppBar iconElementLeft={<IconButton onClick={this.requestSideNavChange}><Close /></IconButton>}title="AppBar" />
                 <List style={{fontSize: "0.5em"}}>
                     <ListItem
-                        style={{color: "rgb(222, 222, 222)"}}
+                        
                         key={101}
                         open={userOpen}
                         onClick={() => this.setState({userOpen: !userOpen})}
                         primaryText="User"
-                        leftIcon={<PersonOutline color="rgb(222, 222, 222)" />}
+                        leftIcon={<PersonOutline  />}
                         nestedItems={[
                             <ListItem
                               key={1}
                               nestedLevel={1}
                               onClick={this.sendToUpdateProfile}
                               primaryText="Update Profile"
-                              leftIcon={<ModeEdit color="rgb(222, 222, 222)" color="rgb(222, 222, 222)"/>}
+                              leftIcon={<ModeEdit  />}
                             />,
                             <Link key={2} to="/measurements"><ListItem
                               nestedLevel={1}
                               onClick={this.requestSideNavChange}
                               primaryText="Update Measurements"
-                              leftIcon={<InsertChart color="rgb(222, 222, 222)" />}
+                              leftIcon={<InsertChart  />}
                             /></Link>,
                             <Link key={3} to="/macroCalc"><ListItem
                               nestedLevel={1}
                               onClick={this.requestSideNavChange}
                               primaryText="Macro Calculator"
-                              leftIcon={<PieChart color="rgb(222, 222, 222)" />}
+                              leftIcon={<PieChart  />}
                             /></Link>
                           ]}
                         />
                     <ListItem
-                        style={{color: "rgb(222, 222, 222)"}}
+                        
                         key={102}
                         onClick={() => this.setState({nutritionOpen: !nutritionOpen})}
                         open={nutritionOpen}
                         primaryText="Nutrition"
-                        leftIcon={<Dining color="rgb(222, 222, 222)" />}
+                        leftIcon={<Dining  />}
                         nestedItems={[
                             <ListItem
                             key={4}
                               onClick={this.sendToMenuCreator}
                               primaryText="Menu Creator"
-                              leftIcon={<Assignment color="rgb(222, 222, 222)" />}
+                              leftIcon={<Assignment  />}
                             />,
                             <ListItem
                               key={5}
                               onClick={this.sendToMealCreator}
                               primaryText="Meal Creator"
-                              leftIcon={<Restaurant color="rgb(222, 222, 222)" />}
+                              leftIcon={<Restaurant  />}
                             />,
                             <ListItem
                               key={6}
                               onClick={this.sendToFoodCreator}
                               primaryText="Food Creator"
-                              leftIcon={<NoteAdd color="rgb(222, 222, 222)" />}
+                              leftIcon={<NoteAdd  />}
                             />
                           ]}
                         />
                     <ListItem
-                        style={{color: "rgb(222, 222, 222)"}}
+                        
                         key={103}
                         open={fitnessOpen}
                         onClick={() => this.setState({fitnessOpen: !fitnessOpen})}
                         primaryText="Fitness"
-                        leftIcon={<Fitness color="rgb(222, 222, 222)" />}
+                        leftIcon={<Fitness  />}
                         nestedItems={[
                             <ListItem
                               key={7}
                               onClick={this.sendToWorkoutCreator}
                               primaryText="Workout Creator"
-                              leftIcon={<Fitness color="rgb(222, 222, 222)" />}
+                              leftIcon={<Fitness  />}
                             />,
                             <ListItem
                               key={8}
                               onClick={this.sendToExerciseCreator}
                               primaryText="Exercise Creator"
-                              leftIcon={<NoteAdd color="rgb(222, 222, 222)" />}
+                              leftIcon={<NoteAdd  />}
                             />,
                             <Link key={9} to="/workout/nav"><ListItem
                               nestedLevel={1}
                               onClick={this.requestSideNavChange}
                               primaryText="Workout Designer"
-                              leftIcon={<Storage color="rgb(222, 222, 222)" />}
+                              leftIcon={<Storage  />}
                             /></Link>
                           ]}
                         />

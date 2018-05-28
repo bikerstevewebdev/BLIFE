@@ -35,7 +35,7 @@ const muiTheme = getMuiTheme({
         accent3Color: "#fff",
         textColor: darkBlack,
         alternateTextColor: white,
-        canvasColor: "rgb(52, 97, 0)",
+        canvasColor: "#D7F9F1",
         borderColor: "#64DD17",
         disabledColor: fade(darkBlack, 0.6),
         pickerHeaderColor: "rgb(74, 138, 0)",

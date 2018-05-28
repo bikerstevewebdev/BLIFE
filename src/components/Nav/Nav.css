@@ -1,0 +1,62 @@
+.right-icons{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.app-bar{
+    display: flex;
+    padding: 2em;
+    width: 100%;
+    justify-content: space-between;
+    height: 100%;
+    align-items: center;
+    background-color: rgba(70, 51, 9, 0.45)!important;
+}
+.nav-title{
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 0.45px;
+    -webkit-text-stroke-color: #000;
+    cursor: pointer;
+    font-size: 3.5rem;
+}
+
+@media (max-width: 1300px){
+    .right-icons.desktop{
+        display: none;
+    }
+    .hamburger-menu.mobile{
+        display: inherit
+    }
+}
+@media (min-width: 1300px){
+    .right-icons.desktop{
+        display: inherit;
+    }
+    .hamburger-menu.mobile{
+        display: none
+    }
+}
+@media (max-width: 1024px){
+    .profile-av-btn{
+        display: none!important;
+    }
+}
+@media (max-width: 700px){
+    .nav-title{
+        font-size: 2.75rem;
+    }
+}
+@media (max-width: 550px){
+    .nav-title{
+        font-size: 2.25rem;
+    }
+}
+@media (max-width: 425px){
+    .nav-title{
+        font-size: 2rem;
+    }
+}
+
+.ham-burg-i svg{
+    color: white!important;
+}

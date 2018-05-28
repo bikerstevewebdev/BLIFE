@@ -23,10 +23,15 @@ class SearchExternalFood extends Component{
 
     searchExternalFoods(e) {
         e.preventDefault()
-        this.props.searchExternalFoods(this.state.externalSearchIn, this.state.branded)
-        this.setState({
-            externalSearchIn: ''
-        })
+        if(this.state.externalSearchIn.length){
+            this.props.searchExternalFoods(this.state.externalSearchIn, this.state.branded)
+            this.setState({
+                externalSearchIn: ''
+            })
+        }else{
+            alert('Please enter text to search.')
+        }
+        
     }
 
     updateExternalSearch(e){

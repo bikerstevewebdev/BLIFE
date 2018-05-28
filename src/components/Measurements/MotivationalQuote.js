@@ -7,6 +7,7 @@ import FlatButton from 'material-ui/FlatButton'
 import axios from 'axios'
 import { grey400 } from 'material-ui/styles/colors'
 import { Redirect } from 'react-router-dom'
+import './Measurements.css'
 
 class MotivationalQuote extends Component{
     constructor() {
@@ -58,9 +59,9 @@ class MotivationalQuote extends Component{
             <Dialog contentStyle={{...jcFlex, flexDirection: "column"}} open={motivationalModalOpen} className="motivational-modal" >
                 <section style={{...jcFlex}}>
                     <section style={{...jcFlex, flexDirection: "column"}}>
-                        <p style={{textShadow: "black 2px 4px 1px", color: "white"}}>{qText ? `"${qText}"` : 'Try Another One'}</p>
+                        <p className="quote-text">{qText ? `"${qText}"` : 'Try Another One'}</p>
                         <br/>
-                        <p style={{...textStyles, fontStyle: "italic"}}>{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
+                        <p style={{fontStyle: "italic"}} className="quote-text">{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
                     </section>
                     <figure style={{...jcFlex, flexDirection: "column"}}>
                         <img style={{borderRadius: "5%"}} src={this.state.img} alt={this.state.imgUser}/>

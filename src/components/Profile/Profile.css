@@ -6,11 +6,180 @@
     width: 0px;
 }
 
-/* img{
-    max-width: 200px;
-} */
+.comp.profile{
+    box-shadow: rgb(90, 123, 132) 0px 1px 1px 1px;
+    border-radius: 3px;
+    width: 100%;
+    padding: 2em;
+    grid-gap: 0.75em;
+    background-color: rgba(237, 255, 237, 0.7);
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 100px;
+    width: 100%;
+    grid-gap: 0.75em;
+    text-align: center;
+    justify-items: center;
+}
+
+.comp.profile>h1{
+    grid-area: 1/1/2/4;
+    justify-self: center;
+    font-size: 3em;
+}
+
+.comp.profile.progress-pics{
+    box-shadow: none;
+    grid-template-rows: 125px;
+    grid-area: 3/1/4/4;
+    justify-items: center;
+    align-items: center;
+    grid-auto-rows: 9.375em;
+    background-color: transparent;
+}
+
+.jcFlexCol{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+
+.jcFlex{
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+}
+
+.curr-stats{
+    grid-area: 2 / 1 / 3 / 4;
+    justify-content: center;
+}
+
+.jcFlex.progress-btns{
+    width: 50%;
+    justify-content: center;
+    align-items: flex-end;
+}
+.progress-pic-btn{
+    grid-area: 1/1/2/4
+}
+
+.add-photo-btn{
+    grid-area: 1/3/2/4;
+    align-self: center;
+}
+
+.progress-chart{
+    grid-area: 4/1/5/4;
+    width: 100%;
+}
+canvas{
+    min-height: 500px;
+    width: 100%;
+}
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+@media (max-width: 1300px){
+    .comp.profile{
+        grid-template-columns: repeat(2, 1fr);
+        padding: 2em 0.5em;
+    }
+    
+    .comp.profile>h1{
+        grid-area: 1/1/2/3
+    }
+    
+    .curr-stats{
+        grid-area: 2 / 1 / 3 / 3;
+        min-width: 300px;
+    }
+    
+    .progress-pic-btn{
+        grid-area: 1/1/2/3
+    }
+    
+    .add-photo-btn{
+        grid-area: 2/1/3/2;
+    }
+    
+    .comp.profile.progress-pics{
+        grid-area: 3/1/4/3
+    }
+
+    .progress-chart{
+        grid-area: 4/1/5/3;
+    }
+    canvas{
+        max-height: 400px;
+    }
+}
+
+/* @media (max-width: 750px){
+    
+} */
+@media (max-width: 950px){
+    .comp.profile{
+        font-size: 90%;
+    }
+}
+@media (max-width: 775px){
+    .comp.profile div>button>div>div>span{
+        font-size: 90%!important;
+    }
+    .jcFlex.progress-btns{
+        width: 60%;
+    }    
+}
+@media (max-width: 650px){
+    section.curr-stats{
+        flex-direction: column;
+    }
+    .comp.profile{
+        grid-template-columns: 1fr;
+        padding: 2em 0.5em;
+    }
+    
+    .comp.profile>h1{
+        grid-area: 1/1/2/2
+    }
+    
+    .curr-stats{
+        grid-area: 2 / 1 / 3 / 2;
+        min-width: 300px;
+    }
+    .jcFlex.progress-btns{
+        width: 100%;
+    }    
+    .progress-pic-btn{
+        grid-area: 1/1/2/2;
+        height: 75px;
+    }
+    
+    .add-photo-btn{
+        grid-area: 2/1/3/2;
+    }
+    
+    .comp.profile.progress-pics{
+        grid-area: 3/1/4/2;
+        grid-template-rows: 70px 40px;
+        width: 97%;
+    }
+    
+    .progress-chart{
+        grid-area: 4/1/5/2;
+    }
+    canvas{
+        height: 100%;
+        width: 100%;
+        max-width: 90vw;
+    }
 }
