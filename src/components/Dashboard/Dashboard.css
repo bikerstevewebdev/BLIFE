@@ -195,7 +195,12 @@
         height: 3rem!important;
     }
 }
-
+@media (max-width: 400px){
+    .comp.dashboard>h1{
+        font-size: 1.5rem;
+    }
+    
+}
 /* .comp.dashboard .user-menus{
     width: 100%;
     display: grid;
