@@ -56,6 +56,11 @@
         font-size: 1.75rem;
     }
 }
+@media (max-width: 375px){
+    .nav-title{
+        font-size: 1.45rem;
+    }
+}
 
 .ham-burg-i svg{
     color: white!important;

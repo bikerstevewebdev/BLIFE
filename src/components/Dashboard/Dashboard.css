@@ -161,6 +161,12 @@
         animation-direction: normal, alternate;    
         color: green;
     }
+    @media (max-width: 800px){
+        .macros-display>h3{
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+    }
     @media (max-width: 700px){
         .comp.dashboard>h1{
             font-size: 2.25rem;
@@ -198,6 +204,12 @@
 @media (max-width: 400px){
     .comp.dashboard>h1{
         font-size: 1.5rem;
+    }
+    
+}
+@media (max-width: 375px){
+    .db-icon-btn.workout-i{
+        padding-right: 22%;
     }
     
 }

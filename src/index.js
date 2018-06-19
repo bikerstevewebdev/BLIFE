@@ -32,7 +32,7 @@ const muiTheme = getMuiTheme({
         primary3Color: grey400,
         accent1Color: blue800,
         accent2Color: "#e6e6e6",
-        accent3Color: "#fff",
+        accent3Color: "#000",
         textColor: darkBlack,
         alternateTextColor: white,
         canvasColor: "#D7F9F1",

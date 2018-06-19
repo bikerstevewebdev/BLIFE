@@ -87,6 +87,11 @@
     align-items: center;
 }
 
+@media (max-width: 1024px){
+    .workout, .menu{
+        width: 100%;
+    }
+}
 @media (max-width: 525px){
     .workouts-home .order-1-card, .menus-home .order-1-card{
         width: 25em!important;

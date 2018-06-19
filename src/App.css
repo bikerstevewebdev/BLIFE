@@ -99,14 +99,39 @@ header.nav-comp{
   display: flex;
 }
 
+@media (max-width: 1400px){
+  .unauthorized{
+    text-align: center;
+  }
+  .message {
+    margin-left: 25%;
+    width: 50%;
+  }
+}
+
 @media (max-width: 1024px){
   #main-content{
     padding: 100px 5%;
   }
 }
+@media (max-width: 845px){
+  .message{
+    font-size: 0.75rem;
+  }
+}
 @media (max-width: 750px){
   #main-content{
     padding: 100px 6px;
+  }
+  .message{
+    font-size: 0.5rem;
+  }
+}
+@media (max-width: 430px){
+  .message{
+    font-size: 0.35rem;
+    margin-left: 19%;
+    width: 40%;
   }
 }
  

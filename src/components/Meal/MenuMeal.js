@@ -25,7 +25,7 @@ class MenuMeal extends Component{
     render() {
         const { menu_id, menu_meals_id, meal_id, title, total_p, total_c, total_f, total_fib, img_url } = this.props
         return(
-            <Card key={meal_id} containerStyle={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between"}} style={{maxWidth: "225px", maxHeight: "20em", width: "100%", borderRadius: "3px"}}>
+            <Card key={meal_id} containerStyle={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between"}} style={{backgroundColor: "#279815", maxWidth: "225px", maxHeight: "20em", width: "100%", borderRadius: "3px"}}>
                 <CardMedia >
                     {img_url ? <img style={{height: "10em", borderRadius: "3px 3px 0 0"}}  src={img_url}  alt={title} /> : null}
                 </CardMedia>
@@ -40,7 +40,7 @@ class MenuMeal extends Component{
                                 <p style={{padding: "5px"}}>Fiber: <span style={{color: "#fff"}}>{total_fib}g</span></p>
                             </section>
                 </CardText>
-                <CardActions>
+                <CardActions style={{display: "flex"}}>
                     <Link to={{
                         pathname: `/meal/menu`,
                         state: { menu_id, meal_id, menu_meals_id }

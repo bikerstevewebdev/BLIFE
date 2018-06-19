@@ -146,7 +146,7 @@ class Menu extends Component{
                 {menuMealsList}
                 <section style={{...menuSearchStyle, gridColumn: "1/5"}}>
                     <TextField style={{gridColumn: "1/3"}} value={searchIn} floatingLabelText="Search Meals by Name" onChange={e => this.updateSearchIn(e.target.value)}/>
-                    <RaisedButton style={{gridColumn: "3/4"}} secondary={true} onClick={() => this.props.searchMeals(searchIn)} label="Search for your next meal!" />
+                    <RaisedButton style={{gridColumn: "3/4"}} secondary={true} onClick={() => this.props.searchMeals(searchIn)} label="Search meals!" />
                     {
                         this.props.mealSearchResults.length > 0
                         ?

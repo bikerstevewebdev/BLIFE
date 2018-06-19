@@ -28,14 +28,14 @@ app.use(session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true
-  }));
+  }))
 
   // Initializing Passport
-  app.use(passport.initialize());
+  app.use(passport.initialize())
   // Handing express-session over to passport
-  app.use(passport.session());
+  app.use(passport.session())
   // Setting up the ability to run the static-build files
-  app.use(express.static(__dirname + '/../build'));
+  app.use(express.static(__dirname + '/../build'))
 
 passport.use( new Auth0Strategy({
     domain: DOMAIN,
@@ -46,7 +46,7 @@ passport.use( new Auth0Strategy({
 }, (accessToken, refreshToken, extraParams, profile, done) => {
     const { id, nickname, picture, emails } = profile
 
-    console.log('profile', profile);
+    console.log('profile', profile)
     const db = app.get('db') 
     db.get_user([id]).then( users => {        
         if ( users[0] ){
@@ -79,7 +79,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
     app.get('db').find_session_user([user.auth_id]).then( dbUser => {
         console.log(`Deserial User should be DB User: ${dbUser.id}, in case its an array: ${dbUser[0]}`)
-        return done(null, dbUser[0]);
+        return done(null, dbUser[0])
     })
 })
 
@@ -89,7 +89,7 @@ const io = socket(app.listen(port, () => {
 }))
 
 massive(process.env.CONNECTION_STRING).then( db => {
-    app.set('db', db);
+    app.set('db', db)
     console.log("MASSive is up and running")
 })
 

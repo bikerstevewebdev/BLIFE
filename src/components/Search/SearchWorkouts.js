@@ -76,7 +76,7 @@ class SearchWorkouts extends Component{
                         </div>
                     </div>
                     <div className="actions">
-                        <Link to={`/workout/${res.workout_id}`}><IconButton tooltip="Details"><Info/></IconButton></Link>
+                        <Link to={`/workout/${res.workout_id}`}><IconButton tooltip="Details"><Info /></IconButton></Link>
                         {
                             userData.coach_id !== -7
                             ?
@@ -88,8 +88,7 @@ class SearchWorkouts extends Component{
                 </section>
             )
         })
-
-        return (
+        return(
             <section id="workout-search" className={this.props.styleClass}>
                     <h2>Find your new Workout:</h2>
                     <div className="search-box">
