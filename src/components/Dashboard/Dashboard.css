@@ -207,11 +207,13 @@
     }
     
 }
-@media (max-width: 375px){
+@media (max-width: 376px){
     .db-icon-btn.workout-i{
-        padding-right: 22%;
+        padding-right: 20%;
     }
-    
+    .db-icon-btn.menu-i{
+        padding-left: 20%;
+    }
 }
 /* .comp.dashboard .user-menus{
     width: 100%;

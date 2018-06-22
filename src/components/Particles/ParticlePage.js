@@ -63,10 +63,12 @@ class ParticlePage extends Component{
                 }}
                 style={{
                     position: "fixed",
-                    // width: '100%',
                     zIndex: '-40',
                     background: `url(${this.props.bgimg})`,
-                    backgroundRepeat: "round"
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: `${window.innerWidth <= 768 ? window.innerWidth * 2 : window.innerWidth}px 100%`,
+                    backgroundPosition: "center",
+                    height: "100%"
                 }}
                 >
                 {this.props.children}

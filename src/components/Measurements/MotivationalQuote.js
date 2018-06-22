@@ -57,13 +57,13 @@ class MotivationalQuote extends Component{
         }
         return(
             <Dialog contentStyle={{...jcFlex, flexDirection: "column"}} open={motivationalModalOpen} className="motivational-modal" >
-                <section style={{...jcFlex}}>
+                <section className="quote-content">
                     <section style={{...jcFlex, flexDirection: "column"}}>
                         <p className="quote-text">{qText ? `"${qText}"` : 'Try Another One'}</p>
                         <br/>
                         <p style={{fontStyle: "italic"}} className="quote-text">{qText ? (qAuthor ? `---> ${qAuthor}` : '---> Someone Fancy') : null}</p>
                     </section>
-                    <figure style={{...jcFlex, flexDirection: "column"}}>
+                    <figure>
                         <img style={{borderRadius: "5%"}} src={this.state.img} alt={this.state.imgUser}/>
                         <figcaption  >{this.state.imgUser}</figcaption>
                     </figure>

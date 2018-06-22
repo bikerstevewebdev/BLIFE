@@ -2,3 +2,22 @@
     text-shadow: black 1px 1px 1px;
     color: black;
 }
+.quote-content{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.quote-content figure{
+    display: flex;
+    justify-content: space-around;
+    align-content: center;
+    flex-direction: column;
+}
+@media (max-width: 375px){
+        .quote-content{
+            flex-direction: column;
+        }
+        .quote-content img{
+            width: 200px;
+        }
+    }
